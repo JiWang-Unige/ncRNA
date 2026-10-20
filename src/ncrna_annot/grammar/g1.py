@@ -96,7 +96,7 @@ def _lmm(A, B):
     return torch.logsumexp(A.unsqueeze(-1) + B.unsqueeze(-3), dim=-2)
 
 
-def log_partition(emit, T, gates, allowed=None, block=128):
+def log_partition(emit, T, gates, allowed=None, block=64):
     """log Z for a batch.  emit [B, L, S], T [S, S], gates [B, L, S] (0 / NEG), allowed bool [B, L, S] or None.
 
     Any state may begin or end a window except that motif gates still apply.  Exact (no pruning).
