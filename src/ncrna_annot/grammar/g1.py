@@ -231,3 +231,98 @@ def path_to_genes(path, offset=0):
     if cur:
         genes.append(cur)
     return [g for g in genes if g["exons"]]
+
+
+# ---- decode-time minimum durations (protocol v1.3 section 10, "S3") ----------------------------------
+
+def expand_duration(T, min_exon=20, min_intron=50):
+    """Expanded state space with minimum exon / intron lengths (intron length counts L and R bases).
+
+    Returns (T_exp [Se, Se], orig [Se] original-state index of each expanded state).
+    Chains reuse the original self-loop score for internal steps; entry/exit scores are G1's.
+    Runs that touch the window/chromosome ends may be shorter (any state may start or end a path).
+    """
+    T = np.asarray(T, np.float64)
+    orig, slot = [0], {}
+    for s in STRANDS:
+        for k in TYPES:
+            E, Lb, I, R = (IDX[f"{k}{p}{s}"] for p in PARTS)
+            slot[(k, s, "E")] = list(range(len(orig), len(orig) + min_exon))
+            orig += [E] * min_exon
+            slot[(k, s, "L")] = [len(orig)]
+            orig.append(Lb)
+            n_i = max(min_intron - 2, 1)
+            slot[(k, s, "I")] = list(range(len(orig), len(orig) + n_i))
+            orig += [I] * n_i
+            slot[(k, s, "R")] = [len(orig)]
+            orig.append(R)
+    Se = len(orig)
+    Te = np.full((Se, Se), NEG)
+    Te[0, 0] = T[0, 0]
+    for s in STRANDS:
+        for k in TYPES:
+            E, Lb, I, R = (IDX[f"{k}{p}{s}"] for p in PARTS)
+            es, ls, is_, rs = slot[(k, s, "E")], slot[(k, s, "L")][0], slot[(k, s, "I")], slot[(k, s, "R")][0]
+            Te[0, es[0]] = T[0, E]                       # gene start
+            for a, b in zip(es, es[1:]):
+                Te[a, b] = T[E, E]
+            Te[es[-1], es[-1]] = T[E, E]
+            Te[es[-1], 0] = T[E, 0]                      # gene end (after >= min_exon bases)
+            Te[es[-1], ls] = T[E, Lb]
+            Te[ls, is_[0]] = T[Lb, I]
+            for a, b in zip(is_, is_[1:]):
+                Te[a, b] = T[I, I]
+            Te[is_[-1], is_[-1]] = T[I, I]
+            Te[is_[-1], rs] = T[I, R]
+            Te[rs, es[0]] = T[R, E]
+    return Te, np.array(orig, np.int64)
+
+
+if njit is not None:
+    @njit(cache=True)
+    def _viterbi_dur_nb(x, Te, orig, pred_idx, pred_n):
+        L = x.shape[0]
+        n = Te.shape[0]
+        bp = np.zeros((L, n), np.int16)
+        v = np.empty(n)
+        for j in range(n):
+            v[j] = x[0, orig[j]]
+        nv = np.empty(n)
+        for t in range(1, L):
+            for j in range(n):
+                best, arg = -1e300, 0
+                for q in range(pred_n[j]):
+                    i = pred_idx[j, q]
+                    c = v[i] + Te[i, j]
+                    if c > best:
+                        best, arg = c, i
+                bp[t, j] = arg
+                nv[j] = best + x[t, orig[j]]
+            for j in range(n):
+                v[j] = nv[j]
+        m, a = -1e300, 0
+        for j in range(n):
+            if v[j] > m:
+                m, a = v[j], j
+        path = np.empty(L, np.int64)
+        path[L - 1] = a
+        for t in range(L - 1, 0, -1):
+            path[t - 1] = bp[t, path[t]]
+        out = np.empty(L, np.int8)
+        for t in range(L):
+            out[t] = orig[path[t]]
+        return out, m
+
+
+def viterbi_duration(emit, T, gates, allowed=None, min_exon=20, min_intron=50):
+    """MAP path under G1 with minimum exon/intron lengths; returns original-state path and score."""
+    x = np.asarray(emit, np.float64) + np.asarray(gates, np.float64)
+    if allowed is not None:
+        x = np.where(np.asarray(allowed), x, NEG)
+    Te, orig = expand_duration(T, min_exon, min_intron)
+    preds = [np.flatnonzero(Te[:, j] > NEG / 2) for j in range(len(orig))]
+    pred_n = np.array([len(p) for p in preds], np.int64)
+    pred_idx = np.zeros((len(orig), pred_n.max()), np.int64)
+    for j, p in enumerate(preds):
+        pred_idx[j, :len(p)] = p
+    return _viterbi_dur_nb(np.ascontiguousarray(x), Te, orig, pred_idx, pred_n)

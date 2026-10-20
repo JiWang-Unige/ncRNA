@@ -127,3 +127,53 @@ def test_path_to_genes():
     genes = g1.path_to_genes(np.array(path), offset=100)
     assert genes == [{"type": "l", "strand": "+", "exons": [[102, 103], [107, 107]]},
                      {"type": "m", "strand": "-", "exons": [[109, 109]]}]
+
+
+def _runs_ok(names, min_exon, min_intron):
+    """duration constraints on runs fully inside the sequence."""
+    L = len(names)
+    t = 0
+    while t < L:
+        n = names[t]
+        if n != "IG" and n[1] == "E":
+            u = t
+            while u < L and names[u] == n:
+                u += 1
+            if t > 0 and u < L and u - t < min_exon:
+                return False
+            t = u
+        elif n != "IG" and n[1] == "L":
+            u = t
+            while u < L and names[u] != "IG" and names[u][1] != "E":
+                u += 1
+            if t > 0 and u < L and u - t < min_intron:
+                return False
+            t = u
+        else:
+            t += 1
+    return True
+
+
+@pytest.mark.parametrize("seq", ["AGTAGTAGTA", "GTAAGGTCAG"])
+def test_duration_viterbi_matches_constrained_bruteforce(seq):
+    rng = np.random.default_rng(13)
+    L = len(seq)
+    sub = [0] + [g1.IDX[f"l{p}+"] for p in g1.PARTS]
+    allowed = np.zeros((L, g1.S), bool)
+    allowed[:, sub] = True
+    emit = rng.normal(size=(L, g1.S)) * 2
+    T = rand_trans(4).numpy()
+    gates = g1.gate_mask(g1.encode(seq))
+    x = np.where(allowed, emit + gates, g1.NEG)
+    best, best_path = -np.inf, None
+    for P in itertools.product(sub, repeat=L):
+        if any(T[a, b] < g1.NEG / 2 for a, b in zip(P, P[1:])) or any(x[t, p] < g1.NEG / 2 for t, p in enumerate(P)):
+            continue
+        if not _runs_ok([g1.STATES[p] for p in P], 2, 4):
+            continue
+        sc = sum(x[t, p] for t, p in enumerate(P)) + sum(T[a, b] for a, b in zip(P, P[1:]))
+        if sc > best:
+            best, best_path = sc, P
+    path, sc = g1.viterbi_duration(emit, T, gates, allowed, min_exon=2, min_intron=4)
+    assert abs(sc - best) < 1e-8
+    assert _runs_ok([g1.STATES[p] for p in path], 2, 4)
