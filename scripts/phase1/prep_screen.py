@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""P1-S prep (protocol v1.1 section 8), CPU on ont: G1 labels for the Phase 0 0.5 windows.
+"""P1-S prep (protocol v1.2: canonical-transcript labels + feasibility repair), CPU on ont.
 
 data/p1s/
   {train,val}_codes.npy      int8   [n, 24576]  real sequence codes (hg38)
@@ -17,7 +17,7 @@ from ncrna_annot.data import evidence, labels  # noqa: E402
 from ncrna_annot.grammar import g1  # noqa: E402
 
 ROOT = os.path.expanduser("~/ncrna-annot")
-P05, OUT = f"{ROOT}/data/p05", f"{ROOT}/data/p1s"
+P05, OUT = f"{ROOT}/data/p05", f"{ROOT}/data/p1s_v12"
 GTF = {"v50": f"{ROOT}/data/human/gencode.v50.annotation.gtf.gz", "v41": f"{ROOT}/data/human/gencode.v41.annotation.gtf.gz"}
 WIN = 24576
 
@@ -62,10 +62,23 @@ def main():
                     for va in variants:
                         arr[(sp, va)][i] = b[va][st:st + WIN]
         print(c, "done", flush=True)
+    stats = {}
     for sp in wins:
         np.save(f"{OUT}/{sp}_codes.npy", codes[sp])
         for va in variants:
-            np.save(f"{OUT}/{sp}_bits_{va}.npy", arr[(sp, va)])
+            A = arr[(sp, va)]
+            rel, viol = [], []
+            for i in range(len(A)):
+                A[i], r, v = labels.repair(A[i], codes[sp][i])
+                rel.append(r)
+                viol.append(v)
+            stats[f"{sp}_{va}"] = {"windows_infeasible_before_repair": int(sum(v > 0 for v in viol)),
+                                   "violations_mean": float(np.mean(viol)), "relaxed_bp_mean": float(np.mean(rel)),
+                                   "relaxed_frac": float(np.sum(rel) / A.size)}
+            print(sp, va, stats[f"{sp}_{va}"], flush=True)
+            np.save(f"{OUT}/{sp}_bits_{va}.npy", A)
+    import json
+    json.dump(stats, open(f"{OUT}/repair_stats.json", "w"), indent=1)
     with open(f"{OUT}/val_windows.tsv", "w") as fh:
         fh.writelines(f"{c}\t{st}\n" for c, st in wins["val"])
     # truth for window-level validation: v50 genes whose full span lies inside one val window

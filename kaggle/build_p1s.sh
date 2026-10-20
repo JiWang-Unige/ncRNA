@@ -6,7 +6,7 @@ cd ~/ncrna-annot
 DS=kaggle/ds_p1s_$ACC
 rm -rf $DS && mkdir -p $DS
 ln data/p05_feat/feat_train.npy $DS/feat_train.npy; ln data/p05_feat/feat_val.npy $DS/feat_val.npy
-for f in data/p1s/*.npy data/p1s/val_windows.tsv data/p1s/val_truth_v50.gtf; do cp $f $DS/; done
+for f in data/p1s_v12/*.npy data/p1s_v12/val_windows.tsv data/p1s_v12/val_truth_v50.gtf data/p1s_v12/repair_stats.json; do cp $f $DS/; done
 tar czf $DS/src.tgz src
 printf '{"title": "ncrna-p1s-data", "id": "%s/ncrna-p1s-data", "licenses": [{"name": "CC0-1.0"}]}' $ACC > $DS/dataset-metadata.json
 for spec in r:v50uev:0:argmax s2:v50uevlnc:1: s4:v50f:0: s5:v41uev:0:; do
