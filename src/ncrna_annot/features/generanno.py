@@ -14,10 +14,15 @@ DIM = 2048 * len(LAYERS)
 ACGT = np.array(list("ACGTA"))  # code 4 (N) -> A
 
 
+def half_dtype():
+    """bf16 on Ampere+ (e.g. RTX 4090, A10G), fp16 on older GPUs (e.g. Kaggle T4, no native bf16)."""
+    return torch.bfloat16 if torch.cuda.get_device_capability()[0] >= 8 else torch.float16
+
+
 def load(device="cuda"):
     from transformers import AutoModel, AutoTokenizer
     tok = AutoTokenizer.from_pretrained(REPO, trust_remote_code=True)
-    model = AutoModel.from_pretrained(REPO, trust_remote_code=True).to(device).eval()
+    model = AutoModel.from_pretrained(REPO, trust_remote_code=True, torch_dtype=half_dtype()).to(device).eval()
     return tok, model
 
 
@@ -29,7 +34,7 @@ def features(tok, model, codes_batch, dtype=None):
     """codes_batch: list of int8 arrays of length 24,576 -> float16 tensor [B, 4096, DIM] (on device)."""
     dev = next(model.parameters()).device
     if dtype is None:
-        dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+        dtype = half_dtype()
     ids = torch.tensor([tok(codes_to_str(c))["input_ids"] for c in codes_batch], device=dev)
     assert ids.shape[1] == NT + 1, ids.shape
     with torch.no_grad(), torch.autocast("cuda", dtype=dtype):

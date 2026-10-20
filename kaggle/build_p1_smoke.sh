@@ -26,12 +26,12 @@ from ncrna_annot.features import generanno as G
 from ncrna_annot.train import loop
 tok, model = G.load()
 codes = np.load(f'{IN}/train_codes.npy'); bits = np.load(f'{IN}/train_bits.npy')
-feats = np.concatenate([G.features(tok, model, list(codes[i:i + 2])).cpu().numpy() for i in range(0, len(codes), 2)])
+feats = np.concatenate([G.features(tok, model, list(codes[i:i + 1])).cpu().numpy() for i in range(0, len(codes))])
 vc = np.load(f'{IN}/chr18_codes_1Mb.npy'); starts = G.chromosome_tiles(len(vc)); vf = np.zeros(((len(vc) // 6), G.DIM), np.float16)
 for s in starts:
     lo, hi = G.kept_tokens(s, starts); vf[s // 6 + lo:s // 6 + hi] = G.features(tok, model, [vc[s:s + G.WIN]])[0, lo:hi].cpu().numpy()
 del model; torch.cuda.empty_cache()
-best = loop.train(feats, codes, bits, {'feats': vf, 'codes': vc[:len(vf) * 6], 'truth_gtf': f'{IN}/chr18_v50.gtf.gz', 'chrom': 'chr18'},
+best = loop.train(feats, codes, bits, {'feats': vf, 'codes': vc[:len(vf) * 6], 'truth_gtf': glob.glob(f'{IN}/chr18_v50.gtf*')[0], 'chrom': 'chr18'},
                   '/kaggle/working/smoke', epochs=1, batch=4)
 print('BEST', best, flush=True)
 PY
