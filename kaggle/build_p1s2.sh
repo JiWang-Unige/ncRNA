@@ -9,9 +9,10 @@ zcat data/human/gencode.v50.annotation.gtf.gz | awk '$1=="chr18"' > $DS/chr18_v5
 tar czf $DS/src.tgz src
 printf '{"title": "ncrna-p1s2-data", "id": "%s/ncrna-p1s2-data", "licenses": [{"name": "CC0-1.0"}]}' $ACC > $DS/dataset-metadata.json
 HDR='import glob, json, os, subprocess, sys, tarfile
-def find(name):
-    return glob.glob(f"/kaggle/input/**/{name}", recursive=True)[0]
-tarfile.open(find("src.tgz")).extractall("/tmp/code"); sys.path.insert(0, "/tmp/code/src")
+def find(name, hint=""):
+    c = [x for x in glob.glob(f"/kaggle/input/**/{name}", recursive=True) if hint in x]
+    return sorted(c)[0]
+tarfile.open(find("src.tgz", "p1s2-data")).extractall("/tmp/code"); sys.path.insert(0, "/tmp/code/src")
 import numpy as np, torch'
 # 1) chr18 proxy-feature extraction
 K=kaggle/ncrna-p1s2-chr18feat; mkdir -p $K
