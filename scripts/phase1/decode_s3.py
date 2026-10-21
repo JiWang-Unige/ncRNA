@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """P1-S S3 (protocol v1.3 section 10): decode-time minimum durations on R's best checkpoint (CPU on ont).
 
-usage: decode_s3.py <best.pt> <out_dir> [min_exon min_intron]
+usage: decode_s3.py <best.pt> <out_dir> [min_exon min_intron] [lnc_only 0|1]
 """
 import json
 import os
@@ -22,6 +22,7 @@ ROOT = os.path.expanduser("~/ncrna-annot")
 def main():
     ck, out = sys.argv[1], sys.argv[2]
     me, mi = (int(sys.argv[3]), int(sys.argv[4])) if len(sys.argv) > 4 else (20, 50)
+    lnc_only = len(sys.argv) > 5 and sys.argv[5] == "1"
     os.makedirs(out, exist_ok=True)
     torch.set_num_threads(4)
     feats = np.load(f"{ROOT}/data/p05_feat/feat_val.npy", mmap_mode="r")
@@ -39,6 +40,8 @@ def main():
         for i in range(len(codes)):
             e = head(torch.as_tensor(np.asarray(feats[i], np.float32))[None],
                      torch.as_tensor(codes[i].astype(np.int64))[None])[0].numpy()
+            if lnc_only:
+                e[:, screen.M_STATES] = g1.NEG
             path, _ = g1.viterbi_duration(e, T, g1.gate_mask(codes[i]), None, me, mi)
             genes += g1.path_to_genes(path, offset=starts[i])
     seen, uniq = set(), []
@@ -51,7 +54,7 @@ def main():
     dec.write_gff3(uniq, "chr18", f"{out}/val_s3_nofilter.gff3")
     dec.write_gff3(keep, "chr18", f"{out}/val_s3.gff3")
     truth = f"{ROOT}/data/p1s_v12/val_truth_v50.gtf"
-    res = {"min_exon": me, "min_intron": mi, "checkpoint": ck,
+    res = {"min_exon": me, "min_intron": mi, "checkpoint": ck, "lnc_only": lnc_only,
            "S3": screen.score(f"{out}/val_s3.gff3", truth, "chr18"),
            "S3_without_length_filter": screen.score(f"{out}/val_s3_nofilter.gff3", truth, "chr18")}
     json.dump(res, open(f"{out}/s3.json", "w"), indent=1)
