@@ -1,0 +1,120 @@
+{
+ "exploratory": true,
+ "lnc": {
+  "n_paired": 104,
+  "truth_genes_spanned_per_pred": {
+   "median": 2.0,
+   "frac_ge2": 0.5576923076923077
+  },
+  "pred_introns_inside_truth_span": {
+   "1-5": {
+    "n": 1,
+    "frac": 0.01282051282051282
+   },
+   "21-100": {
+    "n": 4,
+    "frac": 0.05128205128205128
+   },
+   "6-20": {
+    "n": 6,
+    "frac": 0.07692307692307693
+   },
+   ">100": {
+    "n": 52,
+    "frac": 0.6666666666666666
+   },
+   "exact": {
+    "n": 12,
+    "frac": 0.15384615384615385
+   },
+   "no_truth_intron": {
+    "n": 3,
+    "frac": 0.038461538461538464
+   }
+  },
+  "pred_introns_outside_truth_span": {
+   ">100": {
+    "n": 192,
+    "frac": 0.9504950495049505
+   },
+   "no_truth_intron": {
+    "n": 10,
+    "frac": 0.04950495049504951
+   }
+  },
+  "truth_intron_exact_recovery": {
+   "median": 0.0,
+   "mean": 0.03367003367003367
+  },
+  "pred_span_over_truth_span": {
+   "median": 2.772867265323176,
+   "q25": 1.0489465002717364,
+   "q75": 5.9907473286788555
+  },
+  "pred_introns_per_pred_median": 2.0,
+  "preds_per_hit_truth_gene(5=5+)": {
+   "1": 101,
+   "2": 7
+  }
+ },
+ "mrna": {
+  "n_paired": 635,
+  "truth_genes_spanned_per_pred": {
+   "median": 1.0,
+   "frac_ge2": 0.17795275590551182
+  },
+  "pred_introns_inside_truth_span": {
+   "1-5": {
+    "n": 177,
+    "frac": 0.06325947105075054
+   },
+   "21-100": {
+    "n": 39,
+    "frac": 0.013938527519656898
+   },
+   "6-20": {
+    "n": 50,
+    "frac": 0.017869907076483203
+   },
+   ">100": {
+    "n": 450,
+    "frac": 0.16082916368834882
+   },
+   "exact": {
+    "n": 2080,
+    "frac": 0.7433881343817013
+   },
+   "no_truth_intron": {
+    "n": 2,
+    "frac": 0.0007147962830593281
+   }
+  },
+  "pred_introns_outside_truth_span": {
+   ">100": {
+    "n": 103,
+    "frac": 0.9279279279279279
+   },
+   "no_truth_intron": {
+    "n": 8,
+    "frac": 0.07207207207207207
+   }
+  },
+  "truth_intron_exact_recovery": {
+   "median": 0.0,
+   "mean": 0.2637856346717889
+  },
+  "pred_span_over_truth_span": {
+   "median": 0.1178380872383972,
+   "q25": 0.00426017613052262,
+   "q75": 0.7477839281796129
+  },
+  "pred_introns_per_pred_median": 1.0,
+  "preds_per_hit_truth_gene(5=5+)": {
+   "1": 116,
+   "2": 51,
+   "3": 40,
+   "4": 23,
+   "5": 28
+  }
+ }
+}
