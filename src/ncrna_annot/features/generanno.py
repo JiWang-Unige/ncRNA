@@ -5,7 +5,6 @@ so the 6-mer grid stays aligned (as in Phase 0). Whole chromosomes are tiled wit
 and the central tokens kept (margin 342 tokens), as in Phase 0 0.5.
 """
 import numpy as np
-import torch
 
 REPO = "GenerTeam/GENERanno-eukaryote-1.2b-cds-annotator-preview"
 LAYERS = (17, 23)
@@ -16,6 +15,7 @@ ACGT = np.array(list("ACGTA"))  # code 4 (N) -> A
 
 def half_dtype():
     """bf16 on Ampere+ (e.g. RTX 4090, A10G), fp16 on older GPUs (e.g. Kaggle T4, no native bf16)."""
+    import torch
     return torch.bfloat16 if torch.cuda.get_device_capability()[0] >= 8 else torch.float16
 
 
@@ -32,6 +32,7 @@ def codes_to_str(codes):
 
 def features(tok, model, codes_batch, dtype=None):
     """codes_batch: list of int8 arrays of length 24,576 -> float16 tensor [B, 4096, DIM] (on device)."""
+    import torch
     dev = next(model.parameters()).device
     if dtype is None:
         dtype = half_dtype()

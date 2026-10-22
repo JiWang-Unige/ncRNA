@@ -62,13 +62,19 @@ def main():
     from ncrna_annot.features import generanno as G
     os.makedirs(a.out, exist_ok=True)
     t0 = time.time()
-    if a.cpu_stub:
-        import torch
+    if a.cpu_stub:  # tests: deterministic random features, no torch / model
         tok, model, compute, gpu = None, None, "stub", "cpu"
         rng = np.random.default_rng(0)
 
+        class _Arr(np.ndarray):
+            def cpu(self):
+                return self
+
+            def numpy(self):
+                return np.asarray(self)
+
         def feats(batch):
-            return torch.from_numpy(rng.standard_normal((len(batch), G.NT, G.DIM), dtype=np.float32)).half()
+            return rng.standard_normal((len(batch), G.NT, G.DIM), dtype=np.float32).astype(np.float16).view(_Arr)
     else:
         import torch
         tok, model = G.load()
