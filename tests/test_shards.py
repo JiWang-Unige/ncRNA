@@ -42,8 +42,10 @@ def test_chrom_and_train_shards(tmp_path):
     arr = np.load(feat / "chrX.npy", mmap_mode="r")
     assert arr.shape == (L // G.TOK, G.DIM)
     shard = np.load(sh / "chrX_t00001_00004.npy")
+    exp = np.zeros(arr.shape, np.float16)  # same sequential writes as extract_p1.py: a later tile overwrites overlap
     for k, s, lo_, hi_, r0, r1 in m["tiles"]:
-        assert np.array_equal(arr[s // G.TOK + lo_:s // G.TOK + hi_], shard[r0:r1])
+        exp[s // G.TOK + lo_:s // G.TOK + hi_] = shard[r0:r1]
+    assert np.array_equal(np.asarray(arr), exp)
     assert np.abs(np.asarray(arr[:starts[1] // G.TOK + G.MARGIN], np.float32)).sum() == 0  # tile 0 untouched
     tr = np.load(feat / "train.npy", mmap_mode="r")
     assert tr.shape == (5, G.NT, G.DIM) and np.array_equal(tr[3:5], np.load(sh / "train_00003_00005.npy"))
