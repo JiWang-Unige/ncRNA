@@ -311,3 +311,39 @@ def test_g1b_duration_viterbi_matches_constrained_bruteforce(seq):
     path, sc = g1.viterbi_duration(emit, T, gates, allowed, min_exon=2, min_intron=4, edges=(frm, to, vals))
     assert abs(sc - best) < 1e-8
     assert _runs_ok([g1.STATES[p] for p in path], 2, 4)
+
+
+@pytest.mark.parametrize("seq", SEQS[:3])
+def test_marginals_np_match_bruteforce(seq):
+    rng = np.random.default_rng(31)
+    L = len(seq)
+    emit = rng.normal(size=(L, g1.S)) * 2
+    T = rand_trans(11)
+    gates = g1.gate_mask(g1.encode(seq))
+    z_b, marg_b, _, _ = brute(seq, emit, T.numpy())
+    post, z = g1.marginals_np(emit, T.numpy(), gates)
+    assert abs(z - z_b) < 1e-8 and np.abs(post - marg_b).max() < 1e-8
+    coef, bnd = rand_boundary(L, 32)
+    edges = g1.boundary_edges(bnd, coef)
+    z_b, marg_b, _, _ = brute_edges(seq, emit, T.numpy(), edges)
+    post, z = g1.marginals_np(emit, T.numpy(), gates, edges=edges)
+    assert abs(z - z_b) < 1e-8 and np.abs(post - marg_b).max() < 1e-8
+    allowed = rng.random((L, g1.S)) < 0.6
+    allowed[:, 0] = True
+    z_b, marg_b, _, _ = brute_edges(seq, emit, T.numpy(), edges, allowed)
+    post, z = g1.marginals_np(emit, T.numpy(), gates, allowed, edges=edges)
+    assert abs(z - z_b) < 1e-8 and np.abs(post - marg_b).max() < 1e-8
+
+
+def test_marginals_np_match_torch_float64_on_long_input():
+    rng = np.random.default_rng(33)
+    L = 2000
+    seq = "".join(rng.choice(list("ACGT"), L))
+    emit = rng.normal(size=(L, g1.S)) * 2
+    T = rand_trans(12)
+    gates = g1.gate_mask(g1.encode(seq))
+    coef, bnd = rand_boundary(L, 34)
+    post, z = g1.marginals_np(emit, T.numpy(), gates, edges=g1.boundary_edges(bnd, coef))
+    m = g1.marginals(torch.tensor(emit)[None], T, torch.tensor(gates)[None].double(),
+                     edges=g1.boundary_edges(bnd[None], coef))[0].numpy()
+    assert np.abs(post - m).max() < 1e-8 and np.abs(post.sum(1) - 1).max() < 1e-10

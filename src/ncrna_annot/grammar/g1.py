@@ -278,6 +278,71 @@ def _np(a):
     return a.detach().cpu().numpy() if torch.is_tensor(a) else np.asarray(a)
 
 
+if njit is not None:
+    @njit(cache=True)
+    def _lse_acc(acc, v):
+        if v == -np.inf:
+            return acc
+        if acc == -np.inf:
+            return v
+        if acc > v:
+            return acc + np.log1p(np.exp(v - acc))
+        return v + np.log1p(np.exp(acc - v))
+
+    @njit(cache=True)
+    def _fb_nb(x, T, pred_idx, pred_n, succ_idx, succ_n, eid, ev):
+        L, n = x.shape
+        a = np.full((L, n), -np.inf)
+        b = np.full((L, n), -np.inf)
+        for j in range(n):
+            a[0, j] = x[0, j]
+        for t in range(1, L):
+            for j in range(n):
+                s = -np.inf
+                for q in range(pred_n[j]):
+                    i = pred_idx[j, q]
+                    c = a[t - 1, i] + T[i, j]
+                    if eid[i, j] >= 0:
+                        c += ev[t, eid[i, j]]
+                    s = _lse_acc(s, c)
+                a[t, j] = s + x[t, j]
+        for j in range(n):
+            b[L - 1, j] = 0.0
+        for t in range(L - 2, -1, -1):
+            for i in range(n):
+                s = -np.inf
+                for q in range(succ_n[i]):
+                    j = succ_idx[i, q]
+                    c = T[i, j] + x[t + 1, j] + b[t + 1, j]
+                    if eid[i, j] >= 0:
+                        c += ev[t + 1, eid[i, j]]
+                    s = _lse_acc(s, c)
+                b[t, i] = s
+        z = -np.inf
+        for j in range(n):
+            z = _lse_acc(z, a[L - 1, j])
+        post = np.exp(a + b - z)
+        return post, z
+
+
+def marginals_np(emit, T, gates, allowed=None, edges=None):
+    """Exact posteriors [L, S] (float64) and log Z of one sequence by a sparse CPU forward-backward (numba).
+    Same model as marginals() / log_partition() (incl. G1B edges), without the float32 block-scan drift."""
+    x = np.asarray(emit, np.float64) + np.asarray(gates, np.float64)
+    if allowed is not None:
+        x = np.where(np.asarray(allowed), x, NEG)
+    T = np.asarray(T, np.float64)
+    frm, to, vals = edges if edges is not None else (None, None, None)
+    eid, ev = _edge_table(frm, to, None if vals is None else _np(vals), S, len(x))
+    preds = [np.flatnonzero(T[:, j] > NEG / 2) for j in range(S)]
+    succs = [np.flatnonzero(T[i, :] > NEG / 2) for i in range(S)]
+    mk = lambda lst: (np.array([len(p) for p in lst], np.int64),
+                      np.array([np.pad(p, (0, max(map(len, lst)) - len(p))) for p in lst], np.int64))
+    pred_n, pred_idx = mk(preds)
+    succ_n, succ_idx = mk(succs)
+    return _fb_nb(np.ascontiguousarray(x), T, pred_idx, pred_n, succ_idx, succ_n, eid, ev)
+
+
 def path_to_genes(path, offset=0):
     """State path -> list of genes (type, strand, [(start, end) 1-based closed exons])."""
     genes, cur = [], None

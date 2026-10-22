@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 from ncrna_annot.decode import g2cand  # noqa: E402
 
 ROOT = os.path.expanduser("~/ncrna-annot")
+K_LOOKBACK = 256
 
 
 def event_values(sc, ex):
@@ -43,18 +44,26 @@ def main():
     res["val_event_recall"] = {g2cand.CHANNELS[c]: float(np.mean(np.asarray(vv[c]) >= theta[c])) if vv[c] else None for c in range(8)}
     n_cand = np.zeros(8)
     intron_ok = np.zeros(len(V["in_w"]), bool)
+    reach_ok = np.zeros(len(V["in_w"]), bool)
+    nodes = []
     for w in range(len(sc["val"])):
         cands = g2cand.candidates(np.asarray(sc["val"][w], np.float32), theta)
         n_cand += [len(x) for x in cands]
+        nodes.append(len(set(np.concatenate([cands[c] + (1 if c in (1, 3, 5, 7) else 0) for c in range(8)]).tolist())) + 2)
         sel = np.flatnonzero(V["in_w"] == w)
         for i in sel:
             s = V["in_s"][i]
             Lc, Rc = (cands[0], cands[1]) if s == 0 else (cands[2], cands[3])
             intron_ok[i] = V["in_L"][i] in set(Lc.tolist()) and V["in_R"][i] in set(Rc.tolist())
+            # look-back reach: the intron's start node must be among the last K intron-start nodes before its end node
+            n_between = int(np.sum((Lc >= V["in_L"][i]) & (Lc <= V["in_R"][i])))
+            reach_ok[i] = intron_ok[i] and n_between <= K_LOOKBACK
     res["val_candidates_per_kb"] = dict(zip(g2cand.CHANNELS, (n_cand / (len(sc["val"]) * sc["val"].shape[1] / 1000)).tolist()))
+    res["val_nodes_per_window"] = {"median": float(np.median(nodes)), "q90": float(np.quantile(nodes, 0.9))}
     for k, name in ((1, "lnc"), (0, "mrna")):
         m = V["in_k"] == k
-        res[f"val_{name}_intron_recall"] = {"n": int(m.sum()), "recall": float(intron_ok[m].mean()) if m.any() else None}
+        res[f"val_{name}_intron_recall"] = {"n": int(m.sum()), "recall": float(intron_ok[m].mean()) if m.any() else None,
+                                            "recall_and_reachable_K256": float(reach_ok[m].mean()) if m.any() else None}
         # chain ceiling: complete multi-exon canonical transcripts inside a window with all introns recalled
         txs = [t for t in range(len(V["tx_w"])) if V["tx_k"][t] == k and V["tx_inside"][t] and V["tx_n_intron"][t] > 0]
         ok = [bool(np.all(intron_ok[V["in_tx"] == t])) for t in txs]

@@ -62,7 +62,8 @@ def candidates(sc, theta):
         if j < 4:
             out.append(np.flatnonzero((sc[:, j] >= theta[j]) & (sc[:, j] > 0)))
         else:
-            out.append(np.flatnonzero(peak_values(sc[:, j]) >= theta[j]))
+            pv = peak_values(sc[:, j])
+            out.append(np.flatnonzero((pv >= theta[j]) & (pv > 0)))
     return out
 
 
@@ -91,5 +92,5 @@ def choose_theta(values_by_channel):
             continue
         target = TARGET["splice" if c < 4 else "ends"]
         k = int(np.floor((1 - target) * len(v)))        # number of events allowed to fall below theta
-        theta[c] = max(v[k], 1e-6)
+        theta[c] = max(v[k], 0.0)                    # candidates() additionally requires a positive score
     return theta
