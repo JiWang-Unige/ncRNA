@@ -11,6 +11,10 @@ Strand parameters are tied in mirror image so that log Z is invariant to reverse
 
 Training: log_partition() (differentiable two-level log-space scan; posteriors = d logZ / d emissions).
 Decoding: viterbi() (numba, CPU, whole chromosome).
+
+G1B (protocol v1.6 section 13): optional position-dependent bonuses on the gene-entry (IG -> kE s) and gene-exit
+(kE s -> IG) edges from a boundary head (TSS / TES logits per strand), see boundary_edges(); all inference
+functions take `edges=(frm, to, vals)` with vals[..., t-1, e] = bonus of edge e on the step (t-1 -> t).
 """
 import numpy as np
 import torch
@@ -91,13 +95,63 @@ class G1Transitions(nn.Module):
         return T
 
 
+BOUNDARY = ("TSS+", "TES+", "TSS-", "TES-")
+
+
+class BoundaryCoef(nn.Module):
+    """G1B: per-type weights of the boundary logits on gene entry / exit (tied in mirror image)."""
+
+    def __init__(self, init=1.0):
+        super().__init__()
+        self.c = nn.ParameterDict({k: nn.Parameter(torch.full((2,), float(init))) for k in TYPES})  # (start, end)
+
+
+def boundary_edges(bnd, coef, clamp=10.0):
+    """bnd [..., L, 4] boundary logits (BOUNDARY order) -> (frm, to, vals [..., L-1, 8]).
+
+    + gene starts at t: IG -> kE+ on step t, bonus c_start * TSS+[t];  ends at t-1: kE+ -> IG, c_end * TES+[t-1]
+    - gene left end at t: IG -> kE-, c_end * TES-[t];                 right end at t-1: kE- -> IG, c_start * TSS-[t-1]
+    """
+    b = bnd.clamp(-clamp, clamp)
+    tss_p, tes_p, tss_m, tes_m = (b[..., i] for i in range(4))
+    frm, to, vals = [], [], []
+    for k in TYPES:
+        cs, ce = coef.c[k][0], coef.c[k][1]
+        Ep, Em = IDX[f"{k}E+"], IDX[f"{k}E-"]
+        for f_, t_, v in ((0, Ep, cs * tss_p[..., 1:]), (Ep, 0, ce * tes_p[..., :-1]),
+                          (0, Em, ce * tes_m[..., 1:]), (Em, 0, cs * tss_m[..., :-1])):
+            frm.append(f_)
+            to.append(t_)
+            vals.append(v)
+    return frm, to, torch.stack(vals, -1)
+
+
+def _edge_table(frm, to, vals, n, L):
+    """numpy edge-id table [n, n] (-1 = none) and per-step values [L, nE] (row t = step t-1 -> t)."""
+    eid = np.full((n, n), -1, np.int64)
+    if frm is None:
+        return eid, np.zeros((L, 1))
+    for e, (i, j) in enumerate(zip(frm, to)):
+        eid[i, j] = e
+    ev = np.zeros((L, len(frm)))
+    ev[1:] = np.asarray(vals, np.float64)
+    return eid, ev
+
+
 def _lmm(A, B):
     """log-semiring matmul over the last two dims."""
     return torch.logsumexp(A.unsqueeze(-1) + B.unsqueeze(-3), dim=-2)
 
 
-def log_partition(emit, T, gates, allowed=None, block=64):
+def _add_edges(W, frm, to, vals):
+    add = torch.zeros_like(W)
+    add[:, :, frm, to] = vals.to(W.dtype)
+    return W + add
+
+
+def log_partition(emit, T, gates, allowed=None, block=64, edges=None):
     """log Z for a batch.  emit [B, L, S], T [S, S], gates [B, L, S] (0 / NEG), allowed bool [B, L, S] or None.
+    edges: optional (frm, to, vals [B, L-1, nE]) position-dependent edge bonuses (G1B).
 
     Any state may begin or end a window except that motif gates still apply.  Exact (no pruning).
     """
@@ -109,6 +163,8 @@ def log_partition(emit, T, gates, allowed=None, block=64):
     if L == 1:
         return torch.logsumexp(alpha, -1)
     W = T[None, None] + x[:, 1:, None, :]                   # [B, L-1, S, S]: from i (row) to j (col)
+    if edges is not None:
+        W = _add_edges(W, *edges)
     n = W.shape[1]
     nb = -(-n // block)
     pad = nb * block - n
@@ -125,10 +181,12 @@ def log_partition(emit, T, gates, allowed=None, block=64):
     return torch.logsumexp(alpha, -1)
 
 
-def marginals(emit, T, gates, allowed=None):
+def marginals(emit, T, gates, allowed=None, edges=None):
     """Posterior state marginals [B, L, S] via autograd (d logZ / d emit)."""
     e = emit.detach().requires_grad_(True)
-    z = log_partition(e, T.detach(), gates, allowed)
+    if edges is not None:
+        edges = (edges[0], edges[1], edges[2].detach())
+    z = log_partition(e, T.detach(), gates, allowed, edges=edges)
     (g,) = torch.autograd.grad(z.sum(), e)
     return g
 
@@ -139,7 +197,7 @@ except ImportError:  # pragma: no cover
     njit = None
 
 
-def _viterbi_py(x, T, start_ok):
+def _viterbi_py(x, T, start_ok, eid=None, ev=None):
     L, n = x.shape
     bp = np.zeros((L, n), np.int8)
     v = x[0] + np.where(start_ok, 0.0, NEG)
@@ -148,6 +206,9 @@ def _viterbi_py(x, T, start_ok):
         nv = np.empty(n)
         for j in range(n):
             c = v[preds[j]] + T[preds[j], j]
+            if eid is not None:
+                e = eid[preds[j], j]
+                c = c + np.where(e >= 0, ev[t, np.maximum(e, 0)], 0.0)
             a = int(np.argmax(c))
             bp[t, j] = preds[j][a]
             nv[j] = c[a] + x[t, j]
@@ -161,7 +222,7 @@ def _viterbi_py(x, T, start_ok):
 
 if njit is not None:
     @njit(cache=True)
-    def _viterbi_nb(x, T, pred_idx, pred_n, start_ok):
+    def _viterbi_nb(x, T, pred_idx, pred_n, start_ok, eid, ev):
         L, n = x.shape
         bp = np.zeros((L, n), np.int8)
         v = np.empty(n)
@@ -174,6 +235,8 @@ if njit is not None:
                 for q in range(pred_n[j]):
                     i = pred_idx[j, q]
                     c = v[i] + T[i, j]
+                    if eid[i, j] >= 0:
+                        c += ev[t, eid[i, j]]
                     if c > best:
                         best, arg = c, i
                 bp[t, j] = arg
@@ -191,21 +254,28 @@ if njit is not None:
         return path, m
 
 
-def viterbi(emit, T, gates, allowed=None):
-    """MAP state path for one sequence.  emit [L, S] (np/torch), T [S, S], gates [L, S]."""
+def viterbi(emit, T, gates, allowed=None, edges=None):
+    """MAP state path for one sequence.  emit [L, S] (np/torch), T [S, S], gates [L, S].
+    edges: optional (frm, to, vals [L-1, nE]) as in log_partition (unbatched, numpy or torch)."""
     x = np.asarray(emit, np.float64) + np.asarray(gates, np.float64)
     if allowed is not None:
         x = np.where(np.asarray(allowed), x, NEG)
     T = np.asarray(T, np.float64)
     start_ok = np.ones(S, np.bool_)
+    frm, to, vals = edges if edges is not None else (None, None, None)
+    eid, ev = _edge_table(frm, to, None if vals is None else _np(vals), S, len(x))
     if njit is None:
-        return _viterbi_py(x, T, start_ok)
+        return _viterbi_py(x, T, start_ok, eid, ev)
     preds = [np.flatnonzero(T[:, j] > NEG / 2) for j in range(S)]
     pred_n = np.array([len(p) for p in preds], np.int64)
     pred_idx = np.zeros((S, pred_n.max()), np.int64)
     for j, p in enumerate(preds):
         pred_idx[j, :len(p)] = p
-    return _viterbi_nb(np.ascontiguousarray(x), T, pred_idx, pred_n, start_ok)
+    return _viterbi_nb(np.ascontiguousarray(x), T, pred_idx, pred_n, start_ok, eid, ev)
+
+
+def _np(a):
+    return a.detach().cpu().numpy() if torch.is_tensor(a) else np.asarray(a)
 
 
 def path_to_genes(path, offset=0):
@@ -280,7 +350,7 @@ def expand_duration(T, min_exon=20, min_intron=50):
 
 if njit is not None:
     @njit(cache=True)
-    def _viterbi_dur_nb(x, Te, orig, pred_idx, pred_n):
+    def _viterbi_dur_nb(x, Te, orig, pred_idx, pred_n, eid, ev):
         L = x.shape[0]
         n = Te.shape[0]
         bp = np.zeros((L, n), np.int16)
@@ -294,6 +364,8 @@ if njit is not None:
                 for q in range(pred_n[j]):
                     i = pred_idx[j, q]
                     c = v[i] + Te[i, j]
+                    if eid[i, j] >= 0:
+                        c += ev[t, eid[i, j]]
                     if c > best:
                         best, arg = c, i
                 bp[t, j] = arg
@@ -314,15 +386,31 @@ if njit is not None:
         return out, m
 
 
-def viterbi_duration(emit, T, gates, allowed=None, min_exon=20, min_intron=50):
-    """MAP path under G1 with minimum exon/intron lengths; returns original-state path and score."""
+def viterbi_duration(emit, T, gates, allowed=None, min_exon=20, min_intron=50, edges=None):
+    """MAP path under G1 with minimum exon/intron lengths; returns original-state path and score.
+    edges (G1B): bonuses on IG -> kE s / kE s -> IG are applied to the expanded gene entry / exit edges."""
     x = np.asarray(emit, np.float64) + np.asarray(gates, np.float64)
     if allowed is not None:
         x = np.where(np.asarray(allowed), x, NEG)
     Te, orig = expand_duration(T, min_exon, min_intron)
-    preds = [np.flatnonzero(Te[:, j] > NEG / 2) for j in range(len(orig))]
+    n = len(orig)
+    if edges is None:
+        eid, ev = _edge_table(None, None, None, n, len(x))
+    else:
+        frm, to, vals = edges
+        efrm, eto = [], []
+        for i, j in zip(frm, to):  # map original entry / exit edges onto the expanded chain ends
+            if i == 0:
+                efrm.append(0)
+                eto.append(int(np.flatnonzero((orig == j) & (Te[0] > NEG / 2))[0]))
+            else:
+                cand = np.flatnonzero((orig == i) & (Te[:, 0] > NEG / 2))
+                efrm.append(int(cand[0]))
+                eto.append(0)
+        eid, ev = _edge_table(efrm, eto, _np(vals), n, len(x))
+    preds = [np.flatnonzero(Te[:, j] > NEG / 2) for j in range(n)]
     pred_n = np.array([len(p) for p in preds], np.int64)
-    pred_idx = np.zeros((len(orig), pred_n.max()), np.int64)
+    pred_idx = np.zeros((n, pred_n.max()), np.int64)
     for j, p in enumerate(preds):
         pred_idx[j, :len(p)] = p
-    return _viterbi_dur_nb(np.ascontiguousarray(x), Te, orig, pred_idx, pred_n)
+    return _viterbi_dur_nb(np.ascontiguousarray(x), Te, orig, pred_idx, pred_n, eid, ev)

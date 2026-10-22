@@ -70,25 +70,31 @@ def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False):
     modes = [("S3", "s3", pot)] + ([("S1", "argmax", post.astype(np.float32))] if with_s1 else [])
     for name, mode, arr in modes:
         genes = chrom.decode_blocks(arr, codes[:L], Tn, 20, 50, mode=mode)
-        genes = [g for g in genes if g["type"] != "l" or sum(b - a + 1 for a, b in g["exons"]) >= 200]
-        for g in genes:
-            g["conf"] = chrom.gene_confidence(g, post)
-        lnc = [{"strand": g["strand"], "exons": [tuple(x) for x in g["exons"]], "conf": g["conf"]}
-               for g in genes if g["type"] == "l"]
-        pr = prcurve.pr_curve(lnc, truth)
-        preds = [{"id": str(i), "strand": g["strand"], "cls": "lnc" if g["type"] == "l" else "mrna",
-                  "exons": [tuple(x) for x in g["exons"]]} for i, g in enumerate(genes)]
-        idx = ruler.ExonIndex(truth)
-        sl = ruler.score_class("lnc", truth, preds, idx, 0)
-        sm = ruler.score_class("mrna", truth, preds, idx, 0)
-        out[name] = {"auprc_lnc": pr["auprc"], "best_locus_f1": pr["best_f1"], "best_point": pr["best_point"],
-                     "n_truth_lnc": pr["n_truth"], "n_pred_lnc": pr["n_pred"],
-                     "lnc_L1": {"sn": sl["L1_locus"]["sn"], "pr": sl["L1_locus"]["pr_strict"]},
-                     "lnc_L2": {"sn": sl["L2_intron_chain"]["sn"], "pr": sl["L2_intron_chain"]["pr_strict"]},
-                     "mrna_L1": {"sn": sm["L1_locus"]["sn"], "pr": sm["L1_locus"]["pr_strict"]},
-                     "n_pred_mrna": sum(1 for g in genes if g["type"] == "m"), "curve": pr["curve"]}
+        out[name] = summarize(genes, post, truth)
     out["eval_s"] = round(time.time() - t0)
     return out
+
+
+def summarize(genes, post, truth):
+    """lnc >= 200 nt filter, gene confidence, gene-level PR / AUPRC and ruler L1 / L2 (protocol v1.4)."""
+    genes = [g for g in genes if g["type"] != "l" or sum(b - a + 1 for a, b in g["exons"]) >= 200]
+    for g in genes:
+        g["conf"] = chrom.gene_confidence(g, post)
+    lnc = [{"strand": g["strand"], "exons": [tuple(x) for x in g["exons"]], "conf": g["conf"]}
+           for g in genes if g["type"] == "l"]
+    pr = prcurve.pr_curve(lnc, truth)
+    preds = [{"id": str(i), "strand": g["strand"], "cls": "lnc" if g["type"] == "l" else "mrna",
+              "exons": [tuple(x) for x in g["exons"]]} for i, g in enumerate(genes)]
+    idx = ruler.ExonIndex(truth)
+    sl = ruler.score_class("lnc", truth, preds, idx, 0)
+    sm = ruler.score_class("mrna", truth, preds, idx, 0)
+    return {"auprc_lnc": pr["auprc"], "best_locus_f1": pr["best_f1"], "best_point": pr["best_point"],
+            "n_truth_lnc": pr["n_truth"], "n_pred_lnc": pr["n_pred"],
+            "lnc_L1": {"sn": sl["L1_locus"]["sn"], "pr": sl["L1_locus"]["pr_strict"]},
+            "lnc_L2": {"sn": sl["L2_intron_chain"]["sn"], "pr": sl["L2_intron_chain"]["pr_strict"]},
+            "mrna_L1": {"sn": sm["L1_locus"]["sn"], "pr": sm["L1_locus"]["pr_strict"]},
+            "mrna_L2": {"sn": sm["L2_intron_chain"]["sn"], "pr": sm["L2_intron_chain"]["pr_strict"]},
+            "n_pred_mrna": sum(1 for g in genes if g["type"] == "m"), "curve": pr["curve"]}
 
 
 def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3, device="cuda", log=print):

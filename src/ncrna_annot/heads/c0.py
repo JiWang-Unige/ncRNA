@@ -19,8 +19,8 @@ class C0Head(nn.Module):
         self.fuse = nn.Sequential(nn.Linear(hidden + dna_hidden, hidden), nn.GELU(), nn.LayerNorm(hidden))
         self.out = nn.Linear(hidden, g1.S)
 
-    def forward(self, token_features, codes):
-        """token_features [B, T, D] (T = L/6), codes int64 [B, L] -> potentials [B, L, S] (fp32)."""
+    def hidden(self, token_features, codes):
+        """fused per-base representation [B, L, hidden]."""
         B, L = codes.shape
         if token_features.shape[1] * 6 != L:
             raise ValueError("expect one feature vector per six bases")
@@ -28,4 +28,21 @@ class C0Head(nn.Module):
         ctx = ctx.repeat_interleave(6, dim=1)
         dna = nn.functional.one_hot(codes.clamp(0, 4), 5).float()
         local = self.dna(dna.transpose(1, 2)).transpose(1, 2)
-        return self.out(self.fuse(torch.cat([ctx, local], -1)))
+        return self.fuse(torch.cat([ctx, local], -1))
+
+    def forward(self, token_features, codes):
+        """token_features [B, T, D] (T = L/6), codes int64 [B, L] -> potentials [B, L, S] (fp32)."""
+        return self.out(self.hidden(token_features, codes))
+
+
+class C0BHead(C0Head):
+    """G1B (protocol v1.6 section 13): C0 plus a boundary head -> (potentials [B, L, S], logits [B, L, 4])
+    with logits in g1.BOUNDARY order (TSS+, TES+, TSS-, TES-)."""
+
+    def __init__(self, feature_dim, hidden=256, dna_hidden=32):
+        super().__init__(feature_dim, hidden, dna_hidden)
+        self.bnd = nn.Linear(hidden, len(g1.BOUNDARY))
+
+    def forward(self, token_features, codes):
+        h = self.hidden(token_features, codes)
+        return self.out(h), self.bnd(h)

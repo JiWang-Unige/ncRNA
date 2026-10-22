@@ -7,7 +7,16 @@ import torch
 
 from ncrna_annot.grammar import g1
 
-torch.set_default_dtype(torch.float64)
+
+
+@pytest.fixture(autouse=True)
+def _float64():
+    """exact comparisons in double precision, restored afterwards (other test modules use float32)."""
+    old = torch.get_default_dtype()
+    torch.set_default_dtype(torch.float64)
+    yield
+    torch.set_default_dtype(old)
+
 RC = str.maketrans("ACGT", "TGCA")
 
 
@@ -175,5 +184,130 @@ def test_duration_viterbi_matches_constrained_bruteforce(seq):
         if sc > best:
             best, best_path = sc, P
     path, sc = g1.viterbi_duration(emit, T, gates, allowed, min_exon=2, min_intron=4)
+    assert abs(sc - best) < 1e-8
+    assert _runs_ok([g1.STATES[p] for p in path], 2, 4)
+
+
+# ---- G1B (protocol v1.6 section 13): position-dependent boundary bonuses on gene entry / exit ----------------
+
+def rand_boundary(L, seed):
+    rng = np.random.default_rng(seed)
+    coef = g1.BoundaryCoef()
+    with torch.no_grad():
+        for k in g1.TYPES:
+            coef.c[k].copy_(torch.tensor(rng.normal(size=2)))
+    bnd = torch.tensor(rng.normal(size=(L, 4)) * 2)
+    return coef, bnd
+
+
+def edge_score(P, frm, to, vals):
+    """bonus of each path [N, L] given edges; vals [L-1, nE]."""
+    out = np.zeros(len(P))
+    for e, (i, j) in enumerate(zip(frm, to)):
+        hit = (P[:, :-1] == i) & (P[:, 1:] == j)
+        out += (hit * vals[None, :, e]).sum(1)
+    return out
+
+
+def brute_edges(seq, emit, T, edges, allowed=None):
+    L = len(seq)
+    x = emit + g1.gate_mask(g1.encode(seq)).astype(np.float64)
+    if allowed is not None:
+        x = np.where(allowed, x, g1.NEG)
+    P = np.array(list(itertools.product(range(g1.S), repeat=L)))
+    frm, to, vals = edges
+    sc = x[np.arange(L), P].sum(1) + T[P[:, :-1], P[:, 1:]].sum(1) + edge_score(P, frm, to, vals.detach().numpy())
+    z = np.logaddexp.reduce(sc)
+    w = np.exp(sc - z)
+    marg = np.zeros((L, g1.S))
+    for t in range(L):
+        np.add.at(marg[t], P[:, t], w)
+    b = int(np.argmax(sc))
+    return z, marg, P[b], sc[b]
+
+
+@pytest.mark.parametrize("seq", SEQS[:3])
+def test_g1b_logz_marginals_viterbi_match_bruteforce(seq):
+    rng = np.random.default_rng(21)
+    L = len(seq)
+    emit = rng.normal(size=(L, g1.S)) * 2
+    T = rand_trans(6)
+    coef, bnd = rand_boundary(L, 22)
+    edges = g1.boundary_edges(bnd, coef)
+    z_b, marg_b, path_b, sc_b = brute_edges(seq, emit, T.numpy(), edges)
+    gates = torch.tensor(g1.gate_mask(g1.encode(seq)))[None].double()
+    bedges = g1.boundary_edges(bnd[None], coef)
+    for block in (1, 2, 64):
+        z = g1.log_partition(torch.tensor(emit)[None], T, gates, block=block, edges=bedges)
+        assert abs(float(z) - z_b) < 1e-8
+    marg = g1.marginals(torch.tensor(emit)[None], T, gates, edges=bedges)[0].numpy()
+    assert np.abs(marg - marg_b).max() < 1e-8
+    path, sc = g1.viterbi(emit, T.numpy(), gates[0].numpy(), edges=edges)
+    assert abs(sc - sc_b) < 1e-8
+    assert list(path) == list(path_b)
+
+
+def test_g1b_observed_partition_and_gradient():
+    seq = "AGTAG"
+    rng = np.random.default_rng(23)
+    emit = rng.normal(size=(5, g1.S))
+    allowed = rng.random((5, g1.S)) < 0.6
+    allowed[:, 0] = True
+    T = rand_trans(7)
+    coef, bnd = rand_boundary(5, 24)
+    z_b, _, _, _ = brute_edges(seq, emit, T.numpy(), g1.boundary_edges(bnd, coef), allowed)
+    gates = torch.tensor(g1.gate_mask(g1.encode(seq)))[None].double()
+    b = bnd[None].clone().requires_grad_(True)
+    z = g1.log_partition(torch.tensor(emit)[None], T, gates, torch.tensor(allowed)[None], edges=g1.boundary_edges(b, coef))
+    assert abs(float(z) - z_b) < 1e-8
+    z.sum().backward()
+    assert b.grad is not None and torch.isfinite(b.grad).all()
+    assert all(coef.c[k].grad is not None for k in g1.TYPES)
+
+
+def test_g1b_reverse_complement_invariance():
+    rng = np.random.default_rng(25)
+    L = 300
+    seq = "".join(rng.choice(list("ACGT"), L))
+    rc = seq.translate(RC)[::-1]
+    emit = rng.normal(size=(L, g1.S))
+    mi = mirror_index()
+    emit_rc = np.empty_like(emit)
+    emit_rc[:, mi] = emit[::-1]
+    coef, bnd = rand_boundary(L, 26)
+    bnd_rc = bnd.flip(0)[:, [2, 3, 0, 1]]  # TSS+ <-> TSS-, TES+ <-> TES-
+    T = rand_trans(10)
+    z1 = g1.log_partition(torch.tensor(emit)[None], T, torch.tensor(g1.gate_mask(g1.encode(seq)))[None].double(),
+                          edges=g1.boundary_edges(bnd[None], coef))
+    z2 = g1.log_partition(torch.tensor(emit_rc)[None], T, torch.tensor(g1.gate_mask(g1.encode(rc)))[None].double(),
+                          edges=g1.boundary_edges(bnd_rc[None], coef))
+    assert abs(float(z1) - float(z2)) < 1e-7
+
+
+@pytest.mark.parametrize("seq", ["AGTAGTAGTA", "GTAAGGTCAG"])
+def test_g1b_duration_viterbi_matches_constrained_bruteforce(seq):
+    rng = np.random.default_rng(27)
+    L = len(seq)
+    sub = [0] + [g1.IDX[f"l{p}+"] for p in g1.PARTS]
+    allowed = np.zeros((L, g1.S), bool)
+    allowed[:, sub] = True
+    emit = rng.normal(size=(L, g1.S)) * 2
+    T = rand_trans(8).numpy()
+    coef, bnd = rand_boundary(L, 28)
+    frm, to, vals = g1.boundary_edges(bnd * 3, coef)
+    V = vals.detach().numpy()
+    gates = g1.gate_mask(g1.encode(seq))
+    x = np.where(allowed, emit + gates, g1.NEG)
+    eb = {(i, j): e for e, (i, j) in enumerate(zip(frm, to))}
+    best = -np.inf
+    for P in itertools.product(sub, repeat=L):
+        if any(T[a, b] < g1.NEG / 2 for a, b in zip(P, P[1:])) or any(x[t, p] < g1.NEG / 2 for t, p in enumerate(P)):
+            continue
+        if not _runs_ok([g1.STATES[p] for p in P], 2, 4):
+            continue
+        sc = sum(x[t, p] for t, p in enumerate(P)) + sum(T[a, b] for a, b in zip(P, P[1:]))
+        sc += sum(V[t, eb[(a, b)]] for t, (a, b) in enumerate(zip(P, P[1:])) if (a, b) in eb)
+        best = max(best, sc)
+    path, sc = g1.viterbi_duration(emit, T, gates, allowed, min_exon=2, min_intron=4, edges=(frm, to, vals))
     assert abs(sc - best) < 1e-8
     assert _runs_ok([g1.STATES[p] for p in path], 2, 4)
