@@ -30,7 +30,19 @@ meta() {  # slug datasets kernel_sources
   printf '{"id": "%s/%s", "title": "%s", "code_file": "kernel.py", "language": "python", "kernel_type": "script", "is_private": "true", "enable_gpu": "true", "enable_tpu": "false", "enable_internet": "true", "machine_shape": "", "dataset_sources": %s, "competition_sources": [], "kernel_sources": %s, "model_sources": []}' $ACC $1 $1 "$2" "$3"
 }
 TRDS="[\"$ACC/ncrna-p1s-data\", \"$ACC/ncrna-p1g-data\"]"
-EVDS="[\"$ACC/ncrna-p1s2-data\", \"$ACC/ncrna-p1g-data\"]"
+EVDS="[\"$ACC/ncrna-p1s2-data\"]"
+# eval kernels carry the code inline (base64 src.tgz): inputs above ~14 GB no longer start on Kaggle
+tar czf /tmp/p1g_src_eval.tgz --exclude=__pycache__ src
+SRC64=$(base64 -w0 /tmp/p1g_src_eval.tgz)
+EHDR="import subprocess, sys
+subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-q', 'numba'])
+import base64, glob, io, json, os, tarfile
+def find(name, hint=''):
+    c = [x for x in glob.glob(f'/kaggle/input/**/{name}', recursive=True) if hint in x]
+    return sorted(c)[0]
+tarfile.open(fileobj=io.BytesIO(base64.b64decode('$SRC64'))).extractall('/tmp/code'); sys.path.insert(0, '/tmp/code/src')
+import numpy as np, torch
+from ncrna_annot.train import screen_g1b"
 for tag in smoke-run 42 123 456; do
   K=kaggle/ncrna-p1g-g1b-$tag; mkdir -p $K
   if [ $tag = smoke-run ]; then
@@ -54,7 +66,7 @@ PY
   E=kaggle/ncrna-p1g-g1b-$tag-eval; mkdir -p $E
   if [ $tag = smoke-run ]; then
     cat > $E/kernel.py <<PY
-$HDR
+$EHDR
 $CH
 ch.update(feats=ch["feats"][:500000], codes=ch["codes"][:3000000], gff_out="/kaggle/working/smoke_chr18.gff3")
 screen_g1b.evaluate_checkpoint(find("best.pt", "ncrna-p1g-g1b-smoke-run/"), 512, ch, "/kaggle/working/p1g_g1b_smoke")
@@ -62,7 +74,7 @@ print("EVAL_DONE", flush=True)
 PY
   else
     cat > $E/kernel.py <<PY
-$HDR
+$EHDR
 $CH
 ch["gff_out"] = "/kaggle/working/g1b_${tag}_chr18.gff3"
 screen_g1b.evaluate_checkpoint(find("best.pt", "ncrna-p1g-g1b-$tag/"), 512, ch, "/kaggle/working/p1g_g1b_$tag")
