@@ -1,7 +1,7 @@
 #!/bin/bash
 # P1.1 formal feature cache on ont (decision formal-features-ont, 2026-10-23): GENERanno L17+L23, fp16, bf16 compute.
-# Shard by shard (train 100 windows, chromosomes 200 tiles): before EVERY shard wait until the GPU is idle
-# (no other compute process, < 2 GB used) so TE / coding jobs are never blocked; each shard is < 1 min of GPU.
+# Shard by shard (train 100 windows, chromosomes 200 tiles): before EVERY shard pass the GPU gate (gpu_gate.sh:
+# wait for TE processes and other users; the user's own coding jobs may share); each shard is < 1 min of GPU.
 # Resumable: a shard whose .json sits in data/p1_shards/ont is skipped.  Shards are assembled into data/p1_feat
 # (same layout as extract_p1.py) right away and their .npy deleted, so peak disk ~ cache + one shard.
 #   nohup bash scripts/phase1/p1_feat_ont.sh > logs/p1_feat_ont.log 2>&1 &
@@ -12,15 +12,11 @@ DONE=data/p1_shards/ont; STG=data/p1_shards/stage; FEAT=data/p1_feat; mkdir -p $
 LOCK=logs/p1_feat_ont.lock
 if [ -e $LOCK ] && kill -0 "$(cat $LOCK)" 2>/dev/null; then echo "another runner (pid $(cat $LOCK)) is active"; exit 1; fi
 echo $$ > $LOCK; trap 'rm -f $LOCK' EXIT
-TRAIN_STEP=${TRAIN_STEP:-100}; TILE_STEP=${TILE_STEP:-200}; IDLE_MB=${IDLE_MB:-2000}
+TRAIN_STEP=${TRAIN_STEP:-100}; TILE_STEP=${TILE_STEP:-200}
 log() { echo "$(date -u +%Y-%m-%dT%H:%MZ) $*"; }
-gpu_idle() {  # no foreign compute process and little memory in use
-  local apps used
-  apps=$(nvidia-smi --query-compute-apps=pid --format=csv,noheader | grep -c .)
-  used=$(nvidia-smi --query-gpu=memory.used --format=csv,noheader,nounits | head -1)
-  [ "$apps" -eq 0 ] && [ "$used" -lt "$IDLE_MB" ]
-}
-wait_idle() { local n=0; until gpu_idle; do [ $((n % 10)) -eq 0 ] && log "GPU busy ($(nvidia-smi --query-compute-apps=process_name,used_memory --format=csv,noheader | tr '\n' ';')) - waiting"; n=$((n+1)); sleep 60; done; }
+. scripts/phase1/gpu_gate.sh   # TE / other users block; own coding jobs may share (rule 2026-10-26)
+export NCRNA_GPU_FRAC=${NCRNA_GPU_FRAC:-0.4}   # cap this process at ~10 GB of the 24 GB card
+wait_idle() { gpu_wait; }
 run_shard() {  # stem, extract args...
   local stem=$1; shift
   [ -e $DONE/$stem.json ] && { log "skip $stem (done)"; return 0; }

@@ -77,6 +77,9 @@ def main():
             return rng.standard_normal((len(batch), G.NT, G.DIM), dtype=np.float32).astype(np.float16).view(_Arr)
     else:
         import torch
+        frac = float(os.environ.get("NCRNA_GPU_FRAC", "0") or 0)
+        if frac > 0:  # share the card with the user's other (non-TE) jobs: cap this process
+            torch.cuda.set_per_process_memory_fraction(frac, 0)
         tok, model = G.load()
         compute, gpu = str(G.half_dtype()), torch.cuda.get_device_name(0)
 
