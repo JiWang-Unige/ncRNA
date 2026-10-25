@@ -104,9 +104,18 @@ def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print)
     return res
 
 
-def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print):
+class Paused(Exception):
+    """Raised by run() when the pause hook asks to yield the GPU (ont: a TE or other user's job appeared)."""
+
+
+def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print,
+        pause=None, resume=False):
     """tr / va = dict(feats, codes, bits, events [n, L, 8] int8); ch as in screen2, or None (training only;
-    evaluate later with evaluate_checkpoint)."""
+    evaluate later with evaluate_checkpoint).
+    pause: optional callable checked before every batch; returning True aborts the current epoch with Paused
+    (the caller frees the GPU and restarts later).  resume: keep last.pt (model, optimiser, scheduler, RNG, best)
+    after every epoch and continue from it, so an aborted run repeats at most one epoch and reproduces the
+    uninterrupted run's epoch-level trajectory (same permutations, same updates)."""
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out, exist_ok=True)
@@ -118,11 +127,21 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=1e-2)
     steps = epochs * math.ceil(N / batch)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=steps, eta_min=1e-5)
-    best, t0 = (math.inf, 0), time.time()
-    for ep in range(epochs):
+    best, t0, start = (math.inf, 0), time.time(), 0
+    last = f"{out}/last.pt"
+    if resume and os.path.exists(last):
+        st = torch.load(last, map_location=device, weights_only=False)
+        head.load_state_dict(st["head"]); trans.load_state_dict(st["trans"]); coef.load_state_dict(st["coef"])
+        opt.load_state_dict(st["opt"]); sched.load_state_dict(st["sched"])
+        rng.bit_generator.state = st["rng"]; torch.set_rng_state(st["torch_rng"])
+        best, start, t0 = tuple(st["best"]), st["epoch"], time.time() - st["t"]
+        log(json.dumps({"resume_from_epoch": start, "best": best}))
+    for ep in range(start, epochs):
         head.train()
         order, tot, tot_b, nb = rng.permutation(N), 0.0, 0.0, 0
         for i in range(0, N, batch):
+            if pause is not None and pause():
+                raise Paused(f"epoch {ep + 1} batch {i // batch}")
             idx = np.sort(order[i:i + batch])
             f = torch.as_tensor(np.asarray(tr["feats"][idx], np.float32), device=device)
             c_np = np.asarray(tr["codes"][idx])
@@ -148,6 +167,12 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
             best = (v, ep + 1)
             torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "coef": coef.state_dict(),
                         "epoch": ep + 1}, f"{out}/best.pt")
+        if resume:
+            torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "coef": coef.state_dict(),
+                        "opt": opt.state_dict(), "sched": sched.state_dict(), "rng": rng.bit_generator.state,
+                        "torch_rng": torch.get_rng_state(), "best": list(best), "epoch": ep + 1,
+                        "t": round(time.time() - t0)}, last + ".tmp")
+            os.replace(last + ".tmp", last)
     res = {"arm": "G1B", "seed": seed, "best_epoch": best[1], "best_val_nll": best[0], "train_s": round(time.time() - t0)}
     if ch is None:
         json.dump(res, open(f"{out}/train_summary.json", "w"), indent=1)

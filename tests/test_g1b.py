@@ -64,3 +64,39 @@ def test_decode_blocks_with_boundary_equals_single_pass():
     assert len(set(key(whole)) & set(key(blk))) >= 0.9 * len(whole)
     plain = g1.path_to_genes(g1.viterbi_duration(pot, T, g1.gate_mask(codes), None, 5, 10)[0])
     assert key(plain) != key(whole)  # the bonuses change the decoding
+
+
+def test_run_pause_and_resume_reproduces_uninterrupted(tmp_path):
+    """screen_g1b.run with resume=True: a run aborted by the pause hook and restarted ends with the same
+    metrics and best checkpoint as an uninterrupted run (epoch-level determinism on CPU)."""
+    import json as _json
+    import numpy as _np
+    import torch as _torch
+    from ncrna_annot.data import labels as _labels
+    from ncrna_annot.train import screen_g1b as sg
+    rng = _np.random.default_rng(3)
+    N, L, D = 6, 600, 16
+    tx = [("l", "+", [(100, 200), (300, 400)]), ("m", "-", [(450, 500)])]
+    def mk(n):
+        return dict(feats=rng.normal(size=(n, L // 6, D)).astype(_np.float16),
+                    codes=rng.integers(0, 4, size=(n, L)).astype(_np.int8),
+                    bits=_np.stack([_labels.allowed_bits(L, tx) for _ in range(n)]),
+                    events=_np.zeros((n, L, 8), _np.int8))
+    tr, va = mk(N), mk(2)
+    a = sg.run(0, tr, va, None, str(tmp_path / "a"), epochs=3, batch=2, device="cpu", log=lambda *_: None, resume=True)
+    calls = {"n": 0}
+    def pause_once():  # abort in the middle of epoch 2 (first epoch = 3 batches)
+        calls["n"] += 1
+        return calls["n"] == 5
+    try:
+        sg.run(0, tr, va, None, str(tmp_path / "b"), epochs=3, batch=2, device="cpu", log=lambda *_: None,
+               pause=pause_once, resume=True)
+        raise AssertionError("expected Paused")
+    except sg.Paused:
+        pass
+    assert _torch.load(tmp_path / "b" / "last.pt", weights_only=False)["epoch"] == 1
+    b = sg.run(0, tr, va, None, str(tmp_path / "b"), epochs=3, batch=2, device="cpu", log=lambda *_: None, resume=True)
+    assert a["best_epoch"] == b["best_epoch"] and abs(a["best_val_nll"] - b["best_val_nll"]) < 1e-9
+    ra = [_json.loads(l) for l in open(tmp_path / "a" / "metrics.jsonl")]
+    rb = [_json.loads(l) for l in open(tmp_path / "b" / "metrics.jsonl")]
+    assert [r["val_nll"] for r in ra] == [r["val_nll"] for r in rb[-3:]] or [r["val_nll"] for r in ra] == [r["val_nll"] for r in rb]
