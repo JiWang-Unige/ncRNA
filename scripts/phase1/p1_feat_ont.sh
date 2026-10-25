@@ -34,6 +34,12 @@ T0=$SECONDS; fails=0
 N=$($PY -c "import numpy as np;print(len(np.load('data/p1/train_codes.npy',mmap_mode='r')))")
 for ((a=0; a<N; a+=TRAIN_STEP)); do b=$((a+TRAIN_STEP)); [ $b -gt $N ] && b=$N
   run_shard $(printf "train_%05d_%05d" $a $b) --kind train --codes data/p1/train_codes.npy --range $a:$b || fails=$((fails+1)); done
+# 1b) checkpoint-selection windows (300 chr18 windows of P1-S; starts are not on the 6-mer grid -> own features)
+V=data/p1v12/val_codes.npy
+if [ -e $V ]; then NV=$($PY -c "import numpy as np;print(len(np.load('$V',mmap_mode='r')))")
+  for ((a=0; a<NV; a+=TRAIN_STEP)); do b=$((a+TRAIN_STEP)); [ $b -gt $NV ] && b=$NV
+    run_shard $(printf "val_%05d_%05d" $a $b) --kind train --name val --codes $V --range $a:$b || fails=$((fails+1)); done
+else log "WARN no $V - validation windows skipped"; fi
 # 2) chromosomes (chr18 validation, chr20 test, T2T chr20 if its codes exist)
 for name in chr18 chr20 t2t_chr20; do
   C=data/p1/${name}_codes.npy; [ -e $C ] || { log "WARN no codes for $name ($C) - skipped"; continue; }

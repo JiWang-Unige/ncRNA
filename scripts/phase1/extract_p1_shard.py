@@ -26,7 +26,8 @@ def parse():
     ap.add_argument("--src", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "src"))
     ap.add_argument("--range", default=None, help="train: A:B window indices within --codes")
     ap.add_argument("--index-offset", type=int, default=0, help="train: global index of codes[0]")
-    ap.add_argument("--name", default=None, help="chrom: chromosome name for the stem")
+    ap.add_argument("--name", default=None, help="chrom: chromosome name; train: window-set name (default train)")
+    ap.add_argument("--n-total", type=int, default=None, help="train: size of the full window set (default len(codes) when --index-offset is 0, else read by the assembler from <codes-dir>/<name>_codes.npy)")
     ap.add_argument("--tiles", default=None, help="chrom: K0:K1 tile indices (tiles of the full chromosome)")
     ap.add_argument("--chrom-len", type=int, default=None, help="chrom: full chromosome length (bp)")
     ap.add_argument("--bp-offset", type=int, default=0, help="chrom: bp position of codes[0] in the chromosome")
@@ -92,14 +93,16 @@ def main():
     if a.kind == "train":
         A, B = map(int, a.range.split(":"))
         ga, gb = A + a.index_offset, B + a.index_offset
-        stem = f"train_{ga:05d}_{gb:05d}"
+        wname = a.name or "train"
+        stem = f"{wname}_{ga:05d}_{gb:05d}"
         arr = np.empty((B - A, G.NT, G.DIM), np.float16)
         t1 = time.time()
         for i in range(A, B, a.batch):
             j = min(i + a.batch, B)
             arr[i - A:j - A] = feats([codes[k] for k in range(i, j)]).cpu().numpy()
             print(json.dumps({"win": j - A, "of": B - A, "t": round(time.time() - t0)}), flush=True)
-        meta.update(index_range=[ga, gb], shape=list(arr.shape), window_s=round((time.time() - t1) / (B - A), 2))
+        meta.update(name=wname, n_total=a.n_total or (len(codes) if a.index_offset == 0 else None), index_range=[ga, gb],
+                    shape=list(arr.shape), window_s=round((time.time() - t1) / (B - A), 2))
     else:
         K0, K1 = map(int, a.tiles.split(":"))
         L = a.chrom_len or (len(codes) + a.bp_offset)

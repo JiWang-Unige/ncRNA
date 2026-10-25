@@ -38,8 +38,19 @@ def read_genome(chroms):
 
 
 def main():
+    global OUT
+    import argparse
+    ap = argparse.ArgumentParser(description="v1.2 labels for a window set (defaults: the P1-S windows -> data/p1s_v12)")
+    ap.add_argument("--windows-train", default=f"{P05}/windows_train.tsv")
+    ap.add_argument("--windows-val", default=f"{P05}/windows_val.tsv")
+    ap.add_argument("--splits", default="train,val")
+    ap.add_argument("--out", default=OUT)
+    ap.add_argument("--check-train-codes", default=None, help="assert the regenerated train codes equal this .npy")
+    a = ap.parse_args()
+    OUT = a.out
     os.makedirs(OUT, exist_ok=True)
-    wins = {sp: [(l.split("\t")[0], int(l.split("\t")[1])) for l in open(f"{P05}/windows_{sp}.tsv")] for sp in ("train", "val")}
+    src = {"train": a.windows_train, "val": a.windows_val}
+    wins = {sp: [(l.split("\t")[0], int(l.split("\t")[1])) for l in open(src[sp])] for sp in a.splits.split(",")}
     chroms = {c for w in wins.values() for c, _ in w}
     seqs = read_genome(chroms)
     tx = {v: labels.read_transcripts(p, chroms) for v, p in GTF.items()}
@@ -62,6 +73,10 @@ def main():
                     for va in variants:
                         arr[(sp, va)][i] = b[va][st:st + WIN]
         print(c, "done", flush=True)
+    if a.check_train_codes and "train" in wins:
+        ref = np.load(a.check_train_codes, mmap_mode="r")
+        assert ref.shape == codes["train"].shape and np.array_equal(ref, codes["train"]), "train codes differ from " + a.check_train_codes
+        print("train codes identical to", a.check_train_codes, flush=True)
     stats = {}
     for sp in wins:
         np.save(f"{OUT}/{sp}_codes.npy", codes[sp])
@@ -79,6 +94,8 @@ def main():
             np.save(f"{OUT}/{sp}_bits_{va}.npy", A)
     import json
     json.dump(stats, open(f"{OUT}/repair_stats.json", "w"), indent=1)
+    if "val" not in wins:
+        return
     with open(f"{OUT}/val_windows.tsv", "w") as fh:
         fh.writelines(f"{c}\t{st}\n" for c, st in wins["val"])
     # truth for window-level validation: v50 genes whose full span lies inside one val window

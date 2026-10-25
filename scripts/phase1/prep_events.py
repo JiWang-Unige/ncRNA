@@ -70,8 +70,17 @@ def paint(track, positions, w, lo, hi, value, only_if=None):
 
 
 def main():
-    os.makedirs(OUT, exist_ok=True)
-    wins = {sp: [(l.split("\t")[0], int(l.split("\t")[1])) for l in open(f"{P05}/windows_{sp}.tsv")] for sp in ("train", "val")}
+    import argparse
+    ap = argparse.ArgumentParser(description="P1-G0 event targets for a window set (defaults: P1-S windows -> data/p1g)")
+    ap.add_argument("--windows-train", default=f"{P05}/windows_train.tsv")
+    ap.add_argument("--windows-val", default=f"{P05}/windows_val.tsv")
+    ap.add_argument("--splits", default="train,val")
+    ap.add_argument("--out", default=OUT)
+    a = ap.parse_args()
+    out_dir = a.out
+    os.makedirs(out_dir, exist_ok=True)
+    src = {"train": a.windows_train, "val": a.windows_val}
+    wins = {sp: [(l.split("\t")[0], int(l.split("\t")[1])) for l in open(src[sp])] for sp in a.splits.split(",")}
     chroms = {c for w in wins.values() for c, _ in w}
     clen = chrom_lengths(chroms)
     tx = labels.read_transcripts(GTF, chroms)
@@ -102,12 +111,12 @@ def main():
                             paint(tr, ev.get(ch, []), POS_W, lo, hi, 1)
                     win[:, j] = tr
             print(sp, c, "done", flush=True)
-        np.save(f"{OUT}/{sp}_events.npy", out)
+        np.save(f"{out_dir}/{sp}_events.npy", out)
         stats[sp] = {ch: {"pos_frac": float((out[..., j] == 1).mean()), "ign_frac": float((out[..., j] == -1).mean()),
                           "n_pos_events_approx": int((out[..., j] == 1).sum() // (2 * POS_W + 1))} for ch, j in CH.items()}
         print(sp, json.dumps(stats[sp]), flush=True)
     stats["channels"] = EV
-    json.dump(stats, open(f"{OUT}/events_stats.json", "w"), indent=1)
+    json.dump(stats, open(f"{out_dir}/events_stats.json", "w"), indent=1)
 
 
 if __name__ == "__main__":

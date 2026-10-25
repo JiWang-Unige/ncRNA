@@ -76,12 +76,13 @@ def main():
         if not a.check_only:
             sh = np.load(npy, mmap_mode="r")
             if m["kind"] == "train":
-                n = len(np.load(os.path.join(a.codes_dir, "train_codes.npy"), mmap_mode="r"))
-                arr = open_arr(os.path.join(a.feat_root, "train.npy"), (n, G.NT, G.DIM))
+                wname = m.get("name", "train")
+                n = m.get("n_total") or len(np.load(os.path.join(a.codes_dir, f"{wname}_codes.npy"), mmap_mode="r"))
+                arr = open_arr(os.path.join(a.feat_root, f"{wname}.npy"), (n, G.NT, G.DIM))
                 ga, gb = m["index_range"]
                 arr[ga:gb] = sh
                 arr.flush()
-                cp = os.path.join(a.feat_root, "train.cover.json")
+                cp = os.path.join(a.feat_root, f"{wname}.cover.json")
                 cv = cover(cp); cv.append([ga, gb]); json.dump(sorted(cv), open(cp, "w"))
                 rep["wrote"] = [ga, gb]
             else:
