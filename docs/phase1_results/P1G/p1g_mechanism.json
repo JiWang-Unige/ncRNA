@@ -1,0 +1,65 @@
+[
+ {
+  "arm": "R (seed 123, v1.5)",
+  "span_ratio": 2.772867265323176,
+  "tss": 9834.0,
+  "tes": 16984.5,
+  "span_cov": 0.9718644477195446,
+  "out_span": 0.7214285714285714,
+  "exact_j": 0.04285714285714286,
+  "truth_intron_recovery": 0.03367003367003367,
+  "genes_spanned_ge2": 0.5576923076923077,
+  "pred_intron_len": 18434.5,
+  "truth_intron_len": 4096.0,
+  "exon_cov": 0.4,
+  "mrna_exact_j": 0.715022344448264,
+  "mrna_frag_ge2": 0.5503875968992248,
+  "decision": {
+   "A_boundary_precision": false,
+   "B_structure": true,
+   "C_ends": true
+  }
+ },
+ {
+  "arm": "G1B (seed 42)",
+  "span_ratio": 1.0442323700476583,
+  "tss": 8829.5,
+  "tes": 9305.0,
+  "span_cov": 0.6129775438286077,
+  "out_span": 0.5640138408304498,
+  "exact_j": 0.0847750865051903,
+  "truth_intron_recovery": 0.08147986837011227,
+  "genes_spanned_ge2": 0.25,
+  "pred_intron_len": 8889.0,
+  "truth_intron_len": 4622.0,
+  "exon_cov": 0.5,
+  "mrna_exact_j": 0.7790249035426167,
+  "mrna_frag_ge2": 0.36964980544747084,
+  "decision": {
+   "A_boundary_precision": false,
+   "B_structure": false,
+   "C_ends": true
+  }
+ },
+ {
+  "arm": "G2-PH (seed 456)",
+  "span_ratio": 1.8547598348185177,
+  "tss": 2982.0,
+  "tes": 8301.0,
+  "span_cov": 0.8588076422926878,
+  "out_span": 0.7112676056338029,
+  "exact_j": 0.035211267605633804,
+  "truth_intron_recovery": 0.012831858407079646,
+  "genes_spanned_ge2": 0.35658914728682173,
+  "pred_intron_len": 30120.0,
+  "truth_intron_len": 4646.0,
+  "exon_cov": 0.5,
+  "mrna_exact_j": 0.7672,
+  "mrna_frag_ge2": 0.26877470355731226,
+  "decision": {
+   "A_boundary_precision": false,
+   "B_structure": false,
+   "C_ends": true
+  }
+ }
+]
