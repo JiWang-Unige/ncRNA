@@ -1,0 +1,11 @@
+# protocol v1.8 section 15 (frozen 2026-10-26). P1.3 pilot = main model seed 42.
+g1b-42 --seed 42
+check-frag g1b-42
+g1b-123 --seed 123
+g1b-456 --seed 456
+ab2-f-42 --seed 42 --labels v50f
+ab2-f-123 --seed 123 --labels v50f
+ab2-f-456 --seed 456 --labels v50f
+ab4-v41-42 --seed 42 --labels v41uev
+ab4-v41-123 --seed 123 --labels v41uev
+ab4-v41-456 --seed 456 --labels v41uev
