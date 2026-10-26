@@ -19,7 +19,8 @@ from ..eval import ruler
 from ..features import generanno as G
 from ..grammar import g1
 from ..heads.c0 import C0BHead
-from .screen2 import summarize
+from .screen import M_STATES
+from .screen2 import Paused, summarize  # noqa: F401  (Paused re-exported)
 
 TOK = 6
 EV_BOUNDARY = [2, 3, 6, 7]  # P1-G0 event channels (TSS+, TES+, TSS-, TES-) in g1.BOUNDARY order
@@ -33,8 +34,18 @@ def boundary_bce(logits, ev):
     return torch.nn.functional.binary_cross_entropy_with_logits(logits[keep], ev[keep].float())
 
 
-def crf_nll(head, trans, coef, f, c, c_np, bits, device):
+def _mask_lnc_only(e, lnc_only):
+    """lnc-only arm (AB3 / S2): mRNA states impossible (same masking as screen2._emit)."""
+    if not lnc_only:
+        return e
+    e = e.clone()
+    e[..., M_STATES] = g1.NEG
+    return e
+
+
+def crf_nll(head, trans, coef, f, c, c_np, bits, device, lnc_only=False):
     e, b = head(f, c)
+    e = _mask_lnc_only(e, lnc_only)
     T = trans()
     gates = torch.as_tensor(np.stack([g1.gate_mask(x) for x in c_np]), device=device)
     al = torch.as_tensor(labels.bits_to_bool(bits), device=device)
@@ -43,7 +54,7 @@ def crf_nll(head, trans, coef, f, c, c_np, bits, device):
     return nll, b
 
 
-def val_nll(head, trans, coef, va, device):
+def val_nll(head, trans, coef, va, device, lnc_only=False):
     head.eval()
     tot, n = 0.0, 0
     with torch.no_grad():
@@ -51,13 +62,14 @@ def val_nll(head, trans, coef, va, device):
             f = torch.as_tensor(np.asarray(va["feats"][i:i + 4], np.float32), device=device)
             c_np = np.asarray(va["codes"][i:i + 4])
             c = torch.as_tensor(c_np.astype(np.int64), device=device)
-            nll, _ = crf_nll(head, trans, coef, f, c, c_np, np.asarray(va["bits"][i:i + 4]), device)
+            nll, _ = crf_nll(head, trans, coef, f, c, c_np, np.asarray(va["bits"][i:i + 4]), device, lnc_only)
             tot += float(nll.sum())
             n += len(c_np)
     return tot / n
 
 
-def evaluate_chromosome(head, trans, coef, ch, device):
+def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=False):
+    """S3 (+ boundary bonuses); with_s1 also decodes S1 = posterior-argmax segments (AB1, no grammar at decode)."""
     head.eval()
     feats, codes = ch["feats"], ch["codes"]
     L = len(feats) * TOK
@@ -68,7 +80,7 @@ def evaluate_chromosome(head, trans, coef, ch, device):
         c = torch.as_tensor(np.asarray(codes[s:e], np.int64), device=device)[None]
         with torch.no_grad():
             p, b = head(f, c)
-        return p[0], b[0]
+        return _mask_lnc_only(p, lnc_only)[0], b[0]
 
     t0 = time.time()
     pot = np.zeros((L, g1.S), np.float32)
@@ -80,8 +92,12 @@ def evaluate_chromosome(head, trans, coef, ch, device):
     post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device, coef=coef)
     truth = ruler.read_gtf(ch["truth_gtf"], ch["chrom"])
     genes = chrom.decode_blocks(pot, codes[:L], T.double().cpu().numpy(), 20, 50, mode="s3", bnd=bnd, coef=coef)
-    out = {"S3": summarize(genes, post, truth), "eval_s": round(time.time() - t0),
-           "coef": {k: [float(x) for x in coef.c[k].detach().cpu()] for k in g1.TYPES}}
+    out = {"S3": summarize(genes, post, truth)}
+    if with_s1:
+        s1 = chrom.decode_blocks(post.astype(np.float32), codes[:L], T.double().cpu().numpy(), 20, 50, mode="argmax")
+        out["S1"] = summarize(s1, post, truth)
+    out.update({"eval_s": round(time.time() - t0),
+           "coef": {k: [float(x) for x in coef.c[k].detach().cpu()] for k in g1.TYPES}})
     if ch.get("gff_out"):
         from ..decode import genes as dec
         dec.write_gff3([g for g in genes if g["type"] != "l" or sum(b - a + 1 for a, b in g["exons"]) >= 200],
@@ -89,14 +105,15 @@ def evaluate_chromosome(head, trans, coef, ch, device):
     return out
 
 
-def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print):
+def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print, lnc_only=False, with_s1=False):
     """Separate evaluation job (Kaggle input-size limits): load best.pt, evaluate on ch, write result_eval.json."""
     head, trans, coef = C0BHead(feature_dim).to(device), g1.G1Transitions().to(device), g1.BoundaryCoef().to(device)
     ck = torch.load(ck_path, map_location=device)
     head.load_state_dict(ck["head"])
     trans.load_state_dict(ck["trans"])
     coef.load_state_dict(ck["coef"])
-    res = {"arm": "G1B", "best_epoch": ck["epoch"], **evaluate_chromosome(head, trans, coef, ch, device)}
+    res = {"arm": "G1B", "best_epoch": ck["epoch"], "lnc_only": lnc_only,
+           **evaluate_chromosome(head, trans, coef, ch, device, lnc_only=lnc_only, with_s1=with_s1)}
     os.makedirs(out, exist_ok=True)
     json.dump(res, open(f"{out}/result.json", "w"), indent=1)
     log(json.dumps({k: (v if not isinstance(v, dict) else {kk: vv for kk, vv in v.items() if kk != "curve"})
@@ -104,12 +121,8 @@ def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print)
     return res
 
 
-class Paused(Exception):
-    """Raised by run() when the pause hook asks to yield the GPU (ont: a TE or other user's job appeared)."""
-
-
 def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print,
-        pause=None, resume=False):
+        pause=None, resume=False, lnc_only=False):
     """tr / va = dict(feats, codes, bits, events [n, L, 8] int8); ch as in screen2, or None (training only;
     evaluate later with evaluate_checkpoint).
     pause: optional callable checked before every batch; returning True aborts the current epoch with Paused
@@ -146,7 +159,7 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
             f = torch.as_tensor(np.asarray(tr["feats"][idx], np.float32), device=device)
             c_np = np.asarray(tr["codes"][idx])
             c = torch.as_tensor(c_np.astype(np.int64), device=device)
-            nll, b = crf_nll(head, trans, coef, f, c, c_np, np.asarray(tr["bits"][idx]), device)
+            nll, b = crf_nll(head, trans, coef, f, c, c_np, np.asarray(tr["bits"][idx]), device, lnc_only)
             ev = torch.as_tensor(np.asarray(tr["events"][idx])[..., EV_BOUNDARY], device=device)
             bce = boundary_bce(b, ev)
             loss = nll.mean() + bce_weight * bce
@@ -156,7 +169,7 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
             opt.step()
             sched.step()
             tot, tot_b, nb = tot + float(nll.mean()), tot_b + float(bce), nb + 1
-        v = val_nll(head, trans, coef, va, device)
+        v = val_nll(head, trans, coef, va, device, lnc_only)
         rec = {"arm": "G1B", "seed": seed, "epoch": ep + 1, "train_nll": round(tot / nb, 5), "train_bce": round(tot_b / nb, 5),
                "val_nll": round(v, 5), "lr": opt.param_groups[0]["lr"], "t": round(time.time() - t0),
                "coef": {k: [round(float(x), 4) for x in coef.c[k].detach().cpu()] for k in g1.TYPES}}
@@ -182,7 +195,8 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
     head.load_state_dict(ck["head"])
     trans.load_state_dict(ck["trans"])
     coef.load_state_dict(ck["coef"])
-    res.update(evaluate_chromosome(head, trans, coef, ch, device))
+    res["lnc_only"] = lnc_only
+    res.update(evaluate_chromosome(head, trans, coef, ch, device, lnc_only=lnc_only))
     json.dump(res, open(f"{out}/result.json", "w"), indent=1)
     log(json.dumps({k: (v if not isinstance(v, dict) else {kk: vv for kk, vv in v.items() if kk != "curve"})
                     for k, v in res.items()}))

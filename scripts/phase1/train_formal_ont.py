@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Phase 1 formal-feature runs on ont (P1.1 cache: GENERanno L17+L23, 4,096-d): G1B training + chr18 evaluation.
 
-  train_formal_ont.py --name NAME --seed S [--labels v50uev] [--epochs 12] [--smoke] [--eval-only]
+  train_formal_ont.py --name NAME --seed S [--arm G1B|R|G2PH] [--labels v50uev] [--lnc-only] [--epochs 12] [--smoke]
+  train_formal_ont.py --name ab1-s1-42 --eval-only --from g1b-42 --with-s1      (AB1: S1 decoding of a main model)
+Arms (protocol v1.8 section 15): G1B main / AB2 (--labels v50f) / AB4 (--labels v41uev) / AB3 (--labels v50uevlnc
+--lnc-only); AB0 = --arm R (G1 without boundary head, screen2); AB6 = --arm G2PH (screen_g2ph, numba CPU FB).
 Data (ont): data/p1_feat/{train,val,chr18}.npy (memmaps), data/p1v12/{train,val}_{codes,bits_<labels>,events}.npy,
 chr18 truth outputs/PHASE1/DIAG_L2/chr18_v50.gtf.  Output: outputs/PHASE1/FORMAL/<NAME>/ (metrics.jsonl, last.pt,
 best.pt, result.json, chr18.gff3).  Settings other than features / window set are those of the screening arm
@@ -37,11 +40,17 @@ def main():
     ap.add_argument("--epochs", type=int, default=12)
     ap.add_argument("--smoke", action="store_true", help="64 train / 8 val windows, 1 epoch, first 3 Mb of chr18")
     ap.add_argument("--eval-only", action="store_true")
+    ap.add_argument("--arm", default="G1B", choices=["G1B", "R", "G2PH"])
+    ap.add_argument("--lnc-only", action="store_true", help="AB3: mRNA states masked in training and decoding")
+    ap.add_argument("--from", dest="src", default=None, help="eval-only: take best.pt from this run name")
+    ap.add_argument("--with-s1", action="store_true", help="eval-only: also decode S1 (posterior argmax), AB1")
     a = ap.parse_args()
     import torch
     frac = float(os.environ.get("NCRNA_GPU_FRAC", "0.45"))
     torch.cuda.set_per_process_memory_fraction(frac, 0)
     from ncrna_annot.train import screen_g1b as sg
+    from ncrna_annot.train import screen2 as s2
+    from ncrna_annot.train import screen_g2ph as sp
     out = f"{ROOT}/outputs/PHASE1/FORMAL/{a.name}"
     os.makedirs(out, exist_ok=True)
     F, D = f"{ROOT}/data/p1_feat", f"{ROOT}/data/p1v12"
@@ -63,7 +72,8 @@ def main():
         va = {k: np.asarray(v[:8]) for k, v in va.items()}
         ch.update(feats=ch["feats"][:500000], codes=ch["codes"][:3000000])
         a.epochs = 1
-    meta = dict(name=a.name, seed=a.seed, labels=a.labels, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
+    meta = dict(name=a.name, arm=a.arm, seed=a.seed, labels=a.labels, lnc_only=a.lnc_only, eval_only=a.eval_only,
+                src=a.src, with_s1=a.with_s1, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
                 features="GENERanno-1.2b-cds L17+L23 fp16 (data/p1_feat)", started=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     json.dump(meta, open(f"{out}/run_meta.json", "w"), indent=1)
     n = {"i": 0}
@@ -81,10 +91,21 @@ def main():
         if a.eval_only:
             if gate_busy():
                 sys.exit(75)
-            sg.evaluate_checkpoint(f"{out}/best.pt", 4096, ch, out, device="cuda")
-        else:
-            sg.run(a.seed, tr, va, ch, out, epochs=a.epochs, device="cuda",
-                   pause=pause, resume=True)
+            ck = f"{ROOT}/outputs/PHASE1/FORMAL/{a.src or a.name}/best.pt"
+            if a.arm == "G2PH":
+                sp.evaluate_checkpoint(ck, "G2PH", 4096, ch, out, device="cuda")
+            else:
+                sg.evaluate_checkpoint(ck, 4096, ch, out, device="cuda", lnc_only=a.lnc_only, with_s1=a.with_s1)
+        elif a.arm == "G1B":
+            sg.run(a.seed, tr, va, ch, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, lnc_only=a.lnc_only)
+        elif a.arm == "R":
+            s2.run("R", a.seed, tr, va, ch, out, lnc_only=a.lnc_only, epochs=a.epochs, device="cuda", pause=pause, resume=True)
+        else:  # G2PH: training (GPU head + numba CPU forward-backward), then evaluation in the same run
+            if not os.path.exists(f"{out}/train_summary.json"):
+                sp.run("G2PH", a.seed, tr, va, out, epochs=a.epochs, device="cuda", pause=pause, resume=True)
+            if gate_busy():
+                sys.exit(75)
+            sp.evaluate_checkpoint(f"{out}/best.pt", "G2PH", 4096, ch, out, device="cuda")
     except sg.Paused:
         sys.exit(75)
     print("RUN_DONE", flush=True)

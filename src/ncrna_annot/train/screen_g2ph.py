@@ -19,6 +19,7 @@ from ..features import generanno as G
 from ..grammar import g1, g2ph
 from ..heads.c0 import C0BHead
 from .screen2 import summarize
+from .screen2 import Paused  # noqa: E402
 from .screen_g1b import EV_BOUNDARY, boundary_bce
 
 TOK = 6
@@ -118,8 +119,11 @@ def evaluate_checkpoint(ck_path, arm, feature_dim, ch, out, device="cuda", log=p
     return res
 
 
-def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print):
-    """Training only (evaluation is a separate job, see evaluate_checkpoint).  tr / va as in screen_g1b."""
+def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print,
+        pause=None, resume=False):
+    """Training only (evaluation is a separate job, see evaluate_checkpoint).  tr / va as in screen_g1b.
+    pause: optional callable checked before every batch; True aborts the epoch with Paused.  resume: keep last.pt
+    after every epoch and continue from it (see screen_g1b.run)."""
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out, exist_ok=True)
@@ -137,11 +141,21 @@ def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, dev
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=1e-2)
     steps = epochs * math.ceil(N / batch)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=steps, eta_min=1e-5)
-    best, t0 = (math.inf, 0), time.time()
-    for ep in range(epochs):
+    best, t0, start = (math.inf, 0), time.time(), 0
+    last = f"{out}/last.pt"
+    if resume and os.path.exists(last):
+        st = torch.load(last, map_location=device, weights_only=False)
+        head.load_state_dict(st["head"]); prm.load_state_dict(st["grammar"])
+        opt.load_state_dict(st["opt"]); sched.load_state_dict(st["sched"])
+        rng.bit_generator.state = st["rng"]; torch.set_rng_state(st["torch_rng"])
+        best, start, t0 = tuple(st["best"]), st["epoch"], time.time() - st["t"]
+        log(json.dumps({"resume_from_epoch": start, "best": best}))
+    for ep in range(start, epochs):
         head.train()
         order, tot, tot_b, nb = rng.permutation(N), 0.0, 0.0, 0
         for i in range(0, N, batch):
+            if pause is not None and pause():
+                raise Paused(f"epoch {ep + 1} batch {i // batch}")
             idx = np.sort(order[i:i + batch])
             nll, b = _batch_nll(head, prm, space, tr["feats"], tr["codes"], tr["bits"], idx, feas_tr, device)
             keep = torch.as_tensor(feas_tr[idx], device=nll.device)
@@ -165,6 +179,11 @@ def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, dev
             best = (v, ep + 1)
             torch.save({"head": head.state_dict(), "grammar": prm.state_dict(), "epoch": ep + 1, "arm": arm},
                        f"{out}/best.pt")
+        if resume:
+            torch.save({"head": head.state_dict(), "grammar": prm.state_dict(), "opt": opt.state_dict(),
+                        "sched": sched.state_dict(), "rng": rng.bit_generator.state, "torch_rng": torch.get_rng_state(),
+                        "best": list(best), "epoch": ep + 1, "t": round(time.time() - t0)}, last + ".tmp")
+            os.replace(last + ".tmp", last)
     res = {**info, "best_epoch": best[1], "best_val_nll": best[0], "train_s": round(time.time() - t0)}
     json.dump(res, open(f"{out}/train_summary.json", "w"), indent=1)
     log(json.dumps(res))

@@ -20,6 +20,10 @@ from .screen import M_STATES
 TOK = 6
 
 
+class Paused(Exception):
+    """Raised by the training loops when the pause hook asks to yield the GPU (ont: a TE or other user's job)."""
+
+
 def _emit(head, f, c, lnc_only):
     e = head(f, c)
     if lnc_only:
@@ -97,7 +101,11 @@ def summarize(genes, post, truth):
             "n_pred_mrna": sum(1 for g in genes if g["type"] == "m"), "curve": pr["curve"]}
 
 
-def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3, device="cuda", log=print):
+def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3, device="cuda", log=print,
+        pause=None, resume=False):
+    """Arms R / S2 / S4 (G1 without boundary head).
+    pause: optional callable checked before every batch; True aborts the epoch with Paused.  resume: keep last.pt
+    after every epoch and continue from it (see screen_g1b.run)."""
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out, exist_ok=True)
@@ -108,11 +116,21 @@ def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3,
     opt = torch.optim.AdamW(params, lr=lr, weight_decay=1e-2)
     steps = epochs * math.ceil(N / batch)
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=steps, eta_min=1e-5)
-    best, t0 = (math.inf, 0), time.time()
-    for ep in range(epochs):
+    best, t0, start = (math.inf, 0), time.time(), 0
+    last = f"{out}/last.pt"
+    if resume and os.path.exists(last):
+        st = torch.load(last, map_location=device, weights_only=False)
+        head.load_state_dict(st["head"]); trans.load_state_dict(st["trans"])
+        opt.load_state_dict(st["opt"]); sched.load_state_dict(st["sched"])
+        rng.bit_generator.state = st["rng"]; torch.set_rng_state(st["torch_rng"])
+        best, start, t0 = tuple(st["best"]), st["epoch"], time.time() - st["t"]
+        log(json.dumps({"resume_from_epoch": start, "best": best}))
+    for ep in range(start, epochs):
         head.train()
         order, tot, nb = rng.permutation(N), 0.0, 0
         for i in range(0, N, batch):
+            if pause is not None and pause():
+                raise Paused(f"epoch {ep + 1} batch {i // batch}")
             idx = np.sort(order[i:i + batch])
             f = torch.as_tensor(np.asarray(tr["feats"][idx], np.float32), device=device)
             c_np = np.asarray(tr["codes"][idx])
@@ -136,6 +154,11 @@ def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3,
         if v < best[0]:
             best = (v, ep + 1)
             torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "epoch": ep + 1}, f"{out}/best.pt")
+        if resume:
+            torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "opt": opt.state_dict(),
+                        "sched": sched.state_dict(), "rng": rng.bit_generator.state, "torch_rng": torch.get_rng_state(),
+                        "best": list(best), "epoch": ep + 1, "t": round(time.time() - t0)}, last + ".tmp")
+            os.replace(last + ".tmp", last)
     ck = torch.load(f"{out}/best.pt", map_location=device)
     head.load_state_dict(ck["head"])
     trans.load_state_dict(ck["trans"])
