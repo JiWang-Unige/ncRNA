@@ -24,7 +24,7 @@ import time
 
 import numpy as np
 
-ROOT = os.path.expanduser("~/ncrna-annot")
+ROOT = os.path.expanduser(os.environ.get("NCRNA_ROOT", "~/ncrna-annot"))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 
 
@@ -45,7 +45,10 @@ def main():
     ap.add_argument("--lnc-only", action="store_true", help="AB3: mRNA states masked in training and decoding")
     ap.add_argument("--from", dest="src", default=None, help="eval-only: take best.pt from this run name")
     ap.add_argument("--with-s1", action="store_true", help="eval-only: also decode S1 (posterior argmax), AB1")
-    ap.add_argument("--accum", type=int, default=2, help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
+    ap.add_argument("--accum", type=int, default=int(os.environ.get("NCRNA_ACCUM", "2")),
+                    help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
+    ap.add_argument("--online-features", action="store_true", default=os.environ.get("NCRNA_ONLINE") == "1",
+                    help="compute backbone features on the fly (win3090: no feature cache on disk)")
     a = ap.parse_args()
     import torch
     frac = float(os.environ.get("NCRNA_GPU_FRAC", "0.30"))
@@ -57,13 +60,21 @@ def main():
     os.makedirs(out, exist_ok=True)
     F, D = f"{ROOT}/data/p1_feat", f"{ROOT}/data/p1v12"
     mm = lambda p: np.load(p, mmap_mode="r")
-    tr = dict(feats=mm(f"{F}/train.npy"), codes=mm(f"{D}/train_codes.npy"), bits=mm(f"{D}/train_bits_{a.labels}.npy"),
+    tr = dict(feats=mm(f"{F}/train.npy") if os.path.exists(f"{F}/train.npy") else None, codes=mm(f"{D}/train_codes.npy"), bits=mm(f"{D}/train_bits_{a.labels}.npy"),
               events=mm(f"{D}/train_events.npy"))
-    va = dict(feats=mm(f"{F}/val.npy"), codes=mm(f"{D}/val_codes.npy"), bits=mm(f"{D}/val_bits_{a.labels}.npy"),
+    va = dict(feats=mm(f"{F}/val.npy") if os.path.exists(f"{F}/val.npy") else None, codes=mm(f"{D}/val_codes.npy"), bits=mm(f"{D}/val_bits_{a.labels}.npy"),
               events=mm(f"{D}/val_events.npy"))
-    ch = dict(feats=mm(f"{F}/chr18.npy"), codes=mm(f"{ROOT}/data/p1/chr18_codes.npy"),
+    ch = dict(feats=mm(f"{F}/chr18.npy") if os.path.exists(f"{F}/chr18.npy") else None, codes=mm(f"{ROOT}/data/p1/chr18_codes.npy"),
               truth_gtf=f"{ROOT}/outputs/PHASE1/DIAG_L2/chr18_v50.gtf", chrom="chr18", gff_out=f"{out}/chr18.gff3")
-    for k in ("train", "val", "chr18"):  # refuse to train on a partially filled cache
+    if a.online_features:  # same features as data/p1_feat (GENERanno L17+L23, bf16 compute, fp16), computed per use
+        from ncrna_annot.features import generanno as G
+        from ncrna_annot.features import online
+        tok, model = G.load()
+        fn = online.backbone_fn(tok, model, batch=int(os.environ.get("NCRNA_BB_BATCH", "2")))
+        tr["feats"] = online.OnlineWindows(tr["codes"], fn)
+        va["feats"] = online.OnlineWindows(va["codes"], fn, cache_all=True)
+        ch["feats"] = online.OnlineChromosome(ch["codes"], fn)
+    for k in ([] if a.online_features else ("train", "val", "chr18")):  # refuse a partially filled cache
         cov = json.load(open(f"{F}/{k}.cover.json"))
         need = len(tr["codes"]) if k == "train" else len(va["codes"]) if k == "val" else None
         if need is not None:
@@ -72,9 +83,10 @@ def main():
     if a.smoke:
         tr = {k: np.asarray(v[:64]) for k, v in tr.items()}
         va = {k: np.asarray(v[:8]) for k, v in va.items()}
-        ch.update(feats=ch["feats"][:500000], codes=ch["codes"][:3000000])
+        ch.update(codes=ch["codes"][:3000000])
+        ch["feats"] = (online.OnlineChromosome(ch["codes"], fn) if a.online_features else ch["feats"][:500000])
         a.epochs = 1
-    meta = dict(name=a.name, arm=a.arm, seed=a.seed, labels=a.labels, lnc_only=a.lnc_only, eval_only=a.eval_only,
+    meta = dict(name=a.name, host=os.uname().nodename, online_features=a.online_features, accum=a.accum, arm=a.arm, seed=a.seed, labels=a.labels, lnc_only=a.lnc_only, eval_only=a.eval_only,
                 src=a.src, with_s1=a.with_s1, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
                 features="GENERanno-1.2b-cds L17+L23 fp16 (data/p1_feat)", started=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     json.dump(meta, open(f"{out}/run_meta.json", "w"), indent=1)

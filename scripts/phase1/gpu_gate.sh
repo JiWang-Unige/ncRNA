@@ -5,6 +5,7 @@
 # is free.  It waits for: any TE process (cwd/args under ab-initio-TE or TE-GLM, env te_benchmark/earlgrey/
 # repeatmasker), any other user's process (shared lab server), or free memory < NCRNA_NEED_MB (default 10000).
 : "${NCRNA_NEED_MB:=10000}"
+: "${NCRNA_TE_PS_PAT:=}"   # if set (win3090), ANY of the user's processes matching it blocks ncRNA GPU use
 TE_PAT='ab-initio-TE|TE-GLM|te_benchmark|earlgrey|repeatmasker|RepeatMasker'
 gpu_why_busy() {  # prints the reason and returns 0 when busy; returns 1 when ncRNA may run
   local me pid user where free
@@ -16,6 +17,10 @@ gpu_why_busy() {  # prints the reason and returns 0 when busy; returns 1 when nc
     where="$(readlink /proc/$pid/cwd 2>/dev/null) $(ps -o args= -p "$pid" 2>/dev/null)"
     if echo "$where" | grep -qE "$TE_PAT"; then echo "TE process pid $pid: $(echo "$where" | cut -c1-120)"; return 0; fi
   done
+  if [ -n "$NCRNA_TE_PS_PAT" ]; then
+    pid=$(pgrep -u "$me" -f "$NCRNA_TE_PS_PAT" | head -1)
+    if [ -n "$pid" ]; then echo "TE process pid $pid: $(ps -o args= -p "$pid" | cut -c1-120)"; return 0; fi
+  fi
   free=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits | head -1)
   if [ "$free" -lt "$NCRNA_NEED_MB" ]; then echo "only ${free} MiB free (< $NCRNA_NEED_MB)"; return 0; fi
   return 1
