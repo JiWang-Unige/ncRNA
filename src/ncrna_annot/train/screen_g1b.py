@@ -122,13 +122,15 @@ def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print,
 
 
 def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print,
-        pause=None, resume=False, lnc_only=False):
+        pause=None, resume=False, lnc_only=False, accum=1):
     """tr / va = dict(feats, codes, bits, events [n, L, 8] int8); ch as in screen2, or None (training only;
     evaluate later with evaluate_checkpoint).
     pause: optional callable checked before every batch; returning True aborts the current epoch with Paused
     (the caller frees the GPU and restarts later).  resume: keep last.pt (model, optimiser, scheduler, RNG, best)
     after every epoch and continue from it, so an aborted run repeats at most one epoch and reproduces the
-    uninterrupted run's epoch-level trajectory (same permutations, same updates)."""
+    uninterrupted run's epoch-level trajectory (same permutations, same updates).
+    accum: split each batch into `accum` micro-batches with gradient accumulation (same optimiser steps; the NLL
+    term is exactly the batch mean, the boundary BCE is averaged per micro-batch weighted by window count)."""
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out, exist_ok=True)
@@ -156,19 +158,24 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
             if pause is not None and pause():
                 raise Paused(f"epoch {ep + 1} batch {i // batch}")
             idx = np.sort(order[i:i + batch])
-            f = torch.as_tensor(np.asarray(tr["feats"][idx], np.float32), device=device)
-            c_np = np.asarray(tr["codes"][idx])
-            c = torch.as_tensor(c_np.astype(np.int64), device=device)
-            nll, b = crf_nll(head, trans, coef, f, c, c_np, np.asarray(tr["bits"][idx]), device, lnc_only)
-            ev = torch.as_tensor(np.asarray(tr["events"][idx])[..., EV_BOUNDARY], device=device)
-            bce = boundary_bce(b, ev)
-            loss = nll.mean() + bce_weight * bce
             opt.zero_grad()
-            loss.backward()
+            b_nll = b_bce = 0.0
+            for part in (np.array_split(idx, accum) if accum > 1 else [idx]):
+                if not len(part):
+                    continue
+                w = len(part) / len(idx)
+                f = torch.as_tensor(np.asarray(tr["feats"][part], np.float32), device=device)
+                c_np = np.asarray(tr["codes"][part])
+                c = torch.as_tensor(c_np.astype(np.int64), device=device)
+                nll, b = crf_nll(head, trans, coef, f, c, c_np, np.asarray(tr["bits"][part]), device, lnc_only)
+                ev = torch.as_tensor(np.asarray(tr["events"][part])[..., EV_BOUNDARY], device=device)
+                bce = boundary_bce(b, ev)
+                ((nll.mean() + bce_weight * bce) * w).backward()
+                b_nll, b_bce = b_nll + float(nll.mean().detach()) * w, b_bce + float(bce.detach()) * w
             torch.nn.utils.clip_grad_norm_(params, 1.0)
             opt.step()
             sched.step()
-            tot, tot_b, nb = tot + float(nll.mean()), tot_b + float(bce), nb + 1
+            tot, tot_b, nb = tot + b_nll, tot_b + b_bce, nb + 1
         v = val_nll(head, trans, coef, va, device, lnc_only)
         rec = {"arm": "G1B", "seed": seed, "epoch": ep + 1, "train_nll": round(tot / nb, 5), "train_bce": round(tot_b / nb, 5),
                "val_nll": round(v, 5), "lr": opt.param_groups[0]["lr"], "t": round(time.time() - t0),

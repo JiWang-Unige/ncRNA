@@ -9,9 +9,10 @@ Data (ont): data/p1_feat/{train,val,chr18}.npy (memmaps), data/p1v12/{train,val}
 chr18 truth outputs/PHASE1/DIAG_L2/chr18_v50.gtf.  Output: outputs/PHASE1/FORMAL/<NAME>/ (metrics.jsonl, last.pt,
 best.pt, result.json, chr18.gff3).  Settings other than features / window set are those of the screening arm
 (protocol v1.6 section 13): 12 epochs, AdamW 1e-3 cosine to 1e-5, batch 8, checkpoint by validation NLL.
-GPU sharing (rule 2026-10-26): every 25 batches the GPU gate (scripts/phase1/gpu_gate.sh) is checked; if a TE or
+GPU sharing (rule 2026-10-26): every 5 batches the GPU gate (scripts/phase1/gpu_gate.sh) is checked; if a TE or
 another user's job is on the card the run stops with exit code 75 after the last full epoch was saved, and
-run_formal_ont.sh waits and restarts it.  The process memory is capped by NCRNA_GPU_FRAC (default 0.45).
+run_formal_ont.sh waits and restarts it; a CUDA out-of-memory error (another job took the card) is treated the same
+way.  Memory: NCRNA_GPU_FRAC (default 0.30) and batch 8 as 2 x 4 gradient accumulation (--accum).
 chr20 / T2T chr20 are never read here.
 """
 import argparse
@@ -44,9 +45,10 @@ def main():
     ap.add_argument("--lnc-only", action="store_true", help="AB3: mRNA states masked in training and decoding")
     ap.add_argument("--from", dest="src", default=None, help="eval-only: take best.pt from this run name")
     ap.add_argument("--with-s1", action="store_true", help="eval-only: also decode S1 (posterior argmax), AB1")
+    ap.add_argument("--accum", type=int, default=2, help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
     a = ap.parse_args()
     import torch
-    frac = float(os.environ.get("NCRNA_GPU_FRAC", "0.45"))
+    frac = float(os.environ.get("NCRNA_GPU_FRAC", "0.30"))
     torch.cuda.set_per_process_memory_fraction(frac, 0)
     from ncrna_annot.train import screen_g1b as sg
     from ncrna_annot.train import screen2 as s2
@@ -80,7 +82,7 @@ def main():
 
     def pause():
         n["i"] += 1
-        if n["i"] % 25:
+        if n["i"] % 5:
             return False
         why = gate_busy()
         if why:
@@ -97,16 +99,21 @@ def main():
             else:
                 sg.evaluate_checkpoint(ck, 4096, ch, out, device="cuda", lnc_only=a.lnc_only, with_s1=a.with_s1)
         elif a.arm == "G1B":
-            sg.run(a.seed, tr, va, ch, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, lnc_only=a.lnc_only)
+            sg.run(a.seed, tr, va, ch, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, lnc_only=a.lnc_only,
+                   accum=a.accum)
         elif a.arm == "R":
-            s2.run("R", a.seed, tr, va, ch, out, lnc_only=a.lnc_only, epochs=a.epochs, device="cuda", pause=pause, resume=True)
+            s2.run("R", a.seed, tr, va, ch, out, lnc_only=a.lnc_only, epochs=a.epochs, device="cuda", pause=pause, resume=True,
+                   accum=a.accum)
         else:  # G2PH: training (GPU head + numba CPU forward-backward), then evaluation in the same run
             if not os.path.exists(f"{out}/train_summary.json"):
-                sp.run("G2PH", a.seed, tr, va, out, epochs=a.epochs, device="cuda", pause=pause, resume=True)
+                sp.run("G2PH", a.seed, tr, va, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, accum=a.accum)
             if gate_busy():
                 sys.exit(75)
             sp.evaluate_checkpoint(f"{out}/best.pt", "G2PH", 4096, ch, out, device="cuda")
     except sg.Paused:
+        sys.exit(75)
+    except torch.OutOfMemoryError as e:  # another job (TE / coding) took the card: yield, resume from last.pt
+        print(json.dumps({"yield_oom": str(e)[:200]}), flush=True)
         sys.exit(75)
     print("RUN_DONE", flush=True)
 

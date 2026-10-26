@@ -102,7 +102,7 @@ def summarize(genes, post, truth):
 
 
 def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3, device="cuda", log=print,
-        pause=None, resume=False):
+        pause=None, resume=False, accum=1):
     """Arms R / S2 / S4 (G1 without boundary head).
     pause: optional callable checked before every batch; True aborts the epoch with Paused.  resume: keep last.pt
     after every epoch and continue from it (see screen_g1b.run)."""
@@ -132,19 +132,25 @@ def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3,
             if pause is not None and pause():
                 raise Paused(f"epoch {ep + 1} batch {i // batch}")
             idx = np.sort(order[i:i + batch])
-            f = torch.as_tensor(np.asarray(tr["feats"][idx], np.float32), device=device)
-            c_np = np.asarray(tr["codes"][idx])
-            c = torch.as_tensor(c_np.astype(np.int64), device=device)
-            gates = torch.as_tensor(np.stack([g1.gate_mask(x) for x in c_np]), device=device)
-            al = torch.as_tensor(labels.bits_to_bool(np.asarray(tr["bits"][idx])), device=device)
-            e, T = _emit(head, f, c, lnc_only), trans()
-            loss = ((g1.log_partition(e, T, gates) - g1.log_partition(e, T, gates, al)) / c.shape[1]).mean()
             opt.zero_grad()
-            loss.backward()
+            b_loss = 0.0
+            for part in (np.array_split(idx, accum) if accum > 1 else [idx]):  # gradient accumulation (exact mean)
+                if not len(part):
+                    continue
+                w = len(part) / len(idx)
+                f = torch.as_tensor(np.asarray(tr["feats"][part], np.float32), device=device)
+                c_np = np.asarray(tr["codes"][part])
+                c = torch.as_tensor(c_np.astype(np.int64), device=device)
+                gates = torch.as_tensor(np.stack([g1.gate_mask(x) for x in c_np]), device=device)
+                al = torch.as_tensor(labels.bits_to_bool(np.asarray(tr["bits"][part])), device=device)
+                e, T = _emit(head, f, c, lnc_only), trans()
+                loss = ((g1.log_partition(e, T, gates) - g1.log_partition(e, T, gates, al)) / c.shape[1]).mean()
+                (loss * w).backward()
+                b_loss += float(loss.detach()) * w
             torch.nn.utils.clip_grad_norm_(params, 1.0)
             opt.step()
             sched.step()
-            tot, nb = tot + float(loss), nb + 1
+            tot, nb = tot + b_loss, nb + 1
         v = val_nll(head, trans, va, lnc_only, device)
         rec = {"arm": arm, "seed": seed, "epoch": ep + 1, "train_nll": round(tot / nb, 5), "val_nll": round(v, 5),
                "lr": opt.param_groups[0]["lr"], "t": round(time.time() - t0)}

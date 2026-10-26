@@ -120,7 +120,7 @@ def evaluate_checkpoint(ck_path, arm, feature_dim, ch, out, device="cuda", log=p
 
 
 def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print,
-        pause=None, resume=False):
+        pause=None, resume=False, accum=1):
     """Training only (evaluation is a separate job, see evaluate_checkpoint).  tr / va as in screen_g1b.
     pause: optional callable checked before every batch; True aborts the epoch with Paused.  resume: keep last.pt
     after every epoch and continue from it (see screen_g1b.run)."""
@@ -157,18 +157,24 @@ def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, dev
             if pause is not None and pause():
                 raise Paused(f"epoch {ep + 1} batch {i // batch}")
             idx = np.sort(order[i:i + batch])
-            nll, b = _batch_nll(head, prm, space, tr["feats"], tr["codes"], tr["bits"], idx, feas_tr, device)
-            keep = torch.as_tensor(feas_tr[idx], device=nll.device)
-            ev = torch.as_tensor(np.asarray(tr["events"][idx])[..., EV_BOUNDARY], device=device)
-            bce = boundary_bce(b, ev)
-            nll_mean = nll[keep].mean() if keep.any() else nll.sum() * 0.0
-            loss = nll_mean.float() + bce_weight * bce
             opt.zero_grad()
-            loss.backward()
+            n_keep = max(1, int(feas_tr[idx].sum()))
+            b_nll = b_bce = 0.0
+            for part in (np.array_split(idx, accum) if accum > 1 else [idx]):  # NLL over feasible windows: exact mean
+                if not len(part):
+                    continue
+                nll, b = _batch_nll(head, prm, space, tr["feats"], tr["codes"], tr["bits"], part, feas_tr, device)
+                keep = torch.as_tensor(feas_tr[part], device=nll.device)
+                ev = torch.as_tensor(np.asarray(tr["events"][part])[..., EV_BOUNDARY], device=device)
+                bce = boundary_bce(b, ev)
+                nll_part = nll[keep].sum() / n_keep if keep.any() else nll.sum() * 0.0
+                w = len(part) / len(idx)
+                (nll_part.float() + bce_weight * bce * w).backward()
+                b_nll, b_bce = b_nll + float(nll_part.detach()), b_bce + float(bce.detach()) * w
             torch.nn.utils.clip_grad_norm_(params, 1.0)
             opt.step()
             sched.step()
-            tot, tot_b, nb = tot + float(nll_mean.detach()), tot_b + float(bce.detach()), nb + 1
+            tot, tot_b, nb = tot + b_nll, tot_b + b_bce, nb + 1
         v = val_nll(head, prm, space, va, feas_va, device)
         rec = {"arm": arm, "seed": seed, "epoch": ep + 1, "train_nll": round(tot / nb, 5), "train_bce": round(tot_b / nb, 5),
                "val_nll": round(v, 5), "lr": opt.param_groups[0]["lr"], "t": round(time.time() - t0)}

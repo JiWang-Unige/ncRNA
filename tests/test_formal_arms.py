@@ -58,3 +58,20 @@ def test_r_arm_pause_resume(tmp_path):
     ra = [json.loads(l)["val_nll"] for l in open(tmp_path / "a" / "metrics.jsonl")]
     rb = [json.loads(l)["val_nll"] for l in open(tmp_path / "b" / "metrics.jsonl")]
     assert ra == rb and "S1" in a
+
+
+def test_gradient_accumulation_matches_full_batch(tmp_path):
+    """batch 8 as 2 x 4 (shared-GPU memory): same validation NLL trajectory as the full batch, for G1B and R."""
+    rng = np.random.default_rng(7)
+    tr, va, ch = _data(rng, 8), _data(rng, 2), _chrom(rng, tmp_path)
+    q = lambda *_: None
+    for arm in ("G1B", "R"):
+        runs = []
+        for acc in (1, 2):
+            out = str(tmp_path / f"{arm}{acc}")
+            if arm == "G1B":
+                screen_g1b.run(0, tr, va, None, out, epochs=2, batch=4, device="cpu", log=q, accum=acc)
+            else:
+                screen2.run("R", 0, tr, va, ch, out, epochs=2, batch=4, device="cpu", log=q, accum=acc)
+            runs.append([json.loads(l)["val_nll"] for l in open(f"{out}/metrics.jsonl")])
+        assert np.allclose(runs[0], runs[1], rtol=1e-5, atol=1e-6), (arm, runs)
