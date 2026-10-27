@@ -13,6 +13,7 @@ import torch
 
 from ..features import generanno as G
 from ..grammar import g1
+from . import scratch
 
 
 def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pad=100_000, mode="s3", bnd=None, coef=None):
@@ -44,7 +45,7 @@ def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pa
 def chromosome_marginals(emit_fn, L, T, codes, device="cuda", coef=None):
     """emit_fn(start, end) -> torch [end-start, S] potentials on `device` (G1B: a tuple (potentials,
     boundary logits [end-start, 4]) and coef given).  Returns float16 [L, S]."""
-    post = np.zeros((L, g1.S), np.float16)
+    post = scratch.zeros((L, g1.S), np.float16)
     starts = G.chromosome_tiles(L)
     for k, s in enumerate(starts):
         e = emit_fn(s, s + G.WIN)

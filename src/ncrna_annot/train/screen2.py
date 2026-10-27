@@ -10,7 +10,7 @@ import numpy as np
 import torch
 
 from ..data import labels
-from ..decode import chrom
+from ..decode import chrom, scratch
 from ..eval import prcurve, ruler
 from ..features import generanno as G
 from ..grammar import g1
@@ -64,14 +64,14 @@ def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False):
             return _emit(head, f, c, lnc_only)[0]
 
     t0 = time.time()
-    pot = np.zeros((L, g1.S), np.float32)
+    pot = scratch.zeros((L, g1.S), np.float32)
     for s in range(0, L, G.WIN * 8):
         e = min(s + G.WIN * 8, L)
         pot[s:e] = emit_fn(s, e).float().cpu().numpy()
     post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device)
     truth = ruler.read_gtf(ch["truth_gtf"], ch["chrom"])
     out = {"eval_s": None}
-    modes = [("S3", "s3", pot)] + ([("S1", "argmax", post.astype(np.float32))] if with_s1 else [])
+    modes = [("S3", "s3", pot)] + ([("S1", "argmax", scratch.astype(post, np.float32))] if with_s1 else [])
     for name, mode, arr in modes:
         genes = chrom.decode_blocks(arr, codes[:L], Tn, 20, 50, mode=mode)
         out[name] = summarize(genes, post, truth)

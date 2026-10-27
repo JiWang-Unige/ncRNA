@@ -14,6 +14,7 @@ import numpy as np
 import torch
 
 from ..data import labels
+from ..decode import scratch
 from ..eval import ruler
 from ..features import generanno as G
 from ..grammar import g1, g2ph
@@ -66,8 +67,8 @@ def evaluate_chromosome(head, prm, space, ch, device, block=1_000_000, pad=100_0
     feats, codes = ch["feats"], ch["codes"]
     L = len(feats) * TOK
     t0 = time.time()
-    pot = np.zeros((L, g1.S), np.float32)
-    bnd = np.zeros((L, len(g1.BOUNDARY)), np.float32)
+    pot = scratch.zeros((L, g1.S), np.float32)
+    bnd = scratch.zeros((L, len(g1.BOUNDARY)), np.float32)
     with torch.no_grad():
         for s in range(0, L, G.WIN * 8):
             e = min(s + G.WIN * 8, L)
@@ -76,7 +77,7 @@ def evaluate_chromosome(head, prm, space, ch, device, block=1_000_000, pad=100_0
             p, b = head(f, c)
             pot[s:e], bnd[s:e] = p[0].float().cpu().numpy(), b[0].float().cpu().numpy()
         T = prm().detach().cpu().numpy()
-    post = np.zeros((L, g1.S), np.float32)
+    post = scratch.zeros((L, g1.S), np.float32)
     genes = []
     for s in range(0, L, block):
         e = min(s + block, L)

@@ -14,7 +14,7 @@ import numpy as np
 import torch
 
 from ..data import labels
-from ..decode import chrom
+from ..decode import chrom, scratch
 from ..eval import ruler
 from ..features import generanno as G
 from ..grammar import g1
@@ -83,8 +83,8 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
         return _mask_lnc_only(p, lnc_only)[0], b[0]
 
     t0 = time.time()
-    pot = np.zeros((L, g1.S), np.float32)
-    bnd = np.zeros((L, len(g1.BOUNDARY)), np.float32)
+    pot = scratch.zeros((L, g1.S), np.float32)
+    bnd = scratch.zeros((L, len(g1.BOUNDARY)), np.float32)
     for s in range(0, L, G.WIN * 8):
         e = min(s + G.WIN * 8, L)
         p, b = emit_fn(s, e)
@@ -94,7 +94,7 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
     genes = chrom.decode_blocks(pot, codes[:L], T.double().cpu().numpy(), 20, 50, mode="s3", bnd=bnd, coef=coef)
     out = {"S3": summarize(genes, post, truth)}
     if with_s1:
-        s1 = chrom.decode_blocks(post.astype(np.float32), codes[:L], T.double().cpu().numpy(), 20, 50, mode="argmax")
+        s1 = chrom.decode_blocks(scratch.astype(post, np.float32), codes[:L], T.double().cpu().numpy(), 20, 50, mode="argmax")
         out["S1"] = summarize(s1, post, truth)
     out.update({"eval_s": round(time.time() - t0),
            "coef": {k: [float(x) for x in coef.c[k].detach().cpu()] for k in g1.TYPES}})

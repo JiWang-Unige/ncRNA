@@ -41,3 +41,15 @@ def test_online_windows_with_and_without_cache(monkeypatch):
         assert w.shape == (5, G.NT, 8) and len(w) == 5
         assert np.array_equal(w[[3, 1]], ref[[3, 1]]) and np.array_equal(w[1:4], ref[1:4])
         assert np.array_equal(w[[1, 3, 4]], ref[[1, 3, 4]]) and np.array_equal(w[2], ref[2])
+
+
+def test_scratch_arrays_on_disk_equal_ram(tmp_path, monkeypatch):
+    from ncrna_annot.decode import scratch
+    x = np.random.default_rng(2).normal(size=(1000, 17)).astype(np.float16)
+    monkeypatch.delenv("NCRNA_SCRATCH", raising=False)
+    a = scratch.zeros((1000, 17), np.float32); a[:] = x
+    monkeypatch.setenv("NCRNA_SCRATCH", str(tmp_path / "s"))
+    b = scratch.zeros((1000, 17), np.float32); b[:] = x
+    assert isinstance(b, np.memmap) and np.array_equal(a, b) and not list((tmp_path / "s").iterdir())  # unlinked
+    c = scratch.astype(x, np.float32, block=64)
+    assert np.array_equal(c, x.astype(np.float32))

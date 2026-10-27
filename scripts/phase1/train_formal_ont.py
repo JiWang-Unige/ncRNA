@@ -51,6 +51,8 @@ def main():
                     help="compute backbone features on the fly (win3090: no feature cache on disk)")
     a = ap.parse_args()
     import torch
+    if os.environ.get("NCRNA_THREADS"):
+        torch.set_num_threads(int(os.environ["NCRNA_THREADS"]))
     frac = float(os.environ.get("NCRNA_GPU_FRAC", "0.30"))
     torch.cuda.set_per_process_memory_fraction(frac, 0)
     from ncrna_annot.train import screen_g1b as sg
@@ -72,7 +74,7 @@ def main():
         tok, model = G.load()
         fn = online.backbone_fn(tok, model, batch=int(os.environ.get("NCRNA_BB_BATCH", "2")))
         tr["feats"] = online.OnlineWindows(tr["codes"], fn)
-        va["feats"] = online.OnlineWindows(va["codes"], fn, cache_all=True)
+        va["feats"] = online.OnlineWindows(va["codes"], fn, cache_all=os.environ.get("NCRNA_VAL_CACHE", "1") == "1")
         ch["feats"] = online.OnlineChromosome(ch["codes"], fn)
     for k in ([] if a.online_features else ("train", "val", "chr18")):  # refuse a partially filled cache
         cov = json.load(open(f"{F}/{k}.cover.json"))
