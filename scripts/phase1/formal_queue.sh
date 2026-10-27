@@ -34,7 +34,9 @@ while true; do
     if [ "$n" -gt $((5 * 929)) ]; then
       echo "check-frag:$2 failed" >> $S; log "FRAGMENTATION_RULE fired: $2 n_pred_lnc=$n > 5x929 - queue stopped for discussion (protocol section 15 P1.3)"; exit 2
     fi
-    echo "check-frag:$2 done" >> $S; log "check-frag $2 ok (n_pred_lnc=$n <= 4645)"; continue
+    echo "check-frag:$2 done" >> $S; log "check-frag $2 ok (n_pred_lnc=$n <= 4645)"
+    echo "n_pred_lnc=$n $(date -u +%FT%H:%MZ)" > queues/check-frag_$2.ok  # relayed to win3090 as queues/pilot_frag_ok
+    continue
   fi
   name=$1; shift
   log "run $name $*"

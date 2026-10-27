@@ -1,0 +1,22 @@
+# protocol v1.8 section 15 - win3090 part (RTX 3090, on-the-fly features, yields to TE): seeds 123 / 456 + AB6.
+# smokes first: on-the-fly path and the new arm code paths (numbers not read)
+smoke-w-g1b --seed 123 --smoke
+smoke-w-ab0-r --seed 123 --arm R --smoke
+smoke-w-ab3-lnc --seed 123 --labels v50uevlnc --lnc-only --smoke
+smoke-w-ab6-g2ph --seed 42 --arm G2PH --smoke
+g1b-123 --seed 123
+g1b-456 --seed 456
+# ablations only after the P1.3 pilot fragmentation check on ont passed (marker relayed from ont)
+await queues/pilot_frag_ok
+ab2-f-123 --seed 123 --labels v50f
+ab2-f-456 --seed 456 --labels v50f
+ab4-v41-123 --seed 123 --labels v41uev
+ab4-v41-456 --seed 456 --labels v41uev
+ab0-r-123 --seed 123 --arm R
+ab0-r-456 --seed 456 --arm R
+ab3-lnc-123 --seed 123 --labels v50uevlnc --lnc-only
+ab3-lnc-456 --seed 456 --labels v50uevlnc --lnc-only
+ab1-s1-123 --seed 123 --eval-only --from g1b-123 --with-s1
+ab1-s1-456 --seed 456 --eval-only --from g1b-456 --with-s1
+ab6-g2ph-42 --seed 42 --arm G2PH
+END
