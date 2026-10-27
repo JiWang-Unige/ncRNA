@@ -6,10 +6,12 @@
 # repeatmasker), any other user's process (shared lab server), or free memory < NCRNA_NEED_MB (default 10000).
 : "${NCRNA_NEED_MB:=10000}"
 : "${NCRNA_TE_PS_PAT:=}"   # if set (win3090), ANY of the user's processes matching it blocks ncRNA GPU use
+: "${NCRNA_HOLD:=${NCRNA_ROOT:-$HOME/ncrna-annot}/queues/HOLD}"   # while this file exists ncRNA stays off the GPU (e.g. a long TE job with gaps between phases)
 TE_PAT='ab-initio-TE|TE-GLM|te_benchmark|earlgrey|repeatmasker|RepeatMasker'
 gpu_why_busy() {  # prints the reason and returns 0 when busy; returns 1 when ncRNA may run
   local me pid user where free
   me=$(id -un)
+  if [ -e "$NCRNA_HOLD" ]; then echo "hold file $NCRNA_HOLD: $(head -c 120 "$NCRNA_HOLD")"; return 0; fi
   for pid in $(nvidia-smi --query-compute-apps=pid --format=csv,noheader 2>/dev/null); do
     user=$(ps -o user= -p "$pid" 2>/dev/null | tr -d ' ')
     [ -z "$user" ] && continue
