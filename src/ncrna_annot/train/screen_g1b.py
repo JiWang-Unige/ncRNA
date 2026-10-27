@@ -148,7 +148,7 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
         st = torch.load(last, map_location=device, weights_only=False)
         head.load_state_dict(st["head"]); trans.load_state_dict(st["trans"]); coef.load_state_dict(st["coef"])
         opt.load_state_dict(st["opt"]); sched.load_state_dict(st["sched"])
-        rng.bit_generator.state = st["rng"]; torch.set_rng_state(st["torch_rng"])
+        rng.bit_generator.state = st["rng"]; torch.set_rng_state(st["torch_rng"].cpu())  # map_location moved it to the GPU
         best, start, t0 = tuple(st["best"]), st["epoch"], time.time() - st["t"]
         log(json.dumps({"resume_from_epoch": start, "best": best}))
     for ep in range(start, epochs):
