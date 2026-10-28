@@ -45,6 +45,8 @@ def main():
     ap.add_argument("--lnc-only", action="store_true", help="AB3: mRNA states masked in training and decoding")
     ap.add_argument("--from", dest="src", default=None, help="eval-only: take best.pt from this run name")
     ap.add_argument("--with-s1", action="store_true", help="eval-only: also decode S1 (posterior argmax), AB1")
+    ap.add_argument("--ckpt", default="best", choices=["best", "last"],
+                    help="eval-only: checkpoint of the source run (last = final epoch; diagnostics only)")
     ap.add_argument("--accum", type=int, default=int(os.environ.get("NCRNA_ACCUM", "2")),
                     help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
     ap.add_argument("--online-features", action="store_true", default=os.environ.get("NCRNA_ONLINE") == "1",
@@ -89,7 +91,7 @@ def main():
         ch["feats"] = (online.OnlineChromosome(ch["codes"], fn) if a.online_features else ch["feats"][:500000])
         a.epochs = 1
     meta = dict(name=a.name, host=os.uname().nodename, online_features=a.online_features, accum=a.accum, arm=a.arm, seed=a.seed, labels=a.labels, lnc_only=a.lnc_only, eval_only=a.eval_only,
-                src=a.src, with_s1=a.with_s1, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
+                src=a.src, ckpt=a.ckpt, with_s1=a.with_s1, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
                 features="GENERanno-1.2b-cds L17+L23 fp16 (data/p1_feat)", started=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     json.dump(meta, open(f"{out}/run_meta.json", "w"), indent=1)
     n = {"i": 0}
@@ -107,7 +109,7 @@ def main():
         if a.eval_only:
             if gate_busy():
                 sys.exit(75)
-            ck = f"{ROOT}/outputs/PHASE1/FORMAL/{a.src or a.name}/best.pt"
+            ck = f"{ROOT}/outputs/PHASE1/FORMAL/{a.src or a.name}/{a.ckpt}.pt"
             if a.arm == "G2PH":
                 sp.evaluate_checkpoint(ck, "G2PH", 4096, ch, out, device="cuda")
             else:
