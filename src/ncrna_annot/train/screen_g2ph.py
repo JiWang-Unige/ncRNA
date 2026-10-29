@@ -121,10 +121,10 @@ def evaluate_checkpoint(ck_path, arm, feature_dim, ch, out, device="cuda", log=p
 
 
 def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print,
-        pause=None, resume=False, accum=1):
+        pause=None, resume=False, accum=1, keep_epochs=False):
     """Training only (evaluation is a separate job, see evaluate_checkpoint).  tr / va as in screen_g1b.
     pause: optional callable checked before every batch; True aborts the epoch with Paused.  resume: keep last.pt
-    after every epoch and continue from it (see screen_g1b.run)."""
+    after every epoch and continue from it (see screen_g1b.run).  keep_epochs: also save ep<NN>.pt every epoch."""
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out, exist_ok=True)
@@ -182,6 +182,9 @@ def run(arm, seed, tr, va, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, dev
         with open(f"{out}/metrics.jsonl", "a") as fh:
             fh.write(json.dumps(rec) + "\n")
         log(json.dumps(rec))
+        if keep_epochs:
+            torch.save({"head": head.state_dict(), "grammar": prm.state_dict(), "epoch": ep + 1, "arm": arm},
+                       f"{out}/ep{ep + 1:02d}.pt")
         if v < best[0]:
             best = (v, ep + 1)
             torch.save({"head": head.state_dict(), "grammar": prm.state_dict(), "epoch": ep + 1, "arm": arm},

@@ -122,7 +122,7 @@ def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print,
 
 
 def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, device="cuda", log=print,
-        pause=None, resume=False, lnc_only=False, accum=1):
+        pause=None, resume=False, lnc_only=False, accum=1, keep_epochs=False):
     """tr / va = dict(feats, codes, bits, events [n, L, 8] int8); ch as in screen2, or None (training only;
     evaluate later with evaluate_checkpoint).
     pause: optional callable checked before every batch; returning True aborts the current epoch with Paused
@@ -130,7 +130,8 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
     after every epoch and continue from it, so an aborted run repeats at most one epoch and reproduces the
     uninterrupted run's epoch-level trajectory (same permutations, same updates).
     accum: split each batch into `accum` micro-batches with gradient accumulation (same optimiser steps; the NLL
-    term is exactly the batch mean, the boundary BCE is averaged per micro-batch weighted by window count)."""
+    term is exactly the batch mean, the boundary BCE is averaged per micro-batch weighted by window count).
+    keep_epochs: also save every epoch's weights as ep<NN>.pt (same format as best.pt; diagnostics only)."""
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out, exist_ok=True)
@@ -183,6 +184,9 @@ def run(seed, tr, va, ch, out, epochs=12, batch=8, lr=1e-3, bce_weight=1.0, devi
         with open(f"{out}/metrics.jsonl", "a") as fh:
             fh.write(json.dumps(rec) + "\n")
         log(json.dumps(rec))
+        if keep_epochs:
+            torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "coef": coef.state_dict(),
+                        "epoch": ep + 1}, f"{out}/ep{ep + 1:02d}.pt")
         if v < best[0]:
             best = (v, ep + 1)
             torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "coef": coef.state_dict(),

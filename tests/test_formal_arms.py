@@ -1,8 +1,9 @@
 """Protocol v1.8 arms on CPU with random features: G1B lnc-only training + S1 decoding (AB3 / AB1), and the R arm
-(AB0, screen2.run) pause / resume reproducing an uninterrupted run."""
+(AB0, screen2.run) pause / resume reproducing an uninterrupted run, with every epoch's weights kept (keep_epochs)."""
 import json
 
 import numpy as np
+import torch
 
 from ncrna_annot.data import labels
 from ncrna_annot.train import screen2, screen_g1b
@@ -49,15 +50,21 @@ def test_r_arm_pause_resume(tmp_path):
         n["i"] += 1
         return n["i"] == 5
     try:
-        screen2.run("R", 0, tr, va, ch, str(tmp_path / "b"), epochs=3, batch=2, device="cpu", log=q, pause=pause, resume=True)
+        screen2.run("R", 0, tr, va, ch, str(tmp_path / "b"), epochs=3, batch=2, device="cpu", log=q, pause=pause, resume=True,
+                    keep_epochs=True)
         raise AssertionError("expected Paused")
     except screen2.Paused:
         pass
-    b = screen2.run("R", 0, tr, va, ch, str(tmp_path / "b"), epochs=3, batch=2, device="cpu", log=q, resume=True)
+    b = screen2.run("R", 0, tr, va, ch, str(tmp_path / "b"), epochs=3, batch=2, device="cpu", log=q, resume=True,
+                    keep_epochs=True)
     assert a["best_epoch"] == b["best_epoch"] and abs(a["best_val_nll"] - b["best_val_nll"]) < 1e-9
     ra = [json.loads(l)["val_nll"] for l in open(tmp_path / "a" / "metrics.jsonl")]
     rb = [json.loads(l)["val_nll"] for l in open(tmp_path / "b" / "metrics.jsonl")]
     assert ra == rb and "S1" in a
+    ck = {k: torch.load(tmp_path / "b" / f"{k}.pt") for k in ["ep01", "ep02", "ep03", "best", "last"]}
+    same = lambda x, y: all(torch.equal(x["head"][k], y["head"][k]) for k in x["head"])
+    assert same(ck["ep03"], ck["last"]) and same(ck[f"ep{b['best_epoch']:02d}"], ck["best"])
+    assert not (tmp_path / "a" / "ep01.pt").exists()
 
 
 def test_gradient_accumulation_matches_full_batch(tmp_path):

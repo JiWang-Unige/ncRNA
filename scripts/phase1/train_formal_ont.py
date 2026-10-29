@@ -7,7 +7,7 @@ Arms (protocol v1.8 section 15): G1B main / AB2 (--labels v50f) / AB4 (--labels 
 --lnc-only); AB0 = --arm R (G1 without boundary head, screen2); AB6 = --arm G2PH (screen_g2ph, numba CPU FB).
 Data (ont): data/p1_feat/{train,val,chr18}.npy (memmaps), data/p1v12/{train,val}_{codes,bits_<labels>,events}.npy,
 chr18 truth outputs/PHASE1/DIAG_L2/chr18_v50.gtf.  Output: outputs/PHASE1/FORMAL/<NAME>/ (metrics.jsonl, last.pt,
-best.pt, result.json, chr18.gff3).  Settings other than features / window set are those of the screening arm
+best.pt, ep<NN>.pt (every epoch, 5.7 MB each), result.json, chr18.gff3).  Settings other than features / window set are those of the screening arm
 (protocol v1.6 section 13): 12 epochs, AdamW 1e-3 cosine to 1e-5, batch 8, checkpoint by validation NLL.
 GPU sharing (rule 2026-10-26): every 5 batches the GPU gate (scripts/phase1/gpu_gate.sh) is checked; if a TE or
 another user's job is on the card the run stops with exit code 75 after the last full epoch was saved, and
@@ -18,6 +18,7 @@ chr20 / T2T chr20 are never read here.
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -45,13 +46,15 @@ def main():
     ap.add_argument("--lnc-only", action="store_true", help="AB3: mRNA states masked in training and decoding")
     ap.add_argument("--from", dest="src", default=None, help="eval-only: take best.pt from this run name")
     ap.add_argument("--with-s1", action="store_true", help="eval-only: also decode S1 (posterior argmax), AB1")
-    ap.add_argument("--ckpt", default="best", choices=["best", "last"],
-                    help="eval-only: checkpoint of the source run (last = final epoch; diagnostics only)")
+    ap.add_argument("--ckpt", default="best",
+                    help="eval-only: checkpoint of the source run: best, last (final epoch) or epNN (diagnostics only)")
     ap.add_argument("--accum", type=int, default=int(os.environ.get("NCRNA_ACCUM", "2")),
                     help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
     ap.add_argument("--online-features", action="store_true", default=os.environ.get("NCRNA_ONLINE") == "1",
                     help="compute backbone features on the fly (win3090: no feature cache on disk)")
     a = ap.parse_args()
+    if not re.fullmatch(r"best|last|ep\d\d", a.ckpt):
+        ap.error(f"--ckpt {a.ckpt}: expected best, last or epNN")
     import torch
     if os.environ.get("NCRNA_THREADS"):
         torch.set_num_threads(int(os.environ["NCRNA_THREADS"]))
@@ -116,13 +119,14 @@ def main():
                 sg.evaluate_checkpoint(ck, 4096, ch, out, device="cuda", lnc_only=a.lnc_only, with_s1=a.with_s1)
         elif a.arm == "G1B":
             sg.run(a.seed, tr, va, ch, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, lnc_only=a.lnc_only,
-                   accum=a.accum)
+                   accum=a.accum, keep_epochs=True)
         elif a.arm == "R":
             s2.run("R", a.seed, tr, va, ch, out, lnc_only=a.lnc_only, epochs=a.epochs, device="cuda", pause=pause, resume=True,
-                   accum=a.accum)
+                   accum=a.accum, keep_epochs=True)
         else:  # G2PH: training (GPU head + numba CPU forward-backward), then evaluation in the same run
             if not os.path.exists(f"{out}/train_summary.json"):
-                sp.run("G2PH", a.seed, tr, va, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, accum=a.accum)
+                sp.run("G2PH", a.seed, tr, va, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, accum=a.accum,
+                       keep_epochs=True)
             if gate_busy():
                 sys.exit(75)
             sp.evaluate_checkpoint(f"{out}/best.pt", "G2PH", 4096, ch, out, device="cuda")

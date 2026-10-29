@@ -102,10 +102,10 @@ def summarize(genes, post, truth):
 
 
 def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3, device="cuda", log=print,
-        pause=None, resume=False, accum=1):
+        pause=None, resume=False, accum=1, keep_epochs=False):
     """Arms R / S2 / S4 (G1 without boundary head).
     pause: optional callable checked before every batch; True aborts the epoch with Paused.  resume: keep last.pt
-    after every epoch and continue from it (see screen_g1b.run)."""
+    after every epoch and continue from it (see screen_g1b.run).  keep_epochs: also save ep<NN>.pt every epoch."""
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     os.makedirs(out, exist_ok=True)
@@ -157,6 +157,8 @@ def run(arm, seed, tr, va, ch, out, lnc_only=False, epochs=12, batch=8, lr=1e-3,
         with open(f"{out}/metrics.jsonl", "a") as fh:
             fh.write(json.dumps(rec) + "\n")
         log(json.dumps(rec))
+        if keep_epochs:
+            torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "epoch": ep + 1}, f"{out}/ep{ep + 1:02d}.pt")
         if v < best[0]:
             best = (v, ep + 1)
             torch.save({"head": head.state_dict(), "trans": trans.state_dict(), "epoch": ep + 1}, f"{out}/best.pt")
