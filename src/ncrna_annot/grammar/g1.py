@@ -479,3 +479,42 @@ def viterbi_duration(emit, T, gates, allowed=None, min_exon=20, min_intron=50, e
     for j, p in enumerate(preds):
         pred_idx[j, :len(p)] = p
     return _viterbi_dur_nb(np.ascontiguousarray(x), Te, orig, pred_idx, pred_n, eid, ev)
+
+
+# ---- posterior decoding under the grammar (development for protocol v1.9, chr18 only) -------------------
+
+def mea_duration(post, T, gates, gamma=1.0, min_exon=20, min_intron=50, agg=0.0):
+    """Maximum expected accuracy path under G1's grammar with minimum exon / intron lengths ("MEA").
+
+    post [L, S] posterior state marginals (chromosome_marginals), T [S, S] only gives the allowed transitions
+    (every allowed edge scores 0), gates [L, S] the splice-motif mask.  The path maximises
+    sum_t w(s_t) * (post[t, s_t] + agg * post[t, c(s_t)]) with w(IG) = 1 and w(gene state) = gamma, where
+    post[t, c(s)] is the total posterior of the state's gene class (IG, or one type x strand: E + L + I + R).
+    gamma = 1, agg = 0 is the expected number of correctly labelled bases; gamma > 1 trades precision for
+    sensitivity (gamma-centroid style); agg > 0 lets the gene / intergenic decision follow the class total when the
+    mass is split between exon and intron states of the same gene (where per-state scores, like S1's argmax,
+    under-call).  Unlike S3 (MAP path of the CRF) it scores each base by its marginal, so a locus whose posterior
+    mass is spread over many alternative gene structures is still called; unlike S1 (per-base argmax) the result is
+    a valid gene structure.  Returns (original-state path int8 [L], score)."""
+    p = np.asarray(post, np.float64)
+    if agg:
+        q = p.copy()
+        q[:, 0] += agg * p[:, 0]
+        for s in STRANDS:
+            for k in TYPES:
+                ix = [IDX[f"{k}{part}{s}"] for part in PARTS]
+                q[:, ix] += agg * p[:, ix].sum(1, keepdims=True)
+        p = q
+    w = np.full(S, float(gamma))
+    w[0] = 1.0
+    x = p * w + np.asarray(gates, np.float64)
+    Ts = np.where(np.asarray(T, np.float64) > NEG / 2, 0.0, NEG)
+    Te, orig = expand_duration(Ts, min_exon, min_intron)
+    n = len(orig)
+    eid, ev = _edge_table(None, None, None, n, len(x))
+    preds = [np.flatnonzero(Te[:, j] > NEG / 2) for j in range(n)]
+    pred_n = np.array([len(p_) for p_ in preds], np.int64)
+    pred_idx = np.zeros((n, pred_n.max()), np.int64)
+    for j, p_ in enumerate(preds):
+        pred_idx[j, :len(p_)] = p_
+    return _viterbi_dur_nb(np.ascontiguousarray(x), Te, orig, pred_idx, pred_n, eid, ev)

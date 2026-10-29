@@ -3,6 +3,8 @@
 
   train_formal_ont.py --name NAME --seed S [--arm G1B|R|G2PH] [--labels v50uev] [--lnc-only] [--epochs 12] [--smoke]
   train_formal_ont.py --name ab1-s1-42 --eval-only --from g1b-42 --with-s1      (AB1: S1 decoding of a main model)
+  train_formal_ont.py --name dev-x --eval-only --from ab2-f-123 --ckpt avg10-12 --with-s1 --mea 1,2,4 --dump-post
+      (v1.9 development on chr18: weight average of epochs 10-12, MEA decoding, posteriors saved for CPU decoders)
 Arms (protocol v1.8 section 15): G1B main / AB2 (--labels v50f) / AB4 (--labels v41uev) / AB3 (--labels v50uevlnc
 --lnc-only); AB0 = --arm R (G1 without boundary head, screen2); AB6 = --arm G2PH (screen_g2ph, numba CPU FB).
 Data (ont): data/p1_feat/{train,val,chr18}.npy (memmaps), data/p1v12/{train,val}_{codes,bits_<labels>,events}.npy,
@@ -47,7 +49,13 @@ def main():
     ap.add_argument("--from", dest="src", default=None, help="eval-only: take best.pt from this run name")
     ap.add_argument("--with-s1", action="store_true", help="eval-only: also decode S1 (posterior argmax), AB1")
     ap.add_argument("--ckpt", default="best",
-                    help="eval-only: checkpoint of the source run: best, last (final epoch) or epNN (diagnostics only)")
+                    help="eval-only: checkpoint of the source run: best, last (final epoch), epNN (diagnostics only) or "
+                         "avgNN-MM (v1.9 development: uniform weight average of epochs NN..MM)")
+    ap.add_argument("--mea", default="",
+                    help="eval-only (v1.9 development): comma list of gamma[@agg], each decoded with g1.mea_duration; "
+                         "also adds the thresholded lnc L1 grid (conf_grid) to every decoder")
+    ap.add_argument("--dump-post", action="store_true",
+                    help="eval-only (v1.9 development): save the chr18 posteriors as <out>/chr18_post.npy (float16, 2.7 GB)")
     ap.add_argument("--lnc-entry-bias", default="",
                     help="eval-only, G1B (diagnostic): comma list of per-gene log priors b on IG -> lncRNA entry, "
                          "each decoded as an extra S3_lncbias<b> block in result.json")
@@ -56,8 +64,8 @@ def main():
     ap.add_argument("--online-features", action="store_true", default=os.environ.get("NCRNA_ONLINE") == "1",
                     help="compute backbone features on the fly (win3090: no feature cache on disk)")
     a = ap.parse_args()
-    if not re.fullmatch(r"best|last|ep\d\d", a.ckpt):
-        ap.error(f"--ckpt {a.ckpt}: expected best, last or epNN")
+    if not re.fullmatch(r"best|last|ep\d\d|avg\d\d-\d\d", a.ckpt):
+        ap.error(f"--ckpt {a.ckpt}: expected best, last, epNN or avgNN-MM")
     import torch
     if os.environ.get("NCRNA_THREADS"):
         torch.set_num_threads(int(os.environ["NCRNA_THREADS"]))
@@ -115,12 +123,20 @@ def main():
         if a.eval_only:
             if gate_busy():
                 sys.exit(75)
-            ck = f"{ROOT}/outputs/PHASE1/FORMAL/{a.src or a.name}/{a.ckpt}.pt"
+            src = f"{ROOT}/outputs/PHASE1/FORMAL/{a.src or a.name}"
+            ck = f"{src}/{a.ckpt}.pt"
+            m = re.fullmatch(r"avg(\d\d)-(\d\d)", a.ckpt)
+            if m:
+                ck = [f"{src}/ep{e:02d}.pt" for e in range(int(m.group(1)), int(m.group(2)) + 1)]
+            dev = dict(mea_gammas=a.mea, conf_grid=s2.CONF_GRID if a.mea else (),
+                       post_out=f"{out}/chr18_post.npy" if a.dump_post else None)
             if a.arm == "G2PH":
                 sp.evaluate_checkpoint(ck, "G2PH", 4096, ch, out, device="cuda")
+            elif a.arm == "R":
+                s2.evaluate_checkpoint(ck, 4096, ch, out, device="cuda", lnc_only=a.lnc_only, with_s1=a.with_s1, **dev)
             else:
                 sg.evaluate_checkpoint(ck, 4096, ch, out, device="cuda", lnc_only=a.lnc_only, with_s1=a.with_s1,
-                                       lnc_entry_bias=[float(x) for x in a.lnc_entry_bias.split(",") if x])
+                                       lnc_entry_bias=[float(x) for x in a.lnc_entry_bias.split(",") if x], **dev)
         elif a.arm == "G1B":
             sg.run(a.seed, tr, va, ch, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, lnc_only=a.lnc_only,
                    accum=a.accum, keep_epochs=True)

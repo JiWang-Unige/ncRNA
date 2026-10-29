@@ -20,7 +20,7 @@ from ..features import generanno as G
 from ..grammar import g1
 from ..heads.c0 import C0BHead
 from .screen import M_STATES
-from .screen2 import Paused, summarize  # noqa: F401  (Paused re-exported)
+from .screen2 import Paused, load_ckpt, mea_specs, summarize  # noqa: F401  (Paused re-exported)
 
 TOK = 6
 EV_BOUNDARY = [2, 3, 6, 7]  # P1-G0 event channels (TSS+, TES+, TSS-, TES-) in g1.BOUNDARY order
@@ -68,11 +68,16 @@ def val_nll(head, trans, coef, va, device, lnc_only=False):
     return tot / n
 
 
-def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=False, lnc_entry_bias=(), log=None):
+def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=False, lnc_entry_bias=(), log=None,
+                        mea_gammas=(), conf_grid=(), post_out=None):
     """S3 (+ boundary bonuses); with_s1 also decodes S1 = posterior-argmax segments (AB1, no grammar at decode).
     lnc_entry_bias (diagnostic): also decode S3 with b added to the log transition IG -> lncRNA first exon (both
     strands), i.e. a per-gene log prior b on lncRNA genes; results under "S3_lncbias<b>", each also logged as soon as
-    it is done (log given)."""
+    it is done (log given).
+    v1.9 development (chr18 only): mea_gammas ("1,2,1@1", see screen2.mea_specs) also decodes g1.mea_duration on the
+    posteriors (results "MEA_g<gamma>[_a<agg>]"),
+    conf_grid adds thresholded lnc L1 Sn / Pr to every block, post_out saves the float16 posteriors [L, S] (.npy) so
+    further decoders can be tried on CPU (scripts/phase1/dev_decode.py)."""
     head.eval()
     feats, codes = ch["feats"], ch["codes"]
     L = len(feats) * TOK
@@ -93,9 +98,11 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
         p, b = emit_fn(s, e)
         pot[s:e], bnd[s:e] = p.float().cpu().numpy(), b.float().cpu().numpy()
     post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device, coef=coef)
+    if post_out:
+        np.save(post_out, post)
     truth = ruler.read_gtf(ch["truth_gtf"], ch["chrom"])
     genes = chrom.decode_blocks(pot, codes[:L], T.double().cpu().numpy(), 20, 50, mode="s3", bnd=bnd, coef=coef)
-    out = {"S3": summarize(genes, post, truth)}
+    out = {"S3": summarize(genes, post, truth, conf_grid)}
     for bias in lnc_entry_bias:
         Tb = T.double().cpu().numpy().copy()
         for s_ in g1.STRANDS:
@@ -106,7 +113,12 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
             log(json.dumps({f"S3_lncbias{bias:g}": {k: v for k, v in out[f"S3_lncbias{bias:g}"].items() if k != "curve"}}))
     if with_s1:
         s1 = chrom.decode_blocks(scratch.astype(post, np.float32), codes[:L], T.double().cpu().numpy(), 20, 50, mode="argmax")
-        out["S1"] = summarize(s1, post, truth)
+        out["S1"] = summarize(s1, post, truth, conf_grid)
+    for name, gm, ag in mea_specs(mea_gammas):
+        gm_ = chrom.decode_blocks(post, codes[:L], T.double().cpu().numpy(), 20, 50, mode="mea", gamma=gm, agg=ag)
+        out[name] = summarize(gm_, post, truth, conf_grid)
+        if log:
+            log(json.dumps({name: {k: v for k, v in out[name].items() if k != "curve"}}))
     out.update({"eval_s": round(time.time() - t0),
            "coef": {k: [float(x) for x in coef.c[k].detach().cpu()] for k in g1.TYPES}})
     if ch.get("gff_out"):
@@ -117,16 +129,18 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
 
 
 def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print, lnc_only=False, with_s1=False,
-                        lnc_entry_bias=()):
-    """Separate evaluation job (Kaggle input-size limits): load best.pt, evaluate on ch, write result_eval.json."""
+                        lnc_entry_bias=(), mea_gammas=(), conf_grid=(), post_out=None):
+    """Separate evaluation job (Kaggle input-size limits): load best.pt (or average a list, see load_ckpt), evaluate
+    on ch, write result.json."""
     head, trans, coef = C0BHead(feature_dim).to(device), g1.G1Transitions().to(device), g1.BoundaryCoef().to(device)
-    ck = torch.load(ck_path, map_location=device)
+    ck = load_ckpt(ck_path, device)
     head.load_state_dict(ck["head"])
     trans.load_state_dict(ck["trans"])
     coef.load_state_dict(ck["coef"])
     res = {"arm": "G1B", "best_epoch": ck["epoch"], "lnc_only": lnc_only,
            **evaluate_chromosome(head, trans, coef, ch, device, lnc_only=lnc_only, with_s1=with_s1,
-                                 lnc_entry_bias=lnc_entry_bias, log=log)}
+                                 lnc_entry_bias=lnc_entry_bias, log=log, mea_gammas=mea_gammas, conf_grid=conf_grid,
+                                 post_out=post_out)}
     os.makedirs(out, exist_ok=True)
     json.dump(res, open(f"{out}/result.json", "w"), indent=1)
     log(json.dumps({k: (v if not isinstance(v, dict) else {kk: vv for kk, vv in v.items() if kk != "curve"})

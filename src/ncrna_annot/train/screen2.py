@@ -49,8 +49,10 @@ def val_nll(head, trans, va, lnc_only, device):
     return tot / n
 
 
-def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False):
-    """ch = dict(feats [ntok, K] memmap, codes int8 [L], truth_gtf, chrom)."""
+def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False, mea_gammas=(), conf_grid=(), post_out=None,
+                        log=None):
+    """ch = dict(feats [ntok, K] memmap, codes int8 [L], truth_gtf, chrom).
+    mea_gammas / conf_grid / post_out: v1.9 development, as in screen_g1b.evaluate_chromosome."""
     head.eval()
     feats, codes = ch["feats"], ch["codes"]
     L = len(feats) * TOK
@@ -69,18 +71,69 @@ def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False):
         e = min(s + G.WIN * 8, L)
         pot[s:e] = emit_fn(s, e).float().cpu().numpy()
     post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device)
+    if post_out:
+        np.save(post_out, post)
     truth = ruler.read_gtf(ch["truth_gtf"], ch["chrom"])
     out = {"eval_s": None}
-    modes = [("S3", "s3", pot)] + ([("S1", "argmax", scratch.astype(post, np.float32))] if with_s1 else [])
-    for name, mode, arr in modes:
-        genes = chrom.decode_blocks(arr, codes[:L], Tn, 20, 50, mode=mode)
-        out[name] = summarize(genes, post, truth)
+    modes = [("S3", "s3", pot, 1.0, 0.0)] + ([("S1", "argmax", scratch.astype(post, np.float32), 1.0, 0.0)] if with_s1 else [])
+    modes += [(name, "mea", post, gm, ag) for name, gm, ag in mea_specs(mea_gammas)]
+    for name, mode, arr, gm, ag in modes:
+        genes = chrom.decode_blocks(arr, codes[:L], Tn, 20, 50, mode=mode, gamma=gm, agg=ag)
+        out[name] = summarize(genes, post, truth, conf_grid)
+        if log and mode == "mea":
+            log(json.dumps({name: {k: v for k, v in out[name].items() if k != "curve"}}))
     out["eval_s"] = round(time.time() - t0)
     return out
 
 
-def summarize(genes, post, truth):
-    """lnc >= 200 nt filter, gene confidence, gene-level PR / AUPRC and ruler L1 / L2 (protocol v1.4)."""
+def load_ckpt(ck_path, device):
+    """One checkpoint, or (list of paths) the uniform average of their weights ("epoch" becomes the list of epochs).
+    v1.9 development: averaging the last epochs of one run (same cosine-annealed basin; the head has LayerNorm only,
+    no batch statistics to recompute)."""
+    if isinstance(ck_path, str):
+        return torch.load(ck_path, map_location=device)
+    cks = [torch.load(p, map_location=device) for p in ck_path]
+    avg = {k: {n: sum(c[k][n].double() for c in cks).div(len(cks)).to(cks[0][k][n].dtype) for n in cks[0][k]}
+           for k, v in cks[0].items() if isinstance(v, dict)}
+    avg["epoch"] = [c["epoch"] for c in cks]
+    return avg
+
+
+def evaluate_checkpoint(ck_path, feature_dim, ch, out, arm="R", device="cuda", log=print, lnc_only=False, with_s1=False,
+                        mea_gammas=(), conf_grid=(), post_out=None):
+    """Eval-only job for arm R (AB0): load a checkpoint (or average a list), evaluate on ch, write result.json."""
+    head, trans = C0Head(feature_dim).to(device), g1.G1Transitions().to(device)
+    ck = load_ckpt(ck_path, device)
+    head.load_state_dict(ck["head"])
+    trans.load_state_dict(ck["trans"])
+    res = {"arm": arm, "best_epoch": ck["epoch"], "lnc_only": lnc_only,
+           **evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=with_s1, mea_gammas=mea_gammas,
+                                 conf_grid=conf_grid, post_out=post_out, log=log)}
+    os.makedirs(out, exist_ok=True)
+    json.dump(res, open(f"{out}/result.json", "w"), indent=1)
+    log(json.dumps({k: (v if not isinstance(v, dict) else {kk: vv for kk, vv in v.items() if kk != "curve"})
+                    for k, v in res.items()}))
+    return res
+
+
+CONF_GRID = (0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
+
+
+def mea_specs(spec):
+    """v1.9 development: "1,2,1@1" (or a sequence of gamma / (gamma, agg)) -> [(name, gamma, agg)], names
+    MEA_g<gamma> (agg 0) or MEA_g<gamma>_a<agg>."""
+    items = [x for x in spec.split(",") if x] if isinstance(spec, str) else list(spec)
+    out = []
+    for it in items:
+        g, a = (it.split("@") + ["0"])[:2] if isinstance(it, str) else (it if isinstance(it, (tuple, list)) else (it, 0))
+        g, a = float(g), float(a)
+        out.append((f"MEA_g{g:g}" + (f"_a{a:g}" if a else ""), g, a))
+    return out
+
+
+def summarize(genes, post, truth, conf_grid=()):
+    """lnc >= 200 nt filter, gene confidence, gene-level PR / AUPRC and ruler L1 / L2 (protocol v1.4).
+    conf_grid (v1.9 development): also ruler lnc L1 Sn / strict Pr of the lnc genes with confidence >= tau."""
     genes = [g for g in genes if g["type"] != "l" or sum(b - a + 1 for a, b in g["exons"]) >= 200]
     for g in genes:
         g["conf"] = chrom.gene_confidence(g, post)
@@ -92,7 +145,13 @@ def summarize(genes, post, truth):
     idx = ruler.ExonIndex(truth)
     sl = ruler.score_class("lnc", truth, preds, idx, 0)
     sm = ruler.score_class("mrna", truth, preds, idx, 0)
-    return {"auprc_lnc": pr["auprc"], "best_locus_f1": pr["best_f1"], "best_point": pr["best_point"],
+    grid = []
+    for tau in conf_grid:
+        keep = [p for p, g in zip(preds, genes) if p["cls"] == "lnc" and g["conf"] >= tau]
+        st = ruler.score_class("lnc", truth, keep, idx, 0)["L1_locus"]
+        grid.append({"tau": tau, "n": len(keep), "sn": st["sn"], "pr": st["pr_strict"]})
+    extra = {"conf_grid": grid} if conf_grid else {}
+    return {**extra, "auprc_lnc": pr["auprc"], "best_locus_f1": pr["best_f1"], "best_point": pr["best_point"],
             "n_truth_lnc": pr["n_truth"], "n_pred_lnc": pr["n_pred"],
             "lnc_L1": {"sn": sl["L1_locus"]["sn"], "pr": sl["L1_locus"]["pr_strict"]},
             "lnc_L2": {"sn": sl["L2_intron_chain"]["sn"], "pr": sl["L2_intron_chain"]["pr_strict"]},

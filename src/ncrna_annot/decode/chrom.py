@@ -16,9 +16,11 @@ from ..grammar import g1
 from . import scratch
 
 
-def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pad=100_000, mode="s3", bnd=None, coef=None):
+def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pad=100_000, mode="s3", bnd=None, coef=None,
+                  gamma=1.0, agg=0.0):
     """pot float32 [L, S] (already masked for lnc-only arms), codes int8 [L] -> genes (1-based exons).
-    G1B: bnd float [L, 4] boundary logits + coef (g1.BoundaryCoef) add gene entry / exit edge bonuses (S3 only)."""
+    G1B: bnd float [L, 4] boundary logits + coef (g1.BoundaryCoef) add gene entry / exit edge bonuses (S3 only).
+    mode "mea" (v1.9 development): `pot` holds posteriors, decoded by g1.mea_duration with this gamma / agg."""
     L = len(pot)
     out, coef_cpu = [], None
     for s in range(0, L, block):
@@ -33,6 +35,8 @@ def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pa
                 with torch.no_grad():
                     edges = g1.boundary_edges(torch.as_tensor(np.asarray(bnd[a:b]), dtype=torch.float64), coef_cpu)
             path, _ = g1.viterbi_duration(pot[a:b], T, gates, None, min_exon, min_intron, edges=edges)
+        elif mode == "mea":
+            path, _ = g1.mea_duration(pot[a:b], T, gates, gamma, min_exon, min_intron, agg)
         else:  # "argmax" (S1): per-base argmax of posteriors passed in as `pot`
             path = np.asarray(pot[a:b]).argmax(-1).astype(np.int8)
         for gene in g1.path_to_genes(path, offset=a):
