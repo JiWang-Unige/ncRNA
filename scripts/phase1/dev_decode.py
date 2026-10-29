@@ -4,7 +4,7 @@
   dev_decode.py --post outputs/PHASE1/FORMAL/<run>/chr18_post.npy --mea 1,x1,x2,pv1 [--s1] --out <json>
 ([pv][x]gamma as in g1.mea_duration / screen2.mea_specs)
 Posteriors come from train_formal_ont.py --eval-only ... --dump-post (same model, same tiling as the run's own
-evaluation).  The grammar's allowed transitions do not depend on the trained parameters, so the default
+evaluation); --post a.npy,b.npy,... decodes their per-base mean (posterior ensemble, saved as <out>.post.npy).  The grammar's allowed transitions do not depend on the trained parameters, so the default
 G1Transitions() gives the structure for mea_duration.  chr20 / T2T chr20 are never read here.
 """
 import argparse
@@ -34,7 +34,14 @@ def main():
     from ncrna_annot.eval import ruler
     from ncrna_annot.grammar import g1
     from ncrna_annot.train import screen2 as s2
-    post = np.load(a.post, mmap_mode="r")
+    paths = a.post.split(",")
+    post = np.load(paths[0], mmap_mode="r")
+    if len(paths) > 1:  # posterior ensemble: per-base mean of several checkpoints' posteriors (float16 on disk)
+        parts = [post] + [np.load(p, mmap_mode="r") for p in paths[1:]]
+        assert all(p.shape == post.shape for p in parts)
+        post = np.lib.format.open_memmap(a.out + ".post.npy", "w+", np.float16, post.shape)
+        for i in range(0, len(post), 1 << 22):
+            post[i:i + (1 << 22)] = sum(np.asarray(p[i:i + (1 << 22)], np.float32) for p in parts) / len(parts)
     codes = np.load(a.codes, mmap_mode="r")[:len(post)]
     T = g1.G1Transitions()().detach().double().numpy()
     truth = ruler.read_gtf(a.truth, a.chrom)
