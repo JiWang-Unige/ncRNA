@@ -48,6 +48,9 @@ def main():
     ap.add_argument("--with-s1", action="store_true", help="eval-only: also decode S1 (posterior argmax), AB1")
     ap.add_argument("--ckpt", default="best",
                     help="eval-only: checkpoint of the source run: best, last (final epoch) or epNN (diagnostics only)")
+    ap.add_argument("--lnc-entry-bias", default="",
+                    help="eval-only, G1B (diagnostic): comma list of per-gene log priors b on IG -> lncRNA entry, "
+                         "each decoded as an extra S3_lncbias<b> block in result.json")
     ap.add_argument("--accum", type=int, default=int(os.environ.get("NCRNA_ACCUM", "2")),
                     help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
     ap.add_argument("--online-features", action="store_true", default=os.environ.get("NCRNA_ONLINE") == "1",
@@ -94,7 +97,7 @@ def main():
         ch["feats"] = (online.OnlineChromosome(ch["codes"], fn) if a.online_features else ch["feats"][:500000])
         a.epochs = 1
     meta = dict(name=a.name, host=os.uname().nodename, online_features=a.online_features, accum=a.accum, arm=a.arm, seed=a.seed, labels=a.labels, lnc_only=a.lnc_only, eval_only=a.eval_only,
-                src=a.src, ckpt=a.ckpt, with_s1=a.with_s1, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
+                src=a.src, ckpt=a.ckpt, lnc_entry_bias=a.lnc_entry_bias, with_s1=a.with_s1, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
                 features="GENERanno-1.2b-cds L17+L23 fp16 (data/p1_feat)", started=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     json.dump(meta, open(f"{out}/run_meta.json", "w"), indent=1)
     n = {"i": 0}
@@ -116,7 +119,8 @@ def main():
             if a.arm == "G2PH":
                 sp.evaluate_checkpoint(ck, "G2PH", 4096, ch, out, device="cuda")
             else:
-                sg.evaluate_checkpoint(ck, 4096, ch, out, device="cuda", lnc_only=a.lnc_only, with_s1=a.with_s1)
+                sg.evaluate_checkpoint(ck, 4096, ch, out, device="cuda", lnc_only=a.lnc_only, with_s1=a.with_s1,
+                                       lnc_entry_bias=[float(x) for x in a.lnc_entry_bias.split(",") if x])
         elif a.arm == "G1B":
             sg.run(a.seed, tr, va, ch, out, epochs=a.epochs, device="cuda", pause=pause, resume=True, lnc_only=a.lnc_only,
                    accum=a.accum, keep_epochs=True)

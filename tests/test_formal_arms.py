@@ -36,8 +36,10 @@ def test_g1b_lnc_only_and_s1(tmp_path):
                          lnc_only=True)
     assert res["lnc_only"] is True and res["S3"]["n_pred_mrna"] == 0  # mRNA states are impossible
     ev = screen_g1b.evaluate_checkpoint(str(tmp_path / "ab3" / "best.pt"), D, ch, str(tmp_path / "ab1"), device="cpu",
-                                        log=lambda *_: None, with_s1=True)
+                                        log=lambda *_: None, with_s1=True, lnc_entry_bias=(0, 1e3))
     assert "S1" in ev and "S3" in ev and np.isfinite(ev["S1"]["auprc_lnc"])
+    assert ev["S3_lncbias0"]["n_pred_lnc"] == ev["S3"]["n_pred_lnc"]  # b = 0 reproduces S3
+    assert ev["S3_lncbias1000"]["n_pred_lnc"] >= ev["S3"]["n_pred_lnc"]
 
 
 def test_r_arm_pause_resume(tmp_path):
