@@ -483,31 +483,37 @@ def viterbi_duration(emit, T, gates, allowed=None, min_exon=20, min_intron=50, e
 
 # ---- posterior decoding under the grammar (development for protocol v1.9, chr18 only) -------------------
 
-def mea_duration(post, T, gates, gamma=1.0, min_exon=20, min_intron=50, agg=0.0):
+def mea_duration(post, T, gates, gamma=1.0, min_exon=20, min_intron=50, level="state", delta=1e-4, log_gain=False):
     """Maximum expected accuracy path under G1's grammar with minimum exon / intron lengths ("MEA").
 
     post [L, S] posterior state marginals (chromosome_marginals), T [S, S] only gives the allowed transitions
-    (every allowed edge scores 0), gates [L, S] the splice-motif mask.  The path maximises
-    sum_t w(s_t) * (post[t, s_t] + agg * post[t, c(s_t)]) with w(IG) = 1 and w(gene state) = gamma, where
-    post[t, c(s)] is the total posterior of the state's gene class (IG, or one type x strand: E + L + I + R).
-    gamma = 1, agg = 0 is the expected number of correctly labelled bases; gamma > 1 trades precision for
-    sensitivity (gamma-centroid style); agg > 0 lets the gene / intergenic decision follow the class total when the
-    mass is split between exon and intron states of the same gene (where per-state scores, like S1's argmax,
-    under-call).  Unlike S3 (MAP path of the CRF) it scores each base by its marginal, so a locus whose posterior
-    mass is spread over many alternative gene structures is still called; unlike S1 (per-base argmax) the result is
-    a valid gene structure.  Returns (original-state path int8 [L], score)."""
+    (every allowed edge scores 0), gates [L, S] the splice-motif mask.  The path maximises sum_t w(s_t) * g_t(s_t):
+      level "state": g_t(s) = post[t, s], w(IG) = 1, w(gene state) = gamma; gamma = 1 is the expected number of
+        correctly labelled bases.  Long intron-only stretches (a 24.6 kb posterior tile inside a long intron sees no
+        exon) then pay for two minimum-length exons to collect the intron score: spurious 2-exon genes.
+      level "exon": expected exon-label accuracy.  g_t(kE s) = post[t, kE s] with weight gamma, and IG / intron
+        states all score the non-exon mass 1 - sum_E post[t, E] (weight 1), so genes are anchored by exon evidence
+        only; a fraction delta of the state-level score breaks the intron / IG tie in favour of joining supported
+        exons through a supported intron (it pays for spurious exons only on intron-only runs > ~2 * min_exon /
+        delta bases).
+    gamma > 1 trades precision for sensitivity (gamma-centroid style).  Unlike S3 (MAP path of the CRF) every base
+    is scored by its marginal, so a locus whose posterior mass is spread over alternative gene structures is still
+    called; unlike S1 (per-base argmax) the result is a valid gene structure.  log_gain: maximise
+    sum_t log(w * g_t) instead (posterior-Viterbi, Fariselli et al. 2005: one low-scoring base is expensive).
+    Returns (original-state path int8 [L], score)."""
     p = np.asarray(post, np.float64)
-    if agg:
-        q = p.copy()
-        q[:, 0] += agg * p[:, 0]
-        for s in STRANDS:
-            for k in TYPES:
-                ix = [IDX[f"{k}{part}{s}"] for part in PARTS]
-                q[:, ix] += agg * p[:, ix].sum(1, keepdims=True)
-        p = q
     w = np.full(S, float(gamma))
     w[0] = 1.0
-    x = p * w + np.asarray(gates, np.float64)
+    if level == "exon":
+        ex = [IDX[f"{k}E{s}"] for s in STRANDS for k in TYPES]
+        q = np.repeat(1.0 - p[:, ex].sum(1, keepdims=True), S, 1)
+        q[:, ex] = p[:, ex]
+        p = (1.0 - delta) * q + delta * p
+        w[[j_ for j_ in range(1, S) if j_ not in ex]] = 1.0
+    elif level != "state":
+        raise ValueError(level)
+    x = np.log(np.maximum(p * w, 1e-12)) if log_gain else p * w
+    x = x + np.asarray(gates, np.float64)
     Ts = np.where(np.asarray(T, np.float64) > NEG / 2, 0.0, NEG)
     Te, orig = expand_duration(Ts, min_exon, min_intron)
     n = len(orig)

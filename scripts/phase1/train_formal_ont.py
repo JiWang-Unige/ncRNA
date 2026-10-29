@@ -3,7 +3,7 @@
 
   train_formal_ont.py --name NAME --seed S [--arm G1B|R|G2PH] [--labels v50uev] [--lnc-only] [--epochs 12] [--smoke]
   train_formal_ont.py --name ab1-s1-42 --eval-only --from g1b-42 --with-s1      (AB1: S1 decoding of a main model)
-  train_formal_ont.py --name dev-x --eval-only --from ab2-f-123 --ckpt avg10-12 --with-s1 --mea 1,2,4 --dump-post
+  train_formal_ont.py --name dev-x --eval-only --from ab2-f-123 --ckpt avg10-12 --with-s1 --mea 1,x1 --dump-post
       (v1.9 development on chr18: weight average of epochs 10-12, MEA decoding, posteriors saved for CPU decoders)
 Arms (protocol v1.8 section 15): G1B main / AB2 (--labels v50f) / AB4 (--labels v41uev) / AB3 (--labels v50uevlnc
 --lnc-only); AB0 = --arm R (G1 without boundary head, screen2); AB6 = --arm G2PH (screen_g2ph, numba CPU FB).
@@ -52,7 +52,7 @@ def main():
                     help="eval-only: checkpoint of the source run: best, last (final epoch), epNN (diagnostics only) or "
                          "avgNN-MM (v1.9 development: uniform weight average of epochs NN..MM)")
     ap.add_argument("--mea", default="",
-                    help="eval-only (v1.9 development): comma list of gamma[@agg], each decoded with g1.mea_duration; "
+                    help="eval-only (v1.9 development): comma list of [pv][x]gamma (screen2.mea_specs), each decoded with g1.mea_duration; "
                          "also adds the thresholded lnc L1 grid (conf_grid) to every decoder")
     ap.add_argument("--dump-post", action="store_true",
                     help="eval-only (v1.9 development): save the chr18 posteriors as <out>/chr18_post.npy (float16, 2.7 GB)")

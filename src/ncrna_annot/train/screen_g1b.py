@@ -74,8 +74,8 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
     lnc_entry_bias (diagnostic): also decode S3 with b added to the log transition IG -> lncRNA first exon (both
     strands), i.e. a per-gene log prior b on lncRNA genes; results under "S3_lncbias<b>", each also logged as soon as
     it is done (log given).
-    v1.9 development (chr18 only): mea_gammas ("1,2,1@1", see screen2.mea_specs) also decodes g1.mea_duration on the
-    posteriors (results "MEA_g<gamma>[_a<agg>]"),
+    v1.9 development (chr18 only): mea_gammas ("1,x1,pv1", see screen2.mea_specs) also decodes g1.mea_duration on
+    the posteriors (results "MEA_g<gamma>", "MEAX_g<gamma>", "PV_g<gamma>"),
     conf_grid adds thresholded lnc L1 Sn / Pr to every block, post_out saves the float16 posteriors [L, S] (.npy) so
     further decoders can be tried on CPU (scripts/phase1/dev_decode.py)."""
     head.eval()
@@ -114,8 +114,9 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
     if with_s1:
         s1 = chrom.decode_blocks(scratch.astype(post, np.float32), codes[:L], T.double().cpu().numpy(), 20, 50, mode="argmax")
         out["S1"] = summarize(s1, post, truth, conf_grid)
-    for name, gm, ag in mea_specs(mea_gammas):
-        gm_ = chrom.decode_blocks(post, codes[:L], T.double().cpu().numpy(), 20, 50, mode="mea", gamma=gm, agg=ag)
+    for name, gm, lv, lg in mea_specs(mea_gammas):
+        gm_ = chrom.decode_blocks(post, codes[:L], T.double().cpu().numpy(), 20, 50, mode="mea", gamma=gm, level=lv,
+                                  log_gain=lg)
         out[name] = summarize(gm_, post, truth, conf_grid)
         if log:
             log(json.dumps({name: {k: v for k, v in out[name].items() if k != "curve"}}))

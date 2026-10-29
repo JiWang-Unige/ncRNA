@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """v1.9 development (chr18 only, CPU): decode saved chr18 posteriors with S1 / MEA and score them like the formal runs.
 
-  dev_decode.py --post outputs/PHASE1/FORMAL/<run>/chr18_post.npy --mea 1,2,4,1@1 [--s1] --out <json>
-(gamma[@agg] as in g1.mea_duration / screen2.mea_specs)
+  dev_decode.py --post outputs/PHASE1/FORMAL/<run>/chr18_post.npy --mea 1,x1,x2,pv1 [--s1] --out <json>
+([pv][x]gamma as in g1.mea_duration / screen2.mea_specs)
 Posteriors come from train_formal_ont.py --eval-only ... --dump-post (same model, same tiling as the run's own
 evaluation).  The grammar's allowed transitions do not depend on the trained parameters, so the default
 G1Transitions() gives the structure for mea_duration.  chr20 / T2T chr20 are never read here.
@@ -39,11 +39,11 @@ def main():
     T = g1.G1Transitions()().detach().double().numpy()
     truth = ruler.read_gtf(a.truth, a.chrom)
     res = {"post": a.post}
-    modes = ([("S1", "argmax", 1.0, 0.0)] if a.s1 else []) + [(n, "mea", g, ag) for n, g, ag in s2.mea_specs(a.mea)]
-    for name, mode, gm, ag in modes:
+    modes = ([("S1", "argmax", 1.0, "state", False)] if a.s1 else []) + [(n, "mea", g, lv, lg) for n, g, lv, lg in s2.mea_specs(a.mea)]
+    for name, mode, gm, lv, lg in modes:
         t0 = time.time()
         arr = np.asarray(post, np.float32) if mode == "argmax" else post
-        genes = chrom.decode_blocks(arr, codes, T, 20, 50, mode=mode, gamma=gm, agg=ag)
+        genes = chrom.decode_blocks(arr, codes, T, 20, 50, mode=mode, gamma=gm, level=lv, log_gain=lg)
         res[name] = s2.summarize(genes, post, truth, s2.CONF_GRID)
         res[name]["decode_s"] = round(time.time() - t0)
         print(json.dumps({name: {k: v for k, v in res[name].items() if k != "curve"}}), flush=True)

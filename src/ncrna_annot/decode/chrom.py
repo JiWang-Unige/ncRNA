@@ -17,10 +17,10 @@ from . import scratch
 
 
 def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pad=100_000, mode="s3", bnd=None, coef=None,
-                  gamma=1.0, agg=0.0):
+                  gamma=1.0, level="state", log_gain=False):
     """pot float32 [L, S] (already masked for lnc-only arms), codes int8 [L] -> genes (1-based exons).
     G1B: bnd float [L, 4] boundary logits + coef (g1.BoundaryCoef) add gene entry / exit edge bonuses (S3 only).
-    mode "mea" (v1.9 development): `pot` holds posteriors, decoded by g1.mea_duration with this gamma / agg."""
+    mode "mea" (v1.9 development): `pot` holds posteriors, decoded by g1.mea_duration with this gamma / level / log_gain."""
     L = len(pot)
     out, coef_cpu = [], None
     for s in range(0, L, block):
@@ -36,7 +36,7 @@ def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pa
                     edges = g1.boundary_edges(torch.as_tensor(np.asarray(bnd[a:b]), dtype=torch.float64), coef_cpu)
             path, _ = g1.viterbi_duration(pot[a:b], T, gates, None, min_exon, min_intron, edges=edges)
         elif mode == "mea":
-            path, _ = g1.mea_duration(pot[a:b], T, gates, gamma, min_exon, min_intron, agg)
+            path, _ = g1.mea_duration(pot[a:b], T, gates, gamma, min_exon, min_intron, level, log_gain=log_gain)
         else:  # "argmax" (S1): per-base argmax of posteriors passed in as `pot`
             path = np.asarray(pot[a:b]).argmax(-1).astype(np.int8)
         for gene in g1.path_to_genes(path, offset=a):
@@ -78,4 +78,11 @@ def gene_confidence(gene, post):
     for (_, b1), (a2, _) in zip(ex, ex[1:]):
         vals.append(post[b1:a2 - 1][:, intron].astype(np.float64).sum(1))
     v = np.concatenate(vals)
+    return float(v.mean()) if len(v) else 0.0
+
+
+def exon_confidence(gene, post):
+    """v1.9 development: mean posterior of the gene's exon state over its exon bases only."""
+    E = g1.IDX[f"{gene['type']}E{gene['strand']}"]
+    v = np.concatenate([post[a - 1:b, E].astype(np.float64) for a, b in gene["exons"]])
     return float(v.mean()) if len(v) else 0.0

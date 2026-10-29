@@ -75,10 +75,10 @@ def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False, mea_ga
         np.save(post_out, post)
     truth = ruler.read_gtf(ch["truth_gtf"], ch["chrom"])
     out = {"eval_s": None}
-    modes = [("S3", "s3", pot, 1.0, 0.0)] + ([("S1", "argmax", scratch.astype(post, np.float32), 1.0, 0.0)] if with_s1 else [])
-    modes += [(name, "mea", post, gm, ag) for name, gm, ag in mea_specs(mea_gammas)]
-    for name, mode, arr, gm, ag in modes:
-        genes = chrom.decode_blocks(arr, codes[:L], Tn, 20, 50, mode=mode, gamma=gm, agg=ag)
+    modes = [("S3", "s3", pot, 1.0, "state")] + ([("S1", "argmax", scratch.astype(post, np.float32), 1.0, "state")] if with_s1 else [])
+    modes = [m + (False,) for m in modes] + [(name, "mea", post, gm, lv, lg) for name, gm, lv, lg in mea_specs(mea_gammas)]
+    for name, mode, arr, gm, lv, lg in modes:
+        genes = chrom.decode_blocks(arr, codes[:L], Tn, 20, 50, mode=mode, gamma=gm, level=lv, log_gain=lg)
         out[name] = summarize(genes, post, truth, conf_grid)
         if log and mode == "mea":
             log(json.dumps({name: {k: v for k, v in out[name].items() if k != "curve"}}))
@@ -120,14 +120,16 @@ CONF_GRID = (0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9)
 
 
 def mea_specs(spec):
-    """v1.9 development: "1,2,1@1" (or a sequence of gamma / (gamma, agg)) -> [(name, gamma, agg)], names
-    MEA_g<gamma> (agg 0) or MEA_g<gamma>_a<agg>."""
-    items = [x for x in spec.split(",") if x] if isinstance(spec, str) else list(spec)
+    """v1.9 development: "1,x2,pv1,pvx1" (or a sequence of gamma) -> [(name, gamma, level, log_gain)]: prefix "pv" =
+    posterior-Viterbi (log gains), "x" = exon-level gains (g1.mea_duration).  Names MEA[X]_g<gamma> / PV[X]_g<gamma>."""
     out = []
-    for it in items:
-        g, a = (it.split("@") + ["0"])[:2] if isinstance(it, str) else (it if isinstance(it, (tuple, list)) else (it, 0))
-        g, a = float(g), float(a)
-        out.append((f"MEA_g{g:g}" + (f"_a{a:g}" if a else ""), g, a))
+    for it in ([x for x in spec.split(",") if x] if isinstance(spec, str) else list(spec)):
+        it = str(it)
+        lg = it.startswith("pv")
+        it = it[2:] if lg else it
+        lv = "exon" if it.startswith("x") else "state"
+        g = float(it[1:] if lv == "exon" else it)
+        out.append((("PV" if lg else "MEA") + ("X" if lv == "exon" else "") + f"_g{g:g}", g, lv, lg))
     return out
 
 
@@ -150,7 +152,11 @@ def summarize(genes, post, truth, conf_grid=()):
         keep = [p for p, g in zip(preds, genes) if p["cls"] == "lnc" and g["conf"] >= tau]
         st = ruler.score_class("lnc", truth, keep, idx, 0)["L1_locus"]
         grid.append({"tau": tau, "n": len(keep), "sn": st["sn"], "pr": st["pr_strict"]})
-    extra = {"conf_grid": grid} if conf_grid else {}
+    extra = {}
+    if conf_grid:  # development readout: AUPRC with the gene confidence taken over exon bases only
+        ex_conf = [{"strand": g["strand"], "exons": [tuple(x) for x in g["exons"]], "conf": chrom.exon_confidence(g, post)}
+                   for g in genes if g["type"] == "l"]
+        extra = {"conf_grid": grid, "auprc_lnc_exonconf": prcurve.pr_curve(ex_conf, truth)["auprc"]}
     return {**extra, "auprc_lnc": pr["auprc"], "best_locus_f1": pr["best_f1"], "best_point": pr["best_point"],
             "n_truth_lnc": pr["n_truth"], "n_pred_lnc": pr["n_pred"],
             "lnc_L1": {"sn": sl["L1_locus"]["sn"], "pr": sl["L1_locus"]["pr_strict"]},

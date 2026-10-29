@@ -31,6 +31,8 @@ def test_mea_recovers_a_clean_path_and_obeys_the_grammar():
     T = g1.G1Transitions()().detach().double().numpy()
     got, _ = g1.mea_duration(post, T, g1.gate_mask(codes))
     assert (got == path).all()
+    for kw in ({"log_gain": True}, {"level": "exon"}, {"level": "exon", "log_gain": True}):
+        assert (g1.mea_duration(post, T, g1.gate_mask(codes), **kw)[0] == path).all(), kw
     assert g1.path_to_genes(got) == [{"type": "l", "strand": "+", "exons": [[101, 200], [301, 400]]}]
     # a 10-bp "exon" in the posteriors cannot be called (minimum exon 20)
     short = np.full((300, g1.S), 0.01)
@@ -40,20 +42,36 @@ def test_mea_recovers_a_clean_path_and_obeys_the_grammar():
     assert all(sum(b - a + 1 for a, b in g["exons"]) >= 20 for g in g1.path_to_genes(got2))
 
 
-def test_mea_gamma_and_class_total_call_split_genes():
+def test_mea_gamma_calls_split_genes():
     """A gene whose posterior is split between exon and intron states (IG 0.4, exon 0.3, intron 0.3 over 400 bp):
-    per-state scores (gamma 1, like S1's argmax) call nothing; gamma 2 or the class total (agg 1) call it."""
+    per-state scores with gamma 1 (like S1's argmax) call nothing; gamma 2 calls it."""
     L = 1000
-    post = np.full((L, g1.S), 0.0)
+    post = np.zeros((L, g1.S))
     post[:, 0] = 1.0
     post[300:700, 0] = 0.4
     post[300:700, g1.IDX["lE+"]] = 0.3
     post[300:700, g1.IDX["lI+"]] = 0.3
     T = g1.G1Transitions()().detach().double().numpy()
+    n = lambda **kw: int((g1.mea_duration(post, T, np.zeros((L, g1.S)), **kw)[0] != 0).sum())
+    assert n(gamma=1.0) == 0 and n(gamma=2.0) >= 380 and n(gamma=4.0) >= n(gamma=2.0)
+
+
+def test_exon_level_needs_exon_evidence_but_joins_supported_exons():
+    """An intron-only posterior stretch (a tile inside a long intron): state-level MEA invents two minimum-length
+    exons around it, exon-level MEA calls nothing; two supported exons around a supported intron stay one gene."""
+    T = g1.G1Transitions()().detach().double().numpy()
+    L = 6000
+    post = np.zeros((L, g1.S))
+    post[:, 0] = 1.0
+    post[1000:5000, 0] = 0.0
+    post[1000:5000, g1.IDX["mI-"]] = 1.0
     gates = np.zeros((L, g1.S))
-    n = lambda **kw: int((g1.mea_duration(post, T, gates, **kw)[0] != 0).sum())
-    assert n(gamma=1.0) == 0 and n(gamma=2.0) >= 380 and n(gamma=1.0, agg=1.0) >= 380
-    assert n(gamma=4.0) >= n(gamma=2.0)
+    assert len(g1.path_to_genes(g1.mea_duration(post, T, gates)[0])) == 1  # spurious 2-exon gene
+    assert g1.path_to_genes(g1.mea_duration(post, T, gates, level="exon")[0]) == []
+    post[900:1000, 0], post[900:1000, g1.IDX["mE-"]] = 0.0, 1.0
+    post[5000:5100, 0], post[5000:5100, g1.IDX["mE-"]] = 0.0, 1.0
+    genes = g1.path_to_genes(g1.mea_duration(post, T, gates, level="exon")[0])
+    assert [len(g["exons"]) for g in genes] == [2] and genes[0]["exons"][0][0] == 901
 
 
 def test_decode_blocks_mea_equals_single_pass():
@@ -77,8 +95,9 @@ def test_load_ckpt_averages_weights(tmp_path):
     assert torch.equal(avg["head"]["w"], torch.full((3,), 2.0)) and torch.equal(avg["trans"]["p"], torch.ones(2))
     assert avg["epoch"] == [10, 11]
     assert screen2.load_ckpt(str(tmp_path / "ep10.pt"), "cpu")["epoch"] == 10
-    assert screen2.mea_specs("1,2@0.5") == [("MEA_g1", 1.0, 0.0), ("MEA_g2_a0.5", 2.0, 0.5)]
-    assert screen2.mea_specs((2.0,)) == [("MEA_g2", 2.0, 0.0)]
+    assert screen2.mea_specs("1,x2,pv1,pvx0.5") == [("MEA_g1", 1.0, "state", False), ("MEAX_g2", 2.0, "exon", False),
+                                                    ("PV_g1", 1.0, "state", True), ("PVX_g0.5", 0.5, "exon", True)]
+    assert screen2.mea_specs((2.0,)) == [("MEA_g2", 2.0, "state", False)]
 
 
 def test_eval_only_mea_grid_average_and_saved_posteriors(tmp_path):
@@ -89,8 +108,9 @@ def test_eval_only_mea_grid_average_and_saved_posteriors(tmp_path):
     cks = [str(tmp_path / "g" / f"ep0{e}.pt") for e in (1, 2)]
     po = str(tmp_path / "post.npy")
     ev = screen_g1b.evaluate_checkpoint(cks, D, ch, str(tmp_path / "e"), device="cpu", log=q, with_s1=True,
-                                        mea_gammas="1,4@1", conf_grid=screen2.CONF_GRID, post_out=po)
-    assert ev["best_epoch"] == [1, 2] and {"S3", "S1", "MEA_g1", "MEA_g4_a1"} <= set(ev)
+                                        mea_gammas="1,x4", conf_grid=screen2.CONF_GRID, post_out=po)
+    assert ev["best_epoch"] == [1, 2] and {"S3", "S1", "MEA_g1", "MEAX_g4"} <= set(ev)
+    assert 0 <= ev["MEAX_g4"]["auprc_lnc_exonconf"] <= 1
     grid = ev["MEA_g1"]["conf_grid"]
     assert [g["tau"] for g in grid] == list(screen2.CONF_GRID) and all(a["n"] >= b["n"] for a, b in zip(grid, grid[1:]))
     post = np.load(po)
@@ -98,5 +118,5 @@ def test_eval_only_mea_grid_average_and_saved_posteriors(tmp_path):
     # arm R (AB0) eval-only
     screen2.run("R", 0, tr, va, ch, str(tmp_path / "r"), epochs=1, batch=2, device="cpu", log=q, keep_epochs=True)
     er = screen2.evaluate_checkpoint([str(tmp_path / "r" / "ep01.pt")], D, ch, str(tmp_path / "re"), device="cpu",
-                                     log=q, with_s1=True, mea_gammas=(2.0,), conf_grid=(0.5,))
-    assert {"S3", "S1", "MEA_g2"} <= set(er) and len(er["MEA_g2"]["conf_grid"]) == 1
+                                     log=q, with_s1=True, mea_gammas="2,pv1", conf_grid=(0.5,))
+    assert {"S3", "S1", "MEA_g2", "PV_g1"} <= set(er) and len(er["MEA_g2"]["conf_grid"]) == 1
