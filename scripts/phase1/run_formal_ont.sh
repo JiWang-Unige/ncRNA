@@ -1,6 +1,7 @@
 #!/bin/bash
 # Wrapper for train_formal_ont.py on ont: wait for the GPU gate, run, and on exit code 75 (yielded to a TE / other
-# user's job) wait and restart from last.pt.  One ncRNA GPU run at a time (lock).
+# user's job) wait and restart from last.pt.  One ncRNA GPU run at a time (lock).  PYTHONFAULTHANDLER: a crash
+# in native code (e.g. the segfault of 2026-10-29) still leaves a Python traceback in the log.
 #   nohup bash scripts/phase1/run_formal_ont.sh <name> [train_formal_ont.py args...] >> logs/formal_<name>.log 2>&1 &
 set -u
 cd ${NCRNA_ROOT:-~/ncrna-annot}
@@ -13,7 +14,7 @@ echo $$ > $LOCK; trap 'rm -f $LOCK' EXIT
 while true; do
   gpu_wait
   log "start $NAME $*"
-  PYTHONPATH=src nice -n ${NCRNA_NICE:-0} ${NCRNA_PY:-$HOME/envs/generanno/bin/python} -u scripts/phase1/train_formal_ont.py --name "$NAME" "$@"
+  PYTHONFAULTHANDLER=1 PYTHONPATH=src nice -n ${NCRNA_NICE:-0} ${NCRNA_PY:-$HOME/envs/generanno/bin/python} -u scripts/phase1/train_formal_ont.py --name "$NAME" "$@"
   rc=$?
   if [ $rc -eq 0 ]; then log "DONE $NAME"; exit 0; fi
   if [ $rc -eq 75 ]; then log "yielded GPU ($NAME); will resume from last.pt"; sleep 120; continue; fi

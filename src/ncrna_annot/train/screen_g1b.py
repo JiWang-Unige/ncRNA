@@ -68,10 +68,11 @@ def val_nll(head, trans, coef, va, device, lnc_only=False):
     return tot / n
 
 
-def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=False, lnc_entry_bias=()):
+def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=False, lnc_entry_bias=(), log=None):
     """S3 (+ boundary bonuses); with_s1 also decodes S1 = posterior-argmax segments (AB1, no grammar at decode).
     lnc_entry_bias (diagnostic): also decode S3 with b added to the log transition IG -> lncRNA first exon (both
-    strands), i.e. a per-gene log prior b on lncRNA genes; results under "S3_lncbias<b>"."""
+    strands), i.e. a per-gene log prior b on lncRNA genes; results under "S3_lncbias<b>", each also logged as soon as
+    it is done (log given)."""
     head.eval()
     feats, codes = ch["feats"], ch["codes"]
     L = len(feats) * TOK
@@ -101,6 +102,8 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
             Tb[g1.IDX["IG"], g1.IDX[f"lE{s_}"]] += bias
         gb = chrom.decode_blocks(pot, codes[:L], Tb, 20, 50, mode="s3", bnd=bnd, coef=coef)
         out[f"S3_lncbias{bias:g}"] = summarize(gb, post, truth)
+        if log:
+            log(json.dumps({f"S3_lncbias{bias:g}": {k: v for k, v in out[f"S3_lncbias{bias:g}"].items() if k != "curve"}}))
     if with_s1:
         s1 = chrom.decode_blocks(scratch.astype(post, np.float32), codes[:L], T.double().cpu().numpy(), 20, 50, mode="argmax")
         out["S1"] = summarize(s1, post, truth)
@@ -123,7 +126,7 @@ def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print,
     coef.load_state_dict(ck["coef"])
     res = {"arm": "G1B", "best_epoch": ck["epoch"], "lnc_only": lnc_only,
            **evaluate_chromosome(head, trans, coef, ch, device, lnc_only=lnc_only, with_s1=with_s1,
-                                 lnc_entry_bias=lnc_entry_bias)}
+                                 lnc_entry_bias=lnc_entry_bias, log=log)}
     os.makedirs(out, exist_ok=True)
     json.dump(res, open(f"{out}/result.json", "w"), indent=1)
     log(json.dumps({k: (v if not isinstance(v, dict) else {kk: vv for kk, vv in v.items() if kk != "curve"})
