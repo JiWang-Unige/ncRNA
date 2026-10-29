@@ -118,5 +118,19 @@ def test_eval_only_mea_grid_average_and_saved_posteriors(tmp_path):
     # arm R (AB0) eval-only
     screen2.run("R", 0, tr, va, ch, str(tmp_path / "r"), epochs=1, batch=2, device="cpu", log=q, keep_epochs=True)
     er = screen2.evaluate_checkpoint([str(tmp_path / "r" / "ep01.pt")], D, ch, str(tmp_path / "re"), device="cpu",
-                                     log=q, with_s1=True, mea_gammas="2,pv1", conf_grid=(0.5,))
+                                     log=q, with_s1=True, mea_gammas="2,pv1", conf_grid=(0.5,), exact_post=True)
     assert {"S3", "S1", "MEA_g2", "PV_g1"} <= set(er) and len(er["MEA_g2"]["conf_grid"]) == 1
+
+
+def test_exact_chromosome_marginals_match_autograd_and_sum_to_one():
+    rng = np.random.default_rng(8)
+    L = 30000
+    codes = rng.integers(0, 4, L).astype(np.int8)
+    pot = torch.tensor(rng.normal(size=(L, g1.S)), dtype=torch.float32)
+    bnd = torch.tensor(rng.normal(size=(L, 4)), dtype=torch.float32)
+    T, coef = g1.G1Transitions()().detach(), g1.BoundaryCoef()
+    fn = lambda s, e: (pot[s:e], bnd[s:e])
+    a = chrom.chromosome_marginals(fn, L, T, codes, "cpu", coef=coef).astype(np.float64)
+    b = chrom.chromosome_marginals(fn, L, T, codes, "cpu", coef=coef, exact=True).astype(np.float64)
+    assert np.abs(b.sum(1) - 1).max() < 5e-3  # float16 storage only
+    assert np.abs(a - b).max() < 0.2 and np.abs(a - b).mean() < 0.01

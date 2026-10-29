@@ -50,9 +50,9 @@ def val_nll(head, trans, va, lnc_only, device):
 
 
 def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False, mea_gammas=(), conf_grid=(), post_out=None,
-                        log=None):
+                        log=None, exact_post=False):
     """ch = dict(feats [ntok, K] memmap, codes int8 [L], truth_gtf, chrom).
-    mea_gammas / conf_grid / post_out: v1.9 development, as in screen_g1b.evaluate_chromosome."""
+    mea_gammas / conf_grid / post_out / exact_post: v1.9 development, as in screen_g1b.evaluate_chromosome."""
     head.eval()
     feats, codes = ch["feats"], ch["codes"]
     L = len(feats) * TOK
@@ -70,7 +70,7 @@ def evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=False, mea_ga
     for s in range(0, L, G.WIN * 8):
         e = min(s + G.WIN * 8, L)
         pot[s:e] = emit_fn(s, e).float().cpu().numpy()
-    post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device)
+    post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device, exact=exact_post)
     if post_out:
         np.save(post_out, post)
     truth = ruler.read_gtf(ch["truth_gtf"], ch["chrom"])
@@ -100,7 +100,7 @@ def load_ckpt(ck_path, device):
 
 
 def evaluate_checkpoint(ck_path, feature_dim, ch, out, arm="R", device="cuda", log=print, lnc_only=False, with_s1=False,
-                        mea_gammas=(), conf_grid=(), post_out=None):
+                        mea_gammas=(), conf_grid=(), post_out=None, exact_post=False):
     """Eval-only job for arm R (AB0): load a checkpoint (or average a list), evaluate on ch, write result.json."""
     head, trans = C0Head(feature_dim).to(device), g1.G1Transitions().to(device)
     ck = load_ckpt(ck_path, device)
@@ -108,7 +108,7 @@ def evaluate_checkpoint(ck_path, feature_dim, ch, out, arm="R", device="cuda", l
     trans.load_state_dict(ck["trans"])
     res = {"arm": arm, "best_epoch": ck["epoch"], "lnc_only": lnc_only,
            **evaluate_chromosome(head, trans, ch, lnc_only, device, with_s1=with_s1, mea_gammas=mea_gammas,
-                                 conf_grid=conf_grid, post_out=post_out, log=log)}
+                                 conf_grid=conf_grid, post_out=post_out, log=log, exact_post=exact_post)}
     os.makedirs(out, exist_ok=True)
     json.dump(res, open(f"{out}/result.json", "w"), indent=1)
     log(json.dumps({k: (v if not isinstance(v, dict) else {kk: vv for kk, vv in v.items() if kk != "curve"})

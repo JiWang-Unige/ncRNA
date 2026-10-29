@@ -69,7 +69,7 @@ def val_nll(head, trans, coef, va, device, lnc_only=False):
 
 
 def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=False, lnc_entry_bias=(), log=None,
-                        mea_gammas=(), conf_grid=(), post_out=None):
+                        mea_gammas=(), conf_grid=(), post_out=None, exact_post=False):
     """S3 (+ boundary bonuses); with_s1 also decodes S1 = posterior-argmax segments (AB1, no grammar at decode).
     lnc_entry_bias (diagnostic): also decode S3 with b added to the log transition IG -> lncRNA first exon (both
     strands), i.e. a per-gene log prior b on lncRNA genes; results under "S3_lncbias<b>", each also logged as soon as
@@ -77,7 +77,8 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
     v1.9 development (chr18 only): mea_gammas ("1,x1,pv1", see screen2.mea_specs) also decodes g1.mea_duration on
     the posteriors (results "MEA_g<gamma>", "MEAX_g<gamma>", "PV_g<gamma>"),
     conf_grid adds thresholded lnc L1 Sn / Pr to every block, post_out saves the float16 posteriors [L, S] (.npy) so
-    further decoders can be tried on CPU (scripts/phase1/dev_decode.py)."""
+    further decoders can be tried on CPU (scripts/phase1/dev_decode.py), exact_post computes the posteriors by the
+    float64 CPU forward-backward (chrom.chromosome_marginals)."""
     head.eval()
     feats, codes = ch["feats"], ch["codes"]
     L = len(feats) * TOK
@@ -97,7 +98,7 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
         e = min(s + G.WIN * 8, L)
         p, b = emit_fn(s, e)
         pot[s:e], bnd[s:e] = p.float().cpu().numpy(), b.float().cpu().numpy()
-    post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device, coef=coef)
+    post = chrom.chromosome_marginals(emit_fn, L, T, codes[:L], device, coef=coef, exact=exact_post)
     if post_out:
         np.save(post_out, post)
     truth = ruler.read_gtf(ch["truth_gtf"], ch["chrom"])
@@ -130,7 +131,7 @@ def evaluate_chromosome(head, trans, coef, ch, device, lnc_only=False, with_s1=F
 
 
 def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print, lnc_only=False, with_s1=False,
-                        lnc_entry_bias=(), mea_gammas=(), conf_grid=(), post_out=None):
+                        lnc_entry_bias=(), mea_gammas=(), conf_grid=(), post_out=None, exact_post=False):
     """Separate evaluation job (Kaggle input-size limits): load best.pt (or average a list, see load_ckpt), evaluate
     on ch, write result.json."""
     head, trans, coef = C0BHead(feature_dim).to(device), g1.G1Transitions().to(device), g1.BoundaryCoef().to(device)
@@ -141,7 +142,7 @@ def evaluate_checkpoint(ck_path, feature_dim, ch, out, device="cuda", log=print,
     res = {"arm": "G1B", "best_epoch": ck["epoch"], "lnc_only": lnc_only,
            **evaluate_chromosome(head, trans, coef, ch, device, lnc_only=lnc_only, with_s1=with_s1,
                                  lnc_entry_bias=lnc_entry_bias, log=log, mea_gammas=mea_gammas, conf_grid=conf_grid,
-                                 post_out=post_out)}
+                                 post_out=post_out, exact_post=exact_post)}
     os.makedirs(out, exist_ok=True)
     json.dump(res, open(f"{out}/result.json", "w"), indent=1)
     log(json.dumps({k: (v if not isinstance(v, dict) else {kk: vv for kk, vv in v.items() if kk != "curve"})

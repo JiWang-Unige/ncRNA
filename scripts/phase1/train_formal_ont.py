@@ -54,6 +54,8 @@ def main():
     ap.add_argument("--mea", default="",
                     help="eval-only (v1.9 development): comma list of [pv][x]gamma (screen2.mea_specs), each decoded with g1.mea_duration; "
                          "also adds the thresholded lnc L1 grid (conf_grid) to every decoder")
+    ap.add_argument("--exact-post", action="store_true",
+                    help="eval-only (v1.9 development): posteriors by the float64 CPU forward-backward (no float32 drift)")
     ap.add_argument("--dump-post", action="store_true",
                     help="eval-only (v1.9 development): save the chr18 posteriors as <out>/chr18_post.npy (float16, 2.7 GB)")
     ap.add_argument("--lnc-entry-bias", default="",
@@ -129,7 +131,7 @@ def main():
             if m:
                 ck = [f"{src}/ep{e:02d}.pt" for e in range(int(m.group(1)), int(m.group(2)) + 1)]
             dev = dict(mea_gammas=a.mea, conf_grid=s2.CONF_GRID if a.mea else (),
-                       post_out=f"{out}/chr18_post.npy" if a.dump_post else None)
+                       post_out=f"{out}/chr18_post.npy" if a.dump_post else None, exact_post=a.exact_post)
             if a.arm == "G2PH":
                 sp.evaluate_checkpoint(ck, "G2PH", 4096, ch, out, device="cuda")
             elif a.arm == "R":

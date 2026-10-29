@@ -46,21 +46,34 @@ def decode_blocks(pot, codes, T, min_exon=20, min_intron=50, block=1_000_000, pa
     return out
 
 
-def chromosome_marginals(emit_fn, L, T, codes, device="cuda", coef=None):
+def chromosome_marginals(emit_fn, L, T, codes, device="cuda", coef=None, exact=False):
     """emit_fn(start, end) -> torch [end-start, S] potentials on `device` (G1B: a tuple (potentials,
-    boundary logits [end-start, 4]) and coef given).  Returns float16 [L, S]."""
+    boundary logits [end-start, 4]) and coef given).  Returns float16 [L, S].
+    exact (v1.9 development): per-tile posteriors by the float64 CPU forward-backward (g1.marginals_np) instead of
+    the float32 GPU autograd (whose per-base sums drift by up to ~10 % on chr18 tiles)."""
     post = scratch.zeros((L, g1.S), np.float16)
     starts = G.chromosome_tiles(L)
+    if exact:
+        Tn = T.detach().double().cpu().numpy()
+        coef_cpu = None if coef is None else copy.deepcopy(coef).double().cpu()
     for k, s in enumerate(starts):
         e = emit_fn(s, s + G.WIN)
+        gates_np = g1.gate_mask(np.asarray(codes[s:s + G.WIN]))
         edges = None
-        if coef is not None:
-            e, b = e
-            with torch.no_grad():
-                edges = g1.boundary_edges(b[None].to(e.dtype), coef)
-        e = e[None]
-        gates = torch.as_tensor(g1.gate_mask(np.asarray(codes[s:s + G.WIN])), device=device)[None]
-        m = g1.marginals(e, T, gates, edges=edges)[0].float().cpu().numpy()
+        if exact:
+            if coef is not None:
+                e, b = e
+                with torch.no_grad():
+                    frm, to, vals = g1.boundary_edges(b.detach().double().cpu(), coef_cpu)
+                edges = (frm, to, vals.numpy())
+            m = g1.marginals_np(e.detach().double().cpu().numpy(), Tn, gates_np, edges=edges)[0]
+        else:
+            if coef is not None:
+                e, b = e
+                with torch.no_grad():
+                    edges = g1.boundary_edges(b[None].to(e.dtype), coef)
+            gates = torch.as_tensor(gates_np, device=device)[None]
+            m = g1.marginals(e[None], T, gates, edges=edges)[0].float().cpu().numpy()
         lo = 0 if k == 0 else G.MARGIN * G.TOK
         hi = G.WIN if k == len(starts) - 1 else G.WIN - G.MARGIN * G.TOK
         post[s + lo:s + hi] = m[lo:hi]
