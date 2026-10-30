@@ -487,3 +487,29 @@
 - (γ*, τ*) 是在 chr18 上选的，chr18 数字略偏乐观（两个参数、约 56 个组合）。
 - 精确度在区段之间差别大：同一工作点下，chr18 前半三 seed 平均 Pr 0.479，后半 0.413，Sn 则几乎不变（0.291 对 0.281）。chr20 上严格 Pr 低于 0.40 的可能性不小，是 Go 的主要风险。
 - run 之间的不稳定没有在训练端解决（lnc 内含子与基因间区在模型里接近打平），本版只在解码、存档和工作点上减轻它。训练端的修改不在本版。
+
+**P1.5 读取的实现（2026-10-30 冻结后、读 chr20 之前写定）**：只用了注释、基因组和 GENATATOR 的预测；GENATATOR 的预测在 Phase 0 已经读过。脚本见 commit 9c3c63b。
+1. **读取与复现。**
+   - 脚本：`scripts/phase1/p15_read.py`（GPU：精确后验 → MEAX γ* → τ* → GFF3）、`p15_score.py`（CPU 评分）、`p15_config.py`（写配置）。
+   - `configs/p15_v19.json` 记录：每个 run 第 10–12 epoch 权重的 sha256；`src/ncrna_annot` 与 `p15_*` 脚本的 sha256。与磁盘上的文件不一致时，读取脚本拒绝运行。
+   - chr18 复现：三个主模型的 chr18 后验须与开发时存下的后验逐字节相同（sha256），MEAX γ* 摘要的每个数字须相同。通过后写入 `REPRO_OK`，读取脚本才允许读 chr20 / T2T chr20。
+2. **主模型选择的具体判法。** 某臂替换 G1B 的条件：三个 seed 的平均 ΔAUPRC_lnc ≥ +0.01，且三个 seed 的 Δ 都 > 0。多个臂都满足时，取平均 Δ 最大的一个。
+3. **护栏口径澄清。** §3 的"46 个"是 GENATATOR 在 hg38 chr20 上"真值命中只有 lnc 基因的预测 mRNA"的个数（Phase 0 0.1b）。另一口径是"被某个预测 mRNA 覆盖、且该 mRNA 不覆盖任何真值 mRNA 的 lnc 基因数"（Phase 0 T2T 面板），GENATATOR 按它是 34 个。P1.5 两个口径都报告，三个 seed 的平均都须低于 GENATATOR 才算过护栏。
+4. **同源隔离（§1）。**
+   - 查询：v50 chr20 lnc 基因的合并外显子（≥ 20 nt）。库：训练染色体上 v50 lnc 基因的合并外显子。
+   - 比对：BLASTn 2.16，`-task blastn`，e < 1e-10。单个 HSP 的 identity ≥ 80% 且覆盖外显子 ≥ 50% 记为命中；有命中外显子的基因记为同源。
+   - 主口径：hg38 软屏蔽的重复序列不作种子（`-lcase_masking`），这样仅共享转座子片段的基因不算同源。955 个 chr20 lnc 基因中 66 个同源。
+   - 敏感性口径（不屏蔽、不做 DUST）：294 个同源。
+   - Strong 的"非同源 L1 Sn ≥ 0.15"用主口径，两个口径都报告。
+5. **次要终点。**
+   - 分层：长度按最长合并转录本（< 1 kb / 1–3 kb / ≥ 3 kb）；外显子数（1 / 2 / 3–4 / ≥ 5）；表达支持度用 GENCODE `transcript_support_level` 在基因内的最好值（1 / 2–3 / 4–5 / NA）。
+   - Δ 子集：v50 中与 v41 没有同链外显子重叠的 lnc 基因。
+   - 校准：预测 lnc 基因（τ 过滤之前）的置信度对 L1 是否命中，10 个等宽箱，报告 ECE 与可靠性曲线，用原始后验。
+6. **配对 bootstrap。**
+   - 对 chr20 真值 lnc 基因重抽 2,000 次（numpy，种子 0），统计量为"三个 seed 命中率的平均 − GENATATOR 是否命中"。
+   - GENATATOR 用 Phase 0 的 hg38 chr20 预测，L1 Sn 0.028 / Pr 0.422，与 Phase 0 一致。
+7. **T2T chr20。**
+   - 用 GENATATOR leaderboard 自己的评分引擎（Space 修订 d32d4dc）：外显子分支，分链，按转录本类型分开算，k = 250。
+   - 包装脚本在 GENATATOR 的官方预测上逐位复现了 Phase 0 的数字（lnc_RNA segmentation P 0.037 / R 0.0069）。
+   - Strong 的 T2T 一项用三个 seed 的平均。
+8. **AB6 与 AB1。** AB6（G2-PH）同样用第 10–12 epoch 的权重平均，用它自己的解码与评分。AB1 = 主模型 chr20 精确后验的 S1，按 τ* 过滤。

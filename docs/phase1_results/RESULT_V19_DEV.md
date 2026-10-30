@@ -78,7 +78,7 @@ mRNA L1 Sn 在 0.79–0.95 之间。只有 seed 123 的第 10 epoch 低于护栏
 | mRNA L1 Pr | 0.880 | 0.981 | 0.949 |
 | 只被报成 mRNA 的 lnc 基因数 | 13 | 0 | 6 |
 
-最后一行的口径同 Phase 0 的 `lnc_genes_reported_as_coding`：被某个预测 mRNA 覆盖、而该 mRNA 不覆盖任何真值 mRNA 的 lnc 基因。GENATATOR 在 hg38 chr20 上为 46 个。
+最后一行的口径同 Phase 0 T2T 面板的 `lnc_genes_reported_as_coding`：被某个预测 mRNA 覆盖、而该 mRNA 不覆盖任何真值 mRNA 的 lnc 基因。GENATATOR 在 hg38 chr20 上按此口径为 34 个。（10-30 更正：起草时写成 46 个是口径混淆。46 是协议 §3 护栏引用的另一口径，即真值命中只有 lnc 基因的预测 mRNA 数；三个 seed 按那个口径为 17 / 0 / 7。P1.5 两个口径都报告，见协议 §16 末尾。）
 
 ## 3. chr18 前后两半的交叉检查
 
