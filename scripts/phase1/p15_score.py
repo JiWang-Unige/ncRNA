@@ -25,7 +25,6 @@ as above with Delta AUPRC_lnc against the same-seed main run; AB1 = S1 (posterio
 runs' posteriors with tau*; AB6 = its own evaluation (result.json).
 """
 import argparse
-import gzip
 import hashlib
 import json
 import os
@@ -67,8 +66,8 @@ def load_genes(path):
 
 
 def final_preds(genes, tau):
-    return [{"id": str(i), "strand": g["strand"], "cls": "lnc" if g["type"] == "l" else "mrna", "exons": g["exons"]}
-            for i, g in enumerate(genes) if g["type"] != "l" or g["conf"] >= tau]
+    return [{"id": str(i), "strand": g["strand"], "cls": "lnc" if g["type"] == "l" else "mrna",
+             "exons": [tuple(x) for x in g["exons"]]} for i, g in enumerate(genes) if g["type"] != "l" or g["conf"] >= tau]
 
 
 def core(genes, post, truth, tau):
@@ -135,7 +134,7 @@ def s1_genes(post, codes, d):
 
 def tsl_by_gene(gtf, chrom_name):
     best = {}
-    with gzip.open(gtf, "rt") as fh:
+    with ruler._open(gtf) as fh:
         for line in fh:
             if not line.startswith(chrom_name + "\t"):
                 continue
