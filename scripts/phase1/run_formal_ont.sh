@@ -6,9 +6,13 @@
 # a run killed by SIGSEGV / SIGABRT / SIGBUS (rc 139 / 134 / 135) is retried up to NCRNA_CRASH_RETRIES (default 2) times
 # (training resumes from last.pt as after a yield); NCRNA_CPUS (e.g. 2-31) pins the run to those CPUs with taskset.
 #   nohup bash scripts/phase1/run_formal_ont.sh <name> [train_formal_ont.py args...] >> logs/formal_<name>.log 2>&1 &
+# --script <file> as the first argument runs scripts/phase1/<file> instead (same --name, gate, lock and retries), e.g.
+#   p15_read.py for the P1.5 read (protocol v1.9 section 16).
 set -u
 cd ${NCRNA_ROOT:-~/ncrna-annot}
 NAME=$1; shift
+SCRIPT=scripts/phase1/train_formal_ont.py
+if [ "${1:-}" = "--script" ]; then SCRIPT=scripts/phase1/$2; shift 2; fi
 . scripts/phase1/gpu_gate.sh
 LOCK=logs/formal_gpu.lock
 log() { echo "$(date -u +%Y-%m-%dT%H:%MZ) $*"; }
@@ -19,7 +23,7 @@ crashes=0
 while true; do
   gpu_wait
   log "start $NAME $*"
-  PYTHONFAULTHANDLER=1 PYTHONPATH=src $PIN nice -n ${NCRNA_NICE:-0} ${NCRNA_PY:-$HOME/envs/generanno/bin/python} -u scripts/phase1/train_formal_ont.py --name "$NAME" "$@"
+  PYTHONFAULTHANDLER=1 PYTHONPATH=src $PIN nice -n ${NCRNA_NICE:-0} ${NCRNA_PY:-$HOME/envs/generanno/bin/python} -u $SCRIPT --name "$NAME" "$@"
   rc=$?
   if [ $rc -eq 0 ]; then log "DONE $NAME"; exit 0; fi
   if [ $rc -eq 75 ]; then log "yielded GPU ($NAME); will resume from last.pt"; sleep 120; continue; fi
