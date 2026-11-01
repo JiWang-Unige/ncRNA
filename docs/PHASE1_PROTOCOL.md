@@ -180,6 +180,7 @@
   - 不变：每个 run 在 chr20 上只读一次；γ* = 3、τ* = 0.6；§3 判据；Go / Strong / 护栏只用主模型，第 1 批读完即可判读，消融表第 2 批补齐。
   - 为此改动的代码（读 chr20 之前）：`p15_config.py` 增加 `--partial` 与 `--previous`；`p15_read.py` 与 `p15_score.py` 的输出目录取配置里的 `out_dir`（默认 `outputs/PHASE1/P15`，计算不变）。
   - 剩余训练仍全部在 ont、同一设定。TE 会话告知 win3090 的 GPU 空闲，但换机器就是另一个模型（§16 第 3 条），所以不用。ont 队列在第 1 批读取之后、剩余训练之前等 TE 的独占测速结束。
+- **2026-11-01（晚），P1.5 第 1 批读取完成：Go 通过，Strong 未通过**：chr18 复现通过（三个主模型后验 sha256 相同、摘要数字相同，18:51Z），之后 T2T chr20 与 chr20 各读一次（20:33Z 完成），没有调参。chr20 三个 seed 平均 lnc L1 Sn 0.306、严格 Pr 0.422，对 GENATATOR 的 Sn 提升 +0.278（95% CI 0.256–0.300），护栏两口径 10.0 / 12.3（GENATATOR 34 / 46）、mRNA L1 Sn 0.861。Strong 四项中只有非同源 Sn（0.292）通过：lnc L2 Sn 三个 seed 都是 0，T2T lnc_RNA segmentation（k = 250）recall / precision 都是 0。7 个已读消融 run 的 ΔAUPRC_lnc 全部为负。详见 `results/RESULT_P15.md`（`docs/phase1_results/RESULT_P15.md`）。第 2 批照上条执行。
 - **2026-10-21，v1.5 诊断执行**：§12 写的是在 ont CPU 上解码。ont 负载约 60/32 核，CPU 上势能计算预计约 5 小时，因此改在 Kaggle castwj GPU 上运行同一解码与诊断脚本（kernel `ncrna-diag-l2-r-123`）。设置与 P1-S2 相同，lnc 预测数与 L1 Pr 完全复现。另外加做了一个标注为“探索性”的补充分析（跨度比、跨基因合并、跨度内 / 外内含子），不参与 A / B / C 判定。结果见 `results/RESULT_DIAG_L2.md`。
 
 ## 8. 代理路线筛选阶段 P1-S（v1.1 新增，2026-10-20，在任何 P1-S 结果之前冻结）
