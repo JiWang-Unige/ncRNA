@@ -1,0 +1,757 @@
+{
+ "protocol": "PHASE1_PROTOCOL.md section 16 (v1.9, frozen 2026-10-30)",
+ "draft": false,
+ "missing": [],
+ "batch": 1,
+ "deferred": [
+  "ab0-r-456",
+  "ab2-f-456",
+  "ab3-lnc-456",
+  "ab4-v41-42-ke",
+  "ab4-v41-456",
+  "ab6-g2ph-42"
+ ],
+ "previous": null,
+ "out_dir": "outputs/PHASE1/P15",
+ "code_commit": "af6faae",
+ "created": "2026-11-01T18:18:05Z",
+ "decode": {
+  "posteriors": "exact (float64 CPU forward-backward per tile, chrom.chromosome_marginals exact=True)",
+  "checkpoint": "uniform weight average of epochs 10-12",
+  "mode": "mea",
+  "level": "exon",
+  "delta": 0.0001,
+  "gamma": 3.0,
+  "tau": 0.6,
+  "min_exon": 20,
+  "min_intron": 50,
+  "lnc_min_len": 200,
+  "transitions": "allowed transitions of g1.G1Transitions() (mea_duration scores none)"
+ },
+ "main": {
+  "family": "G1B",
+  "runs": {
+   "42": "g1b-42-ke",
+   "123": "g1b-123-ke",
+   "456": "g1b-456-ke"
+  }
+ },
+ "selection": {
+  "rule": "replace G1B by an arm only if mean Delta AUPRC_lnc (chr18, MEAX gamma*, no threshold) >= +0.01 and Delta > 0 in all three seeds; AB1 / AB4 / AB6 excluded; an arm with any seed's Delta <= 0 is ruled out before its other seeds finish",
+  "arms": {
+   "AB0": {
+    "delta": {
+     "42": -0.05287340788678216,
+     "123": -0.06245099628752536
+    },
+    "mean_delta": null,
+    "replaces": false
+   },
+   "AB2": {
+    "delta": {
+     "42": -0.04570978107765844,
+     "123": -0.020728753512573694
+    },
+    "mean_delta": null,
+    "replaces": false
+   },
+   "AB3": {
+    "delta": {
+     "42": -0.04352546143817684,
+     "123": -0.1463939095667737
+    },
+    "mean_delta": null,
+    "replaces": false
+   }
+  },
+  "main_family": "G1B"
+ },
+ "arms": {
+  "AB0": {
+   "42": "ab0-r-42-ke",
+   "123": "ab0-r-123",
+   "456": "ab0-r-456"
+  },
+  "AB2": {
+   "42": "ab2-f-42-ke",
+   "123": "ab2-f-123",
+   "456": "ab2-f-456"
+  },
+  "AB3": {
+   "42": "ab3-lnc-42",
+   "123": "ab3-lnc-123",
+   "456": "ab3-lnc-456"
+  },
+  "AB4": {
+   "42": "ab4-v41-42-ke",
+   "123": "ab4-v41-123",
+   "456": "ab4-v41-456"
+  }
+ },
+ "runs": {
+  "g1b-42-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 42,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/g1b-42-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/g1b-42-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/g1b-42-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "52eef64009507977ccbca254af978b13792b43803b3de4bc03b1f5b8d34b9d5a",
+    "334962239dc86335f6782ce3489e8ead22aeb312d2d40b3890c8e050014ea7be",
+    "7fd4d75fbab57da9046690ecf0b1d7bd5737b70920bc3f1bff49f90465b5ec3e"
+   ]
+  },
+  "g1b-123-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 123,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/g1b-123-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/g1b-123-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/g1b-123-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "adfd9b3ed6cb1103460bdbac63ac5744048483f9f3646e1a2abdb60ca5055c10",
+    "37e23f577b8a251a225a161af5fa517ea390fcbb99d94a44b77bf04bd9f71fdf",
+    "43c9aa37067fcd1b327bd26f9868f95f65f78441d28ccbc6114eefcddbf36633"
+   ]
+  },
+  "g1b-456-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 456,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/g1b-456-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/g1b-456-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/g1b-456-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "f069442fc10c330c3d23f1c305a547cd7b45e07827b7209c2ebb99e0e479004f",
+    "a136cfd6c01a0959ad77c7fb757dc7bec74a5781c53bb4f2e4b069c7f840b7a1",
+    "19c14819bcb4a4c79b8484b336d36615167db68a74e0f7fa4fd8e6fa254d45db"
+   ]
+  },
+  "ab0-r-42-ke": {
+   "arm": "R",
+   "family": "AB0",
+   "seed": 42,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/ab0-r-42-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/ab0-r-42-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/ab0-r-42-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "f0f5402bb093d10b073d490cb4f8fae57c53956a3859d1426663964b15a30f16",
+    "273d763eb6357460c84f0f11acd263f5b530c7d3aa6044873f19b2f455316762",
+    "954a681780a55775bf46e52903779b96f637c0d1504acd26fa68398cac2f525f"
+   ]
+  },
+  "ab0-r-123": {
+   "arm": "R",
+   "family": "AB0",
+   "seed": 123,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/ab0-r-123/ep10.pt",
+    "outputs/PHASE1/FORMAL/ab0-r-123/ep11.pt",
+    "outputs/PHASE1/FORMAL/ab0-r-123/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "de1532fb7b019e986be6959281547dc5c3b85b7b3765e317e016540f6bdaa1a7",
+    "76d58d9c2d5052776f8751f0ed94ed8ad64ea50e3bb913f5f397b996d4f91815",
+    "d48fd0c9910aadc854458bb98cb9c01837c5068ff37db8b8f8b0c610768f4503"
+   ]
+  },
+  "ab2-f-42-ke": {
+   "arm": "G1B",
+   "family": "AB2",
+   "seed": 42,
+   "labels": "v50f",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/ab2-f-42-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/ab2-f-42-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/ab2-f-42-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "313f6e24665bcd67eaf2ce1496c1b7e21dc760acbe3da7714ecb76573917c619",
+    "d01514886534909850dcdb82e2abaea9497dd00fd33a1e802c9c902a7efe15ae",
+    "0572175ac804ad2f1582b37fe694751f72493b2cd87721c73e999ffe5b8d9415"
+   ]
+  },
+  "ab2-f-123": {
+   "arm": "G1B",
+   "family": "AB2",
+   "seed": 123,
+   "labels": "v50f",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/ab2-f-123/ep10.pt",
+    "outputs/PHASE1/FORMAL/ab2-f-123/ep11.pt",
+    "outputs/PHASE1/FORMAL/ab2-f-123/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "7a2313304973a044a66d878333fb3a21ca76d1b15edb7a5ba0ea54637ed73345",
+    "f050da9a5420bc14b86e8bf33d12162cf6f25927c038bd77509bef6c69144b70",
+    "242b7fd9aff0bdd07424141fcef7f8a44c23a0d56a3c9d2028b2424251c730e7"
+   ]
+  },
+  "ab3-lnc-42": {
+   "arm": "G1B",
+   "family": "AB3",
+   "seed": 42,
+   "labels": "v50uevlnc",
+   "lnc_only": true,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/ab3-lnc-42/ep10.pt",
+    "outputs/PHASE1/FORMAL/ab3-lnc-42/ep11.pt",
+    "outputs/PHASE1/FORMAL/ab3-lnc-42/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "9a4666a412a385f3b6393668bdb4aad9a35b45f20cdac7e5499f0e49d60a5425",
+    "377908378587679b2ac50461843a9b8290ea6039e2f4839feb97e30df30219f5",
+    "1e8ba68505fccdd6a08c86399d480aedffb84f53eea53ac17345af6925fc6a8a"
+   ]
+  },
+  "ab3-lnc-123": {
+   "arm": "G1B",
+   "family": "AB3",
+   "seed": 123,
+   "labels": "v50uevlnc",
+   "lnc_only": true,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/ab3-lnc-123/ep10.pt",
+    "outputs/PHASE1/FORMAL/ab3-lnc-123/ep11.pt",
+    "outputs/PHASE1/FORMAL/ab3-lnc-123/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "16c2001605fb200b2730232a37d9e10dba883bd0e2f2258ce992a4f147c183d1",
+    "baaa9989e16cc03308710ac22673eb03170dbf40f399131b2bb7258fc6984e57",
+    "c566e627761bb42edb23919ace397e6969a0dbe4d57e2d870cf8552a1ff02b2c"
+   ]
+  },
+  "ab4-v41-123": {
+   "arm": "G1B",
+   "family": "AB4",
+   "seed": 123,
+   "labels": "v41uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/ab4-v41-123/ep10.pt",
+    "outputs/PHASE1/FORMAL/ab4-v41-123/ep11.pt",
+    "outputs/PHASE1/FORMAL/ab4-v41-123/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "95970af4cc921d7bb6af6dbd44dda8e3dd775476b168975bb67fd6f2bf7bb185",
+    "8cdcdf71cc2b963d5ab2f1ede1fab0365336d1dfb108cc97a83e4275e0adaf55",
+    "f163ed00e138752d179f02daed97da776176bb7fd7699890999972668a5a72ca"
+   ]
+  }
+ },
+ "chr18_v19": {
+  "g1b-42-ke": {
+   "source": "outputs/PHASE1/DEV/g3/s42_avg.json",
+   "auprc_lnc": 0.13883491129765557,
+   "n_pred_lnc": 465,
+   "tau": {
+    "tau": 0.6,
+    "n": 364,
+    "sn": 0.2691065662002153,
+    "pr": 0.4835164835164835
+   },
+   "mrna_L1": {
+    "sn": 0.9400749063670412,
+    "pr": 0.88
+   }
+  },
+  "g1b-123-ke": {
+   "source": "outputs/PHASE1/DEV/g3/s123_avg.json",
+   "auprc_lnc": 0.15171965665785986,
+   "n_pred_lnc": 1128,
+   "tau": {
+    "tau": 0.6,
+    "n": 823,
+    "sn": 0.36706135629709363,
+    "pr": 0.39003645200486026
+   },
+   "mrna_L1": {
+    "sn": 0.8876404494382022,
+    "pr": 0.9806094182825484
+   }
+  },
+  "g1b-456-ke": {
+   "source": "outputs/PHASE1/DEV/g3/s456_avg.json",
+   "auprc_lnc": 0.1327009528054971,
+   "n_pred_lnc": 972,
+   "tau": {
+    "tau": 0.6,
+    "n": 525,
+    "sn": 0.22066738428417654,
+    "pr": 0.4533333333333333
+   },
+   "mrna_L1": {
+    "sn": 0.9325842696629213,
+    "pr": 0.9488636363636364
+   }
+  },
+  "ab0-r-42-ke": {
+   "source": "outputs/PHASE1/FORMAL/v19-ab0-r-42-ke/result.json",
+   "auprc_lnc": 0.08596150341087341,
+   "n_pred_lnc": 519,
+   "tau": {
+    "tau": 0.6,
+    "n": 335,
+    "sn": 0.13993541442411195,
+    "pr": 0.43283582089552236
+   },
+   "mrna_L1": {
+    "sn": 0.9588014981273408,
+    "pr": 0.6510164569215876
+   }
+  },
+  "ab0-r-123": {
+   "source": "outputs/PHASE1/FORMAL/v19-ab0-r-123/result.json",
+   "auprc_lnc": 0.0892686603703345,
+   "n_pred_lnc": 627,
+   "tau": {
+    "tau": 0.6,
+    "n": 331,
+    "sn": 0.12917115177610333,
+    "pr": 0.43202416918429004
+   },
+   "mrna_L1": {
+    "sn": 0.9700374531835206,
+    "pr": 0.5834218916046758
+   }
+  },
+  "ab2-f-42-ke": {
+   "source": "outputs/PHASE1/FORMAL/v19-ab2-f-42-ke/result.json",
+   "auprc_lnc": 0.09312513021999713,
+   "n_pred_lnc": 735,
+   "tau": {
+    "tau": 0.6,
+    "n": 356,
+    "sn": 0.13885898815931108,
+    "pr": 0.41292134831460675
+   },
+   "mrna_L1": {
+    "sn": 0.9363295880149812,
+    "pr": 0.9489247311827957
+   }
+  },
+  "ab2-f-123": {
+   "source": "outputs/PHASE1/V19/v19-ab2-f-123.json",
+   "auprc_lnc": 0.13099090314528616,
+   "n_pred_lnc": 604,
+   "tau": {
+    "tau": 0.6,
+    "n": 450,
+    "sn": 0.25941872981700753,
+    "pr": 0.4
+   },
+   "mrna_L1": {
+    "sn": 0.8801498127340824,
+    "pr": 0.930648769574944
+   }
+  },
+  "ab3-lnc-42": {
+   "source": "outputs/PHASE1/FORMAL/v19-ab3-lnc-42/result.json",
+   "auprc_lnc": 0.09530944985947873,
+   "n_pred_lnc": 789,
+   "tau": {
+    "tau": 0.6,
+    "n": 189,
+    "sn": 0.08288482238966631,
+    "pr": 0.42857142857142855
+   },
+   "mrna_L1": {
+    "sn": 0.0,
+    "pr": null
+   }
+  },
+  "ab3-lnc-123": {
+   "source": "outputs/PHASE1/FORMAL/v19-ab3-lnc-123/result.json",
+   "auprc_lnc": 0.005325747091086166,
+   "n_pred_lnc": 19,
+   "tau": {
+    "tau": 0.6,
+    "n": 19,
+    "sn": 0.010764262648008612,
+    "pr": 0.3684210526315789
+   },
+   "mrna_L1": {
+    "sn": 0.0,
+    "pr": null
+   }
+  },
+  "ab4-v41-123": {
+   "source": "outputs/PHASE1/FORMAL/v19-ab4-v41-123/result.json",
+   "auprc_lnc": 0.09552511944867527,
+   "n_pred_lnc": 757,
+   "tau": {
+    "tau": 0.6,
+    "n": 185,
+    "sn": 0.08180839612486544,
+    "pr": 0.4540540540540541
+   },
+   "mrna_L1": {
+    "sn": 0.9588014981273408,
+    "pr": 0.912718204488778
+   }
+  }
+ },
+ "chr18_reference": {
+  "g1b-42-ke": {
+   "post": "outputs/PHASE1/FORMAL/dev-g1b42ke-avg/chr18_post.npy",
+   "post_sha256": "adee7ecc13b8faf496b78e9a8c8fc4763d98cb91ca85a405ab71580f15251598",
+   "summary": {
+    "conf_grid": [
+     {
+      "tau": 0.2,
+      "n": 465,
+      "sn": 0.2831001076426265,
+      "pr": 0.4236559139784946
+     },
+     {
+      "tau": 0.3,
+      "n": 456,
+      "sn": 0.28202368137782563,
+      "pr": 0.42543859649122806
+     },
+     {
+      "tau": 0.4,
+      "n": 427,
+      "sn": 0.27771797631862216,
+      "pr": 0.44028103044496486
+     },
+     {
+      "tau": 0.5,
+      "n": 398,
+      "sn": 0.2744886975242196,
+      "pr": 0.4623115577889447
+     },
+     {
+      "tau": 0.6,
+      "n": 364,
+      "sn": 0.2691065662002153,
+      "pr": 0.4835164835164835
+     },
+     {
+      "tau": 0.7,
+      "n": 335,
+      "sn": 0.25511302475780406,
+      "pr": 0.48955223880597015
+     },
+     {
+      "tau": 0.8,
+      "n": 302,
+      "sn": 0.2357373519913886,
+      "pr": 0.4900662251655629
+     },
+     {
+      "tau": 0.9,
+      "n": 229,
+      "sn": 0.1916038751345533,
+      "pr": 0.5065502183406113
+     }
+    ],
+    "auprc_lnc_exonconf": 0.13116919082589895,
+    "auprc_lnc": 0.13883491129765557,
+    "best_locus_f1": 0.3454060988848317,
+    "best_point": {
+     "conf": 0.5982752628316488,
+     "sn": 0.2691065662002153,
+     "pr": 0.4820936639118457,
+     "n_kept": 364,
+     "n_loci": 363
+    },
+    "n_truth_lnc": 929,
+    "n_pred_lnc": 465,
+    "lnc_L1": {
+     "sn": 0.2831001076426265,
+     "pr": 0.4236559139784946
+    },
+    "lnc_L2": {
+     "sn": 0.001199040767386091,
+     "pr": 0.0026666666666666666
+    },
+    "mrna_L1": {
+     "sn": 0.9400749063670412,
+     "pr": 0.88
+    },
+    "mrna_L2": {
+     "sn": 0.12015503875968993,
+     "pr": 0.10774410774410774
+    },
+    "n_pred_mrna": 400
+   }
+  },
+  "g1b-123-ke": {
+   "post": "outputs/PHASE1/FORMAL/dev-g1b123ke-avg/chr18_post.npy",
+   "post_sha256": "ecdc0e5bec70d1930fd34fa26d41ec02807450f38298dfaf98679e846c31bbbe",
+   "summary": {
+    "conf_grid": [
+     {
+      "tau": 0.2,
+      "n": 1128,
+      "sn": 0.41980624327233584,
+      "pr": 0.35106382978723405
+     },
+     {
+      "tau": 0.3,
+      "n": 1090,
+      "sn": 0.41657696447793324,
+      "pr": 0.355045871559633
+     },
+     {
+      "tau": 0.4,
+      "n": 1003,
+      "sn": 0.4068891280947255,
+      "pr": 0.3698903290129611
+     },
+     {
+      "tau": 0.5,
+      "n": 911,
+      "sn": 0.3907427341227126,
+      "pr": 0.38199780461031835
+     },
+     {
+      "tau": 0.6,
+      "n": 823,
+      "sn": 0.36706135629709363,
+      "pr": 0.39003645200486026
+     },
+     {
+      "tau": 0.7,
+      "n": 728,
+      "sn": 0.3326157158234661,
+      "pr": 0.39285714285714285
+     },
+     {
+      "tau": 0.8,
+      "n": 634,
+      "sn": 0.2884822389666308,
+      "pr": 0.3943217665615142
+     },
+     {
+      "tau": 0.9,
+      "n": 441,
+      "sn": 0.1991388589881593,
+      "pr": 0.3922902494331066
+     }
+    ],
+    "auprc_lnc_exonconf": 0.15543276903731434,
+    "auprc_lnc": 0.15171965665785986,
+    "best_locus_f1": 0.39171532784218366,
+    "best_point": {
+     "conf": 0.4429830165555981,
+     "sn": 0.40365984930032295,
+     "pr": 0.3804573804573805,
+     "n_kept": 963,
+     "n_loci": 962
+    },
+    "n_truth_lnc": 929,
+    "n_pred_lnc": 1128,
+    "lnc_L1": {
+     "sn": 0.41980624327233584,
+     "pr": 0.35106382978723405
+    },
+    "lnc_L2": {
+     "sn": 0.0,
+     "pr": 0.0
+    },
+    "mrna_L1": {
+     "sn": 0.8876404494382022,
+     "pr": 0.9806094182825484
+    },
+    "mrna_L2": {
+     "sn": 0.031007751937984496,
+     "pr": 0.029411764705882353
+    },
+    "n_pred_mrna": 361
+   }
+  },
+  "g1b-456-ke": {
+   "post": "outputs/PHASE1/FORMAL/dev-g1b456ke-avg/chr18_post.npy",
+   "post_sha256": "6f135cb8da503d591a2d60e13b2c6c8e8931948fb0d2444e99e9c40ec0be4b54",
+   "summary": {
+    "conf_grid": [
+     {
+      "tau": 0.2,
+      "n": 972,
+      "sn": 0.3153928955866523,
+      "pr": 0.3940329218106996
+     },
+     {
+      "tau": 0.3,
+      "n": 947,
+      "sn": 0.3110871905274489,
+      "pr": 0.39704329461457233
+     },
+     {
+      "tau": 0.4,
+      "n": 814,
+      "sn": 0.2852529601722282,
+      "pr": 0.41277641277641275
+     },
+     {
+      "tau": 0.5,
+      "n": 672,
+      "sn": 0.2529601722282024,
+      "pr": 0.4255952380952381
+     },
+     {
+      "tau": 0.6,
+      "n": 525,
+      "sn": 0.22066738428417654,
+      "pr": 0.4533333333333333
+     },
+     {
+      "tau": 0.7,
+      "n": 380,
+      "sn": 0.16254036598493002,
+      "pr": 0.4473684210526316
+     },
+     {
+      "tau": 0.8,
+      "n": 270,
+      "sn": 0.11517761033369214,
+      "pr": 0.44074074074074077
+     },
+     {
+      "tau": 0.9,
+      "n": 143,
+      "sn": 0.06350914962325081,
+      "pr": 0.3986013986013986
+     }
+    ],
+    "auprc_lnc_exonconf": 0.14002889951354106,
+    "auprc_lnc": 0.1327009528054971,
+    "best_locus_f1": 0.35115734004236954,
+    "best_point": {
+     "conf": 0.2660606870867249,
+     "sn": 0.3153928955866523,
+     "pr": 0.3960703205791106,
+     "n_kept": 967,
+     "n_loci": 967
+    },
+    "n_truth_lnc": 929,
+    "n_pred_lnc": 972,
+    "lnc_L1": {
+     "sn": 0.3153928955866523,
+     "pr": 0.3940329218106996
+    },
+    "lnc_L2": {
+     "sn": 0.0,
+     "pr": 0.0
+    },
+    "mrna_L1": {
+     "sn": 0.9325842696629213,
+     "pr": 0.9488636363636364
+    },
+    "mrna_L2": {
+     "sn": 0.003875968992248062,
+     "pr": 0.003436426116838488
+    },
+    "n_pred_mrna": 352
+   }
+  }
+ },
+ "targets": {
+  "chr18": {
+   "feats": "data/p1_feat/chr18.npy",
+   "cover": "data/p1_feat/chr18.cover.json",
+   "tiles": 3926,
+   "codes": "data/p1/chr18_codes.npy",
+   "truth": "outputs/PHASE1/DIAG_L2/chr18_v50.gtf",
+   "truth_chrom": "chr18",
+   "seqid": "chr18",
+   "runs": [
+    "g1b-123-ke",
+    "g1b-42-ke",
+    "g1b-456-ke"
+   ]
+  },
+  "chr20": {
+   "feats": "data/p1_feat/chr20.npy",
+   "cover": "data/p1_feat/chr20.cover.json",
+   "tiles": 3148,
+   "codes": "data/p1/chr20_codes.npy",
+   "truth": "data/human/gencode.v50.annotation.gtf.gz",
+   "truth_chrom": "chr20",
+   "seqid": "chr20",
+   "runs": [
+    "g1b-42-ke",
+    "g1b-123-ke",
+    "g1b-456-ke",
+    "ab0-r-42-ke",
+    "ab0-r-123",
+    "ab2-f-42-ke",
+    "ab2-f-123",
+    "ab3-lnc-42",
+    "ab3-lnc-123",
+    "ab4-v41-123"
+   ]
+  },
+  "t2t_chr20": {
+   "feats": "data/p1_feat/t2t_chr20.npy",
+   "cover": "data/p1_feat/t2t_chr20.cover.json",
+   "tiles": 3234,
+   "codes": "data/p1/t2t_chr20_codes.npy",
+   "truth": "data/baselines/t2t_chr20/leaderboard_data/ground_truth/chr20.gff",
+   "truth_chrom": "NC_060944.1",
+   "seqid": "NC_060944.1",
+   "runs": [
+    "g1b-42-ke",
+    "g1b-123-ke",
+    "g1b-456-ke"
+   ]
+  }
+ },
+ "code_files": {
+  "scripts/phase1/p15_config.py": "5aa93f2c96d7972b949a8ebd2ee72da2c7d9b9a70a174eb32cd43f5c09839ace",
+  "scripts/phase1/p15_homology.py": "3b721c2e6f03f5c916b050f80b189881165602de1479035a4036e45145d8c537",
+  "scripts/phase1/p15_read.py": "8aad1d33d195cc6b1b2bce0cd6fcb6212191b90a7d876110321ae195e7887436",
+  "scripts/phase1/p15_score.py": "2c1f903a1146af7dfac17877d9851025fdfe0f6823775881cb4603fe1027c392",
+  "scripts/phase1/p15_t2t_official.py": "7ed58ec60556e518973135ed4376ecaafda80e46c46772be092058030fae0967",
+  "src/ncrna_annot/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/evidence.py": "f342c83f6e938b14a4da293d198fe20f14ec7afbde4686a0da4efa10eaa57a9d",
+  "src/ncrna_annot/data/labels.py": "0f2e206547f6c091c760849592b16c66a8569c0eee632415c57967cde6ac5f87",
+  "src/ncrna_annot/decode/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/decode/chrom.py": "e326772c08d16916aedc27f30d4827d20de47fee6b97020a2012e02d9a62a0b3",
+  "src/ncrna_annot/decode/g2cand.py": "546de0b37607ac79cc1e41568454a45a88cb30eda7a3519238fd068d01a33a36",
+  "src/ncrna_annot/decode/genes.py": "c24c3cc9719c681222e1ac06cad06d62bac410cd3519ea23f7868517a93b7161",
+  "src/ncrna_annot/decode/scratch.py": "707cf4797b1dd0ccffd29af9f656c6dd510c4dc59c7777bd7f25d2a8c1ab8a54",
+  "src/ncrna_annot/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/eval/prcurve.py": "8b72a6a0fafa469e657d48fde8fb9b3db3f2f312bc77fbd243cb68b51779604a",
+  "src/ncrna_annot/eval/ruler.py": "02ef9d1f8fcf372814fa91eecbf57462a896f3ecfbdd2f3b9175a35e1c27df79",
+  "src/ncrna_annot/features/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/features/generanno.py": "57ed6c2d08c8b2893075a5e5d3df3e2b67542f4f7edd0aa6e28fd8ed7e345b41",
+  "src/ncrna_annot/features/online.py": "a9d8d1dd3f3404b8ee1fc78ededa5ebf5c372f6c5ebcf91e5ccf3be4bd2b47d3",
+  "src/ncrna_annot/grammar/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/grammar/g1.py": "8ca4b80c6f4417112e559320be65ca04f844be1ab5763b1b75e65045f2f8099c",
+  "src/ncrna_annot/grammar/g2.py": "4263179662a4a2551cfe3af64e17ec75a7a2c976099731889e05256936cd0e25",
+  "src/ncrna_annot/grammar/g2ph.py": "5532c90f68d3e04a4753687f5179c23d0fe1cdbf85b2b620045879dee753a161",
+  "src/ncrna_annot/heads/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/heads/c0.py": "d1abdc1ef7e43903bac68209fdbbd0a1e196509016f935f85748ed7796b154b9",
+  "src/ncrna_annot/train/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/train/loop.py": "ebcdebc303587af06f7dbc801f530dd2421045ac8811c568997be73412326486",
+  "src/ncrna_annot/train/screen.py": "7a8841d2acddd1594536ddc89a0602517d7b49fda9cb0c5e08b9a1855ba92fb7",
+  "src/ncrna_annot/train/screen2.py": "0d27213751148b41db87cc9aadba03fbc1e8c2689e595b4f3b1ac593e133b31b",
+  "src/ncrna_annot/train/screen_g1b.py": "26f66756664e0c26c44df6148444ee394f183f13931072e73dd832036379679f",
+  "src/ncrna_annot/train/screen_g2ph.py": "719b74f3e867b91ecb54d82acd13cb288c651dffff4bc4775bc0e7980befaa5d"
+ }
+}
