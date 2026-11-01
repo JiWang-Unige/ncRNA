@@ -10,15 +10,16 @@ Per run (default: every run the config lists for the target): the sha256 of its 
 must match the config; the weights are averaged (screen2.load_ckpt); posteriors by the float64 CPU forward-backward
 on the cached features, i.e. the code path of train_formal_ont.py --eval-only --exact-post (same emissions, same
 tiling); exon-level MEA at gamma* with the grammar's allowed transitions (as dev_decode.py); lnc genes < 200 nt
-dropped; gene confidence = chrom.gene_confidence.  Writes outputs/PHASE1/P15/<target>/<run>/:
+dropped; gene confidence = chrom.gene_confidence.  Writes <out>/<target>/<run>/, <out> = the config's "out_dir"
+(default outputs/PHASE1/P15; the second read batch of 2026-11-01 uses its own directory):
   post.npy        float16 [L, S] posteriors
   genes.json      every decoded gene with its confidence (before tau*)
   pred.gff3       mRNA genes + lnc genes with confidence >= tau* (seqid of the target, `confidence` attribute)
   read_meta.json  hashes, settings, timings (written last: a run with read_meta.json is skipped on a restart)
 AB6 (arm G2PH) is decoded and scored by screen_g2ph's own evaluation (result.json + pred.gff3, no tau*).
 No truth is read here except inside that G2PH evaluation; scoring is p15_score.py (CPU).
-chr20 / t2t_chr20 are refused until p15_score.py --target chr18 has written outputs/PHASE1/P15/chr18/REPRO_OK
-for this config (its sha256).  Exit 75 when the GPU gate is busy before a run (run_formal_ont.sh restarts the job).
+chr20 / t2t_chr20 are refused until p15_score.py --target chr18 has written <out>/chr18/REPRO_OK for this config
+(its sha256).  Exit 75 when the GPU gate is busy before a run (run_formal_ont.sh restarts the job).
 """
 import argparse
 import hashlib
@@ -32,7 +33,6 @@ import numpy as np
 
 ROOT = os.path.expanduser(os.environ.get("NCRNA_ROOT", "~/ncrna-annot"))
 sys.path.insert(0, os.path.join(ROOT, "src"))
-P15 = f"{ROOT}/outputs/PHASE1/P15"
 
 
 def sha256(path):
@@ -119,6 +119,7 @@ def main():
     a = ap.parse_args()
     cfg_path = a.config if os.path.isabs(a.config) else f"{ROOT}/{a.config}"
     cfg, cfg_sha = json.load(open(cfg_path)), sha256(cfg_path)
+    P15 = f"{ROOT}/{cfg.get('out_dir', 'outputs/PHASE1/P15')}"
     if a.target != "chr18":
         ok = f"{P15}/chr18/REPRO_OK"
         if not os.path.exists(ok) or json.load(open(ok)).get("config_sha256") != cfg_sha:

@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
-"""Protocol v1.9 section 16, P1.5 scoring (CPU) of the p15_read.py outputs (outputs/PHASE1/P15/<target>/<run>/).
+"""Protocol v1.9 section 16, P1.5 scoring (CPU) of the p15_read.py outputs (<out>/<target>/<run>/, <out> = the config's
+"out_dir", default outputs/PHASE1/P15).
 
   p15_score.py --config configs/p15_v19.json --target chr18       reproduction of the section 16 chr18 numbers
   p15_score.py --config configs/p15_v19.json --target t2t_chr20   main runs: ruler v1.3 + leaderboard metric (k = 250)
   p15_score.py --config configs/p15_v19.json --target chr20       section 3 endpoints, Go / Strong / guardrails
-(score t2t_chr20 before chr20: the chr20 verdict takes the T2T part of Strong from P15/t2t_chr20/SCORE.json)
+(score t2t_chr20 before chr20: the chr20 verdict takes the T2T part of Strong from <out>/t2t_chr20/SCORE.json)
 
 chr18: for every run of the config's "chr18_reference" the read's post.npy must have the sha256 of the development
 dump, and the MEAX gamma* summary (screen2.summarize, conf_grid at tau*) must equal the development result in every
-number; only then P15/chr18/REPRO_OK (config sha256) is written, which p15_read.py requires for chr20 / t2t_chr20.
+number; only then <out>/chr18/REPRO_OK (config sha256) is written, which p15_read.py requires for chr20 / t2t_chr20.
 One run on chr20 / t2t_chr20:
   core    screen2.summarize on all MEAX genes: AUPRC_lnc without threshold (as in development), conf_grid at tau*
   final   ruler v1.3 L1-L6 for lnc and mRNA of the final predictions (lnc confidence >= tau*, every mRNA), with
@@ -36,7 +37,8 @@ import numpy as np
 ROOT = os.path.expanduser(os.environ.get("NCRNA_ROOT", "~/ncrna-annot"))
 sys.path.insert(0, os.path.join(ROOT, "src"))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-P15 = f"{ROOT}/outputs/PHASE1/P15"
+P15 = f"{ROOT}/outputs/PHASE1/P15"  # outputs of the read; main() sets it from the config's "out_dir"
+HOMOLOGY = f"{ROOT}/outputs/PHASE1/P15/homology_{{}}.json"  # p15_homology.py
 BOOT = 2000
 G_CHR20 = f"{ROOT}/outputs/PHASE0/0.1_genatator/human_chr20/pred.gff3"
 G_CHR20_SCORE = f"{ROOT}/outputs/PHASE0/0.1_genatator/human_chr20/score.json"
@@ -163,7 +165,7 @@ def strata(truth, gtf, chrom_name):
             out.setdefault(k, set()).add(gid)
     old = ruler.read_gtf(V41, chrom_name)
     out["delta_v50_new"] = ruler.delta_genes(truth, old)
-    hp = f"{P15}/homology_{chrom_name}.json"
+    hp = HOMOLOGY.format(chrom_name)
     if os.path.exists(hp):
         h = json.load(open(hp))
         for var, v in h["variants"].items():
@@ -297,12 +299,14 @@ def chr20(cfg):
 
 
 def main():
+    global P15
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", required=True)
     ap.add_argument("--target", required=True, choices=["chr18", "chr20", "t2t_chr20"])
     a = ap.parse_args()
     cfg_path = a.config if os.path.isabs(a.config) else f"{ROOT}/{a.config}"
     cfg, cfg_sha = json.load(open(cfg_path)), sha256(cfg_path)
+    P15 = f"{ROOT}/{cfg.get('out_dir', 'outputs/PHASE1/P15')}"
     t0 = time.time()
     if a.target == "chr18":
         res = repro(cfg, cfg_sha)
