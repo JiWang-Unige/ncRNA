@@ -24,6 +24,9 @@ Verdict (chr20): 3-seed means of the main runs (config "main"); paired bootstrap
 resamples, numpy rng seed 0) of mean_seed(hit) - GENATATOR(hit) for the L1 Sn gain.  Ablations: every arm's runs
 as above with Delta AUPRC_lnc against the same-seed main run; AB1 = S1 (posterior-argmax segments) of the main
 runs' posteriors with tau*; AB6 = its own evaluation (result.json).
+Batch 2 (config "batch" 2, p15_config.py --previous): chr20 holds only the runs batch 1 did not read; they are scored
+as above, Delta AUPRC_lnc against the main runs in the previous config's chr20 SCORE.json (which must carry that
+config's sha256); no GENATATOR, AB1 or verdict (batch 1 has them); "ablations_all" = batch-1 + batch-2 ablation rows.
 """
 import argparse
 import hashlib
@@ -226,17 +229,40 @@ def t2t(cfg):
     return res
 
 
+def ablation_rows(cfg, runs, main_auprc):
+    out = {}
+    for arm, by_seed in cfg["arms"].items():
+        for seed, name in by_seed.items():
+            r = runs.get(name)
+            if r and "core" in r:
+                out.setdefault(arm, {})[seed] = {
+                    "run": name, "auprc_lnc": r["core"]["auprc_lnc"], "delta_auprc_vs_main": r["core"]["auprc_lnc"] - main_auprc[seed],
+                    "lnc_L1": [r["final"]["lnc"]["L1_locus"][k] for k in ("sn", "pr_strict")]}
+    return out
+
+
+def previous_score(cfg):
+    """Batch 2: the chr20 SCORE.json of the previous config (main runs, AB1, verdict), which must be that config's."""
+    p = cfg["previous"]
+    pp = p["config"] if os.path.isabs(p["config"]) else f"{ROOT}/{p['config']}"
+    assert sha256(pp) == p["config_sha256"], f"{p['config']}: changed since batch 2 was configured"
+    sp = f"{ROOT}/{json.load(open(pp)).get('out_dir', 'outputs/PHASE1/P15')}/chr20/SCORE.json"
+    s = json.load(open(sp))
+    assert s["config_sha256"] == p["config_sha256"], f"{sp}: scored with another config"
+    return os.path.relpath(sp, ROOT), s
+
+
 def chr20(cfg):
     d, tgt = cfg["decode"], cfg["targets"]["chr20"]
     truth = ruler.read_gtf(f"{ROOT}/{tgt['truth']}", tgt["truth_chrom"])
     lnc_ids = sorted(k for k, v in truth.items() if v["cls"] == "lnc")
     st = strata(truth, f"{ROOT}/{tgt['truth']}", tgt["truth_chrom"])
-    g_fin, g_hits = score_preds(truth, ruler.read_pred_gff3(G_CHR20, "chr20"))
-    g_ph0 = json.load(open(G_CHR20_SCORE))["scores"]["new"]["lnc"]["L1_locus"]
-    res = {"truth": {"n_lnc": len(lnc_ids), "strata_n": {k: len(v) for k, v in st.items()}},
-           "GENATATOR": {"final": g_fin, "strata_sn": {k: sn_in(g_hits, v) for k, v in st.items()},
-                         "phase0_lnc_L1": {"sn": g_ph0["sn"], "pr_strict": g_ph0["pr_strict"]}},
-           "runs": {}, "ablations": {}}
+    res = {"truth": {"n_lnc": len(lnc_ids), "strata_n": {k: len(v) for k, v in st.items()}}, "runs": {}, "ablations": {}}
+    if cfg.get("batch") != 2:
+        g_fin, g_hits = score_preds(truth, ruler.read_pred_gff3(G_CHR20, "chr20"))
+        g_ph0 = json.load(open(G_CHR20_SCORE))["scores"]["new"]["lnc"]["L1_locus"]
+        res["GENATATOR"] = {"final": g_fin, "strata_sn": {k: sn_in(g_hits, v) for k, v in st.items()},
+                            "phase0_lnc_L1": {"sn": g_ph0["sn"], "pr_strict": g_ph0["pr_strict"]}}
     hits = {}
     for name in tgt["runs"]:
         rd = f"{P15}/chr20/{name}"
@@ -250,6 +276,15 @@ def chr20(cfg):
         res["runs"][name], hits[name] = r, h
         print(json.dumps({name: {"auprc": r["core"]["auprc_lnc"], "lnc_L1": [r["final"]["lnc"]["L1_locus"][k] for k in ("sn", "pr_strict")],
                                  "n_lnc": r["final"]["n_pred_lnc"]}}), flush=True)
+    if cfg.get("batch") == 2:  # main runs, AB1 and the verdict come from batch 1 (every run is read once)
+        sp, prev = previous_score(cfg)
+        res["ablations"] = ablation_rows(cfg, res["runs"], {s: prev["runs"][n]["core"]["auprc_lnc"] for s, n in cfg["main"]["runs"].items()})
+        both = {arm: dict(v) for arm, v in prev["ablations"].items()}
+        for arm, by_seed in res["ablations"].items():
+            both.setdefault(arm, {}).update(by_seed)
+        res["ablations_all"] = both
+        res["previous_score"] = sp
+        return res
     codes = np.load(f"{ROOT}/{tgt['codes']}", mmap_mode="r")
     for seed, name in cfg["main"]["runs"].items():  # AB1: S1 on the main runs' posteriors, tau*
         post = np.load(f"{P15}/chr20/{name}/post.npy", mmap_mode="r")
@@ -257,13 +292,7 @@ def chr20(cfg):
         fin, _ = score_preds(truth, final_preds(gs, d["tau"]))
         res["ablations"].setdefault("AB1", {})[seed] = {"run": name, "core": core(gs, post, truth, d["tau"]), "final": fin}
     main = {s: res["runs"][n] for s, n in cfg["main"]["runs"].items()}
-    for arm, by_seed in cfg["arms"].items():
-        for seed, name in by_seed.items():
-            r = res["runs"].get(name)
-            if r and "core" in r:
-                res["ablations"].setdefault(arm, {})[seed] = {
-                    "run": name, "auprc_lnc": r["core"]["auprc_lnc"], "delta_auprc_vs_main": r["core"]["auprc_lnc"] - main[seed]["core"]["auprc_lnc"],
-                    "lnc_L1": [r["final"]["lnc"]["L1_locus"][k] for k in ("sn", "pr_strict")]}
+    res["ablations"].update(ablation_rows(cfg, res["runs"], {s: r["core"]["auprc_lnc"] for s, r in main.items()}))
     # verdict (main runs, 3-seed means)
     L1 = lambda r, k: r["final"]["lnc"]["L1_locus"][k]
     mn = {"lnc_L1_sn": mean([L1(r, "sn") for r in main.values()]), "lnc_L1_pr_strict": mean([L1(r, "pr_strict") for r in main.values()]),
@@ -279,6 +308,7 @@ def chr20(cfg):
     bi = np.random.default_rng(0).integers(0, len(lnc_ids), (BOOT, len(lnc_ids)))
     boots = dvec[bi].mean(1)
     gain = {"mean": float(dvec.mean()), "ci95": [float(np.percentile(boots, 2.5)), float(np.percentile(boots, 97.5))]}
+    g_fin = res["GENATATOR"]["final"]
     gg = g_fin["guards"]
     tp = f"{P15}/t2t_chr20/SCORE.json"
     t2 = json.load(open(tp)) if os.path.exists(tp) else None
@@ -318,7 +348,10 @@ def main():
     res = t2t(cfg) if a.target == "t2t_chr20" else chr20(cfg)
     res.update(config=a.config, config_sha256=cfg_sha, score_s=round(time.time() - t0))
     json.dump(res, open(f"{P15}/{a.target}/SCORE.json", "w"), indent=1, default=lambda x: sorted(x) if isinstance(x, set) else str(x))
-    if a.target == "chr20":
+    if a.target == "chr20" and "verdict" not in res:
+        print(json.dumps({arm: {s: round(v["delta_auprc_vs_main"], 4) for s, v in by_seed.items()} for arm, by_seed in res["ablations_all"].items()
+                          if arm != "AB1"}))
+    elif a.target == "chr20":
         print(json.dumps({k: res["verdict"][k] for k in ("mean", "sn_gain_vs_GENATATOR", "go", "go_pass", "strong", "guardrails")}))
     else:
         print(json.dumps(res["mean"]))
