@@ -1,0 +1,24 @@
+{
+ "what": "v2.0 test data lock (card v20-testdata, user 2026-11-03, option 1)",
+ "locked": "2026-11-03T14:50+01:00",
+ "test_chrom": "chr9",
+ "genome": {
+  "path": "data/human/hg38.fa.gz",
+  "sha256": "c1dd87068c254eb53d944f71e51d1311964fce8de24d6fc0effc9c61c01527d4",
+  "chr9_len": 138394717,
+  "chr9_md5_uppercase": "addd2795560986b7491c40b1faa3978a"
+ },
+ "truth": {
+  "path": "data/human/gencode.v50.annotation.gtf.gz",
+  "sha256": "83fba3e9b03f0b8c958f3595c6c350adc55f468abf8b0e47b6d5284cfe13a453",
+  "chrom": "chr9"
+ },
+ "v19_train_windows_on_chr9": 154,
+ "rules": [
+  "chr9 is not used for training, development, tuning, model selection or inspection of any model output until the single read of the frozen v2.0 models",
+  "no statistic of chr9 predictions is computed before that read; truth-only counts (genes per class) may be reported in the v2.0 draft",
+  "v2.0 retrains the main models without the v1.9 training windows on chr9; the replacement rule is fixed in the v2.0 draft",
+  "any splice-site model used in v2.0 is trained without chr9 (and without chr18 / chr20)",
+  "chr18 stays the development chromosome; chr20 and T2T chr20 are read and never used for tuning"
+ ]
+}
