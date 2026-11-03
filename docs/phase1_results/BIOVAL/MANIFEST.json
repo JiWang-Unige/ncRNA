@@ -1,0 +1,294 @@
+{
+ "fetched": "2026-11-03T13:40:02Z",
+ "prereg_commit": "7c7bc88",
+ "files": {
+  "chess3.1.3.GRCh38.gtf.gz": {
+   "bytes": 19980963,
+   "sha256": "fea2b2b77f166bf998898ed2e3f4a80f3d884ace70002912455c8e96b054824f"
+  },
+  "fantom5_cage_peaks.bed.gz": {
+   "bytes": 5500816,
+   "sha256": "7e007c3e1fd7a2e24404ad9d5a57d27f76cd7920a6fdc1acaa06b5c4fcfcb018"
+  },
+  "gtex_v9_flair_filter_transcripts.gtf.gz": {
+   "bytes": 14022086,
+   "sha256": "c30ff2a1d8c80539eab0edabc25028e6faa1a5112303eb6d508fc72a95775d2a"
+  },
+  "lncbook2.1_GRCh38.gtf.gz": {
+   "bytes": 29017453,
+   "sha256": "dd91a90ce412dcb12f1b65549141e143c63ddea7b40d096e0c2bd95007d69f77"
+  },
+  "polyasite2_GRCh38.96.tsv.gz": {
+   "bytes": 50621563,
+   "sha256": "d4a5f0d174994e6134a32624c35db1898a741e3e325b4fc59b0a935950f36c68"
+  },
+  "rnacentral_homo_sapiens.GRCh38.bed.gz": {
+   "bytes": 59164937,
+   "sha256": "b03d4fc545d42dfb5ee4a98d8c5c607c9bf343610d917808d2810500d8b2fa93"
+  },
+  "rnacentral_release_notes.txt": {
+   "bytes": 727,
+   "sha256": "05ede0efce05cd9cd76af8992db132a13b6d4ea182e2a34fd2be302c65f31f4d"
+  },
+  "snaptron/chr20_1.tsv": {
+   "bytes": 191310,
+   "sha256": "b3ff4cfd3353fcfe27b283c2f107fe1355fd6c05ff577058f4f6e9964ccbd82f"
+  },
+  "snaptron/chr20_1000000.tsv": {
+   "bytes": 316779,
+   "sha256": "4c7577657358bee0439fff1ad8c65b657cb0b0dee841b4fad721c9cc08293ae4"
+  },
+  "snaptron/chr20_10000000.tsv": {
+   "bytes": 148051,
+   "sha256": "6b216d498791d2030d742575ee4d0658e943afdc455a15fff8381bcae3172782"
+  },
+  "snaptron/chr20_11000000.tsv": {
+   "bytes": 62500,
+   "sha256": "7d2566267dec295575f9f54664758eae747b9cc33ce9509b34a1bf2ab00489eb"
+  },
+  "snaptron/chr20_12000000.tsv": {
+   "bytes": 59786,
+   "sha256": "196dd0dfd318a16cbc7f7e66ce0979d76293dde80355eef35ccfa94716745588"
+  },
+  "snaptron/chr20_13000000.tsv": {
+   "bytes": 128438,
+   "sha256": "49edc0b5917ea819f3786a4c075d02ad0c3e318bd5983fceb9ed23506ec11619"
+  },
+  "snaptron/chr20_14000000.tsv": {
+   "bytes": 32334,
+   "sha256": "601ecba54e7ca1b42b1141f727a003110771e9c316df0f4a5d276732ed5b035e"
+  },
+  "snaptron/chr20_15000000.tsv": {
+   "bytes": 29627,
+   "sha256": "c77321201770e195d135990df7cf79fff28efdb5905fe307a628746c7eda9b85"
+  },
+  "snaptron/chr20_16000000.tsv": {
+   "bytes": 65364,
+   "sha256": "e81e42ed201a9f712a7176b683c19a735ac8430e75e705dcb0dd8c8742dd5388"
+  },
+  "snaptron/chr20_17000000.tsv": {
+   "bytes": 200010,
+   "sha256": "4ff24339b9b595e5292cd466ccab9e04b22b9e7240ed8737cb7a78ee7beedf5a"
+  },
+  "snaptron/chr20_18000000.tsv": {
+   "bytes": 290823,
+   "sha256": "3a847ff4d338ce347833787128996dc7b73a54d5f31cf37686f8646d3da73c3b"
+  },
+  "snaptron/chr20_19000000.tsv": {
+   "bytes": 106623,
+   "sha256": "fb0672c34ab50b871631bdbc505358a4542f45576eaa9304c5da18f1bd69a1bf"
+  },
+  "snaptron/chr20_2000000.tsv": {
+   "bytes": 252558,
+   "sha256": "0c84e858a34415c1fccf4e016132061c75b84a098398211ba2563a41cf88595f"
+  },
+  "snaptron/chr20_20000000.tsv": {
+   "bytes": 233451,
+   "sha256": "61cf347922a1846d31c4a88b6f26e89aaf7fa4372ab0ca202470e7af035c6dd6"
+  },
+  "snaptron/chr20_21000000.tsv": {
+   "bytes": 128249,
+   "sha256": "44b7eb3c58f51b1030aa306854c84c9cf05d3ab55f8d2904c7d4e49a3922f070"
+  },
+  "snaptron/chr20_22000000.tsv": {
+   "bytes": 64617,
+   "sha256": "64ddd0e09bf19c1f91eb9bf29d232f8b4f1fd8584677a738e2b80252a3bf6e20"
+  },
+  "snaptron/chr20_23000000.tsv": {
+   "bytes": 172965,
+   "sha256": "d62ed60b9a6ea11cfd1e31c26101003c4432e3bc86a57ebd1888d4102c262019"
+  },
+  "snaptron/chr20_24000000.tsv": {
+   "bytes": 124867,
+   "sha256": "d8e20d36aa29fed99db261b50b0a48b3065edc5358b2466afcbf72c6d74f24e4"
+  },
+  "snaptron/chr20_25000000.tsv": {
+   "bytes": 345916,
+   "sha256": "7df53a5449ec7b7a8db880c0f534c848603eccc16a31fdf16861f5f0a8c453e9"
+  },
+  "snaptron/chr20_26000000.tsv": {
+   "bytes": 62757,
+   "sha256": "190cd111d80e7e3868f94bfaa3d17a16999c6c1e8b2221442df02a28ab65f586"
+  },
+  "snaptron/chr20_27000000.tsv": {
+   "bytes": 247,
+   "sha256": "d099c36ac4cad24dbfe2b29a8b4b2550dd43334c373508911c1016af1b51f8a4"
+  },
+  "snaptron/chr20_28000000.tsv": {
+   "bytes": 24893,
+   "sha256": "8f61293c63936b4f0632605e763e28f9460367f51e256ceaef66076dc364d563"
+  },
+  "snaptron/chr20_29000000.tsv": {
+   "bytes": 48238,
+   "sha256": "a8ec64962118e1f10d7e568b1e0ed7a5bd7f316558cc135ea775681e9c00d0b7"
+  },
+  "snaptron/chr20_3000000.tsv": {
+   "bytes": 429104,
+   "sha256": "9e0c4a119160ed097c80042383443480d608809dfb4b893dd98a18923f20073f"
+  },
+  "snaptron/chr20_30000000.tsv": {
+   "bytes": 93570,
+   "sha256": "179803b4e72549d60ac8ce3ddac97a30cd703636d0e05975192072c46507df18"
+  },
+  "snaptron/chr20_31000000.tsv": {
+   "bytes": 257321,
+   "sha256": "0a64d542d57e15c47e71277c00a5326adcf5864e5daa0c33153a0f4ea9ea150f"
+  },
+  "snaptron/chr20_32000000.tsv": {
+   "bytes": 286914,
+   "sha256": "d52d94db84390ce19e2cefa0973e014bbdaf9500c3f118a0a86fa06cff1f5e85"
+  },
+  "snaptron/chr20_33000000.tsv": {
+   "bytes": 301204,
+   "sha256": "b9fa04f2e023bed6a9ccb8ed1168eb629d71ab6b765f071af6c12fd49345ea26"
+  },
+  "snaptron/chr20_34000000.tsv": {
+   "bytes": 414553,
+   "sha256": "dfb3882d7bc94fb7ab3964bcd1a2eb86f862db9050102e921bd7b5c0e7ad1528"
+  },
+  "snaptron/chr20_35000000.tsv": {
+   "bytes": 469858,
+   "sha256": "89a68b46f28c26feeee142469cd3c7cfeaa3b2cebbaf8869693f4e65c884cf8b"
+  },
+  "snaptron/chr20_36000000.tsv": {
+   "bytes": 376279,
+   "sha256": "3b10d9526408428543ce2ca72aa55970ad28d0e74b37a435c5255449825a0a8d"
+  },
+  "snaptron/chr20_37000000.tsv": {
+   "bytes": 256136,
+   "sha256": "3235aaa279752e5f52b5feefe1b75460b831ca335e8d242dac82a093520dfcb6"
+  },
+  "snaptron/chr20_38000000.tsv": {
+   "bytes": 278979,
+   "sha256": "47b4737b8739ca699e15a52672da1304ace0e12b4cac4ae0be55cb07d6e28986"
+  },
+  "snaptron/chr20_39000000.tsv": {
+   "bytes": 50441,
+   "sha256": "12e7ae260ab37b6b58ad2255938d5a1d050149de98574d405456a1bb149ab727"
+  },
+  "snaptron/chr20_4000000.tsv": {
+   "bytes": 122196,
+   "sha256": "002aad36e1dfc69fafc176dc12f3f54e9a06f0e23a7d63206a6133dba3399231"
+  },
+  "snaptron/chr20_40000000.tsv": {
+   "bytes": 62774,
+   "sha256": "25c73a2b8ad522235dcbf0aa683bbe3050405d96d79c6994f1e8449b54d5b728"
+  },
+  "snaptron/chr20_41000000.tsv": {
+   "bytes": 178087,
+   "sha256": "af178485cee6c0c9eca1ff0307592897a154cbe439a7394d28260a1851586b2f"
+  },
+  "snaptron/chr20_42000000.tsv": {
+   "bytes": 53746,
+   "sha256": "53ef4ab9c0bcc7fde8429dfd98bdf046f1422435ce4d643ff6960eb4554130d8"
+  },
+  "snaptron/chr20_43000000.tsv": {
+   "bytes": 138160,
+   "sha256": "588d88a1a9b8d137e67a2f124306403737504c8f5f0100b2ffa9a20ae7e4d334"
+  },
+  "snaptron/chr20_44000000.tsv": {
+   "bytes": 292823,
+   "sha256": "9203e94ace9cdab843e738a90450d2e766435b058db50f74c15825a0a0c4c4d0"
+  },
+  "snaptron/chr20_45000000.tsv": {
+   "bytes": 385528,
+   "sha256": "08a494d24a53b0bf5d2e4cad70f699a4a557303c1754512483452dffc0b6de5c"
+  },
+  "snaptron/chr20_46000000.tsv": {
+   "bytes": 220996,
+   "sha256": "1b1b689d6258b829e604bd13adbfaacd292337a7402dd34e02b12612b4cb0f17"
+  },
+  "snaptron/chr20_47000000.tsv": {
+   "bytes": 222637,
+   "sha256": "a0891299be78596f323ae297519d23fc8b550e312ed07316c731e3a99e9d66f3"
+  },
+  "snaptron/chr20_48000000.tsv": {
+   "bytes": 621563,
+   "sha256": "677b08de24816a5cf3a26beea0f37ff0a56aa5b6295e169a0da075539ce12e5d"
+  },
+  "snaptron/chr20_49000000.tsv": {
+   "bytes": 293949,
+   "sha256": "dcfa3d272a66d59128ae3df62006806407ee88ca10f50b464fdee3a0af295731"
+  },
+  "snaptron/chr20_5000000.tsv": {
+   "bytes": 217941,
+   "sha256": "8289420874debc800e8d931fba44770578487173ad713fb62aec99ca67e51c65"
+  },
+  "snaptron/chr20_50000000.tsv": {
+   "bytes": 275111,
+   "sha256": "1137050d41f7f7423d5e25d62b3792e9bac5014bf13e11196bdb72aeca09c6a3"
+  },
+  "snaptron/chr20_51000000.tsv": {
+   "bytes": 99274,
+   "sha256": "3fd631e436f7c5480c66cbe31b95e29155200a755965365fe9f07d7186aa00ab"
+  },
+  "snaptron/chr20_52000000.tsv": {
+   "bytes": 102572,
+   "sha256": "d9afae8f4faa510a512571194f065624a5c053dd76b93ad8e0955137259fc9f5"
+  },
+  "snaptron/chr20_53000000.tsv": {
+   "bytes": 101752,
+   "sha256": "993f3188dfee684fcb2281f48bce3836070aae9fe206bb186e9e09bd3becb5f5"
+  },
+  "snaptron/chr20_54000000.tsv": {
+   "bytes": 46376,
+   "sha256": "2b11b004c8e04e3063d6aba5afecdcf375d00c394b41f63b877b27f06b90748d"
+  },
+  "snaptron/chr20_55000000.tsv": {
+   "bytes": 33622,
+   "sha256": "91b8ee58b0219c6a2a6eb53d907faf2b929a360f00e497b05675cb09b3aabf75"
+  },
+  "snaptron/chr20_56000000.tsv": {
+   "bytes": 123454,
+   "sha256": "e29cdf093f324489eba6f42d857ba9d18e3b3ae69dd8dfe4e6b1f3f51f3a53ab"
+  },
+  "snaptron/chr20_57000000.tsv": {
+   "bytes": 152267,
+   "sha256": "e0382d15835815a072f8474d42753a479689f9da98c17765d7548326c9a1f811"
+  },
+  "snaptron/chr20_58000000.tsv": {
+   "bytes": 265608,
+   "sha256": "b6b9a73e1a1ad1b65b0f9b0b26371146b3616fc81877f040f870fc03e68cfae9"
+  },
+  "snaptron/chr20_59000000.tsv": {
+   "bytes": 126759,
+   "sha256": "5187e28193310c0963c8e1da85090a11cbef178abe911fe6390ca3b3ca1b0a2f"
+  },
+  "snaptron/chr20_6000000.tsv": {
+   "bytes": 65291,
+   "sha256": "45b7218eeda5787ecfd57dcb2003e68e1a1fd1899100456fef1557b17c860bda"
+  },
+  "snaptron/chr20_60000000.tsv": {
+   "bytes": 114519,
+   "sha256": "78584c5952cc843860cc7c62d5ed113f629fef10abcd1f11e13a1c791f6567ce"
+  },
+  "snaptron/chr20_61000000.tsv": {
+   "bytes": 104156,
+   "sha256": "357deadfebeaa40f19fa65d87e2b5c0937b99dccdba97ceffca79ba5c60cd49d"
+  },
+  "snaptron/chr20_62000000.tsv": {
+   "bytes": 606650,
+   "sha256": "76e3c13d837ca6b5508ff84795f0f1f15d6b06d1924f6f0d21adf5fb5feabe02"
+  },
+  "snaptron/chr20_63000000.tsv": {
+   "bytes": 913933,
+   "sha256": "eeb295398afbfb51c5ba74199255ae31c9832ce2bc9781da153940b8de2003e8"
+  },
+  "snaptron/chr20_64000000.tsv": {
+   "bytes": 162211,
+   "sha256": "ca68b868e7628e980366831ecd6b5f3c946d9b1a6997018f729dd60849e14326"
+  },
+  "snaptron/chr20_7000000.tsv": {
+   "bytes": 33098,
+   "sha256": "0b3c5f7fcf5e86d6b962f4a4a3d0bd373f78fca2773eb6afc0c763dd157751fa"
+  },
+  "snaptron/chr20_8000000.tsv": {
+   "bytes": 54877,
+   "sha256": "39f0eee85d6a6bb5c825ea9d019bfb9419950b4123ed0d0084fec6050c7ef2b1"
+  },
+  "snaptron/chr20_9000000.tsv": {
+   "bytes": 66657,
+   "sha256": "edce9b76488ebaaeb01a402eecfbf8323f39c8dee0ff127c246f0ff2ae5d1b4c"
+  }
+ }
+}
