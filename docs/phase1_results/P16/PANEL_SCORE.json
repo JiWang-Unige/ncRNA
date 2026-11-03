@@ -1,0 +1,415 @@
+{
+ "config": "configs/p16_v19.json",
+ "config_sha256": "59741d3e891a8769b18962f7251c75b6b640dacfdbd97a715cf827e3c791e619",
+ "score_script_sha256": "7b6bd57ee89e319f151dbe67735f57dbb0fd92b322ad3cc96275e77eb646317a",
+ "panel": {
+  "chicken_5": {
+   "mean": {
+    "auprc_lnc": 0.10038966480379831,
+    "n_truth_lnc": 694.0,
+    "n_pred_lnc": 916.3333333333334,
+    "lnc_L1_sn": 0.3179634966378482,
+    "lnc_L1_pr_strict": 0.24591005864304036,
+    "lnc_L2_sn": 0.0,
+    "lnc_L3_recall": 0.00440852314474651,
+    "lnc_L3_precision": 0.003945983677970055,
+    "n_truth_mrna": 991.0,
+    "n_pred_mrna": 1235.3333333333333,
+    "mrna_L1_sn": 0.8624285233770602,
+    "mrna_L1_pr_strict": 0.8788937268536495,
+    "mrna_L2_sn": 0.01620859760394644,
+    "mrna_L3_recall": 0.3438427970150024,
+    "lnc_genes_reported_as_mrna": 28.666666666666668,
+    "mrna_preds_hitting_lnc_only": 31.0,
+    "ece": 0.4928137420637231
+   },
+   "by_run": {
+    "g1b-123-ke": {
+     "auprc_lnc": 0.1167454307815111,
+     "n_truth_lnc": 694,
+     "n_pred_lnc": 1112,
+     "lnc_L1_sn": 0.39481268011527376,
+     "lnc_L1_pr_strict": 0.2607913669064748,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.002571638501102131,
+     "lnc_L3_precision": 0.002079002079002079,
+     "n_truth_mrna": 991,
+     "n_pred_mrna": 1254,
+     "mrna_L1_sn": 0.9041372351160444,
+     "mrna_L1_pr_strict": 0.8883572567783095,
+     "mrna_L2_sn": 0.013742071881606765,
+     "mrna_L3_recall": 0.39956619412812766,
+     "lnc_genes_reported_as_mrna": 24,
+     "mrna_preds_hitting_lnc_only": 25,
+     "ece": 0.49573223698193736
+    },
+    "g1b-42-ke": {
+     "auprc_lnc": 0.09373170806591723,
+     "n_truth_lnc": 694,
+     "n_pred_lnc": 827,
+     "lnc_L1_sn": 0.2968299711815562,
+     "lnc_L1_pr_strict": 0.21644498186215236,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.009919177075679648,
+     "lnc_L3_precision": 0.008033323415650105,
+     "n_truth_mrna": 991,
+     "n_pred_mrna": 1144,
+     "mrna_L1_sn": 0.7870837537840565,
+     "mrna_L1_pr_strict": 0.9134615384615384,
+     "mrna_L2_sn": 0.03382663847780127,
+     "mrna_L3_recall": 0.4777287163994113,
+     "lnc_genes_reported_as_mrna": 20,
+     "mrna_preds_hitting_lnc_only": 21,
+     "ece": 0.5901655000536965
+    },
+    "g1b-456-ke": {
+     "auprc_lnc": 0.0906918555639666,
+     "n_truth_lnc": 694,
+     "n_pred_lnc": 810,
+     "lnc_L1_sn": 0.2622478386167147,
+     "lnc_L1_pr_strict": 0.26049382716049385,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.0007347538574577516,
+     "lnc_L3_precision": 0.001725625539257981,
+     "n_truth_mrna": 991,
+     "n_pred_mrna": 1308,
+     "mrna_L1_sn": 0.8960645812310797,
+     "mrna_L1_pr_strict": 0.8348623853211009,
+     "mrna_L2_sn": 0.0010570824524312897,
+     "mrna_L3_recall": 0.15423348051746844,
+     "lnc_genes_reported_as_mrna": 42,
+     "mrna_preds_hitting_lnc_only": 47,
+     "ece": 0.3925434891555352
+    }
+   },
+   "genatator": {
+    "lnc": {
+     "n_pred": 1,
+     "L1_sn": 0.0,
+     "L1_pr_strict": 0.0,
+     "L2_sn": 0.0,
+     "L3_recall": 0.0
+    },
+    "mrna": {
+     "n_pred": 1375,
+     "L1_sn": 0.8365287588294652,
+     "L1_pr_strict": 0.96,
+     "L2_sn": 0.24312896405919662,
+     "L3_recall": 0.5957858858160973
+    }
+   },
+   "truth_genes_by_class": {
+    "lnc": 694,
+    "mrna": 991,
+    "small": 58
+   },
+   "n_small": 53
+  },
+  "zebrafish_22": {
+   "mean": {
+    "auprc_lnc": 0.029987141833959008,
+    "n_truth_lnc": 135.0,
+    "n_pred_lnc": 810.3333333333334,
+    "lnc_L1_sn": 0.34814814814814815,
+    "lnc_L1_pr_strict": 0.06530383361943948,
+    "lnc_L2_sn": 0.0,
+    "lnc_L3_recall": 0.027619047619047616,
+    "lnc_L3_precision": 0.003985433709902616,
+    "n_truth_mrna": 1007.0,
+    "n_pred_mrna": 1324.6666666666667,
+    "mrna_L1_sn": 0.8424362793776895,
+    "mrna_L1_pr_strict": 0.7419230716822071,
+    "mrna_L2_sn": 0.038396194359497114,
+    "mrna_L3_recall": 0.403627569528416,
+    "lnc_genes_reported_as_mrna": 28.666666666666668,
+    "mrna_preds_hitting_lnc_only": 30.666666666666668,
+    "ece": 0.6448005645417202
+   },
+   "by_run": {
+    "g1b-123-ke": {
+     "auprc_lnc": 0.030009470937233204,
+     "n_truth_lnc": 135,
+     "n_pred_lnc": 1013,
+     "lnc_L1_sn": 0.35555555555555557,
+     "lnc_L1_pr_strict": 0.05824284304047384,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.011428571428571429,
+     "lnc_L3_precision": 0.002008032128514056,
+     "n_truth_mrna": 1007,
+     "n_pred_mrna": 1142,
+     "mrna_L1_sn": 0.8619662363455809,
+     "mrna_L1_pr_strict": 0.7819614711033275,
+     "mrna_L2_sn": 0.03873598369011213,
+     "mrna_L3_recall": 0.48053204353083434,
+     "lnc_genes_reported_as_mrna": 22,
+     "mrna_preds_hitting_lnc_only": 22,
+     "ece": 0.6368130944600223
+    },
+    "g1b-42-ke": {
+     "auprc_lnc": 0.024788077132364267,
+     "n_truth_lnc": 135,
+     "n_pred_lnc": 745,
+     "lnc_L1_sn": 0.3333333333333333,
+     "lnc_L1_pr_strict": 0.06040268456375839,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.07142857142857142,
+     "lnc_L3_precision": 0.009948269001193792,
+     "n_truth_mrna": 1007,
+     "n_pred_mrna": 1441,
+     "mrna_L1_sn": 0.8222442899702085,
+     "mrna_L1_pr_strict": 0.6932685634975712,
+     "mrna_L2_sn": 0.0672782874617737,
+     "mrna_L3_recall": 0.5197097944377267,
+     "lnc_genes_reported_as_mrna": 35,
+     "mrna_preds_hitting_lnc_only": 37,
+     "ece": 0.7071125346904917
+    },
+    "g1b-456-ke": {
+     "auprc_lnc": 0.03516387743227956,
+     "n_truth_lnc": 135,
+     "n_pred_lnc": 673,
+     "lnc_L1_sn": 0.35555555555555557,
+     "lnc_L1_pr_strict": 0.07726597325408618,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.0,
+     "lnc_L3_precision": 0.0,
+     "n_truth_mrna": 1007,
+     "n_pred_mrna": 1391,
+     "mrna_L1_sn": 0.843098311817279,
+     "mrna_L1_pr_strict": 0.7505391804457225,
+     "mrna_L2_sn": 0.009174311926605505,
+     "mrna_L3_recall": 0.21064087061668682,
+     "lnc_genes_reported_as_mrna": 29,
+     "mrna_preds_hitting_lnc_only": 33,
+     "ece": 0.5904760644746467
+    }
+   },
+   "genatator": {
+    "lnc": {
+     "n_pred": 13,
+     "L1_sn": 0.022222222222222223,
+     "L1_pr_strict": 0.15384615384615385,
+     "L2_sn": 0.007462686567164179,
+     "L3_recall": 0.002857142857142857
+    },
+    "mrna": {
+     "n_pred": 749,
+     "L1_sn": 0.4885799404170804,
+     "L1_pr_strict": 0.9212283044058746,
+     "L2_sn": 0.15698267074413863,
+     "L3_recall": 0.38657799274486093
+    }
+   },
+   "truth_genes_by_class": {
+    "lnc": 135,
+    "mrna": 1007,
+    "small": 76
+   },
+   "n_small": 842
+  },
+  "fly_2L": {
+   "mean": {
+    "auprc_lnc": 0.02494570634177962,
+    "n_truth_lnc": 619.0,
+    "n_pred_lnc": 1411.6666666666667,
+    "lnc_L1_sn": 0.21378567582121702,
+    "lnc_L1_pr_strict": 0.08887262584766288,
+    "lnc_L2_sn": 0.0,
+    "lnc_L3_recall": 0.0050200803212851405,
+    "lnc_L3_precision": 0.00142571998859424,
+    "n_truth_mrna": 2657.0,
+    "n_pred_mrna": 1947.0,
+    "mrna_L1_sn": 0.6400702546731903,
+    "mrna_L1_pr_strict": 0.9290976073039169,
+    "mrna_L2_sn": 0.04949258391881343,
+    "mrna_L3_recall": 0.19174503657262276,
+    "lnc_genes_reported_as_mrna": 4.333333333333333,
+    "mrna_preds_hitting_lnc_only": 4.666666666666667,
+    "ece": 0.579520581161562
+   },
+   "by_run": {
+    "g1b-123-ke": {
+     "auprc_lnc": 0.03153057875941045,
+     "n_truth_lnc": 619,
+     "n_pred_lnc": 1589,
+     "lnc_L1_sn": 0.2455573505654281,
+     "lnc_L1_pr_strict": 0.09439899307740718,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.0,
+     "lnc_L3_precision": 0.0,
+     "n_truth_mrna": 2657,
+     "n_pred_mrna": 2324,
+     "mrna_L1_sn": 0.815205118554761,
+     "mrna_L1_pr_strict": 0.9591222030981067,
+     "mrna_L2_sn": 0.07213114754098361,
+     "mrna_L3_recall": 0.2881073667711599,
+     "lnc_genes_reported_as_mrna": 3,
+     "mrna_preds_hitting_lnc_only": 3,
+     "ece": 0.5505991803755028
+    },
+    "g1b-42-ke": {
+     "auprc_lnc": 0.01395618509330082,
+     "n_truth_lnc": 619,
+     "n_pred_lnc": 939,
+     "lnc_L1_sn": 0.13247172859450726,
+     "lnc_L1_pr_strict": 0.08200212992545261,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.015060240963855422,
+     "lnc_L3_precision": 0.00427715996578272,
+     "n_truth_mrna": 2657,
+     "n_pred_mrna": 1705,
+     "mrna_L1_sn": 0.48739179525780957,
+     "mrna_L1_pr_strict": 0.9032258064516129,
+     "mrna_L2_sn": 0.06932084309133489,
+     "mrna_L3_recall": 0.25225313479623823,
+     "lnc_genes_reported_as_mrna": 5,
+     "mrna_preds_hitting_lnc_only": 6,
+     "ece": 0.6447433516682279
+    },
+    "g1b-456-ke": {
+     "auprc_lnc": 0.02935035517262759,
+     "n_truth_lnc": 619,
+     "n_pred_lnc": 1707,
+     "lnc_L1_sn": 0.2633279483037157,
+     "lnc_L1_pr_strict": 0.09021675454012888,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.0,
+     "lnc_L3_precision": 0.0,
+     "n_truth_mrna": 2657,
+     "n_pred_mrna": 1812,
+     "mrna_L1_sn": 0.6176138502070003,
+     "mrna_L1_pr_strict": 0.9249448123620309,
+     "mrna_L2_sn": 0.00702576112412178,
+     "mrna_L3_recall": 0.03487460815047022,
+     "lnc_genes_reported_as_mrna": 5,
+     "mrna_preds_hitting_lnc_only": 5,
+     "ece": 0.5432192114409554
+    }
+   },
+   "genatator": {
+    "lnc": {
+     "n_pred": 0,
+     "L1_sn": 0.0,
+     "L1_pr_strict": null,
+     "L2_sn": 0.0,
+     "L3_recall": 0.0
+    },
+    "mrna": {
+     "n_pred": 643,
+     "L1_sn": 0.21377493413624388,
+     "L1_pr_strict": 1.0,
+     "L2_sn": 0.05620608899297424,
+     "L3_recall": 0.1211794670846395
+    }
+   },
+   "truth_genes_by_class": {
+    "lnc": 619,
+    "mrna": 2657,
+    "small": 283
+   },
+   "n_small": 133
+  },
+  "worm_I": {
+   "mean": {
+    "auprc_lnc": 0.0009593370876082594,
+    "n_truth_lnc": 150.0,
+    "n_pred_lnc": 1428.6666666666667,
+    "lnc_L1_sn": 0.07333333333333333,
+    "lnc_L1_pr_strict": 0.00792270413185586,
+    "lnc_L2_sn": 0.0,
+    "lnc_L3_recall": 0.0,
+    "lnc_L3_precision": 0.0,
+    "n_truth_mrna": 2878.0,
+    "n_pred_mrna": 3361.3333333333335,
+    "mrna_L1_sn": 0.6832290942784341,
+    "mrna_L1_pr_strict": 0.882522717367518,
+    "mrna_L2_sn": 0.01881624389662975,
+    "mrna_L3_recall": 0.18331866627554516,
+    "lnc_genes_reported_as_mrna": 5.333333333333333,
+    "mrna_preds_hitting_lnc_only": 5.333333333333333,
+    "ece": 0.7487579119893241
+   },
+   "by_run": {
+    "g1b-123-ke": {
+     "auprc_lnc": 0.000865861130122746,
+     "n_truth_lnc": 150,
+     "n_pred_lnc": 763,
+     "lnc_L1_sn": 0.05333333333333334,
+     "lnc_L1_pr_strict": 0.010484927916120577,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.0,
+     "lnc_L3_precision": 0.0,
+     "n_truth_mrna": 2878,
+     "n_pred_mrna": 5028,
+     "mrna_L1_sn": 0.8578874218207089,
+     "mrna_L1_pr_strict": 0.9415274463007159,
+     "mrna_L2_sn": 0.031797070382279385,
+     "mrna_L3_recall": 0.3190378410090936,
+     "lnc_genes_reported_as_mrna": 3,
+     "mrna_preds_hitting_lnc_only": 3,
+     "ece": 0.7352122036341749
+    },
+    "g1b-42-ke": {
+     "auprc_lnc": 0.0013226769919680342,
+     "n_truth_lnc": 150,
+     "n_pred_lnc": 2167,
+     "lnc_L1_sn": 0.10666666666666667,
+     "lnc_L1_pr_strict": 0.007383479464697739,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.0,
+     "lnc_L3_precision": 0.0,
+     "n_truth_mrna": 2878,
+     "n_pred_mrna": 3253,
+     "mrna_L1_sn": 0.5142460041695622,
+     "mrna_L1_pr_strict": 0.8441438671995082,
+     "mrna_L2_sn": 0.021436227224008574,
+     "mrna_L3_recall": 0.15594015840422412,
+     "lnc_genes_reported_as_mrna": 8,
+     "mrna_preds_hitting_lnc_only": 9,
+     "ece": 0.7669688581399178
+    },
+    "g1b-456-ke": {
+     "auprc_lnc": 0.0006894731407339976,
+     "n_truth_lnc": 150,
+     "n_pred_lnc": 1356,
+     "lnc_L1_sn": 0.06,
+     "lnc_L1_pr_strict": 0.0058997050147492625,
+     "lnc_L2_sn": 0.0,
+     "lnc_L3_recall": 0.0,
+     "lnc_L3_precision": 0.0,
+     "n_truth_mrna": 2878,
+     "n_pred_mrna": 1803,
+     "mrna_L1_sn": 0.6775538568450312,
+     "mrna_L1_pr_strict": 0.8618968386023295,
+     "mrna_L2_sn": 0.003215434083601286,
+     "mrna_L3_recall": 0.07497799941331769,
+     "lnc_genes_reported_as_mrna": 5,
+     "mrna_preds_hitting_lnc_only": 4,
+     "ece": 0.7440926741938798
+    }
+   },
+   "genatator": {
+    "lnc": {
+     "n_pred": 0,
+     "L1_sn": 0.0,
+     "L1_pr_strict": null,
+     "L2_sn": 0.0,
+     "L3_recall": 0.0
+    },
+    "mrna": {
+     "n_pred": 15,
+     "L1_sn": 0.00590687977762335,
+     "L1_pr_strict": 1.0,
+     "L2_sn": 0.0017863522686673813,
+     "L3_recall": 0.002112056321501907
+    }
+   },
+   "truth_genes_by_class": {
+    "lnc": 150,
+    "mrna": 2878,
+    "small": 988
+   },
+   "n_small": 194
+  }
+ }
+}

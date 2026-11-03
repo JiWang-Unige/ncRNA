@@ -1,0 +1,55 @@
+2026-11-03T07:29:07Z START
+2026-11-03T07:40:23Z chr18 g1b-42-ke rc=0
+2026-11-03T07:40:52Z chr18 g1b-123-ke rc=0
+2026-11-03T07:41:11Z chr18 g1b-456-ke rc=0
+2026-11-03T07:41:12Z chr18 all rc=0
+2026-11-03T07:41:12Z REPRO_OK
+2026-11-03T07:42:32Z worm_I g1b-42-ke rc=0
+2026-11-03T07:43:36Z worm_I g1b-123-ke rc=0
+2026-11-03T07:45:36Z worm_I g1b-456-ke rc=0
+2026-11-03T07:50:20Z fly_2L g1b-42-ke rc=0
+2026-11-03T07:50:32Z fly_2L g1b-123-ke rc=0
+2026-11-03T07:50:45Z fly_2L g1b-456-ke rc=0
+2026-11-03T07:57:11Z zebrafish_22 g1b-42-ke rc=0
+2026-11-03T07:57:20Z zebrafish_22 g1b-123-ke rc=0
+2026-11-03T07:58:31Z zebrafish_22 g1b-456-ke rc=0
+2026-11-03T08:10:28Z chicken_5 g1b-42-ke rc=0
+2026-11-03T08:10:35Z chicken_5 g1b-123-ke rc=0
+2026-11-03T08:11:17Z chicken_5 g1b-456-ke rc=0
+2026-11-03T08:12:25Z score rc=0
+2026-11-03T08:12:25Z QUEUE_END
+-rw-r--r-- 1 ji ji 19262 Nov  3 09:11 chicken_5/SCORE.json
+-rw-r--r-- 1 ji ji 19435 Nov  3 09:12 fly_2L/SCORE.json
+-rw-r--r-- 1 ji ji 18893 Nov  3 09:12 worm_I/SCORE.json
+-rw-r--r-- 1 ji ji 19322 Nov  3 09:11 zebrafish_22/SCORE.json
+21G	.
+{
+ "config_sha256": "59741d3e891a8769b18962f7251c75b6b640dacfdbd97a715cf827e3c791e619",
+ "ok": true,
+ "runs": {
+  "g1b-42-ke": {
+   "post_equal": true,
+   "genes_equal": true
+  },
+  "g1b-123-ke": {
+   "post_equal": true,
+   "genes_equal": true
+  },
+  "g1b-456-ke": {
+   "post_equal": true,
+   "genes_equal": true
+  }
+ },
+ "time": "2026-11-03T07:41:12Z"
+}worm_I g1b-42-ke 77 2167 3253 700.3
+worm_I g1b-123-ke 81 763 5028 672.8
+worm_I g1b-456-ke 141 1356 1803 385.9
+fly_2L g1b-42-ke 282 939 1705 300.5
+fly_2L g1b-123-ke 233 1589 2324 363.0
+fly_2L g1b-456-ke 186 1707 1812 455.1
+zebrafish_22 g1b-42-ke 383 745 1441 367.8
+zebrafish_22 g1b-123-ke 333 1013 1142 423.2
+zebrafish_22 g1b-456-ke 342 673 1391 411.5
+chicken_5 g1b-42-ke 712 827 1144 301.0
+chicken_5 g1b-123-ke 658 1112 1254 325.3
+chicken_5 g1b-456-ke 641 810 1308 334.0
