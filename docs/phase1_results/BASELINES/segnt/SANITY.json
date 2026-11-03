@@ -1,0 +1,20 @@
+{
+ "n_bases": 1728228,
+ "truth_frac": {
+  "mrna_body": 0.4528152535429353,
+  "lnc_body": 0.25989626368743013,
+  "exon_any": 0.07923491576342936
+ },
+ "auroc": {
+  "protein_coding_gene_vs_mrna_body": 0.9273126291885162,
+  "lncRNA_vs_lnc_body": 0.6488694380698499,
+  "exon_vs_exon_any": 0.8117169809151252
+ },
+ "pcg_runs": {
+  "n": 55225,
+  "n_len1": 28449,
+  "n_ge_1000": 1009,
+  "bp_in_runs_ge_1000_frac": 0.9751935698820224,
+  "mean_abs_p_minus_half_at_len1": 0.005686144810169935
+ }
+}

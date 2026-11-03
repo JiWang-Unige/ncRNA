@@ -1,0 +1,133 @@
+{
+ "n_tx": 531,
+ "gff": "data/baselines/human/helixer_vertebrate_v0.3_chr20.gff3",
+ "final": {
+  "lnc": {
+   "n_truth_genes": 955,
+   "n_pred_tx": 0,
+   "L1_locus": {
+    "sn": 0.0,
+    "sn_ci95": [
+     0.0,
+     0.0
+    ],
+    "pr_strict": null,
+    "pr_strict_ci95": null,
+    "pr_lenient": null,
+    "n_novel_pred": 0,
+    "pred_hits_other_class_only": {}
+   },
+   "L2_intron_chain": {
+    "sn": 0.0,
+    "sn_ci95": [
+     0.0,
+     0.0
+    ],
+    "pr_strict": null,
+    "pr_strict_ci95": null,
+    "pr_lenient": null,
+    "n_truth_multi_genes": 827,
+    "n_pred_multi_tx": 0
+   },
+   "L3_junction": {
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "n_pred": 0,
+    "n_truth": 5108
+   },
+   "L4_exon": {
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "n_pred": 0,
+    "n_truth": 5561
+   },
+   "L5_single_exon": {
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "n_pred": 0,
+    "n_truth": 197
+   },
+   "L6_base": {
+    "precision": null,
+    "recall": 0.0,
+    "f1": null,
+    "n_pred": 0,
+    "n_truth": 1731829
+   }
+  },
+  "mrna": {
+   "n_truth_genes": 548,
+   "n_pred_tx": 531,
+   "L1_locus": {
+    "sn": 0.9197080291970803,
+    "sn_ci95": [
+     0.8959854014598541,
+     0.9416058394160584
+    ],
+    "pr_strict": 0.9397363465160076,
+    "pr_strict_ci95": [
+     0.9190207156308852,
+     0.9585687382297552
+    ],
+    "pr_lenient": 0.9504761904761905,
+    "n_novel_pred": 6,
+    "pred_hits_other_class_only": {
+     "pseudo": 8,
+     "lnc": 18
+    }
+   },
+   "L2_intron_chain": {
+    "sn": 0.24528301886792453,
+    "sn_ci95": [
+     0.20754716981132076,
+     0.2811320754716981
+    ],
+    "pr_strict": 0.2568627450980392,
+    "pr_strict_ci95": [
+     0.2196078431372549,
+     0.296078431372549
+    ],
+    "pr_lenient": 0.2594059405940594,
+    "n_truth_multi_genes": 530,
+    "n_pred_multi_tx": 510
+   },
+   "L3_junction": {
+    "precision": 0.6041164174304551,
+    "recall": 0.3099323543969642,
+    "f1": 0.4096832233793141,
+    "n_pred": 6219,
+    "n_truth": 12122
+   },
+   "L4_exon": {
+    "precision": 0.669193045028979,
+    "recall": 0.37248738522623875,
+    "f1": 0.478584334148156,
+    "n_pred": 6729,
+    "n_truth": 12089
+   },
+   "L5_single_exon": {
+    "precision": 0.5238095238095238,
+    "recall": 0.2826086956521739,
+    "f1": 0.3671373555840821,
+    "n_pred": 21,
+    "n_truth": 46
+   },
+   "L6_base": {
+    "precision": 0.8937643107458897,
+    "recall": 0.44126308542381765,
+    "f1": 0.590827122399051,
+    "n_pred": 1646490,
+    "n_truth": 3334913
+   }
+  },
+  "guards": {
+   "lnc_genes_reported_as_mrna": 14,
+   "mrna_preds_hitting_lnc_only": 18
+  },
+  "n_pred_lnc": 0,
+  "n_pred_mrna": 531
+ }
+}

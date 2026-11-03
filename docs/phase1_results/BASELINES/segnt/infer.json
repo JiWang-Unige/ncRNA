@@ -1,0 +1,12 @@
+{
+ "revision": "1048ad869036bb8e50a15d82b323ebeb52e8ab92",
+ "weights_sha256": "813407b33237647604973041371e8736972bd0fd45c766ef1e7380c446d90476",
+ "L": 64444167,
+ "segments": 89,
+ "segments_run": 34,
+ "bp_not_run_nonN": 459931,
+ "started": "2026-11-03T15:38:11Z",
+ "windows": 4218,
+ "infer_s": 4470,
+ "max_mem_gb": 5.84
+}
