@@ -30,6 +30,9 @@ run_shard() {  # stem, extract args...
   log "done $stem ($(grep -o '"window_s": [0-9.]*\|"tile_s": [0-9.]*' $DONE/$stem.json))"
 }
 T0=$SECONDS; fails=0
+CHROM_ONLY=${CHROM_ONLY:-0}   # 1: chromosomes only (P1.6 panel: NAMES="chicken_5 zebrafish_22 fly_2L worm_I")
+NAMES=${NAMES:-"chr18 chr20 t2t_chr20"}
+if [ "$CHROM_ONLY" != 1 ]; then
 # 1) training windows
 N=$($PY -c "import numpy as np;print(len(np.load('data/p1/train_codes.npy',mmap_mode='r')))")
 for ((a=0; a<N; a+=TRAIN_STEP)); do b=$((a+TRAIN_STEP)); [ $b -gt $N ] && b=$N
@@ -40,13 +43,15 @@ if [ -e $V ]; then NV=$($PY -c "import numpy as np;print(len(np.load('$V',mmap_m
   for ((a=0; a<NV; a+=TRAIN_STEP)); do b=$((a+TRAIN_STEP)); [ $b -gt $NV ] && b=$NV
     run_shard $(printf "val_%05d_%05d" $a $b) --kind train --name val --codes $V --range $a:$b || fails=$((fails+1)); done
 else log "WARN no $V - validation windows skipped"; fi
-# 2) chromosomes (chr18 validation, chr20 test, T2T chr20 if its codes exist)
-for name in chr18 chr20 t2t_chr20; do
+fi
+# 2) chromosomes (default: chr18 validation, chr20 test, T2T chr20 if its codes exist)
+for name in $NAMES; do
   C=data/p1/${name}_codes.npy; [ -e $C ] || { log "WARN no codes for $name ($C) - skipped"; continue; }
   NT=$($PY -c "import numpy as np,sys;sys.path.insert(0,'src');from ncrna_annot.features import generanno as G;print(len(G.chromosome_tiles(len(np.load('$C',mmap_mode='r')))))")
   for ((k=0; k<NT; k+=TILE_STEP)); do k1=$((k+TILE_STEP)); [ $k1 -gt $NT ] && k1=$NT
     run_shard $(printf "%s_t%05d_%05d" $name $k $k1) --kind chrom --name $name --codes $C --tiles $k:$k1 || fails=$((fails+1)); done
 done
+[ "$CHROM_ONLY" = 1 ] && { du -sh $FEAT | log "cache size: $(cat)"; log "ALL DONE fails=$fails wall_s=$((SECONDS-T0))"; exit 0; }
 $PY - <<PY
 import json, glob, os, time
 js = [json.load(open(f)) for f in glob.glob("$DONE/*.json")]
