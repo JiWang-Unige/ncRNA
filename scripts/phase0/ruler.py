@@ -305,7 +305,8 @@ def score_class(cls, truth, preds, index, boot_n):
         for ex in g["tx"].values():
             if len(ex) > 1:
                 chain2gene[(g["strand"], introns(_merge(ex)))] = gid
-    multi_genes = set(chain2gene.values())
+    multi = set(chain2gene.values())
+    multi_genes = [gid for gid in tgenes if gid in multi]  # truth order, as sn_vec (set order follows PYTHONHASHSEED)
     got, pm, pm_len = set(), [], []
     for p, nv in zip(cpreds, pred_novel):
         if len(p["exons"]) < 2:
