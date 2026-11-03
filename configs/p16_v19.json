@@ -1,0 +1,240 @@
+{
+ "protocol": "PHASE1_PROTOCOL.md section 5 P1.6 (zero-shot panel, descriptive); decoding of section 16 (v1.9)",
+ "previous": {
+  "config": "configs/p15_v19b.json",
+  "config_sha256": "a58a7e74b5f424ca8ef32f4226e0612718328bf6a030b2dbec460d30443d0996"
+ },
+ "out_dir": "outputs/PHASE1/P16",
+ "code_commit": "89cbf71",
+ "created": "2026-11-03T07:28:37Z",
+ "decode": {
+  "posteriors": "exact (float64 CPU forward-backward per tile, chrom.chromosome_marginals exact=True)",
+  "checkpoint": "uniform weight average of epochs 10-12",
+  "mode": "mea",
+  "level": "exon",
+  "delta": 0.0001,
+  "gamma": 3.0,
+  "tau": 0.6,
+  "min_exon": 20,
+  "min_intron": 50,
+  "lnc_min_len": 200,
+  "transitions": "allowed transitions of g1.G1Transitions() (mea_duration scores none)"
+ },
+ "main": {
+  "family": "G1B",
+  "runs": {
+   "42": "g1b-42-ke",
+   "123": "g1b-123-ke",
+   "456": "g1b-456-ke"
+  }
+ },
+ "runs": {
+  "g1b-42-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 42,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/g1b-42-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/g1b-42-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/g1b-42-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "52eef64009507977ccbca254af978b13792b43803b3de4bc03b1f5b8d34b9d5a",
+    "334962239dc86335f6782ce3489e8ead22aeb312d2d40b3890c8e050014ea7be",
+    "7fd4d75fbab57da9046690ecf0b1d7bd5737b70920bc3f1bff49f90465b5ec3e"
+   ]
+  },
+  "g1b-123-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 123,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/g1b-123-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/g1b-123-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/g1b-123-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "adfd9b3ed6cb1103460bdbac63ac5744048483f9f3646e1a2abdb60ca5055c10",
+    "37e23f577b8a251a225a161af5fa517ea390fcbb99d94a44b77bf04bd9f71fdf",
+    "43c9aa37067fcd1b327bd26f9868f95f65f78441d28ccbc6114eefcddbf36633"
+   ]
+  },
+  "g1b-456-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 456,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/g1b-456-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/g1b-456-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/g1b-456-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "f069442fc10c330c3d23f1c305a547cd7b45e07827b7209c2ebb99e0e479004f",
+    "a136cfd6c01a0959ad77c7fb757dc7bec74a5781c53bb4f2e4b069c7f840b7a1",
+    "19c14819bcb4a4c79b8484b336d36615167db68a74e0f7fa4fd8e6fa254d45db"
+   ]
+  }
+ },
+ "chr18_reference": {
+  "g1b-42-ke": {
+   "read": "outputs/PHASE1/P15b/chr18/g1b-42-ke",
+   "post_sha256": "adee7ecc13b8faf496b78e9a8c8fc4763d98cb91ca85a405ab71580f15251598",
+   "genes_sha256": "e5df5b83ce10dc97b40a5e4a8ec97b986d7eb3e83af8cbc2bac9cd60c3fdfa79"
+  },
+  "g1b-123-ke": {
+   "read": "outputs/PHASE1/P15b/chr18/g1b-123-ke",
+   "post_sha256": "ecdc0e5bec70d1930fd34fa26d41ec02807450f38298dfaf98679e846c31bbbe",
+   "genes_sha256": "752a5e98c75ffcb19ed7dba2f246188b8ee94e00525e0dee232755b8f7890aaa"
+  },
+  "g1b-456-ke": {
+   "read": "outputs/PHASE1/P15b/chr18/g1b-456-ke",
+   "post_sha256": "6f135cb8da503d591a2d60e13b2c6c8e8931948fb0d2444e99e9c40ec0be4b54",
+   "genes_sha256": "99d43c04164c8b627ea8dc6c9821dfc15e788ed18746a6cbb91fd4fca1a9cdd7"
+  }
+ },
+ "targets": {
+  "chr18": {
+   "feats": "data/p1_feat/chr18.npy",
+   "cover": "data/p1_feat/chr18.cover.json",
+   "tiles": 3926,
+   "codes": "data/p1/chr18_codes.npy",
+   "truth": "outputs/PHASE1/DIAG_L2/chr18_v50.gtf",
+   "truth_chrom": "chr18",
+   "seqid": "chr18",
+   "runs": [
+    "g1b-123-ke",
+    "g1b-42-ke",
+    "g1b-456-ke"
+   ]
+  },
+  "chicken_5": {
+   "feats": "data/p1_feat/chicken_5.npy",
+   "cover": "data/p1_feat/chicken_5.cover.json",
+   "tiles": 2907,
+   "codes": "data/p1/chicken_5_codes.npy",
+   "codes_meta": {
+    "name": "chicken_5",
+    "seqid": "5",
+    "header": ">5",
+    "length": 59506338,
+    "n_frac": 0.00025698102948294347,
+    "fasta": "data/chicken/5.fa",
+    "fasta_md5": "047c8d8de0cdb807155417437736f758"
+   },
+   "truth": "data/chicken/Gallus_gallus.bGalGal1.mat.broiler.GRCg7b.116.gtf.gz",
+   "truth_chrom": "5",
+   "seqid": "5",
+   "runs": [
+    "g1b-123-ke",
+    "g1b-42-ke",
+    "g1b-456-ke"
+   ]
+  },
+  "zebrafish_22": {
+   "feats": "data/p1_feat/zebrafish_22.npy",
+   "cover": "data/p1_feat/zebrafish_22.cover.json",
+   "tiles": 1912,
+   "codes": "data/p1/zebrafish_22_codes.npy",
+   "codes_meta": {
+    "name": "zebrafish_22",
+    "seqid": "22",
+    "header": ">22",
+    "length": 39133080,
+    "n_frac": 0.002228881549829454,
+    "fasta": "data/zebrafish/22.fa",
+    "fasta_md5": "f0c44ca712a10a0907d6f2873decf0ce"
+   },
+   "truth": "data/zebrafish/Danio_rerio.GRCz11.116.gtf.gz",
+   "truth_chrom": "22",
+   "seqid": "22",
+   "runs": [
+    "g1b-123-ke",
+    "g1b-42-ke",
+    "g1b-456-ke"
+   ]
+  },
+  "fly_2L": {
+   "feats": "data/p1_feat/fly_2L.npy",
+   "cover": "data/p1_feat/fly_2L.cover.json",
+   "tiles": 1149,
+   "codes": "data/p1/fly_2L_codes.npy",
+   "codes_meta": {
+    "name": "fly_2L",
+    "seqid": "2L",
+    "header": ">2L",
+    "length": 23513712,
+    "n_frac": 8.505675326805058e-06,
+    "fasta": "data/fly/2L.fa",
+    "fasta_md5": "0d699fc9cde33df5830dd0785166b5be"
+   },
+   "truth": "data/fly/Drosophila_melanogaster.BDGP6.54.63.gtf.gz",
+   "truth_chrom": "2L",
+   "seqid": "2L",
+   "runs": [
+    "g1b-123-ke",
+    "g1b-42-ke",
+    "g1b-456-ke"
+   ]
+  },
+  "worm_I": {
+   "feats": "data/p1_feat/worm_I.npy",
+   "cover": "data/p1_feat/worm_I.cover.json",
+   "tiles": 737,
+   "codes": "data/p1/worm_I_codes.npy",
+   "codes_meta": {
+    "name": "worm_I",
+    "seqid": "I",
+    "header": ">I",
+    "length": 15072434,
+    "n_frac": 0.0,
+    "fasta": "data/worm/I.fa",
+    "fasta_md5": "ee545f64f70c72622216614081c81237"
+   },
+   "truth": "data/worm/Caenorhabditis_elegans.WBcel235.63.gtf.gz",
+   "truth_chrom": "I",
+   "seqid": "I",
+   "runs": [
+    "g1b-123-ke",
+    "g1b-42-ke",
+    "g1b-456-ke"
+   ]
+  }
+ },
+ "code_files": {
+  "scripts/phase1/p15_read.py": "8aad1d33d195cc6b1b2bce0cd6fcb6212191b90a7d876110321ae195e7887436",
+  "scripts/phase1/p16_read.py": "8f0f754bb05b30f363a11fac020250b4d16a3e3718555c7ea07f9cfdaee6aef0",
+  "src/ncrna_annot/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/evidence.py": "f342c83f6e938b14a4da293d198fe20f14ec7afbde4686a0da4efa10eaa57a9d",
+  "src/ncrna_annot/data/labels.py": "0f2e206547f6c091c760849592b16c66a8569c0eee632415c57967cde6ac5f87",
+  "src/ncrna_annot/decode/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/decode/chrom.py": "e326772c08d16916aedc27f30d4827d20de47fee6b97020a2012e02d9a62a0b3",
+  "src/ncrna_annot/decode/g2cand.py": "546de0b37607ac79cc1e41568454a45a88cb30eda7a3519238fd068d01a33a36",
+  "src/ncrna_annot/decode/genes.py": "c24c3cc9719c681222e1ac06cad06d62bac410cd3519ea23f7868517a93b7161",
+  "src/ncrna_annot/decode/scratch.py": "707cf4797b1dd0ccffd29af9f656c6dd510c4dc59c7777bd7f25d2a8c1ab8a54",
+  "src/ncrna_annot/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/eval/prcurve.py": "8b72a6a0fafa469e657d48fde8fb9b3db3f2f312bc77fbd243cb68b51779604a",
+  "src/ncrna_annot/eval/ruler.py": "4d482d4b1541109dd438f385df97c7cb57f5bfdbd2f5485f2f4f6a8e426dc427",
+  "src/ncrna_annot/features/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/features/generanno.py": "57ed6c2d08c8b2893075a5e5d3df3e2b67542f4f7edd0aa6e28fd8ed7e345b41",
+  "src/ncrna_annot/features/online.py": "a9d8d1dd3f3404b8ee1fc78ededa5ebf5c372f6c5ebcf91e5ccf3be4bd2b47d3",
+  "src/ncrna_annot/grammar/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/grammar/g1.py": "8ca4b80c6f4417112e559320be65ca04f844be1ab5763b1b75e65045f2f8099c",
+  "src/ncrna_annot/grammar/g2.py": "4263179662a4a2551cfe3af64e17ec75a7a2c976099731889e05256936cd0e25",
+  "src/ncrna_annot/grammar/g2ph.py": "5532c90f68d3e04a4753687f5179c23d0fe1cdbf85b2b620045879dee753a161",
+  "src/ncrna_annot/heads/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/heads/c0.py": "d1abdc1ef7e43903bac68209fdbbd0a1e196509016f935f85748ed7796b154b9",
+  "src/ncrna_annot/train/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/train/loop.py": "ebcdebc303587af06f7dbc801f530dd2421045ac8811c568997be73412326486",
+  "src/ncrna_annot/train/screen.py": "7a8841d2acddd1594536ddc89a0602517d7b49fda9cb0c5e08b9a1855ba92fb7",
+  "src/ncrna_annot/train/screen2.py": "0d27213751148b41db87cc9aadba03fbc1e8c2689e595b4f3b1ac593e133b31b",
+  "src/ncrna_annot/train/screen_g1b.py": "26f66756664e0c26c44df6148444ee394f183f13931072e73dd832036379679f",
+  "src/ncrna_annot/train/screen_g2ph.py": "719b74f3e867b91ecb54d82acd13cb288c651dffff4bc4775bc0e7980befaa5d"
+ }
+}
