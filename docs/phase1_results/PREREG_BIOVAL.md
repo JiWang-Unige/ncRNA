@@ -1,6 +1,8 @@
-# 预注册：chr20 上 GENCODE v50 之外的候选 lnc 有没有转录证据（草案）
+# 预注册：chr20 上 GENCODE v50 之外的候选 lnc 有没有转录证据（冻结版）
 
-> 状态：**草案，2026-11-03**。数据源与下载等看板决定卡 `bioval-data`；任何证据数据下载或打开之前，本文件定稿并提交（记 commit），之后不改判据。
+> 状态：**冻结，2026-11-03**。用户 11-03 下午在对话中回复「按照推荐推进」，即决定卡 `bioval-data` 第一项（下载最小集，冻结后分析）。本文件提交后（commit 记在协议记录与看板）才下载证据数据。
+> 下载后只计算文件大小与 sha256，写进 `docs/phase1_results/BIOVAL/MANIFEST.json` 并提交，之后才打开文件内容。此后判据不改。
+> 草案（9abecd2）到本版的改动都在看任何证据之前：写死下载地址与 Snaptron 查询；补坐标约定的核对方法、阳性参照的口径、取不到数据时的处理，以及分析代码与输出位置。
 > 来源：用户 2026-11-03 在决定卡 `p15-next` 上的决定，第 ③ 条：「判据预先写定，结果不回流到模型选择」。
 
 ## 1. 目的与边界
@@ -20,13 +22,13 @@
 
 ## 3. 证据与判据（看证据前写定）
 
-数据源（待决定卡 `bioval-data` 批准；定稿时写死版本与文件 sha256）：
-- FANTOM5 hg38 CAGE peaks（phase 1+2，`hg38_fair+new_CAGE_peaks_phase1and2.bed.gz`）
-- PolyASite 2.0（`atlas.clusters.2.0.GRCh38.96.tsv.gz`）
-- Snaptron `gtexv2` 的 chr20 剪接 junction（REST 按区间查询）
-- GTEx v9 长读长 FLAIR 转录本（`flair_filter_transcripts.gtf.gz`）
-- CHESS 3.1.3（`chess3.1.3.GRCh38.gtf.gz`）
-- 「别处已知」标签，不算独立证据：LncBook 2.1、RNAcentral GRCh38
+数据源（下载地址写死；版本以文件 sha256 为准，写进 MANIFEST.json）：
+- S1：FANTOM5 hg38 CAGE peaks（phase 1+2）：`https://fantom.gsc.riken.jp/5/datafiles/reprocessed/hg38_latest/extra/CAGE_peaks/hg38_fair+new_CAGE_peaks_phase1and2.bed.gz`（HEAD：5,500,816 B，2017-10-27）
+- S3：PolyASite 2.0：`https://polyasite.unibas.ch/download/atlas/2.0/GRCh38.96/atlas.clusters.2.0.GRCh38.96.tsv.gz`（HEAD：50,621,563 B，2020-04-22；染色体名无 chr 前缀）
+- S2：Snaptron `gtexv2` 的 chr20 剪接 junction。按 1 Mb 窗口查询 `https://snaptron.cs.jhu.edu/gtexv2/snaptron?regions=chr20:<s>-<e>&rfilter=samples_count>:5&fields=snaptron_id,chromosome,start,end,length,strand,annotated,left_motif,right_motif,samples_count,coverage_sum`，窗口覆盖整条 chr20（不按候选取区间，避免按结果取数），按 snaptron_id 去重。
+- S4：GTEx v9 长读长 FLAIR 转录本 `https://storage.googleapis.com/adult-gtex/long-read-data/v9/long-read-RNA-seq/flair_filter_transcripts.gtf.gz`（HEAD：14,022,086 B，2023-12-08）；CHESS 3.1.3 `https://github.com/chess-genome/chess/releases/download/v.3.1.3/chess3.1.3.GRCh38.gtf.gz`（HEAD：19,980,963 B，2024-07-31）
+- 「别处已知」标签，不算独立证据：LncBook 2.1 `https://ngdc.cncb.ac.cn/lncbook/files/lncRNA_LncBookv2.1_GRCh38.gtf.gz`；RNAcentral 当前版 `https://ftp.ebi.ac.uk/pub/databases/RNAcentral/current_release/genome_coordinates/bed/homo_sapiens.GRCh38.bed.gz`（版本号取同目录 release_notes.txt，记进 MANIFEST）。
+- 某个来源下载失败（重试 3 次）时：该项记为「不可得」，其余照常；主终点中缺的那项按不支持计，并在结果里写明。
 
 | 编号 | 证据 | 支持条件（主分析） | 敏感性分析 |
 |---|---|---|---|
@@ -48,6 +50,24 @@
 - **统计**：报告候选支持率、对照支持率、二者之比，以及单侧经验 p 值。p 值 = 100 次对照（每次给全部候选各放一个）中支持率 ≥ 观察值的比例。
 - **阳性参照**：同一套判据用于 chr20 上 v50 的 lnc 基因，以及 τ* 之后命中 v50 lnc 的预测（真阳性）。
   - GENCODE 自己就用 CAGE、polyA 和长读长做佐证，所以 v50 之外的候选支持率预计低于已注释 lnc。这是选择效应，判读时说明。
+
+## 4b. 坐标约定与核对（只用 v50，不看候选）
+
+- 预测与 v50 都用 ruler 的 1-based 闭区间坐标；内含子 (s, e) 为第一个和最后一个内含子碱基。
+- Snaptron 的 start / end 按同一约定（第一个和最后一个内含子碱基）。核对：chr20 上 v50 所有转录本的内含子中，能在 Snaptron 结果里找到坐标完全一致 junction 的比例，在偏移 −1、0、+1 下各算一次；取比例最高的偏移，并要求它比另外两个高出一倍以上，否则停下来报告。这一步只用 v50 内含子。
+- CAGE：BED thickStart 为 0-based，代表 TSS = thickStart + 1。PolyASite：代表位点列 `rep`（0-based）+ 1。S1 / S3 窗口为 ±500 bp，1 bp 的偏差不影响判定。
+- 候选的 TSS = 转录方向的 5′ 端（+ 链取最小坐标，− 链取最大坐标），TES = 3′ 端。
+
+## 4c. 阳性参照的口径
+
+- 对象：chr20 上 v50 的 lnc 基因（所有转录本合并成一个基因跨度与外显子集合），以及 τ* 之后命中 v50 lnc 的预测（真阳性）。
+- 判据与候选相同，只去掉两个「不属于 v50」的排除条件：S2 允许 junction 是 v50 已注释内含子，S4 允许转录本与 v50 相同。否则阳性参照会按定义为 0。
+
+## 4d. 代码与输出
+
+- 下载：`scripts/phase1/bioval_fetch.sh`（ont，nice 19；只下载与计算 sha256，不读内容）。
+- 分析：`scripts/phase1/bioval.py`（CPU，nice 19）。输出 `outputs/PHASE1/BIOVAL/RESULT.json`，汇总写进 `docs/phase1_results/RESULT_BIOVAL.md`。
+- 随机对照的放置：先选位置（均匀、排除 N 区、不与任何 seed 的任何预测位点重叠、满足分层的区域条件），整套外显子结构平移过去，链随机；同一候选 100 次，numpy `default_rng(0)`，候选按 seed、染色体坐标排序后依次放置。
 
 ## 5. 不允许的事
 
