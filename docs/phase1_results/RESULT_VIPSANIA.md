@@ -111,7 +111,12 @@
 - 显存上限：用 `tf.config.set_logical_device_configuration` 设 7,000 MiB，在任何 GPU 操作之前设置。
   - 加上 CUDA 上下文，nvidia-smi 显示 7,410 MiB，比 30% 上限（24,564 MiB 的 30% = 7,369 MiB）多 41 MiB。
   - 以后同类任务把上限设为 6,800 MiB。
-- 同时在卡上的其他进程最多占 7.6 GB（coding-rna），卡上合计峰值 15.0 GB。TE 的 Vipsania 任务在 win3090 上跑，没有冲突。
+- **违反资源规则，事后发现**：同时在卡上的还有 coding-rna 的 M34 训练（5.0 GB），以及 **TE 的 Tiberius**。
+  - TE 的 Tiberius 在 Apptainer 容器里跑（PHASE1-TIBV2，每个约 2.6 GB、3–4 分钟，连续多个）。卡上合计峰值 15.0 GB。
+  - 我们的 gpu_gate.sh 只认 `ab-initio-TE` 等路径，而容器里的进程只显示 `/work/te/`，所以闸门没拦，本队列与 TE 共用 GPU 约 2 小时（21:08–23:11 CET）。
+  - 这违反了「TE 任务运行期间请不要再占 GPU」。TE 没有被阻塞：这期间 TE 的日志里没有显存错误，TE 新产出 15 个 GTF。但它的速度可能被拖慢，没有量化。
+  - 已修：闸门加上 `/work/te`，并把父进程是 Apptainer / Singularity 的 GPU 进程一律当作 TE。已在 ont 上对当前运行的 TE Tiberius 测试，能拦住。
+  - TE 自己的 Vipsania 任务在 win3090 上跑，与此无关。
 - CPU 限制为 nice 19、核 2–31、≤ 8 线程。
 
 ## 7. 对论文和 v2.0 的影响
