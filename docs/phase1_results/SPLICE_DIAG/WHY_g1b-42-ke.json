@@ -1,0 +1,118 @@
+{
+ "w=0": {
+  "n_pred_lnc": 364,
+  "pred_exon_count": {
+   "1": 15,
+   "2": 73,
+   "3": 58,
+   "4": 41,
+   "5": 177
+  },
+  "pred_single_exon_frac": 0.04120879120879121,
+  "truth_detected": 250,
+  "truth_detected_multi_exon": 241,
+  "truth_detected_exon_count_longest_tx": {
+   "1": 9,
+   "2": 76,
+   "3": 57,
+   "4": 38,
+   "5": 70
+  },
+  "detected_multi_with_any_exact_intron": 0.0954356846473029,
+  "detected_multi_with_full_chain": 0.004149377593360996,
+  "pred_introns_on_hit_genes": {
+   "neither": 1186,
+   "right_only": 99,
+   "left_only": 71,
+   "exact": 24,
+   "both_ends_elsewhere": 2
+  }
+ },
+ "w0.5": {
+  "n_pred_lnc": 507,
+  "pred_exon_count": {
+   "1": 15,
+   "2": 70,
+   "3": 83,
+   "4": 49,
+   "5": 290
+  },
+  "pred_single_exon_frac": 0.029585798816568046,
+  "truth_detected": 302,
+  "truth_detected_multi_exon": 294,
+  "truth_detected_exon_count_longest_tx": {
+   "1": 8,
+   "2": 95,
+   "3": 72,
+   "4": 46,
+   "5": 81
+  },
+  "detected_multi_with_any_exact_intron": 0.4421768707482993,
+  "detected_multi_with_full_chain": 0.013605442176870748,
+  "pred_introns_on_hit_genes": {
+   "right_only": 264,
+   "neither": 1822,
+   "left_only": 255,
+   "exact": 246,
+   "both_ends_elsewhere": 38
+  }
+ },
+ "w1": {
+  "n_pred_lnc": 997,
+  "pred_exon_count": {
+   "1": 11,
+   "2": 86,
+   "3": 132,
+   "4": 95,
+   "5": 673
+  },
+  "pred_single_exon_frac": 0.011033099297893681,
+  "truth_detected": 399,
+  "truth_detected_multi_exon": 388,
+  "truth_detected_exon_count_longest_tx": {
+   "1": 11,
+   "2": 126,
+   "3": 95,
+   "4": 60,
+   "5": 107
+  },
+  "detected_multi_with_any_exact_intron": 0.5309278350515464,
+  "detected_multi_with_full_chain": 0.005154639175257732,
+  "pred_introns_on_hit_genes": {
+   "neither": 4395,
+   "right_only": 502,
+   "left_only": 495,
+   "exact": 394,
+   "both_ends_elsewhere": 31
+  }
+ },
+ "oracle": {
+  "n_pred_lnc": 415,
+  "pred_exon_count": {
+   "1": 33,
+   "2": 108,
+   "3": 90,
+   "4": 52,
+   "5": 132
+  },
+  "pred_single_exon_frac": 0.07951807228915662,
+  "truth_detected": 355,
+  "truth_detected_multi_exon": 353,
+  "truth_detected_exon_count_longest_tx": {
+   "1": 2,
+   "2": 85,
+   "3": 100,
+   "4": 60,
+   "5": 108
+  },
+  "detected_multi_with_any_exact_intron": 0.7478753541076487,
+  "detected_multi_with_full_chain": 0.1671388101983003,
+  "pred_introns_on_hit_genes": {
+   "exact": 772,
+   "neither": 77,
+   "right_only": 63,
+   "left_only": 81,
+   "both_ends_elsewhere": 170
+  }
+ }
+}
