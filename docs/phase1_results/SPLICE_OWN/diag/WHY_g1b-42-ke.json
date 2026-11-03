@@ -1,0 +1,89 @@
+{
+ "w=0": {
+  "n_pred_lnc": 364,
+  "pred_exon_count": {
+   "1": 15,
+   "2": 73,
+   "3": 58,
+   "4": 41,
+   "5": 177
+  },
+  "pred_single_exon_frac": 0.04120879120879121,
+  "truth_detected": 250,
+  "truth_detected_multi_exon": 241,
+  "truth_detected_exon_count_longest_tx": {
+   "1": 9,
+   "2": 76,
+   "3": 57,
+   "4": 38,
+   "5": 70
+  },
+  "detected_multi_with_any_exact_intron": 0.0954356846473029,
+  "detected_multi_with_full_chain": 0.004149377593360996,
+  "pred_introns_on_hit_genes": {
+   "neither": 1186,
+   "right_only": 99,
+   "left_only": 71,
+   "exact": 24,
+   "both_ends_elsewhere": 2
+  }
+ },
+ "w0.5": {
+  "n_pred_lnc": 552,
+  "pred_exon_count": {
+   "1": 15,
+   "2": 74,
+   "3": 79,
+   "4": 57,
+   "5": 327
+  },
+  "pred_single_exon_frac": 0.02717391304347826,
+  "truth_detected": 315,
+  "truth_detected_multi_exon": 304,
+  "truth_detected_exon_count_longest_tx": {
+   "1": 11,
+   "2": 101,
+   "3": 76,
+   "4": 48,
+   "5": 79
+  },
+  "detected_multi_with_any_exact_intron": 0.42105263157894735,
+  "detected_multi_with_full_chain": 0.009868421052631578,
+  "pred_introns_on_hit_genes": {
+   "right_only": 299,
+   "neither": 2358,
+   "left_only": 270,
+   "exact": 229,
+   "both_ends_elsewhere": 28
+  }
+ },
+ "w1": {
+  "n_pred_lnc": 1230,
+  "pred_exon_count": {
+   "1": 8,
+   "2": 84,
+   "3": 129,
+   "4": 130,
+   "5": 879
+  },
+  "pred_single_exon_frac": 0.0065040650406504065,
+  "truth_detected": 421,
+  "truth_detected_multi_exon": 403,
+  "truth_detected_exon_count_longest_tx": {
+   "1": 18,
+   "2": 138,
+   "3": 100,
+   "4": 57,
+   "5": 108
+  },
+  "detected_multi_with_any_exact_intron": 0.5260545905707196,
+  "detected_multi_with_full_chain": 0.009925558312655087,
+  "pred_introns_on_hit_genes": {
+   "right_only": 586,
+   "exact": 401,
+   "neither": 6794,
+   "left_only": 586,
+   "both_ends_elsewhere": 27
+  }
+ }
+}

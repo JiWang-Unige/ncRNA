@@ -1,0 +1,61 @@
+{
+ "baseline": {
+  "auprc_lnc": 0.14108517358700418,
+  "n_lnc": 570.6666666666666,
+  "lnc_L1_sn": 0.28561176892716184,
+  "lnc_L1_pr": 0.44229542295155905,
+  "lnc_L2_sn": 0.0003996802557953637,
+  "lnc_L3_sn": 0.0024263886156469278,
+  "lnc_L3_pr": 0.006120098685938331,
+  "lnc_L4_sn": 0.007028830116750061,
+  "n_mrna": 371.0,
+  "mrna_L1_sn": 0.9200998751560548,
+  "mrna_L2_sn": 0.05167958656330749,
+  "mrna_L3_sn": 0.16699222989104487,
+  "mrna_L3_pr": 0.5108309999201207,
+  "g1": 6.333333333333333,
+  "g2": 8.0
+ },
+ "w": {
+  "0.5": {
+   "lnc_L3_sn": 0.052790346907993974,
+   "lnc_L2_sn": 0.00759392486011191,
+   "lnc_L1_sn": 0.3745963401506997,
+   "lnc_L1_pr": 0.41811756888273344,
+   "all_seeds_rise": {
+    "lnc_L3_sn": true,
+    "lnc_L2_sn": true
+   },
+   "structure": false,
+   "guard": true,
+   "effective": false
+  },
+  "1": {
+   "lnc_L3_sn": 0.10171158764509147,
+   "lnc_L2_sn": 0.007993605115907274,
+   "lnc_L1_sn": 0.5536419088625762,
+   "lnc_L1_pr": 0.33742423202277866,
+   "all_seeds_rise": {
+    "lnc_L3_sn": true,
+    "lnc_L2_sn": true
+   },
+   "structure": true,
+   "guard": false,
+   "effective": false
+  },
+  "2": {
+   "lnc_L3_sn": 0.09731785690864975,
+   "lnc_L2_sn": 0.00959232613908873,
+   "lnc_L1_sn": 0.7735916756368856,
+   "lnc_L1_pr": 0.202020039491687,
+   "all_seeds_rise": {
+    "lnc_L3_sn": true,
+    "lnc_L2_sn": true
+   },
+   "structure": false,
+   "guard": false,
+   "effective": false
+  }
+ },
+ "effective": false
+}

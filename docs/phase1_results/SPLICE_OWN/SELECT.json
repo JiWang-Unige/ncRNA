@@ -1,0 +1,20 @@
+{
+ "rule": "best chr22 lnc AP epoch per variant, then the better variant",
+ "variants": {
+  "s10k": {
+   "epoch": 9,
+   "lnc_ap": 0.2556487582898418,
+   "mrna_ap": 0.6586692796282515,
+   "ckpt": "outputs/PHASE1/SPLICE_OWN/s10k/ep09.pt"
+  },
+  "s2k": {
+   "epoch": 9,
+   "lnc_ap": 0.22863351479258567,
+   "mrna_ap": 0.6261636913378825,
+   "ckpt": "outputs/PHASE1/SPLICE_OWN/s2k/ep09.pt"
+  }
+ },
+ "selected": "s10k",
+ "ckpt": "outputs/PHASE1/SPLICE_OWN/s10k/ep09.pt",
+ "ckpt_sha256": "7a57b8c8fa59108ef8c9c0a02953033c12503c91b152e2ce1e05c03d64f7c1f9"
+}

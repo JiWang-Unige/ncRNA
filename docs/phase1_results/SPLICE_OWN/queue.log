@@ -1,0 +1,15 @@
+2026-11-03T13:32:14Z START
+2026-11-03T13:51:58Z train_s2k rc=0
+2026-11-03T14:42:13Z train_s10k rc=0
+2026-11-03T14:42:13Z selected "selected": "s10k"
+2026-11-03T14:43:44Z score_chr18 rc=0
+2026-11-03T15:00:46Z diag_g1b-42-ke_w1 rc=0
+2026-11-03T15:20:55Z diag_g1b-123-ke_w1 rc=0
+2026-11-03T15:20:59Z diag_g1b-42-ke_w2 rc=0
+2026-11-03T15:41:34Z diag_g1b-456-ke_w1 rc=0
+2026-11-03T15:41:51Z diag_g1b-456-ke_w2 rc=0
+2026-11-03T15:41:56Z diag_g1b-123-ke_w2 rc=0
+2026-11-03T15:42:59Z diag_g1b-42-ke_w0.5 rc=0
+2026-11-03T15:58:56Z diag_g1b-123-ke_w0.5 rc=0
+2026-11-03T16:00:04Z diag_g1b-456-ke_w0.5 rc=0
+2026-11-03T16:00:12Z QUEUE_END effective="effective": false
