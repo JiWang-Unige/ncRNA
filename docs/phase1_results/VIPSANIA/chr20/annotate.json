@@ -1,0 +1,9 @@
+{
+ "chrom": "chr20",
+ "model": "etb1go6q",
+ "T": 200000,
+ "B": 2,
+ "gpu_mb_cap": 7000,
+ "peak_gib": 4.67,
+ "seconds": 661
+}

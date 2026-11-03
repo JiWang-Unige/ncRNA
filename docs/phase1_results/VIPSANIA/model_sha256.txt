@@ -1,0 +1,2 @@
+0330af8f227d0e79eda1de395085d3db38136ca017283e7a314848a027ef4059  ext/vipsania_models/etb1go6q/config.json
+42555b19385dfd7c5772876b10ffb52b87d79bcfccb5950a99a6603913a7f5a8  ext/vipsania_models/etb1go6q/latest_checkpoint.weights.h5

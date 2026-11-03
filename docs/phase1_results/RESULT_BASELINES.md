@@ -37,6 +37,7 @@
 | GENATATOR | 83 | 0.028 | 0.422 | 0.486 | 0.012 | 0.159 / 0.005 | 1,103 | 0.967 | 0.951 | 0.708 | 0.858 / 0.349 | 34 / 46 |
 | Tiberius | — | — | — | — | — | — | 565 | 0.964 | 0.917 | 0.557 | 0.934 / 0.335 | 15 / 18 |
 | Helixer（偏乐观） | — | — | — | — | — | — | 531 | 0.920 | 0.940 | 0.245 | 0.604 / 0.310 | 14 / 18 |
+| Vipsania（无监督，11-03 晚另加） | — | — | — | — | — | — | 510 | 0.911 | 0.863 | 0.408 | 0.901 / 0.290 | 20 / 17 |
 | **SegmentNT 0.5，两链（主读数）** | 1,235 | 0.108 | 0.113 | 0.670 | 0.000 | 0.006 / 0.001 | 109,984 | 0.931 | 0.025 | 0.113 | 0.397 / 0.284 | 240 / 2,811 |
 | SegmentNT 0.5，只留定链 | 21 | 0.010 | 0.476 | 0.667 | 0.000 | 0.019 / 0.001 | 466 | 0.807 | 0.938 | 0.113 | 0.472 / 0.282 | 22 / 21 |
 | SegmentNT 0.3，两链 | 2,379 | 0.174 | 0.089 | 0.599 | 0.000 | 0.003 / 0.002 | 121,309 | 0.914 | 0.021 | 0.040 | 0.234 / 0.252 | 282 / 2,984 |
@@ -50,7 +51,8 @@
   - SegmentNT 主读数 lnc L1 Sn [0.089, 0.129]、严格 Pr [0.096, 0.131]；
   - Tiberius mRNA L1 Sn [0.947, 0.978]、严格 Pr [0.894, 0.940]、L2 [0.513, 0.600]；
   - Helixer mRNA L1 Sn [0.896, 0.942]、严格 Pr [0.919, 0.959]、L2 [0.208, 0.281]。
-- Tiberius 和 Helixer 不预测 lnc，lnc 各栏不报。
+- Tiberius、Helixer 和 Vipsania 不预测 lnc，lnc 各栏不报。
+- Vipsania 一行不在 `PREREG_BASELINES.md` 里，是按决定卡 `vipsania-ref`（11-03 晚）另加的。同样在 chr20 上只跑一次、不调参、用同一把尺子。95% CI：L1 Sn [0.885, 0.934]，严格 Pr [0.833, 0.892]，L2 [0.366, 0.451]。详见 `RESULT_VIPSANIA.md`。
 - Helixer 的 L1 Sn 与 Phase 0 用 ruler v1.2 打出的 0.920 一致。
 
 ## 2. 运行记录
@@ -60,6 +62,7 @@
 | Tiberius | GitHub commit b3ea48f2；模型 `mammalia_nosofttmasking_v2`，权重包 sha256 f57551eb；TensorFlow 2.17.1 | ont 4090，18.7 分钟，batch 2，显存峰值约 8.7 GB | 显存略超本项目 30% 上限（约 7.3 GB），已记录。162 个块、27 个重新预测。输出 565 个转录本，只有 CDS，没有 UTR。 |
 | SegmentNT | Hugging Face `InstaDeepAI/segment_nt` revision 1048ad86，`pytorch_model.bin` sha256 813407b3；generanno 环境（transformers 4.49） | ont 4090，4,218 个窗口，4,470 秒，显存 5.84 GB | chr20 有 89 个不含 N 的片段，其中 34 个 ≥ 30 kb 被运行；未运行的非 N 碱基共 459,931 bp（0.7%），概率记 0。只跑正向。 |
 | Helixer | Phase 0 的 `vertebrate_v0.3` 输出（`data/baselines/human/helixer_vertebrate_v0.3_chr20.gff3`），没有重跑 | 只重新打分（`scripts/phase1/helixer_score.py`） | 人类在其训练 / 验证集里，偏乐观。531 个转录本，含 UTR。 |
+| Vipsania | pip 包 vipsania，Vertebrata 模型 etb1go6q（权重 sha256 42555b19）；独立环境 `~/envs/vipsania_ncrna` | ont 4090，661 秒，T = 200 kb，B = 2，显存 5.24 GB | 预训练，不微调。510 个转录本，只有 CDS。 |
 
 - 打分：`tiberius_score.py`、`helixer_score.py`、`segnt_chr20.py decode`，都用 `p15_score.score_preds`，`PYTHONHASHSEED=0`。
 - SegmentNT 的训练标签是 GENCODE v44，我们的真值是 v50；两者在 chr20 上的差别没有单独统计。
