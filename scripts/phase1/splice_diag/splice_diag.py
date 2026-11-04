@@ -9,6 +9,10 @@ log-potential on the intron boundary states, no retraining:
 (SpliceAI as an independent expert with its prior divided out); the same bonus for the mRNA and the lnc states.
 --oracle replaces s by the chr18 truth splice sites (1 at every lnc / mRNA truth site, 1e-6 elsewhere): the
 decoder's ceiling with perfect splice information.  w = 0 must reproduce the P1.5 chr18 posteriors bit for bit.
+--span-oracle (S1b, PLAN_S1B.md; card subjournal-portfolio 2026-11-04) forbids the lnc states of strand s outside the
+v50 lnc gene spans of strand s (span = first to last exon base over all isoforms): NEG is added to their emissions, so
+the posteriors are those conditioned on known lnc gene boundaries.  mRNA and IG states are untouched.  Combined with
+--oracle it gives the structure ceiling with both boundaries and splice sites known.
 
   splice_diag.py --run g1b-42-ke --w 1 --sai outputs/PHASE1/SPLICE_DIAG/sai_chr18.npy --out outputs/PHASE1/SPLICE_DIAG/g1b-42-ke_w1
 
@@ -80,8 +84,20 @@ def oracle_scores(truth, L):
     return sc
 
 
-def posteriors(run, ck, feats, codes, bonus, device):
-    """p15_read.posteriors with `bonus` added to the boundary-state emissions."""
+def span_mask(truth, L):
+    """[L, 2] float32: 0 inside a v50 lnc gene span of strand (+, -), g1.NEG outside."""
+    m = np.full((L, 2), g1.NEG, np.float32)
+    for g in truth.values():
+        if g["cls"] != "lnc":
+            continue
+        s = min(a for ex in g["tx"].values() for a, _ in ex) - 1   # GTF 1-based inclusive -> 0-based
+        e = max(b for ex in g["tx"].values() for _, b in ex)
+        m[max(s, 0):min(e, L), g1.STRANDS.index(g["strand"])] = 0.0
+    return m
+
+
+def posteriors(run, ck, feats, codes, bonus, device, lnc_mask=None):
+    """p15_read.posteriors with `bonus` added to the boundary-state emissions and `lnc_mask` ([L, 2]) to the lnc states."""
     import torch
     from ncrna_annot.decode import chrom
     from ncrna_annot.heads.c0 import C0BHead
@@ -95,6 +111,7 @@ def posteriors(run, ck, feats, codes, bonus, device):
     head.load_state_dict(ck["head"])
     head.eval()
     cols = [[g1.IDX[f"{k}{part}{s}"] for k in g1.TYPES] for (part, s) in BOUNDARY]
+    lcols = [[g1.IDX[f"l{part}{s}"] for part in g1.PARTS] for s in g1.STRANDS]
 
     def emit_fn(s, e):
         f = torch.as_tensor(np.asarray(feats[s // sg.TOK:e // sg.TOK], np.float32), device=device)[None]
@@ -107,6 +124,11 @@ def posteriors(run, ck, feats, codes, bonus, device):
                 p = p.clone()
                 for k, idx in enumerate(cols):
                     p[:, idx] += bt[:, k:k + 1]
+            if lnc_mask is not None:
+                mt = torch.as_tensor(lnc_mask[s:e], device=device, dtype=p.dtype)
+                p = p.clone()
+                for k, idx in enumerate(lcols):
+                    p[:, idx] += mt[:, k:k + 1]
         return p, b[0]
 
     T = trans().detach()
@@ -120,6 +142,7 @@ def main():
     ap.add_argument("--w", type=float, required=True)
     ap.add_argument("--sai", default="outputs/PHASE1/SPLICE_DIAG/sai_chr18.npy")
     ap.add_argument("--oracle", action="store_true")
+    ap.add_argument("--span-oracle", action="store_true")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     import torch
@@ -143,17 +166,18 @@ def main():
     truth = ruler.read_gtf(f"{ROOT}/{tg['truth']}", tg["truth_chrom"])
     L = len(feats) * 6
     t0 = time.time()
-    meta = {"run": a.run, "w": a.w, "oracle": a.oracle, "config": a.config, "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    meta = {"run": a.run, "w": a.w, "oracle": a.oracle, "span_oracle": a.span_oracle, "config": a.config, "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "code_sha256": {p: R.sha256(f"{ROOT}/{p}") for p in ("src/ncrna_annot/grammar/g1.py", "src/ncrna_annot/decode/chrom.py",
                                                                   "src/ncrna_annot/eval/ruler.py", "scripts/phase1/splice_diag/splice_diag.py")}}
     bonus = None
     if a.w != 0 or a.oracle:
         sc = oracle_scores(truth, L) if a.oracle else np.load(f"{ROOT}/{a.sai}", mmap_mode="r")
         bonus, meta["pi"] = state_bonus(sc, np.asarray(codes[:L]), a.w)
+    mask = span_mask(truth, L) if a.span_oracle else None
     ck = s2.load_ckpt([f"{ROOT}/{p}" for p in run["ckpts"]], "cuda")
-    post, L = posteriors(run, ck, feats, codes, bonus, "cuda")
+    post, L = posteriors(run, ck, feats, codes, bonus, "cuda", lnc_mask=mask)
     meta["post_s"] = round(time.time() - t0)
-    if a.w == 0 and not a.oracle:  # bit-for-bit check against the P1.5 chr18 read of the same run
+    if a.w == 0 and not a.oracle and not a.span_oracle:  # bit-for-bit check against the P1.5 chr18 read of the same run
         np.save(f"{out}/post.npy", post)
         ref = json.load(open(f"{ROOT}/{cfg['out_dir']}/chr18/{a.run}/read_meta.json"))["post_sha256"]
         meta["post_sha256"] = R.sha256(f"{out}/post.npy")
@@ -170,8 +194,11 @@ def main():
     json.dump([{"type": g["type"], "strand": g["strand"], "exons": [list(x) for x in g["exons"]], "conf": g["conf"]}
                for g in genes], open(f"{out}/genes.json", "w"))
     genes = P.load_genes(f"{out}/genes.json")
-    fin, _ = P.score_preds(truth, P.final_preds(genes, d["tau"]), boot=0)
-    res = {**meta, "core": P.core(genes, post, truth, d["tau"]), "final": fin, "total_s": round(time.time() - t0)}
+    final = P.final_preds(genes, d["tau"])
+    fin, _ = P.score_preds(truth, final, boot=0)
+    import diag_l2
+    res = {**meta, "core": P.core(genes, post, truth, d["tau"]), "final": fin, "lnc_structure": diag_l2.analyse(truth, final, "lnc"),
+           "total_s": round(time.time() - t0)}
     json.dump(P.norm(res), open(f"{out}/result.json", "w"), indent=1)
     sl, sm = fin["lnc"], fin["mrna"]
     print(json.dumps({"done": a.out, "post_matches_p15": meta.get("post_matches_p15"), "auprc_lnc": res["core"]["auprc_lnc"],
