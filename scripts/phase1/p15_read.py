@@ -114,12 +114,14 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--name", required=True)
     ap.add_argument("--config", required=True)
-    ap.add_argument("--target", required=True, choices=["chr18", "chr20", "t2t_chr20"])
+    ap.add_argument("--target", required=True, help="a target of the config (chr18, chr20, t2t_chr20; v2.0: chr9)")
     ap.add_argument("--runs", default="", help="comma list (default: the config's runs for this target)")
     a = ap.parse_args()
     cfg_path = a.config if os.path.isabs(a.config) else f"{ROOT}/{a.config}"
     cfg, cfg_sha = json.load(open(cfg_path)), sha256(cfg_path)
     P15 = f"{ROOT}/{cfg.get('out_dir', 'outputs/PHASE1/P15')}"
+    if a.target not in cfg["targets"]:
+        sys.exit(f"{a.target} is not a target of {a.config}")
     if a.target != "chr18":
         ok = f"{P15}/chr18/REPRO_OK"
         if not os.path.exists(ok) or json.load(open(ok)).get("config_sha256") != cfg_sha:
