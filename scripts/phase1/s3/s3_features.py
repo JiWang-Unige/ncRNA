@@ -122,13 +122,15 @@ def fit_logit(X, y, C=100.0):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--chrom", required=True, choices=("chr18", "chr20"))
+    ap.add_argument("--chrom", required=True, choices=("chr18", "chr20", "chr9"))
+    ap.add_argument("--v20", action="store_true", help="v2.0 section 4.2 R-S3: the config's calibrated v2.0 predictions (tau_v20)")
     ap.add_argument("--config", default="configs/p15_v19b.json")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     t0 = time.time()
     cfg = json.load(open(f"{ROOT}/{a.config}"))
-    tau = cfg["decode"]["tau"]
+    tau = cfg["calibration"]["tau_v20"] if a.v20 else cfg["decode"]["tau"]
+    runs = cfg["targets"][a.chrom]["runs"] if a.v20 else RUNS
     tg = cfg["targets"][a.chrom]
     truth = ruler.read_gtf(f"{ROOT}/{tg['truth']}", tg["truth_chrom"])
     v41 = ruler.read_gtf(f"{ROOT}/data/human/gencode.v41.annotation.gtf.gz", a.chrom)
@@ -147,12 +149,22 @@ def main():
     X = np.array([[r[k] for k in FEATS] for r in rows], float)
     idx = ruler.ExonIndex(lnc)
     Y, res_paths = {}, {}
-    for run in RUNS:
+    for run in runs:
         path = f"{ROOT}/{cfg['out_dir']}/{a.chrom}/{run}/genes.json"   # P15b holds the chr18 reproduction read
         if not os.path.exists(path):
             path = f"{ROOT}/outputs/PHASE1/P15/{a.chrom}/{run}/genes.json"  # main runs were read on chr20 in batch 1
         res_paths[run] = path
         genes = P.load_genes(path)
+        if a.v20:   # replace lnc confidences by the calibrated probability (v20_calib features, config model)
+            sys.path.insert(0, os.path.join(ROOT, "scripts/phase1/v20"))
+            import v20_calib as VC
+            cal = cfg["calibration"]
+            tab = json.load(open(f"{ROOT}/{cal['hexamer_table']}"))
+            rows = VC.gene_rows(genes, np.load(path.replace("genes.json", "post.npy"), mmap_mode="r"),
+                                np.load(f"{ROOT}/{tg['codes']}", mmap_mode="r"), tab)
+            p = VC.apply(cal["model"], np.array([[r[f] for f in cal["model"]["features"]] for r in rows], float))
+            sc = {r["k"]: float(s) for r, s in zip(rows, p)}
+            genes = [dict(g, conf=sc.get(k, g["conf"])) for k, g in enumerate(genes)]
         hit = set()
         for p in P.final_preds(genes, tau):
             if p["cls"] == "lnc":
@@ -165,22 +177,22 @@ def main():
     boots = [rng.integers(0, len(gids), len(gids)) for _ in range(N_BOOT)]
     res = {"chrom": a.chrom, "n_genes": len(gids), "tau": tau, "features": FEATS,
            "feature_mean_sd": {k: [float(mu[i]), float(sd[i])] for i, k in enumerate(FEATS)},
-           "detected_frac": {r: float(Y[r].mean()) for r in RUNS}, "pred_files": res_paths}
+           "detected_frac": {r: float(Y[r].mean()) for r in runs}, "pred_files": res_paths}
 
     def r1(Zm, names):
-        coefs = {r: fit_logit(Zm, Y[r])[1:] for r in RUNS}
-        mean = np.mean([coefs[r] for r in RUNS], 0)
-        bm = np.array([np.mean([fit_logit(Zm[b], Y[r][b])[1:] for r in RUNS], 0) for b in boots])
+        coefs = {r: fit_logit(Zm, Y[r])[1:] for r in runs}
+        mean = np.mean([coefs[r] for r in runs], 0)
+        bm = np.array([np.mean([fit_logit(Zm[b], Y[r][b])[1:] for r in runs], 0) for b in boots])
         lo, hi = np.percentile(bm, [2.5, 97.5], 0)
         out = {}
         for i, k in enumerate(names):
-            signs = {np.sign(coefs[r][i]) for r in RUNS}
+            signs = {np.sign(coefs[r][i]) for r in runs}
             assoc = (lo[i] > 0 or hi[i] < 0) and len(signs) == 1
-            out[k] = {"per_run": [float(coefs[r][i]) for r in RUNS], "mean": float(mean[i]), "ci95": [float(lo[i]), float(hi[i])],
+            out[k] = {"per_run": [float(coefs[r][i]) for r in runs], "mean": float(mean[i]), "ci95": [float(lo[i]), float(hi[i])],
                       "associated": bool(assoc)}
         return out
     res["R1"] = r1(Z, FEATS)
-    ymean = np.mean([Y[r] for r in RUNS], 0)
+    ymean = np.mean([Y[r] for r in runs], 0)
     r2 = {}
     for i, k in enumerate(FEATS):
         v = X[:, i]

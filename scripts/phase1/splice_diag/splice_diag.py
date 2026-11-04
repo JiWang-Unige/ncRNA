@@ -144,6 +144,7 @@ def main():
     ap.add_argument("--oracle", action="store_true")
     ap.add_argument("--span-oracle", action="store_true")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--target", default="chr18", help="a target of the config (v2.0 section 4.2 R-S1b: chr9 with configs/v20.json)")
     a = ap.parse_args()
     import torch
     torch.set_num_threads(int(os.environ.get("NCRNA_THREADS", "2")))
@@ -162,11 +163,11 @@ def main():
     os.makedirs(out, exist_ok=True)
     bad = [p for p, h in zip(run["ckpts"], run["ckpt_sha256"]) if R.sha256(f"{ROOT}/{p}") != h]
     assert not bad, bad
-    feats, codes, tg = R.load_target(cfg, "chr18")
+    feats, codes, tg = R.load_target(cfg, a.target)
     truth = ruler.read_gtf(f"{ROOT}/{tg['truth']}", tg["truth_chrom"])
     L = len(feats) * 6
     t0 = time.time()
-    meta = {"run": a.run, "w": a.w, "oracle": a.oracle, "span_oracle": a.span_oracle, "config": a.config, "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    meta = {"run": a.run, "target": a.target, "w": a.w, "oracle": a.oracle, "span_oracle": a.span_oracle, "config": a.config, "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             "code_sha256": {p: R.sha256(f"{ROOT}/{p}") for p in ("src/ncrna_annot/grammar/g1.py", "src/ncrna_annot/decode/chrom.py",
                                                                   "src/ncrna_annot/eval/ruler.py", "scripts/phase1/splice_diag/splice_diag.py")}}
     bonus = None
@@ -177,7 +178,7 @@ def main():
     ck = s2.load_ckpt([f"{ROOT}/{p}" for p in run["ckpts"]], "cuda")
     post, L = posteriors(run, ck, feats, codes, bonus, "cuda", lnc_mask=mask)
     meta["post_s"] = round(time.time() - t0)
-    if a.w == 0 and not a.oracle and not a.span_oracle:  # bit-for-bit check against the P1.5 chr18 read of the same run
+    if a.w == 0 and not a.oracle and not a.span_oracle and a.target == "chr18":  # bit-for-bit check against the config's chr18 read
         np.save(f"{out}/post.npy", post)
         ref = json.load(open(f"{ROOT}/{cfg['out_dir']}/chr18/{a.run}/read_meta.json"))["post_sha256"]
         meta["post_sha256"] = R.sha256(f"{out}/post.npy")

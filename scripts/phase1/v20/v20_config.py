@@ -60,8 +60,11 @@ def main():
         from ncrna_annot.eval import ruler
         from ncrna_annot.features import generanno as G
         cal = json.load(open(f"{ROOT}/outputs/PHASE1/V20/dev/CALIB.json"))
-        decode["tau"] = cal["tau_baseline"]
-        cfg["calibration"] = {"keep": cal["keep"], "model": cal["model"], "tau_v20": cal["tau_v20"],
+        tf = json.load(open(f"{ROOT}/outputs/PHASE1/V20/dev/TAU_FINAL.json"))   # section 17 amendment 1 (card v20-tau)
+        decode["tau"] = tf["tau_baseline"]
+        cfg["tau_final"] = {"file": "outputs/PHASE1/V20/dev/TAU_FINAL.json", "sha256": sha256(f"{ROOT}/outputs/PHASE1/V20/dev/TAU_FINAL.json"),
+                            "rule": tf["rule"]}
+        cfg["calibration"] = {"keep": cal["keep"], "model": cal["model"], "tau_v20": tf["tau_v20"],
                               "hexamer_table": "data/p1v20/hexamer_table.json", "hexamer_table_sha256": cal["hexamer_table_sha256"],
                               "dev_result": "outputs/PHASE1/V20/dev/CALIB.json", "dev_result_sha256": sha256(f"{ROOT}/outputs/PHASE1/V20/dev/CALIB.json")}
         truth = ruler.read_gtf(f"{ROOT}/{targets['chr18']['truth']}", "chr18")
