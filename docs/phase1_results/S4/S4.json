@@ -1,0 +1,363 @@
+{
+ "tau": 0.6,
+ "n_shuffles": 100,
+ "species": {
+  "chicken_5": {
+   "chain_blocks": 186237,
+   "aligned_bp": 6587165,
+   "dropped_overlaps": 0,
+   "chrom_len": 59506338,
+   "runs": {
+    "g1b-42-ke": {
+     "truth_hit": {
+      "n": 179,
+      "lifted": 8,
+      "lnc_hit": 3,
+      "mrna_hit": 4,
+      "lift_rate": 0.0446927374301676,
+      "lnc_hit_rate": 0.375,
+      "mrna_hit_rate": 0.5,
+      "ctrl_lnc_hit_rate_mean": 0.2594621212121212,
+      "ctrl_p95": 0.6033333333333332,
+      "enrichment": 1.445297672924757,
+      "p_emp": 0.24752475247524752
+     },
+     "novel": {
+      "n": 380,
+      "lifted": 54,
+      "lnc_hit": 12,
+      "mrna_hit": 7,
+      "lift_rate": 0.14210526315789473,
+      "lnc_hit_rate": 0.2222222222222222,
+      "mrna_hit_rate": 0.12962962962962962,
+      "ctrl_lnc_hit_rate_mean": 0.17096003354621497,
+      "ctrl_p95": 0.34380387931034484,
+      "enrichment": 1.2998489624310334,
+      "p_emp": 0.25742574257425743
+     },
+     "other": {
+      "n": 268,
+      "lifted": 99,
+      "lnc_hit": 7,
+      "mrna_hit": 90,
+      "lift_rate": 0.3694029850746269,
+      "lnc_hit_rate": 0.0707070707070707,
+      "mrna_hit_rate": 0.9090909090909091,
+      "ctrl_lnc_hit_rate_mean": 0.1657155513475173,
+      "ctrl_p95": 0.38461538461538464,
+      "enrichment": 0.42667734037098876,
+      "p_emp": 0.8118811881188119
+     },
+     "all": {
+      "n": 827,
+      "lifted": 161,
+      "lnc_hit": 22,
+      "mrna_hit": 101,
+      "lift_rate": 0.1946795646916566,
+      "lnc_hit_rate": 0.13664596273291926,
+      "mrna_hit_rate": 0.6273291925465838,
+      "ctrl_lnc_hit_rate_mean": 0.1859582852171315,
+      "ctrl_p95": 0.26666666666666666,
+      "enrichment": 0.7348205140382241,
+      "p_emp": 0.8217821782178217
+     }
+    },
+    "g1b-123-ke": {
+     "truth_hit": {
+      "n": 290,
+      "lifted": 13,
+      "lnc_hit": 3,
+      "mrna_hit": 6,
+      "lift_rate": 0.04482758620689655,
+      "lnc_hit_rate": 0.23076923076923078,
+      "mrna_hit_rate": 0.46153846153846156,
+      "ctrl_lnc_hit_rate_mean": 0.1852147363730181,
+      "ctrl_p95": 0.3333333333333333,
+      "enrichment": 1.2459550211191996,
+      "p_emp": 0.36633663366336633
+     },
+     "novel": {
+      "n": 492,
+      "lifted": 24,
+      "lnc_hit": 4,
+      "mrna_hit": 17,
+      "lift_rate": 0.04878048780487805,
+      "lnc_hit_rate": 0.16666666666666666,
+      "mrna_hit_rate": 0.7083333333333334,
+      "ctrl_lnc_hit_rate_mean": 0.18431993872184613,
+      "ctrl_p95": 0.3007894736842105,
+      "enrichment": 0.9042248376513422,
+      "p_emp": 0.594059405940594
+     },
+     "other": {
+      "n": 330,
+      "lifted": 102,
+      "lnc_hit": 5,
+      "mrna_hit": 95,
+      "lift_rate": 0.3090909090909091,
+      "lnc_hit_rate": 0.049019607843137254,
+      "mrna_hit_rate": 0.9313725490196079,
+      "ctrl_lnc_hit_rate_mean": 0.17327375819615692,
+      "ctrl_p95": 0.35746753246753243,
+      "enrichment": 0.2829026642778991,
+      "p_emp": 0.9108910891089109
+     },
+     "all": {
+      "n": 1112,
+      "lifted": 139,
+      "lnc_hit": 12,
+      "mrna_hit": 118,
+      "lift_rate": 0.125,
+      "lnc_hit_rate": 0.08633093525179857,
+      "mrna_hit_rate": 0.8489208633093526,
+      "ctrl_lnc_hit_rate_mean": 0.18127401314828254,
+      "ctrl_p95": 0.2545454545454545,
+      "enrichment": 0.47624551226313766,
+      "p_emp": 0.9702970297029703
+     }
+    },
+    "g1b-456-ke": {
+     "truth_hit": {
+      "n": 211,
+      "lifted": 5,
+      "lnc_hit": 2,
+      "mrna_hit": 2,
+      "lift_rate": 0.023696682464454975,
+      "lnc_hit_rate": 0.4,
+      "mrna_hit_rate": 0.4,
+      "ctrl_lnc_hit_rate_mean": 0.1669575010043276,
+      "ctrl_p95": 0.3756944444444444,
+      "enrichment": 2.3958192809176744,
+      "p_emp": 0.04950495049504951
+     },
+     "novel": {
+      "n": 346,
+      "lifted": 13,
+      "lnc_hit": 3,
+      "mrna_hit": 5,
+      "lift_rate": 0.03757225433526012,
+      "lnc_hit_rate": 0.23076923076923078,
+      "mrna_hit_rate": 0.38461538461538464,
+      "ctrl_lnc_hit_rate_mean": 0.1601511491392638,
+      "ctrl_p95": 0.28642857142857137,
+      "enrichment": 1.4409464559543006,
+      "p_emp": 0.1782178217821782
+     },
+     "other": {
+      "n": 253,
+      "lifted": 122,
+      "lnc_hit": 3,
+      "mrna_hit": 110,
+      "lift_rate": 0.48221343873517786,
+      "lnc_hit_rate": 0.02459016393442623,
+      "mrna_hit_rate": 0.9016393442622951,
+      "ctrl_lnc_hit_rate_mean": 0.17736251753772617,
+      "ctrl_p95": 0.3333333333333333,
+      "enrichment": 0.13864352105396643,
+      "p_emp": 0.9603960396039604
+     },
+     "all": {
+      "n": 810,
+      "lifted": 140,
+      "lnc_hit": 8,
+      "mrna_hit": 117,
+      "lift_rate": 0.1728395061728395,
+      "lnc_hit_rate": 0.05714285714285714,
+      "mrna_hit_rate": 0.8357142857142857,
+      "ctrl_lnc_hit_rate_mean": 0.1757559704398969,
+      "ctrl_p95": 0.25,
+      "enrichment": 0.3251261223151348,
+      "p_emp": 0.9900990099009901
+     }
+    }
+   },
+   "novel_mean": {
+    "lnc_hit_rate": 0.20655270655270655,
+    "ctrl_lnc_hit_rate_mean": 0.1718103738024416,
+    "lift_rate": 0.07615266843267764,
+    "enrichment": 1.202213242316869
+   },
+   "novel_runs_p_below_0.01": 0,
+   "verdict_novel_synteny_support": false
+  },
+  "zebrafish_22": {
+   "chain_blocks": 18557,
+   "aligned_bp": 1090692,
+   "dropped_overlaps": 0,
+   "chrom_len": 39133080,
+   "runs": {
+    "g1b-42-ke": {
+     "truth_hit": {
+      "n": 45,
+      "lifted": 0,
+      "lnc_hit": 0,
+      "mrna_hit": 0,
+      "lift_rate": 0.0,
+      "lnc_hit_rate": null,
+      "mrna_hit_rate": null,
+      "ctrl_lnc_hit_rate_mean": 0.03,
+      "ctrl_p95": 0.0,
+      "enrichment": null,
+      "p_emp": 1.0
+     },
+     "novel": {
+      "n": 505,
+      "lifted": 16,
+      "lnc_hit": 4,
+      "mrna_hit": 7,
+      "lift_rate": 0.031683168316831684,
+      "lnc_hit_rate": 0.25,
+      "mrna_hit_rate": 0.4375,
+      "ctrl_lnc_hit_rate_mean": 0.16167857142857142,
+      "ctrl_p95": 0.5049999999999997,
+      "enrichment": 1.5462778882261985,
+      "p_emp": 0.32673267326732675
+     },
+     "other": {
+      "n": 195,
+      "lifted": 14,
+      "lnc_hit": 0,
+      "mrna_hit": 12,
+      "lift_rate": 0.07179487179487179,
+      "lnc_hit_rate": 0.0,
+      "mrna_hit_rate": 0.8571428571428571,
+      "ctrl_lnc_hit_rate_mean": 0.09666666666666666,
+      "ctrl_p95": 1.0,
+      "enrichment": 0.0,
+      "p_emp": 1.0
+     },
+     "all": {
+      "n": 745,
+      "lifted": 30,
+      "lnc_hit": 4,
+      "mrna_hit": 19,
+      "lift_rate": 0.040268456375838924,
+      "lnc_hit_rate": 0.13333333333333333,
+      "mrna_hit_rate": 0.6333333333333333,
+      "ctrl_lnc_hit_rate_mean": 0.146485680985681,
+      "ctrl_p95": 0.4,
+      "enrichment": 0.9102141071820303,
+      "p_emp": 0.5445544554455446
+     }
+    },
+    "g1b-123-ke": {
+     "truth_hit": {
+      "n": 59,
+      "lifted": 0,
+      "lnc_hit": 0,
+      "mrna_hit": 0,
+      "lift_rate": 0.0,
+      "lnc_hit_rate": null,
+      "mrna_hit_rate": null,
+      "ctrl_lnc_hit_rate_mean": 0.04,
+      "ctrl_p95": 0.02499999999999858,
+      "enrichment": null,
+      "p_emp": 1.0
+     },
+     "novel": {
+      "n": 734,
+      "lifted": 4,
+      "lnc_hit": 0,
+      "mrna_hit": 2,
+      "lift_rate": 0.005449591280653951,
+      "lnc_hit_rate": 0.0,
+      "mrna_hit_rate": 0.5,
+      "ctrl_lnc_hit_rate_mean": 0.19300285825285823,
+      "ctrl_p95": 0.447222222222222,
+      "enrichment": 0.0,
+      "p_emp": 1.0
+     },
+     "other": {
+      "n": 220,
+      "lifted": 11,
+      "lnc_hit": 1,
+      "mrna_hit": 10,
+      "lift_rate": 0.05,
+      "lnc_hit_rate": 0.09090909090909091,
+      "mrna_hit_rate": 0.9090909090909091,
+      "ctrl_lnc_hit_rate_mean": 0.1355,
+      "ctrl_p95": 1.0,
+      "enrichment": 0.6709158000670915,
+      "p_emp": 0.2376237623762376
+     },
+     "all": {
+      "n": 1013,
+      "lifted": 15,
+      "lnc_hit": 1,
+      "mrna_hit": 12,
+      "lift_rate": 0.014807502467917079,
+      "lnc_hit_rate": 0.06666666666666667,
+      "mrna_hit_rate": 0.8,
+      "ctrl_lnc_hit_rate_mean": 0.16896259296259294,
+      "ctrl_p95": 0.375,
+      "enrichment": 0.39456465184235284,
+      "p_emp": 0.7623762376237624
+     }
+    },
+    "g1b-456-ke": {
+     "truth_hit": {
+      "n": 52,
+      "lifted": 1,
+      "lnc_hit": 0,
+      "mrna_hit": 1,
+      "lift_rate": 0.019230769230769232,
+      "lnc_hit_rate": 0.0,
+      "mrna_hit_rate": 1.0,
+      "ctrl_lnc_hit_rate_mean": 0.056666666666666664,
+      "ctrl_p95": 0.6833333333333323,
+      "enrichment": 0.0,
+      "p_emp": 1.0
+     },
+     "novel": {
+      "n": 412,
+      "lifted": 2,
+      "lnc_hit": 0,
+      "mrna_hit": 2,
+      "lift_rate": 0.0048543689320388345,
+      "lnc_hit_rate": 0.0,
+      "mrna_hit_rate": 1.0,
+      "ctrl_lnc_hit_rate_mean": 0.1952936507936508,
+      "ctrl_p95": 0.5083333333333329,
+      "enrichment": 0.0,
+      "p_emp": 1.0
+     },
+     "other": {
+      "n": 209,
+      "lifted": 21,
+      "lnc_hit": 1,
+      "mrna_hit": 20,
+      "lift_rate": 0.10047846889952153,
+      "lnc_hit_rate": 0.047619047619047616,
+      "mrna_hit_rate": 0.9523809523809523,
+      "ctrl_lnc_hit_rate_mean": 0.1733333333333333,
+      "ctrl_p95": 1.0,
+      "enrichment": 0.27472527472527475,
+      "p_emp": 0.27722772277227725
+     },
+     "all": {
+      "n": 673,
+      "lifted": 24,
+      "lnc_hit": 1,
+      "mrna_hit": 23,
+      "lift_rate": 0.03566121842496285,
+      "lnc_hit_rate": 0.041666666666666664,
+      "mrna_hit_rate": 0.9583333333333334,
+      "ctrl_lnc_hit_rate_mean": 0.16781116106116106,
+      "ctrl_p95": 0.43214285714285694,
+      "enrichment": 0.24829496681380256,
+      "p_emp": 0.6435643564356436
+     }
+    }
+   },
+   "novel_mean": {
+    "lnc_hit_rate": 0.08333333333333333,
+    "ctrl_lnc_hit_rate_mean": 0.18332502682502683,
+    "lift_rate": 0.013995709509841489,
+    "enrichment": 0.4545660501272976
+   },
+   "novel_runs_p_below_0.01": 0,
+   "verdict_novel_synteny_support": false
+  }
+ },
+ "seconds": 65
+}
