@@ -567,3 +567,40 @@
    - 判定与复核的结果写进 `results/RESULT_V20_CHR9.md`。
 
 **算力**：全部在 ont，给 TE 让路，不花钱。补抽与提特征约 0.5 天，重训约 12 GPU 小时，chr18 开发 2–3 天，chr9 读取与复核约 1 天。不设期限。
+
+### 17.1 修订 1（2026-11-05，读 chr9 之前；**用户 2026-11-05 在对话中批准，决定卡 `v20-tau` 第一项：「按照推荐执行」**）
+
+**触发**：chr18 开发（`results/RESULT_V20_DEV.md`，7833dd7）表明校准有效、按规则保留：折外 ECE 0.294 → 0.039。但 §16 的 τ 网格（0.2–0.9、步长 0.1）用在校准概率上过粗，选出的 v2.0 工作点为 τ 0.4、Sn 0.189，低于 Go 的 Sn 线，也比基线低 0.047。本修订只用 chr18 的信息，chr9 至今未读。
+
+1. **τ 选法**（`scripts/phase1/v20/v20_tau_final.py` → `outputs/PHASE1/V20/dev/TAU_FINAL.json`，曲线 `TAU_CURVE.json`）：
+   - 基线：§16 规则改用 0.01 步长的网格（0.20–0.90）。结果 **τ_base = 0.62**，chr18 上 Sn 0.267 / Pr 0.430。
+   - v2.0：在「三 seed 平均 Sn ≥ 基线 Sn − 0.02」的 τ 中取严格 Pr 最高者。结果 **τ_v20 = 0.36**，chr18 上 Sn 0.253 / Pr 0.471。
+   - 这样做是把 chr9 精度判据「Pr 提升、Sn 降幅 ≤ 0.03」直接作为选点规则，留 0.01 余量。
+2. **配置**：`configs/v20.json`（代码 591e8ce，sha256 f780522a0976…），本修订与它一起提交，之后才读 chr9。内容：
+   - 三个重训模型第 10–12 epoch 权重的 sha256；
+   - 读取代码的 sha256；
+   - decode.tau = τ_base；
+   - calibration（保留、系数、τ_v20、六聚体表 sha256）；
+   - chr18 参考：开发时后验的 sha256，以及 τ_base 下的 core 摘要。
+3. **chr9 评分**（`v20_score.py`）：
+   - 基线与 v2.0 用同一批解码基因，只差哪些 lnc 被报出；mRNA 不过滤。
+   - 配对自助法 2,000 次，seed 0，统计量为三 seed 平均：Sn 的 Δ 按真值 lnc 基因重抽；严格 Pr 的 Δ 按解码出的 lnc 基因重抽（逐 run）。
+   - ECE：lnc 基因在 τ 过滤之前，10 个等宽箱。
+   - 结构一条以 v2.0 的 L2 ≥ 0.05 为必要条件。若达到，再补算 Δ 的 CI。
+4. **§4.2 复核的实现**（`v20_chr9_queue.sh`、`v20_replicate.py`）：
+   - R-S1：
+     - Snaptron gtexv2 chr9 查询，samples_count ≥ 5，1 Mb 窗口，sha256 记入 `data/v20_chr9/MANIFEST.json`；
+     - SpliceAI、自训 S10k、Pangolin 在 chr9 上打分，Pangolin 的偏移沿用 chr20 选定的 0；
+     - `s1_analyze.py` 原样运行，判读模型为自训 S10k。
+     - 判据：匹配差距 |Δ| ≤ 0.03；两类 AUROC 从最低使用量层（1–9 条读段）到最高层（≥ 1,000 条）都升高 ≥ 0.05；R4 中 lnc 内含子 GTEx 读段中位数 < mRNA 的 1/5。
+   - R-S1b：`splice_diag.py --config configs/v20.json --target chr9`，三个重训模型的 A1（真值边界）、A2（真值剪接，w = 1）、A3（两者），τ = τ_base。判据：三 seed 平均 L2 中 A2 > A1，且 A1 < 0.05。
+   - R-S3：`s3_features.py --config configs/v20.json --chrom chr9 --v20`，v2.0 预测为校准概率 ≥ τ_v20。判据：启动子 CpG 与 log 基因跨度都满足「相关」。
+5. **顺序**：
+   1. chr18 复现：后验 sha256 与 core 摘要逐字节一致，写 REPRO_OK；
+   2. chr9 提特征（剩余 ≥ 250 GB 时缓存）；
+   3. chr9 一次性读取；
+   4. 评分；
+   5. §4.2 复核；
+   6. 删除 chr9 特征缓存。
+
+   结果写进 `results/RESULT_V20_CHR9.md`。
