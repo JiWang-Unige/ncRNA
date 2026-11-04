@@ -28,7 +28,8 @@ PANEL = {  # name: (truth GTF, seqid)
     "chicken_5": ("data/chicken/Gallus_gallus.bGalGal1.mat.broiler.GRCg7b.116.gtf.gz", "5"),
     "zebrafish_22": ("data/zebrafish/Danio_rerio.GRCz11.116.gtf.gz", "22"),
     "fly_2L": ("data/fly/Drosophila_melanogaster.BDGP6.54.63.gtf.gz", "2L"),
-    "worm_I": ("data/worm/Caenorhabditis_elegans.WBcel235.63.gtf.gz", "I")}
+    "worm_I": ("data/worm/Caenorhabditis_elegans.WBcel235.63.gtf.gz", "I"),
+    "mouse_chr19": ("data/batch2/mouse/gencode.vM39.annotation.gtf.gz", "chr19")}   # S5 (PLAN_BATCH2.md B), --only mouse_chr19
 
 
 def sha256(path):
@@ -44,6 +45,8 @@ def main():
     ap.add_argument("--commit", required=True)
     ap.add_argument("--previous", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--only", default="chicken_5,zebrafish_22,fly_2L,worm_I", help="panel targets besides the chr18 reproduction")
+    ap.add_argument("--out-dir", default="outputs/PHASE1/P16")
     a = ap.parse_args()
     pp = a.previous if os.path.isabs(a.previous) else f"{ROOT}/{a.previous}"
     prev = json.load(open(pp))
@@ -62,6 +65,8 @@ def main():
         ref[name] = {"read": os.path.relpath(rd, ROOT), "post_sha256": m["post_sha256"], "genes_sha256": sha256(f"{rd}/genes.json")}
     targets = {"chr18": dict(prev["targets"]["chr18"], runs=sorted(runs))}
     for name, (gtf, seqid) in PANEL.items():
+        if name not in a.only.split(","):
+            continue
         codes = f"data/p1/{name}_codes.npy"
         L = len(np.load(f"{ROOT}/{codes}", mmap_mode="r"))
         targets[name] = {"feats": f"data/p1_feat/{name}.npy", "cover": f"data/p1_feat/{name}.cover.json",
@@ -70,7 +75,7 @@ def main():
     code = sorted(glob.glob(f"{ROOT}/src/ncrna_annot/**/*.py", recursive=True)
                   + [f"{ROOT}/scripts/phase1/p15_read.py", f"{ROOT}/scripts/phase1/p16_read.py"])
     cfg = {"protocol": "PHASE1_PROTOCOL.md section 5 P1.6 (zero-shot panel, descriptive); decoding of section 16 (v1.9)",
-           "previous": {"config": a.previous, "config_sha256": sha256(pp)}, "out_dir": "outputs/PHASE1/P16",
+           "previous": {"config": a.previous, "config_sha256": sha256(pp)}, "out_dir": a.out_dir,
            "code_commit": a.commit, "created": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
            "decode": prev["decode"], "main": prev["main"], "runs": runs, "chr18_reference": ref, "targets": targets,
            "code_files": {os.path.relpath(p, ROOT): sha256(p) for p in code}}

@@ -35,6 +35,8 @@ REPEAT_PRONE = ("Metazoa_SRP", "U6")
 
 
 def small_hits(target, seqid):
+    if not os.path.isdir(f"{SMALL}/{target}"):   # no Phase 0 small-RNA layer for this target (S5 mouse)
+        return []
     types = dict(l.rstrip("\n").split("\t", 1) for l in open(RFAM_TYPES) if "\t" in l)
     trunc = {}
     for i, line in enumerate(open(f"{SMALL}/{target}/cmscan.tsv")):

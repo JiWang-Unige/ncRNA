@@ -18,11 +18,15 @@ from ncrna_annot.grammar import g1  # noqa: E402
 
 ROOT = os.path.expanduser("~/ncrna-annot")
 PANEL = {"chicken_5": ("chicken", "5.fa", "5"), "zebrafish_22": ("zebrafish", "22.fa", "22"),
-         "fly_2L": ("fly", "2L.fa", "2L"), "worm_I": ("worm", "I.fa", "I")}
+         "fly_2L": ("fly", "2L.fa", "2L"), "worm_I": ("worm", "I.fa", "I"),
+         "mouse_chr19": ("mouse", "chr19.fa", "chr19")}   # S5 (PLAN_BATCH2.md B): UCSC mm39 chr19, prep_panel.py --only mouse_chr19
 
 
 def main():
+    only = sys.argv[sys.argv.index("--only") + 1].split(",") if "--only" in sys.argv else [n for n in PANEL if n != "mouse_chr19"]
     for name, (sp, fa, seqid) in PANEL.items():
+        if name not in only:
+            continue
         path = f"{ROOT}/data/{sp}/{fa}"
         md5 = hashlib.md5(open(path, "rb").read()).hexdigest()
         want = {ln.split()[1].lstrip("./"): ln.split()[0] for ln in open(f"{ROOT}/data/{sp}/MD5SUMS") if ln.strip()}
