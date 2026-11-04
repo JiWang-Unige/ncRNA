@@ -524,3 +524,46 @@
    - 包装脚本在 GENATATOR 的官方预测上逐位复现了 Phase 0 的数字（lnc_RNA segmentation P 0.037 / R 0.0069）。
    - Strong 的 T2T 一项用三个 seed 的平均。
 8. **AB6 与 AB1。** AB6（G2-PH）同样用第 10–12 epoch 的权重平均，用它自己的解码与评分。AB1 = 主模型 chr20 精确后验的 S1，按 τ* 过滤。
+
+## 17. v2.0：精度与校准 + 主线结论在 chr9 上的预注册复核（2026-11-04 起草；**用户 2026-11-04 在对话中批准并冻结（决定卡 `v20-freeze-2` 第一项：「按照1来」）**；冻结时 chr9 上没有任何预测、分数或 RNA-seq 证据被读过）
+
+**全文**：`docs/phase1_results/DRAFT_V20.md` 第 2 版（commit 69dc89d，5a7af11 修订 §1 措辞与 §4.2 的 R-S1 判据），本节冻结的就是这一版。下面只记要点和执行细节；两者不一致时以 DRAFT_V20.md 为准。
+
+**要点**：
+1. 测试染色体 chr9，锁定记录 `configs/v20_testdata.json`。开发只用 chr18。chr20 / T2T chr20 不用于任何调参。
+2. 三个主模型（G1B，seed 42 / 123 / 456）去掉 chr9 上的 154 个训练窗口后重训，配方与 g1b-*-ke 相同：v50uev 标签、12 epoch、2 × 4 累积、每个 epoch 存档、取第 10–12 epoch 权重平均。
+3. 剪接项不进 v2.0，也不作消融。
+4. 主体：编码潜能特征（最长 ORF 长度与占比、六聚体编码分、Fickett、外显子上 mRNA 态后验均值、lnc 态后验均值）进入基因层面的 logistic 校准（L2，C = 1）。只在 chr18 上拟合，保留规则见 DRAFT §3.4。τ 按 §16 规则在 chr18 上重选。不加反义重叠特征。
+5. chr9 主判定（三 seed 平均，配对 bootstrap 2,000 次，seed 0）：
+   - Go 复现：Sn ≥ 0.20 且严格 Pr ≥ 0.40；
+   - 精度：严格 Pr 的 Δ CI 下界 > 0，且 Sn 降幅 ≤ 0.03；
+   - 校准：ECE ≤ 0.15；
+   - 护栏：同 DRAFT §4.1；
+   - 结构：L2 ≥ 0.05 照写。
+6. chr9 预注册复核（DRAFT §4.2）：
+   - R-S1，按量级判：|Δ AUROC| ≤ 0.03、层间升高 ≥ 0.05、lnc / mRNA 使用量之比 < 1/5；
+   - R-S1b：剪接是主要瓶颈；
+   - R-S3：启动子 CpG 与跨度都「相关」。
+   - 需要 Snaptron gtexv2 chr9 查询（samples_count ≥ 5，约 30 MB），读 chr9 那一步才下载。
+
+**执行细节（冻结时写定）**：
+1. **补抽窗口**：`scripts/phase1/v20/prep_v20_windows.py` 写 `data/p1v20/train_windows.tsv`。
+   - 保持 3,000 行的顺序，只把 chr9 上的 154 行原位替换，类型与被替换的行相同（lnc / pc / rand）。
+   - 抽样规则与 `prep_p1.py` 相同：染色体按长度抽，从 TRAIN 去掉 chr9 后的染色体中选；lnc / pc 窗口以该类 v50 外显子中点为中心；rand 均匀；N > 10% 的窗口丢弃重抽。使用 `numpy.random.default_rng(1)`。
+   - 被替换行号与新窗口写进 `data/p1v20/replaced.json`。
+2. **标签与事件**：用原脚本重新生成。
+   - 命令：`prep_screen.py --windows-train data/p1v20/train_windows.tsv --splits train --out data/p1v20` 与 `prep_events.py`，参数相同。
+   - 核对：未替换的 2,846 行的 codes、四种 bits、events 须与 `data/p1v12` 逐位相同，否则停下。
+   - 验证窗口沿用 `data/p1v12/val_*`。
+3. **特征**：
+   - 只为 154 个新窗口提特征，写 `data/p1_feat_v20/train_new.npy`，GPU 走闸门。
+   - 训练时用覆盖视图：替换行读新文件，其余行读 `data/p1_feat/train.npy`，不复制 100 GB 的原缓存。
+   - 实现为 `train_formal_ont.py --data v20`，单元测试核对覆盖视图逐行取到的数据。
+4. **训练**：run 名为 `v20-g1b-42-ke` / `-123-ke` / `-456-ke`。一次一个，占比 0.30，经闸门（认得 TE 容器任务），每 5 个 batch 查一次，遇到 TE 就停在最后一个完整 epoch 后续跑。
+5. **chr18 开发与配置**：编码潜能、校准、τ 都在 chr18 上做，写 `configs/v20.json` 并提交（含权重与代码的 sha256），之后才允许读 chr9。
+6. **chr9 读取**：
+   - 读取脚本先在 chr18 上逐字节复现开发时的后验，通过后才对 chr9 运行。
+   - chr9 特征缓存约 190 GB。读取时 ont 剩余 ≥ 250 GB 就缓存、读完删除，否则边提边读。
+   - 判定与复核的结果写进 `results/RESULT_V20_CHR9.md`。
+
+**算力**：全部在 ont，给 TE 让路，不花钱。补抽与提特征约 0.5 天，重训约 12 GPU 小时，chr18 开发 2–3 天，chr9 读取与复核约 1 天。不设期限。
