@@ -1,0 +1,1 @@
+{"n_genes": 2974, "n_pos": 1141, "oof": {"auprc_raw": 0.4216464491798692, "auprc_cal": 0.5071253132751358, "ece_raw": 0.2940212008202697, "ece_cal": 0.03902992946785732}, "keep": true, "tau_baseline": 0.7, "tau_v20": 0.4, "seconds": 13}

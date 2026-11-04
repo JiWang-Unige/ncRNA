@@ -1,0 +1,21 @@
+train chr1 done
+train chr10 done
+train chr11 done
+train chr12 done
+train chr13 done
+train chr14 done
+train chr15 done
+train chr16 done
+train chr17 done
+train chr19 done
+train chr2 done
+train chr21 done
+train chr22 done
+train chr3 done
+train chr4 done
+train chr5 done
+train chr6 done
+train chr7 done
+train chr8 done
+train chrX done
+train {"donor+": {"pos_frac": 0.0021942003038194443, "ign_frac": 0.05332573784722222, "n_pos_events_approx": 7703}, "acceptor+": {"pos_frac": 0.002199028862847222, "ign_frac": 0.05281396484375, "n_pos_events_approx": 7720}, "TSS+": {"pos_frac": 0.00038651529947916665, "ign_frac": 0.046742513020833334, "n_pos_events_approx": 1357}, "TES+": {"pos_frac": 0.00039397515190972224, "ign_frac": 0.04819992404513889, "n_pos_events_approx": 1383}, "donor-": {"pos_frac": 0.002297200520833333, "ign_frac": 0.0534976806640625, "n_pos_events_approx": 8065}, "acceptor-": {"pos_frac": 0.002292629665798611, "ign_frac": 0.053238837348090276, "n_pos_events_approx": 8049}, "TSS-": {"pos_frac": 0.0004042019314236111, "ign_frac": 0.04659303114149305, "n_pos_events_approx": 1419}, "TES-": {"pos_frac": 0.0003884548611111111, "ign_frac": 0.048047593858506946, "n_pos_events_approx": 1363}}

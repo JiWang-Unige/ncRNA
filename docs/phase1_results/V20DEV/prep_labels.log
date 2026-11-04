@@ -1,0 +1,24 @@
+chr1 done
+chr10 done
+chr11 done
+chr12 done
+chr13 done
+chr14 done
+chr15 done
+chr16 done
+chr17 done
+chr19 done
+chr2 done
+chr21 done
+chr22 done
+chr3 done
+chr4 done
+chr5 done
+chr6 done
+chr7 done
+chr8 done
+chrX done
+train v50uev {'windows_infeasible_before_repair': 315, 'violations_mean': 0.221, 'relaxed_bp_mean': 15.697666666666667, 'relaxed_frac': 0.0006387396918402778}
+train v50f {'windows_infeasible_before_repair': 315, 'violations_mean': 0.221, 'relaxed_bp_mean': 15.697666666666667, 'relaxed_frac': 0.0006387396918402778}
+train v41uev {'windows_infeasible_before_repair': 267, 'violations_mean': 0.224, 'relaxed_bp_mean': 14.906333333333333, 'relaxed_frac': 0.0006065402560763889}
+train v50uevlnc {'windows_infeasible_before_repair': 162, 'violations_mean': 0.07733333333333334, 'relaxed_bp_mean': 7.3213333333333335, 'relaxed_frac': 0.00029790581597222225}

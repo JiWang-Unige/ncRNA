@@ -1,0 +1,10 @@
+2026-11-04T13:43:09Z prep failed - not training
+2026-11-04T13:53:25Z START
+2026-11-04T16:17:28Z v20-g1b-42-ke rc=0
+2026-11-04T18:48:05Z v20-g1b-123-ke rc=0
+2026-11-04T22:35:01Z note: ont rebooted ~2026-11-04T20:56Z; v20-g1b-456-ke had finished all 12 epochs (ep12.pt / last.pt 20:53Z, loadable); only its post-training best.pt S3 chr18 evaluation was cut, which v2.0 does not use (avg10-12 via p15_read). Stale lock logs/formal_gpu.lock (pid 1645716, gone) removed.
+2026-11-04T22:35:01Z START
+2026-11-04T22:35:01Z v20-g1b-42-ke skip (trained)
+2026-11-04T22:35:01Z v20-g1b-123-ke skip (trained)
+2026-11-04T22:35:01Z v20-g1b-456-ke skip (trained)
+2026-11-04T22:35:01Z TRAIN_END
