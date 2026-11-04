@@ -91,3 +91,8 @@
   - 等 S1b 队列结束后依次跑 SpliceAI chr20（`sai_score.py`，占比 0.25）、自训 S10k chr20（`own_splice.py score`，占比 0.25）、Vipsania chr20 后验（`vip_run.py post`，显存上限 6,800 MiB）。
   - 都走 gpu_gate.sh，一次一个。然后在 CPU 上跑分析。
 
+## 9. 冻结后发现（11-04 下午，读数之后）
+
+- chr20 的 Snaptron 文件是 11-03 按 `samples_count ≥ 5` 过滤后下载的（`bioval_fetch.sh`）。§3 的「在 gtexv2 任何连接里都没出现过」实际是「没有出现在任何 ≥ 5 个样本的连接里」。
+- 判定不受影响，RESULT_S1.md 已更正说法。第 2 批的 chr18 / chr7 查询沿用同一过滤条件。
+
