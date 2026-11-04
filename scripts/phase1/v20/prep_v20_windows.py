@@ -33,7 +33,9 @@ def main():
     pos = {"lnc": {}, "pc": {}}
     for c in train:
         for kind, k in (("lnc", "l"), ("pc", "m")):
-            ex = [(a, b) for kk, _, exs in tx.get(c, []) if kk == k for a, b in exs]
+            # labels.read_transcripts now also returns is_canonical (v1.2); the transcript set and order are the same
+            # as when prep_p1.py sampled the v1.9 windows, so the exon-midpoint pool is unchanged
+            ex = [(a, b) for kk, _, exs, *_ in tx.get(c, []) if kk == k for a, b in exs]
             pos[kind][c] = np.array([(a + b) // 2 for a, b in ex], np.int64)
     codes = {c: P.g1.encode(seqs[c]) for c in train}
     lens = np.array([len(seqs[c]) for c in train], float)
