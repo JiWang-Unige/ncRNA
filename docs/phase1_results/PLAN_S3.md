@@ -1,6 +1,6 @@
-# S3 计划：v1.9 靠什么找到 lnc 位点（前半：相关分析，草案，2026-11-04）
+# S3 计划：v1.9 靠什么找到 lnc 位点（前半：相关分析，定稿，2026-11-04）
 
-> 状态：**草案**。属于 `SCREEN_SUBJOURNAL.md` 第 1 批，用户已在决定卡 `subjournal-portfolio` 上批准第一项。实现时补齐细节，在算任何数之前冻结。
+> 状态：**已冻结（2026-11-04）**。属于 `SCREEN_SUBJOURNAL.md` 第 1 批，用户已在决定卡 `subjournal-portfolio` 上批准第一项。本文件在任何 S3 数字算出之前提交，实现细节见 §6。
 > 只用已读出的预测和公开注释，不训练、不重新解码。主分析在 chr18（开发染色体），chr20 只作描述性重复。chr9 不碰。
 > 后半（计算机内突变，GPU）另写计划。
 
@@ -42,3 +42,18 @@
 ## 5. 资源
 
 只用 CPU，已有数据：FANTOM5、PolyASite、hg38 软屏蔽序列、v41 / v50 注释、P1.5 预测。约 1 天。
+
+## 6. 冻结时补的实现细节（读数之前）
+
+- 代码：`scripts/phase1/s3/s3_features.py`。
+- 预测文件：
+  - chr18 用 P15b 的复现读取（`outputs/PHASE1/P15b/chr18/<run>/genes.json`）；
+  - chr20 用 P15 第 1 批读取（`outputs/PHASE1/P15/chr20/<run>/genes.json`）；
+  - τ* = 0.6（`configs/p15_v19b.json`）。
+- 真值：chr18 用 `DIAG_L2/chr18_v50.gtf`，chr20 用 GENCODE v50（与 P1.5 相同）。
+- 「最外侧 TSS」：+ 链取所有转录本最小的起点，− 链取最大的终点。U1 / PAS 计数窗口是从这个 TSS 起、沿转录方向 1 kb 的正义链序列。U1 基序取 GTAAGT 和 GTGAGT（即 GT[AG]AGT）。
+- CAGE：FANTOM5 峰的 thickStart / thickEnd 中点，同链。PolyASite：簇的起止中点，同链（该文件的染色体名不带 chr）。
+- 外显子数和成熟长度取最长转录本；重复序列比例在合并外显子上计算。
+- 逻辑回归：L-BFGS，截距不罚，C = 100。R3 的交互项为标准化特征 × 中心化后的年代。
+- 只用 CPU（ont，nice 19，核 2–31）。
+
