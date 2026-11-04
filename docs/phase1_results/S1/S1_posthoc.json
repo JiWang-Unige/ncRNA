@@ -1,0 +1,167 @@
+{
+ "post_hoc": true,
+ "bins_reads": [
+  [
+   0,
+   100
+  ],
+  [
+   100,
+   1000
+  ],
+  [
+   1000,
+   1000000000000
+  ]
+ ],
+ "models": {
+  "spliceai": {
+   "lnc_bin0": {
+    "n_tx": 1531,
+    "n_sites": 3765,
+    "n_candidates": 28051546,
+    "topk_acc": 0.4956175298804781,
+    "auprc": 0.4975515739149182,
+    "clean_n_sites": 3765,
+    "clean_n_candidates": 28037813,
+    "clean_topk_acc": 0.6,
+    "clean_auprc": 0.6398733687804882,
+    "n_used_unannotated_removed": 13733
+   },
+   "lnc_bin1": {
+    "n_tx": 1717,
+    "n_sites": 3411,
+    "n_candidates": 20325059,
+    "topk_acc": 0.5573145705071827,
+    "auprc": 0.5784666407906001,
+    "clean_n_sites": 3411,
+    "clean_n_candidates": 20311641,
+    "clean_topk_acc": 0.6728232189973615,
+    "clean_auprc": 0.7305204767552734,
+    "n_used_unannotated_removed": 13418
+   },
+   "lnc_bin2": {
+    "n_tx": 1607,
+    "n_sites": 2013,
+    "n_candidates": 10060406,
+    "topk_acc": 0.6204669647292598,
+    "auprc": 0.6690021441556472,
+    "clean_n_sites": 2013,
+    "clean_n_candidates": 10049673,
+    "clean_topk_acc": 0.7486338797814208,
+    "clean_auprc": 0.8224796864409014,
+    "n_used_unannotated_removed": 10733
+   },
+   "mrna_bin0": {
+    "n_tx": 1375,
+    "n_sites": 7499,
+    "n_candidates": 41254569,
+    "topk_acc": 0.8002400320042672,
+    "auprc": 0.851668905796799,
+    "clean_n_sites": 7499,
+    "clean_n_candidates": 41206282,
+    "clean_topk_acc": 0.8434457927723696,
+    "clean_auprc": 0.8918989571757588,
+    "n_used_unannotated_removed": 48287
+   },
+   "mrna_bin1": {
+    "n_tx": 2033,
+    "n_sites": 9506,
+    "n_candidates": 43975716,
+    "topk_acc": 0.8116978750262992,
+    "auprc": 0.8823879124878131,
+    "clean_n_sites": 9506,
+    "clean_n_candidates": 43917667,
+    "clean_topk_acc": 0.8747107090258784,
+    "clean_auprc": 0.9340096123244669,
+    "n_used_unannotated_removed": 58049
+   },
+   "mrna_bin2": {
+    "n_tx": 7349,
+    "n_sites": 11719,
+    "n_candidates": 52775903,
+    "topk_acc": 0.8266916972437921,
+    "auprc": 0.9080257796823511,
+    "clean_n_sites": 11719,
+    "clean_n_candidates": 52707828,
+    "clean_topk_acc": 0.9082686236026964,
+    "clean_auprc": 0.9615682029264091,
+    "n_used_unannotated_removed": 68075
+   }
+  },
+  "own": {
+   "lnc_bin0": {
+    "n_tx": 1531,
+    "n_sites": 3765,
+    "n_candidates": 28051546,
+    "topk_acc": 0.50066401062417,
+    "auprc": 0.5035879291548253,
+    "clean_n_sites": 3765,
+    "clean_n_candidates": 28037813,
+    "clean_topk_acc": 0.60132802124834,
+    "clean_auprc": 0.6409033211571137,
+    "n_used_unannotated_removed": 13733
+   },
+   "lnc_bin1": {
+    "n_tx": 1717,
+    "n_sites": 3411,
+    "n_candidates": 20325059,
+    "topk_acc": 0.5652301377895046,
+    "auprc": 0.5944656609674278,
+    "clean_n_sites": 3411,
+    "clean_n_candidates": 20311641,
+    "clean_topk_acc": 0.6795661096452653,
+    "clean_auprc": 0.7423616021875383,
+    "n_used_unannotated_removed": 13418
+   },
+   "lnc_bin2": {
+    "n_tx": 1607,
+    "n_sites": 2013,
+    "n_candidates": 10060406,
+    "topk_acc": 0.6373571783407849,
+    "auprc": 0.6951807859593868,
+    "clean_n_sites": 2013,
+    "clean_n_candidates": 10049673,
+    "clean_topk_acc": 0.7615499254843517,
+    "clean_auprc": 0.8349722128330026,
+    "n_used_unannotated_removed": 10733
+   },
+   "mrna_bin0": {
+    "n_tx": 1375,
+    "n_sites": 7499,
+    "n_candidates": 41254569,
+    "topk_acc": 0.7815708761168155,
+    "auprc": 0.8405370671522417,
+    "clean_n_sites": 7499,
+    "clean_n_candidates": 41206282,
+    "clean_topk_acc": 0.8270436058141085,
+    "clean_auprc": 0.8843562146814022,
+    "n_used_unannotated_removed": 48287
+   },
+   "mrna_bin1": {
+    "n_tx": 2033,
+    "n_sites": 9506,
+    "n_candidates": 43975716,
+    "topk_acc": 0.7926572690932043,
+    "auprc": 0.8658476374150308,
+    "clean_n_sites": 9506,
+    "clean_n_candidates": 43917667,
+    "clean_topk_acc": 0.8503050704818009,
+    "clean_auprc": 0.9181811144077434,
+    "n_used_unannotated_removed": 58049
+   },
+   "mrna_bin2": {
+    "n_tx": 7349,
+    "n_sites": 11719,
+    "n_candidates": 52775903,
+    "topk_acc": 0.7935830702278351,
+    "auprc": 0.8735007015963264,
+    "clean_n_sites": 11719,
+    "clean_n_candidates": 52707828,
+    "clean_topk_acc": 0.8589470091304718,
+    "clean_auprc": 0.9292769606487502,
+    "n_used_unannotated_removed": 68075
+   }
+  }
+ }
+}
