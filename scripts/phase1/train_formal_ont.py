@@ -63,6 +63,9 @@ def main():
                          "each decoded as an extra S3_lncbias<b> block in result.json")
     ap.add_argument("--accum", type=int, default=int(os.environ.get("NCRNA_ACCUM", "2")),
                     help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
+    ap.add_argument("--data", default="v12", choices=["v12", "v20"],
+                    help="v20 (protocol section 17): training windows data/p1v20 (chr9 windows replaced), features = "
+                         "data/p1_feat/train.npy with the replaced rows from data/p1_feat_v20/train_new.npy; val / chr18 unchanged")
     ap.add_argument("--online-features", action="store_true", default=os.environ.get("NCRNA_ONLINE") == "1",
                     help="compute backbone features on the fly (win3090: no feature cache on disk)")
     a = ap.parse_args()
@@ -80,8 +83,17 @@ def main():
     os.makedirs(out, exist_ok=True)
     F, D = f"{ROOT}/data/p1_feat", f"{ROOT}/data/p1v12"
     mm = lambda p: np.load(p, mmap_mode="r")
-    tr = dict(feats=mm(f"{F}/train.npy") if os.path.exists(f"{F}/train.npy") else None, codes=mm(f"{D}/train_codes.npy"), bits=mm(f"{D}/train_bits_{a.labels}.npy"),
-              events=mm(f"{D}/train_events.npy"))
+    DT = f"{ROOT}/data/p1v20" if a.data == "v20" else D
+    tr = dict(feats=mm(f"{F}/train.npy") if os.path.exists(f"{F}/train.npy") else None, codes=mm(f"{DT}/train_codes.npy"), bits=mm(f"{DT}/train_bits_{a.labels}.npy"),
+              events=mm(f"{DT}/train_events.npy"))
+    if a.data == "v20":
+        sys.path.insert(0, f"{ROOT}/scripts/phase1/v20")
+        from feat_overlay import Overlay
+        rows = [r["row"] for r in json.load(open(f"{DT}/replaced.json"))["replaced"]]
+        new = mm(f"{ROOT}/data/p1_feat_v20/train_new.npy")
+        cov = json.load(open(f"{ROOT}/data/p1_feat_v20/train_new.cover.json"))
+        assert sum(b - a_ for a_, b in cov) == len(rows) == len(new), "v20 new-window feature cache incomplete"
+        tr["feats"] = Overlay(tr["feats"], new, rows)
     va = dict(feats=mm(f"{F}/val.npy") if os.path.exists(f"{F}/val.npy") else None, codes=mm(f"{D}/val_codes.npy"), bits=mm(f"{D}/val_bits_{a.labels}.npy"),
               events=mm(f"{D}/val_events.npy"))
     ch = dict(feats=mm(f"{F}/chr18.npy") if os.path.exists(f"{F}/chr18.npy") else None, codes=mm(f"{ROOT}/data/p1/chr18_codes.npy"),
@@ -106,7 +118,7 @@ def main():
         ch.update(codes=ch["codes"][:3000000])
         ch["feats"] = (online.OnlineChromosome(ch["codes"], fn) if a.online_features else ch["feats"][:500000])
         a.epochs = 1
-    meta = dict(name=a.name, host=os.uname().nodename, online_features=a.online_features, accum=a.accum, arm=a.arm, seed=a.seed, labels=a.labels, lnc_only=a.lnc_only, eval_only=a.eval_only,
+    meta = dict(name=a.name, data=a.data, host=os.uname().nodename, online_features=a.online_features, accum=a.accum, arm=a.arm, seed=a.seed, labels=a.labels, lnc_only=a.lnc_only, eval_only=a.eval_only,
                 src=a.src, ckpt=a.ckpt, lnc_entry_bias=a.lnc_entry_bias, with_s1=a.with_s1, epochs=a.epochs, smoke=a.smoke, gpu_frac=frac,
                 features="GENERanno-1.2b-cds L17+L23 fp16 (data/p1_feat)", started=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()))
     json.dump(meta, open(f"{out}/run_meta.json", "w"), indent=1)
