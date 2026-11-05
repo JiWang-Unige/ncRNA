@@ -71,6 +71,9 @@ def main():
            "pick_rule": "max Sn s.t. strict Pr >= 0.43" if ok else "no t reaches strict Pr 0.43: max strict Pr", "reads": {}}
     del rna18
     for chrom in ("chr18", "chr20", "chr9"):
+        if not os.path.exists(f"{ROOT}/{a.raw}/ag_{chrom}_rna.npy"):
+            res["reads"][chrom] = "not run (chromosome not fetched within the CU cap)"
+            continue
         truth = ruler.read_gtf(f"{ROOT}/{a.v50}", chrom)
         f, _ = P.score_preds(truth, preds_at(load(chrom), pick["t"]), boot=N_BOOT)
         res["reads"][chrom] = P.norm(f)

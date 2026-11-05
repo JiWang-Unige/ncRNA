@@ -2,7 +2,8 @@
 # S2-AG (PLAN_S2_AG.md): run ag_colab_job.py in a Colab VM and fetch its outputs to ont as each part completes.
 #   ag_colab_run.sh smoke|full|auto|cputest <deadline_s> <gpu[,gpu...]|CPU> <cu_cap> <chrom>...
 # auto = smoke on the first chromosome, then, in the same session and only if the smoke check passes (fast path equal
-# to predict_sequence; projected CU of the full run within what is left of cu_cap), the full run on all chromosomes.
+# to predict_sequence), the full run on the longest prefix of the chromosome list (given in priority order) whose
+# projected CU fits in what is left of cu_cap; the first chromosome must fit, otherwise stop.
 # cputest = the smoke steps on a CPU runtime with 16,384 bp windows (install, model load, track mapping, fetch).
 # Assignment: tries each listed accelerator in turn; with ASSIGN_HOURS=h (default 0: one round) repeats every 20 min
 # for up to h hours (premium GPUs are often out of capacity; a failed attempt costs nothing).
@@ -140,17 +141,25 @@ run_job smoke ${CHROMS%% *} || exit 1
 [ -e $D/raw/smoke.fetched ] || { log "STOP: smoke outputs not fetched"; exit 1; }
 # go / stop for the full run, written before any smoke output was seen
 R=$(rate)
-python3 - $D/raw/smoke.done.json "${R:-0}" "$(spent "$(bal)")" "$CAP" > $TMP/check.txt <<'EOF'
-import json, sys
+python3 - $D/raw/smoke.done.json "${R:-0}" "$(spent "$(bal)")" "$CAP" $CHROMS > $TMP/check.txt <<'EOF'
+import json, math, sys
 s, rate, spent, cap = json.load(open(sys.argv[1])), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4])
+L = {"chr20": 64444167, "chr18": 80373285, "chr9": 138394717, "chr7": 159345973}
 d = s["fast_vs_public"]
 same = "public_error" not in d and d["splice_max_abs"] <= 1e-3 and d["rna_max_abs"] <= 1e-3 * max(1.0, d["rna_max_value"])
-hours = s["est_predict_min"] * 1.25 / 60 + 0.25          # +25% and 15 min for downloads, saving and fetching
-need = rate * hours
-go = same and rate > 0 and spent + need <= cap
-print("GO" if go else "STOP", json.dumps({"fast_equals_public": same, "rate_per_h": rate, "projected_h": round(hours, 2),
-                                          "projected_cu": round(need, 2), "spent_cu": spent, "cap": cap}))
+per = sum(s["window_s"]) / len(s["window_s"])
+pick, hours = [], 0.0
+for c in sys.argv[5:]:
+    h = sum(math.ceil(L[x] / 524288) for x in pick + [c]) * per * 1.25 / 3600 + 0.25   # +25%, 15 min for I/O
+    if spent + rate * h > cap:
+        break
+    pick, hours = pick + [c], h
+go = same and rate > 0 and bool(pick)
+print("GO" if go else "STOP", json.dumps({"fast_equals_public": same, "rate_per_h": rate, "window_s": round(per, 2),
+                                          "chroms": pick, "projected_h": round(hours, 2),
+                                          "projected_cu": round(rate * hours, 2), "spent_cu": spent, "cap": cap}))
+print("CHROMS", " ".join(pick))
 EOF
-log "CHECK $(cat $TMP/check.txt)"
+log "CHECK $(head -1 $TMP/check.txt)"
 grep -q '^GO' $TMP/check.txt || exit 1
-run_job full $CHROMS
+run_job full $(sed -n 's/^CHROMS //p' $TMP/check.txt)
