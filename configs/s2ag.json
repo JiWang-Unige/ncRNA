@@ -1,0 +1,24 @@
+{
+ "plan": "docs/phase1_results/PLAN_S2_AG.md",
+ "weights": {
+  "hf_repo": "google/alphagenome-all-folds",
+  "hf_revision": "a8f293a76ee73d5b57f3bf2ae146510589fcf187",
+  "local_dir": "data/alphagenome/hf_all_folds",
+  "sha256_list": "data/alphagenome/hf_all_folds.sha256"
+ },
+ "ag_commit": "3eecf48e58d7babbbc53525a8a0cf29a179e20a6",
+ "codes": {
+  "chr20": "data/p1/chr20_codes.npy",
+  "chr18": "data/p1/chr18_codes.npy",
+  "chr9": "data/p1/chr9_codes.npy",
+  "chr7": "data/splice_own/codes_chr7.npy"
+ },
+ "codes_sha256": {
+  "chr20": "1bd402266d6bef2ddf8661cab43d8960688948b216c1c0877cf3973925a7bb5e",
+  "chr18": "0c20711724717ee5fd8dbe1b83f56598c3e4f405635b1059cf2a7bd8591bd78c",
+  "chr9": "742b09cce95d29d1622be6a1776528d886f94527751d2f97bb19d3a9a23cccab",
+  "chr7": "4ab4a521665fa316d2513352f38f1aaf6fb8d8528c725d0b0ce0b0b26aff2368"
+ },
+ "cu_cap_total": 20,
+ "out_dir": "outputs/PHASE1/S2AG"
+}
