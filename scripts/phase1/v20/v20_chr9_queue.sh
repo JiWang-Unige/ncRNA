@@ -27,8 +27,10 @@ $N $PY scripts/phase1/p15_score.py --config $C --target chr18 > $O/repro_chr18.l
 [ -e $O/read/chr18/REPRO_OK ] || { log REPRO_FAIL; exit 1; }
 log REPRO_OK
 # 2) chr9 features (cache only with >= 250 GB free, protocol section 17 detail 6)
-free=$(df -BG --output=avail ~ | tail -1 | tr -dc 0-9)
-[ "$free" -ge 250 ] || { log "only ${free} GB free - stop (stream mode not implemented)"; exit 1; }
+if [ ! -e data/p1_feat/chr9.npy ]; then   # the >= 250 GB rule decides whether to create the cache; a resumed run reuses it
+  free=$(df -BG --output=avail ~ | tail -1 | tr -dc 0-9)
+  [ "$free" -ge 250 ] || { log "only ${free} GB free - stop (stream mode not implemented)"; exit 1; }
+fi
 NAMES=chr9 CHROM_ONLY=1 NCRNA_GPU_FRAC=0.28 bash scripts/phase1/p1_feat_ont.sh >> $O/feat_chr9.log 2>&1
 grep -q "ALL DONE fails=0" $O/feat_chr9.log || { log FEAT9_FAIL; exit 1; }
 log "chr9 features ok"
