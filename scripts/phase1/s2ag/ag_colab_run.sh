@@ -1,41 +1,49 @@
 #!/bin/bash
-# S2-AG (PLAN_S2_AG.md): run ag_colab_job.py in a Colab GPU VM and fetch its outputs to ont as each part completes.
-#   ag_colab_run.sh smoke|full|auto <deadline_s> <gpu[,gpu...]> <cu_cap> <chrom>...
+# S2-AG (PLAN_S2_AG.md): run ag_colab_job.py in a Colab VM and fetch its outputs to ont as each part completes.
+#   ag_colab_run.sh smoke|full|auto|cputest <deadline_s> <gpu[,gpu...]|CPU> <cu_cap> <chrom>...
 # auto = smoke on the first chromosome, then, in the same session and only if the smoke check passes (fast path equal
 # to predict_sequence; projected CU of the full run within what is left of cu_cap), the full run on all chromosomes.
-# Assignment: tries each listed GPU in turn; with ASSIGN_HOURS=h (default 0: one round) repeats every 20 min for up to
-# h hours (premium GPUs are often out of capacity; a failed attempt costs nothing).  Uses ~/bin/colab_long (the stock CLI
-# with a 600 s HTTP read timeout instead of 120 s).  Large files (weights, outputs) go over scp through the CLI's ssh
-# bridge (~/.ssh/colab.conf, host colab-<session>, key ~/.ssh/colab_ed25519): the CLI's upload / download use the Jupyter
-# contents API, which refuses files of ~100 MB and more.
-# Caps, counted from the moment a session is READY: wall clock (deadline_s) and compute units spent (cu_cap).
-# On exit, whatever happened: stop the session, unassign orphans (colab_cleanup.py --orphans), log the usage.
+# cputest = the smoke steps on a CPU runtime with 16,384 bp windows (install, model load, track mapping, fetch).
+# Assignment: tries each listed accelerator in turn; with ASSIGN_HOURS=h (default 0: one round) repeats every 20 min
+# for up to h hours (premium GPUs are often out of capacity; a failed attempt costs nothing).
+# Transport: everything after assignment goes over ssh / scp through the Colab CLI's ssh bridge (~/.ssh/colab.conf,
+# host colab-<session>, key ~/.ssh/colab_ed25519).  Not `colab exec` (a poll hung for 42 min on 11-05 while the VM
+# kept billing) and not `colab upload / download` (Jupyter contents API, refuses files of ~100 MB and more).
+# Every remote call has a hard timeout; 3 failed polls in a row end the run; a watchdog kills the run at
+# deadline + 15 min.  Caps, counted from the moment a session is READY: wall clock (deadline_s) and CU (cu_cap).
+# On exit, whatever happened (also on TERM / INT / HUP): stop the session, unassign orphans, log the usage.
 set -u
 MODE=$1; DEADLINE_S=$2; GPU=$3; CAP=$4; shift 4; CHROMS="$*"
 cd ~/ncrna-annot || exit 1
 S=agrun
-C="$HOME/bin/colab_long --auth oauth2"
+C="timeout 900 $HOME/bin/colab_long --auth oauth2"
 P=$HOME/.local/share/uv/tools/google-colab-cli/bin/python
 D=outputs/PHASE1/S2AG/$MODE
 mkdir -p $D/raw
 TMP=$(mktemp -d)
+SSH="ssh -F $HOME/.ssh/colab.conf colab-$S"
 SCP="scp -q -F $HOME/.ssh/colab.conf"
 T0=$SECONDS
+WD=
 log() { echo "$(date -u +%FT%TZ) $*" | tee -a $D/run.log; }
-bal() { $C usage 2>&1 | sed -n 's/.*Current balance: \([0-9.]*\).*/\1/p' | head -1; }
-rate() { $C usage 2>&1 | sed -n 's/.*Usage rate: \([0-9.]*\).*/\1/p' | head -1; }
+usage_line() { timeout 120 $HOME/bin/colab_long --auth oauth2 usage 2>&1; }
+bal() { usage_line | sed -n 's/.*Current balance: \([0-9.]*\).*/\1/p' | head -1; }
+rate() { usage_line | sed -n 's/.*Usage rate: \([0-9.]*\).*/\1/p' | head -1; }
 spent() { python3 -c "print(round($B0 - ${1:-$B0}, 2))"; }
 B0=$(bal)
 [ -n "$B0" ] || { echo "ABORT: no balance"; exit 1; }
 cleanup() {
-  for f in job.log job.out job.1.log job.1.out; do timeout 120 $SCP colab-$S:/content/$f $D/$f >/dev/null 2>&1; done
-  $C stop -s $S 2>&1 | tail -1
-  $P $HOME/bin/colab_cleanup.py --orphans
-  log "after: $($C usage 2>&1 | grep -E 'balance|rate|assign' | tr '\n' ' ')"
+  trap - EXIT TERM INT HUP
+  [ -n "$WD" ] && kill $WD 2>/dev/null
+  for f in job.log job.out job.1.log job.1.out; do timeout 60 $SCP colab-$S:/content/$f $D/$f >/dev/null 2>&1; done
+  timeout 120 $HOME/bin/colab_long --auth oauth2 stop -s $S 2>&1 | tail -1
+  timeout 300 $P $HOME/bin/colab_cleanup.py --orphans
+  log "after: $(usage_line | grep -E 'balance|rate|assign' | tr '\n' ' ')"
   log "END wall_s $((SECONDS - T0)) spent_cu $(spent "$(bal)")"
   rm -rf $TMP
 }
 trap cleanup EXIT
+trap 'log "signal: exiting"; exit 1' TERM INT HUP
 log "START mode=$MODE gpu=$GPU cap=$CAP chroms=$CHROMS balance=$B0"
 
 W=data/alphagenome/hf_all_folds.tar
@@ -45,42 +53,35 @@ job_args() {  # mode chrom...
   python3 - "$WSHA" "$@" <<'EOF'
 import json, sys
 c = json.load(open("configs/s2ag.json"))
-print(json.dumps({"mode": sys.argv[2], "chroms": sys.argv[3:], "ag_commit": c["ag_commit"], "ckpt_tar_sha256": sys.argv[1],
-                  "codes_sha256": {k: c["codes_sha256"][k] for k in sys.argv[3:]}}))
+a = {"mode": sys.argv[2], "chroms": sys.argv[3:], "ag_commit": c["ag_commit"], "ckpt_tar_sha256": sys.argv[1],
+     "codes_sha256": {k: c["codes_sha256"][k] for k in sys.argv[3:]}}
+if a["mode"] == "cputest":
+    a.update(cpu=True, window=16384, smoke_windows=1)
+print(json.dumps(a))
 EOF
 }
-cat > $TMP/launch.py <<'EOF'
-import os, subprocess
-for f in ("job.log", "job.out"):  # a previous job's log moves aside, so its "total_s" line cannot end the next poll
-    if os.path.exists(f"/content/{f}"):
-        os.replace(f"/content/{f}", f"/content/{f[:-4]}.1.{f[-3:]}")
-subprocess.Popen("nohup python3 /content/job.py > /content/job.out 2>&1 &", shell=True); print("launched")
-EOF
-cat > $TMP/poll.py <<'EOF'
-import glob, os
-p = "/content/job.log"
-print("\n".join(open(p).read().splitlines()[-3:]) if os.path.exists(p) else "nolog")
-print("DONE_TAGS", " ".join(sorted(os.path.basename(f)[:-5] for f in glob.glob("/content/out/*.done"))))
-EOF
 
 ok=0
 A_END=$((SECONDS + ${ASSIGN_HOURS:-0} * 3600))
 while [ $ok = 0 ]; do
   for g in ${GPU//,/ }; do
-    if $C new -s $S --gpu "$g" 2>&1 | tail -1 | grep -q READY; then ok=1; GPU=$g; break; fi
-    log "new $g failed: $($C usage 2>&1 | grep -i assign | tr -d '\n')"
-    $P $HOME/bin/colab_cleanup.py --orphans >/dev/null
+    if [ "$g" = CPU ]; then acc=; else acc="--gpu $g"; fi
+    if $C new -s $S $acc 2>&1 | tail -1 | grep -q READY; then ok=1; GPU=$g; break; fi
+    log "new $g failed: $(usage_line | grep -i assign | tr -d '\n')"
+    timeout 300 $P $HOME/bin/colab_cleanup.py --orphans >/dev/null
   done
   [ $ok = 1 ] || [ $SECONDS -ge $A_END ] && break
   sleep 1200
 done
 [ $ok = 1 ] || { log "ABORT: no session on $GPU"; exit 1; }
 T0=$SECONDS
+( sleep $((DEADLINE_S + 900)); kill -TERM $$ ) & WD=$!
 log "session READY on $GPU; rate: $(rate)/h"
+timeout 120 $SSH true || { log "ABORT: ssh to the session failed"; exit 1; }
 t=$SECONDS; timeout 1800 $SCP $W colab-$S:/content/ag_ckpt.tar; rc=$?
 log "weights scp rc=$rc s $((SECONDS - t)) bytes $(stat -c %s $W)"
 [ $rc = 0 ] || { log "ABORT: weights upload failed"; exit 1; }
-$C upload -s $S scripts/phase1/s2ag/ag_colab_job.py /content/job.py 2>&1 | tail -1
+timeout 120 $SCP scripts/phase1/s2ag/ag_colab_job.py colab-$S:/content/job.py || { log "ABORT: job upload failed"; exit 1; }
 
 fetch() {  # tag: download <tag>.done, then every file it lists, checking sha256
   local tag=$1 f want got t
@@ -97,33 +98,36 @@ fetch() {  # tag: download <tag>.done, then every file it lists, checking sha256
   touch $D/raw/$tag.fetched
 }
 
+POLL='tail -n 3 /content/job.log 2>/dev/null || echo nolog; pgrep -f "python3 [j]ob.py" >/dev/null && echo JOB_ALIVE; echo DONE_TAGS $(cd /content/out 2>/dev/null && ls *.done 2>/dev/null | sed "s/\.done$//")'
 run_job() {  # mode chrom...: launch, poll every 60 s, fetch finished parts; returns 0 only on the job's own end line
   local fails=0 OUT B rc=1
   job_args "$@" > $TMP/job_args.json
-  $C upload -s $S $TMP/job_args.json /content/job_args.json 2>&1 | tail -1
-  $C exec -s $S --timeout 60 -f $TMP/launch.py 2>&1 | tail -1
+  timeout 120 $SCP $TMP/job_args.json colab-$S:/content/job_args.json || { log "ABORT: args upload failed"; return 1; }
+  timeout 120 $SSH 'cd /content; for f in job.log job.out; do [ -f $f ] && mv $f ${f%.*}.1.${f##*.}; done; nohup python3 job.py > job.out 2>&1 < /dev/null & echo launched' \
+    || { log "ABORT: launch failed"; return 1; }
   log "launched $*"
   while [ $((SECONDS - T0)) -lt "$DEADLINE_S" ]; do
     sleep 60
-    OUT=$($C exec -s $S --timeout 60 -f $TMP/poll.py 2>&1)
+    OUT=$(timeout 90 $SSH "$POLL" 2>&1)
     if ! echo "$OUT" | grep -q DONE_TAGS; then
       fails=$((fails + 1)); log "poll failed ($fails): $(echo "$OUT" | tail -1 | cut -c1-200)"
-      [ $fails -ge 5 ] && { log "ABORT: session unreachable"; return 1; }
+      [ $fails -ge 3 ] && { log "ABORT: session unreachable"; return 1; }
       continue
     fi
     fails=0
     B=$(bal)
-    log "poll $((SECONDS - T0)) s spent_cu $(spent "$B") | $(echo "$OUT" | grep -v DONE_TAGS | tail -1 | cut -c1-300)"
+    log "poll $((SECONDS - T0)) s spent_cu $(spent "$B") | $(echo "$OUT" | grep -v 'DONE_TAGS\|JOB_ALIVE' | tail -1 | cut -c1-300)"
     for tag in $(echo "$OUT" | sed -n 's/^DONE_TAGS //p'); do fetch $tag || log "fetch $tag failed (retry next poll)"; done
     if echo "$OUT" | grep -q '"total_s"'; then
       log "JOB_END $(echo "$OUT" | grep total_s | tail -1 | cut -c1-300)"
       echo "$OUT" | grep total_s | tail -1 | grep -q FAILED || rc=0
       break
     fi
+    if ! echo "$OUT" | grep -q JOB_ALIVE; then log "ABORT: job process gone without an end line"; break; fi
     if python3 -c "import sys; sys.exit(0 if $B0 - ${B:-$B0} >= $CAP else 1)"; then log "ABORT: CU cap $CAP reached"; return 1; fi
   done
   [ $((SECONDS - T0)) -ge "$DEADLINE_S" ] && log "DEADLINE hit"
-  OUT=$($C exec -s $S --timeout 60 -f $TMP/poll.py 2>&1)
+  OUT=$(timeout 90 $SSH "$POLL" 2>&1)
   for tag in $(echo "$OUT" | sed -n 's/^DONE_TAGS //p'); do fetch $tag || log "fetch $tag failed (final)"; done
   return $rc
 }

@@ -15,6 +15,11 @@ Kept per base (float16, no position offsets; ag_post.py picks them on ont):
   ag_<chrom>_rna.npy     [L, 2]  RNA_SEQ, max over the + stranded tracks / over the - stranded tracks
 The reduction runs on the GPU through the model's own jitted _predict (the public predict_sequence would move every
 RNA-seq track to host memory); smoke mode checks it against predict_sequence on one window.
+Mode "cputest" (args "cpu": true, "window": 131072): the smoke steps on a CPU runtime with short windows, to check the
+install, the model load, the track mapping and the fetch before any GPU time is paid for.
+Install: the Colab image pins protobuf 6.x, while a build-isolated install of alphagenome_research compiles its protos
+with the newest protoc (7.x) and then fails to import ("gencode 7.35.1 runtime 6.33.6"); the package is therefore
+rebuilt without build isolation against a grpcio-tools that fits the image's protobuf.
 """
 import hashlib
 import json
@@ -44,14 +49,26 @@ def sh(cmd):
     return r.stdout
 
 
+def set_window(w):
+    global W, STEP, H
+    W, STEP, H = w, w // 2, w // 4
+
+
 def gpu_ok():
     r = subprocess.run([sys.executable, "-c", "import jax; print(jax.devices()[0].platform)"], capture_output=True, text=True)
     return r.stdout.strip().endswith("gpu"), (r.stdout + r.stderr)[-600:]
 
 
 def setup(args):
-    sh(f"pip install -q 'git+https://github.com/google-deepmind/alphagenome_research.git@{args['ag_commit']}'")
-    ok, msg = gpu_ok()
+    url = f"git+https://github.com/google-deepmind/alphagenome_research.git@{args['ag_commit']}"
+    pv = sh(f"{sys.executable} -c 'import google.protobuf as p; print(p.__version__)'").strip()
+    sh(f"pip install -q '{url}'")
+    sh(f"pip install -q hatchling 'protobuf=={pv}' grpcio-tools")
+    sh(f"pip install -q --no-build-isolation --no-deps --force-reinstall '{url}'")
+    sh(f"{sys.executable} -c 'import alphagenome_research.model.dna_model'")
+    log(step="installed", protobuf=sh(f"{sys.executable} -c 'import google.protobuf as p; print(p.__version__)'").strip(),
+        protobuf_before=pv)
+    ok, msg = (True, "cpu test") if args.get("cpu") else gpu_ok()
     if not ok:
         log(step="jax_no_gpu", msg=msg)
         sh("pip install -q -U 'jax[cuda12]'")
@@ -64,7 +81,7 @@ def setup(args):
         raise SystemExit("FAILED: checkpoint tar sha256 differs from ont")
     os.makedirs("/content/ckpt", exist_ok=True)
     sh("tar -xf /content/ag_ckpt.tar -C /content/ckpt")
-    log(step="setup_done", nvidia=sh("nvidia-smi --query-gpu=name,memory.total --format=csv,noheader").strip(),
+    log(step="setup_done", nvidia="cpu" if args.get("cpu") else sh("nvidia-smi --query-gpu=name,memory.total --format=csv,noheader").strip(),
         versions=sh("pip list 2>/dev/null | grep -iE '^(jax|jaxlib|jax-cuda12-plugin|alphagenome|alphagenome.research|dm-haiku|orbax-checkpoint) '"))
 
 
@@ -90,7 +107,7 @@ def codes_of(chrom, want):
 
 
 class Runner:
-    def __init__(self):
+    def __init__(self, cpu=False):
         import jax
         import jax.numpy as jnp
         import numpy as np
@@ -103,7 +120,8 @@ class Runner:
         self.OT, self.org = OT, api.Organism.HOMO_SAPIENS
         self.req = (OT.SPLICE_SITES, OT.RNA_SEQ)
         t = time.time()
-        self.model = dna_model.create("/content/ckpt", organism_settings={self.org: dna_model.OrganismSettings()})
+        device = jax.devices("cpu")[0] if cpu else None
+        self.model = dna_model.create("/content/ckpt", organism_settings={self.org: dna_model.OrganismSettings()}, device=device)
         self.load_s = round(time.time() - t, 1)
         m = self.model
         self.md = m._metadata[self.org]
@@ -128,7 +146,7 @@ class Runner:
         p_idx = rpad[np.flatnonzero(rmeta["strand"].values == "+")]
         m_idx = rpad[np.flatnonzero(rmeta["strand"].values == "-")]
         self.n_tracks = {"rna_plus": len(p_idx), "rna_minus": len(m_idx), "rna_unstranded": int((rmeta["strand"].values == ".").sum())}
-        dev = jax.local_devices()[0]
+        dev = device or jax.local_devices()[0]
         self.dev = dev
         self.consts = [jax.device_put(x, dev) for x in (s_idx, p_idx, m_idx)]
         self.oi = jax.device_put(np.full((1,), dna_model.convert_to_organism_index(self.org), np.int32), dev)
@@ -169,7 +187,10 @@ class Runner:
         return s, r
 
     def peak_gb(self):
-        st = self.dev.memory_stats() or {}
+        try:
+            st = self.dev.memory_stats() or {}
+        except Exception:  # noqa: BLE001 - CPU devices may not report memory
+            st = {}
         return round(st.get("peak_bytes_in_use", 0) / 2**30, 2)
 
 
@@ -263,12 +284,13 @@ def main():
     global LOG
     LOG = open("/content/job.log", "a", buffering=1)
     args = json.load(open("/content/job_args.json"))
-    log(step="start", args={k: v for k, v in args.items() if k != "codes_sha256"})
+    set_window(args.get("window", 1 << 20))
+    log(step="start", window=W, args={k: v for k, v in args.items() if k != "codes_sha256"})
     try:
         setup(args)
-        R = Runner()
+        R = Runner(cpu=bool(args.get("cpu")))
         log(step="model_loaded", load_s=R.load_s, n_tracks=R.n_tracks, splice_tracks=R.smeta.to_dict("records"))
-        (smoke if args["mode"] == "smoke" else full)(R, args)
+        (full if args["mode"] == "full" else smoke)(R, args)
         log(step="end", total_s=round(time.time() - T0))
     except BaseException as e:  # noqa: BLE001 - the wrapper stops on this line
         log(step="FAILED", error=repr(e)[-1500:], total_s=round(time.time() - T0))
