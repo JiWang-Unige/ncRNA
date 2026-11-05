@@ -63,9 +63,11 @@ def main():
                          "each decoded as an extra S3_lncbias<b> block in result.json")
     ap.add_argument("--accum", type=int, default=int(os.environ.get("NCRNA_ACCUM", "2")),
                     help="batch 8 as accum x (8/accum) micro-batches (shared GPU)")
-    ap.add_argument("--data", default="v12", choices=["v12", "v20"],
+    ap.add_argument("--data", default="v12", choices=["v12", "v20", "v30h6", "v30hm"],
                     help="v20 (protocol section 17): training windows data/p1v20 (chr9 windows replaced), features = "
-                         "data/p1_feat/train.npy with the replaced rows from data/p1_feat_v20/train_new.npy; val / chr18 unchanged")
+                         "data/p1_feat/train.npy with the replaced rows from data/p1_feat_v20/train_new.npy; val / chr18 unchanged. "
+                         "v30h6 / v30hm (section 18): the v20 windows followed by the 3,000 new human (data/p1v30/human_new) "
+                         "or mouse (data/p1v30/mouse) windows, features from data/p1_feat_v30/<set>.npy")
     ap.add_argument("--online-features", action="store_true", default=os.environ.get("NCRNA_ONLINE") == "1",
                     help="compute backbone features on the fly (win3090: no feature cache on disk)")
     a = ap.parse_args()
@@ -83,10 +85,10 @@ def main():
     os.makedirs(out, exist_ok=True)
     F, D = f"{ROOT}/data/p1_feat", f"{ROOT}/data/p1v12"
     mm = lambda p: np.load(p, mmap_mode="r")
-    DT = f"{ROOT}/data/p1v20" if a.data == "v20" else D
+    DT = f"{ROOT}/data/p1v20" if a.data in ("v20", "v30h6", "v30hm") else D
     tr = dict(feats=mm(f"{F}/train.npy") if os.path.exists(f"{F}/train.npy") else None, codes=mm(f"{DT}/train_codes.npy"), bits=mm(f"{DT}/train_bits_{a.labels}.npy"),
               events=mm(f"{DT}/train_events.npy"))
-    if a.data == "v20":
+    if a.data in ("v20", "v30h6", "v30hm"):
         sys.path.insert(0, f"{ROOT}/scripts/phase1/v20")
         from feat_overlay import Overlay
         rows = [r["row"] for r in json.load(open(f"{DT}/replaced.json"))["replaced"]]
@@ -94,6 +96,18 @@ def main():
         cov = json.load(open(f"{ROOT}/data/p1_feat_v20/train_new.cover.json"))
         assert sum(b - a_ for a_, b in cov) == len(rows) == len(new), "v20 new-window feature cache incomplete"
         tr["feats"] = Overlay(tr["feats"], new, rows)
+    n_base = len(tr["codes"])   # windows covered by data/p1_feat/train.npy (checked below)
+    if a.data in ("v30h6", "v30hm"):
+        sys.path.insert(0, f"{ROOT}/scripts/phase1/v30")
+        from concat_view import Concat
+        part = "human_new" if a.data == "v30h6" else "mouse"
+        P3 = f"{ROOT}/data/p1v30/{part}"
+        extra = dict(feats=mm(f"{ROOT}/data/p1_feat_v30/{part}.npy"), codes=mm(f"{P3}/train_codes.npy"),
+                     bits=mm(f"{P3}/train_bits_{a.labels}.npy"), events=mm(f"{P3}/train_events.npy"))
+        cov = json.load(open(f"{ROOT}/data/p1_feat_v30/{part}.cover.json"))
+        assert sum(b - a_ for a_, b in cov) == len(extra["codes"]) == len(extra["feats"]) == len(extra["bits"]) == len(extra["events"]), \
+            f"v30 {part} cache or labels incomplete"
+        tr = {k: Concat([tr[k], extra[k]]) for k in tr}
     va = dict(feats=mm(f"{F}/val.npy") if os.path.exists(f"{F}/val.npy") else None, codes=mm(f"{D}/val_codes.npy"), bits=mm(f"{D}/val_bits_{a.labels}.npy"),
               events=mm(f"{D}/val_events.npy"))
     ch = dict(feats=mm(f"{F}/chr18.npy") if os.path.exists(f"{F}/chr18.npy") else None, codes=mm(f"{ROOT}/data/p1/chr18_codes.npy"),
@@ -108,7 +122,7 @@ def main():
         ch["feats"] = online.OnlineChromosome(ch["codes"], fn)
     for k in ([] if a.online_features else ("train", "val", "chr18")):  # refuse a partially filled cache
         cov = json.load(open(f"{F}/{k}.cover.json"))
-        need = len(tr["codes"]) if k == "train" else len(va["codes"]) if k == "val" else None
+        need = n_base if k == "train" else len(va["codes"]) if k == "val" else None
         if need is not None:
             got = sum(b - a_ for a_, b in cov)
             assert got == need, f"{k} cache covers {got} of {need} windows"

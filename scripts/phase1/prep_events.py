@@ -29,9 +29,9 @@ EV = [f"{k}{s}" for s in ("+", "-") for k in ("donor", "acceptor", "TSS", "TES")
 CH = {n: i for i, n in enumerate(EV)}
 
 
-def chrom_lengths(chroms):
+def chrom_lengths(chroms, path=f"{ROOT}/data/human/hg38.fa.gz"):
     n, cur, out = 0, None, {}
-    with gzip.open(f"{ROOT}/data/human/hg38.fa.gz", "rt") as fh:
+    with gzip.open(path, "rt") as fh:
         for line in fh:
             if line.startswith(">"):
                 if cur in chroms:
@@ -76,20 +76,26 @@ def main():
     ap.add_argument("--windows-val", default=f"{P05}/windows_val.tsv")
     ap.add_argument("--splits", default="train,val")
     ap.add_argument("--out", default=OUT)
+    ap.add_argument("--genome", default=f"{ROOT}/data/human/hg38.fa.gz", help="v3.0: another genome (defaults unchanged)")
+    ap.add_argument("--gtf", default=GTF)
+    ap.add_argument("--junction-cache", default=f"{ROOT}/data/p1/junctions")
     a = ap.parse_args()
     out_dir = a.out
     os.makedirs(out_dir, exist_ok=True)
     src = {"train": a.windows_train, "val": a.windows_val}
     wins = {sp: [(l.split("\t")[0], int(l.split("\t")[1])) for l in open(src[sp])] for sp in a.splits.split(",")}
     chroms = {c for w in wins.values() for c, _ in w}
-    clen = chrom_lengths(chroms)
-    tx = labels.read_transcripts(GTF, chroms)
-    spans = labels.gene_spans(GTF, chroms)
+    clen = chrom_lengths(chroms, a.genome)
+    tx = labels.read_transcripts(a.gtf, chroms)
+    spans = labels.gene_spans(a.gtf, chroms)
+    if a.junction_cache != f"{ROOT}/data/p1/junctions":   # never fall back to a live (human) Snaptron query
+        missing = [c for c in chroms if not os.path.exists(f"{a.junction_cache}/{c}.tsv")]
+        assert not missing, f"no U-ev junction rows for {missing} in {a.junction_cache}"
     stats = {}
     for sp, w in wins.items():
         out = np.zeros((len(w), WIN, len(EV)), np.int8)
         for c in sorted({c for c, _ in w}):
-            unk = evidence.unknown_mask(c, clen[c], spans.get(c, []), cache=f"{ROOT}/data/p1/junctions/{c}.tsv")
+            unk = evidence.unknown_mask(c, clen[c], spans.get(c, []), cache=f"{a.junction_cache}/{c}.tsv")
             txs = tx.get(c, [])
             left = np.array([t[2][0][0] for t in txs])
             right = np.array([t[2][-1][1] for t in txs])

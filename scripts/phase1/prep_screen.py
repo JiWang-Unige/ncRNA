@@ -5,6 +5,8 @@ data/p1s/
   {train,val}_codes.npy      int8   [n, 24576]  real sequence codes (hg38)
   {train,val}_bits_{v50uev,v50f,v41uev,v50uevlnc}.npy   uint32 [n, 24576]
   val_windows.tsv, val_truth_v50.gtf (v50 genes fully inside a val window, chr18)
+v3.0 (protocol section 18, detail 5): --genome / --gtf / --junction-cache label another genome (mouse: mm39, GENCODE
+vM39, U-ev junctions lifted from srav1m); --gtf replaces v50 and drops the v41 variant.  Defaults are unchanged.
 """
 import gzip
 import os
@@ -22,9 +24,9 @@ GTF = {"v50": f"{ROOT}/data/human/gencode.v50.annotation.gtf.gz", "v41": f"{ROOT
 WIN = 24576
 
 
-def read_genome(chroms):
+def read_genome(chroms, path=f"{ROOT}/data/human/hg38.fa.gz"):
     seqs, cur, buf = {}, None, []
-    with gzip.open(f"{ROOT}/data/human/hg38.fa.gz", "rt") as fh:
+    with gzip.open(path, "rt") as fh:
         for line in fh:
             if line.startswith(">"):
                 if cur in chroms:
@@ -46,26 +48,36 @@ def main():
     ap.add_argument("--splits", default="train,val")
     ap.add_argument("--out", default=OUT)
     ap.add_argument("--check-train-codes", default=None, help="assert the regenerated train codes equal this .npy")
+    ap.add_argument("--genome", default=f"{ROOT}/data/human/hg38.fa.gz")
+    ap.add_argument("--gtf", default=None, help="annotation in place of v50 (the v41 variant is then not made)")
+    ap.add_argument("--junction-cache", default=f"{ROOT}/data/p1/junctions", help="U-ev junction rows per chromosome")
     a = ap.parse_args()
+    gtf = {"v50": a.gtf} if a.gtf else GTF
     OUT = a.out
     os.makedirs(OUT, exist_ok=True)
     src = {"train": a.windows_train, "val": a.windows_val}
     wins = {sp: [(l.split("\t")[0], int(l.split("\t")[1])) for l in open(src[sp])] for sp in a.splits.split(",")}
     chroms = {c for w in wins.values() for c, _ in w}
-    seqs = read_genome(chroms)
-    tx = {v: labels.read_transcripts(p, chroms) for v, p in GTF.items()}
-    spans = {v: labels.gene_spans(p, chroms) for v, p in GTF.items()}
-    variants = ("v50uev", "v50f", "v41uev", "v50uevlnc")
+    seqs = read_genome(chroms, a.genome)
+    tx = {v: labels.read_transcripts(p, chroms) for v, p in gtf.items()}
+    spans = {v: labels.gene_spans(p, chroms) for v, p in gtf.items()}
+    variants = ("v50uev", "v50f", "v41uev", "v50uevlnc") if "v41" in gtf else ("v50uev", "v50f", "v50uevlnc")
+    if a.junction_cache != f"{ROOT}/data/p1/junctions":   # never fall back to a live (human) Snaptron query
+        missing = [c for c in chroms if not os.path.exists(f"{a.junction_cache}/{c}.tsv")]
+        assert not missing, f"no U-ev junction rows for {missing} in {a.junction_cache}"
     arr = {(sp, va): np.zeros((len(w), WIN), np.uint32) for sp, w in wins.items() for va in variants}
     codes = {sp: np.zeros((len(w), WIN), np.int8) for sp, w in wins.items()}
+    stats = {}
     for c in sorted(chroms):
         n = len(seqs[c])
         cc = g1.encode(seqs[c])
-        unk = {v: evidence.unknown_mask(c, n, spans[v].get(c, []), cache=f"{ROOT}/data/p1/junctions/{c}.tsv") for v in GTF}
+        unk = {v: evidence.unknown_mask(c, n, spans[v].get(c, []), cache=f"{a.junction_cache}/{c}.tsv") for v in gtf}
         b = {"v50uev": labels.allowed_bits(n, tx["v50"].get(c, []), unk["v50"]),
              "v50f": labels.allowed_bits(n, tx["v50"].get(c, []), None),
-             "v41uev": labels.allowed_bits(n, tx["v41"].get(c, []), unk["v41"]),
              "v50uevlnc": labels.allowed_bits(n, [t for t in tx["v50"].get(c, []) if t[0] == "l"], unk["v50"])}
+        if "v41" in gtf:
+            b["v41uev"] = labels.allowed_bits(n, tx["v41"].get(c, []), unk["v41"])
+        stats.setdefault("unknown_bp", {})[c] = int(unk["v50"].sum())
         for sp, w in wins.items():
             for i, (wc, st) in enumerate(w):
                 if wc == c:
@@ -77,7 +89,6 @@ def main():
         ref = np.load(a.check_train_codes, mmap_mode="r")
         assert ref.shape == codes["train"].shape and np.array_equal(ref, codes["train"]), "train codes differ from " + a.check_train_codes
         print("train codes identical to", a.check_train_codes, flush=True)
-    stats = {}
     for sp in wins:
         np.save(f"{OUT}/{sp}_codes.npy", codes[sp])
         for va in variants:
