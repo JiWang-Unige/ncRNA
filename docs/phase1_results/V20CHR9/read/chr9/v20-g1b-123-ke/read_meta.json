@@ -1,0 +1,37 @@
+{
+ "name": "v20-g1b-123-ke",
+ "target": "chr9",
+ "config": "configs/v20.json",
+ "config_sha256": "f780522a0976aba33c21ff9942ed9c711caeb048f56e2391f8e40576baab6ca6",
+ "run": {
+  "arm": "G1B",
+  "family": "G1B",
+  "seed": 123,
+  "labels": "v50uev",
+  "lnc_only": false,
+  "data": "v20",
+  "ckpts": [
+   "outputs/PHASE1/FORMAL/v20-g1b-123-ke/ep10.pt",
+   "outputs/PHASE1/FORMAL/v20-g1b-123-ke/ep11.pt",
+   "outputs/PHASE1/FORMAL/v20-g1b-123-ke/ep12.pt"
+  ],
+  "ckpt_sha256": [
+   "6afcb1a4e7be9dba66edb280301d2d994a76413088d5f497e0d548f544a3dba6",
+   "9cf8b6225f3019f0fd472589044a629506baf9d06cc573f24e5108690d04b93c",
+   "5af6eed63e906a7d54fe8e833820d3e9be315efc3cb329f5f0163d5a5bfdeba6"
+  ]
+ },
+ "host": "ont",
+ "torch_threads": 24,
+ "started": "2026-11-05T00:54:48Z",
+ "post_s": 960,
+ "decode_s": 252,
+ "L": 138394716,
+ "n_genes": 2924,
+ "n_pred_lnc_all": 2001,
+ "n_pred_lnc_kept": 1152,
+ "n_pred_mrna": 923,
+ "post_sha256": "77fe268d168927784e73eaa8dceb4c0a6bc3aea564b7f55772a78a1575b4a523",
+ "read_s": 1223,
+ "mb_per_h": 407.5
+}

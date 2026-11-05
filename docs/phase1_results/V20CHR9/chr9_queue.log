@@ -1,0 +1,56 @@
+2026-11-04T23:36:47Z START
+2026-11-05T00:08:11Z REPRO_OK
+2026-11-05T00:41:14Z FEAT9_FAIL
+2026-11-05T00:44:54Z restart after FEAT9_FAIL (8 of 34 shards: tokenizer errors, scattered; resumable)
+2026-11-05T00:44:54Z START
+2026-11-05T00:45:08Z REPRO_OK
+2026-11-05T00:54:46Z chr9 features ok
+2026-11-05T02:41:15Z chr9 read ok
+2026-11-05T02:42:06Z chr9 scored
+2026-11-05T02:50:10Z snaptron chr9 ok
+2026-11-05T02:50Z GPU gate: TE process pid 2277930: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T02:55:11Z sai9 start
+2026-11-05T03:00:14Z sai9 rc=0
+2026-11-05T03:00Z GPU gate: TE process pid 2279409: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T03:10Z GPU gate: TE process pid 2280746: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T03:11:15Z own9 start
+2026-11-05T03:12:52Z own9 rc=0
+2026-11-05T03:12:52Z pang9 start
+2026-11-05T03:24:24Z pang9 rc=0
+2026-11-05T03:29:47Z R-S1 analysed
+2026-11-05T03:29:47Z s1b_v20-g1b-42-ke_A1 start
+2026-11-05T03:31:17Z s1b_v20-g1b-42-ke_A2 start
+2026-11-05T03:46:45Z s1b_v20-g1b-42-ke_A1 rc=0
+2026-11-05T03:46:45Z s1b_v20-g1b-42-ke_A3 start
+2026-11-05T03:51:28Z s1b_v20-g1b-42-ke_A2 rc=0
+2026-11-05T03:51:28Z s1b_v20-g1b-123-ke_A1 start
+2026-11-05T04:04:02Z s1b_v20-g1b-42-ke_A3 rc=0
+2026-11-05T04:04:02Z s1b_v20-g1b-123-ke_A2 start
+2026-11-05T04:04:43Z s1b_v20-g1b-123-ke_A1 rc=0
+2026-11-05T04:05:32Z s1b_v20-g1b-123-ke_A3 start
+2026-11-05T09:19:07Z RESUME after ont reboot (~2026-11-05T04:17Z); chr9 read, scoring, R-S1 already done and not repeated
+2026-11-05T09:19:07Z s1b_v20-g1b-42-ke_A1 skip
+2026-11-05T09:20:37Z s1b_v20-g1b-42-ke_A2 skip
+2026-11-05T09:22:07Z s1b_v20-g1b-42-ke_A3 skip
+2026-11-05T09:23:37Z s1b_v20-g1b-123-ke_A1 skip
+2026-11-05T09:25Z GPU gate: TE process pid 40352: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T09:26Z GPU gate: TE process pid 40352: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T09:27:07Z s1b_v20-g1b-123-ke_A2 start
+2026-11-05T09:31:37Z s1b_v20-g1b-123-ke_A3 start
+2026-11-05T10:00:52Z s1b_v20-g1b-123-ke_A2 rc=0
+2026-11-05T10:00Z GPU gate: TE process pid 1887292: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T10:03:53Z s1b_v20-g1b-456-ke_A1 start
+2026-11-05T10:06:04Z s1b_v20-g1b-123-ke_A3 rc=0
+2026-11-05T10:06Z GPU gate: TE process pid 1897850: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T10:13:05Z s1b_v20-g1b-456-ke_A2 start
+2026-11-05T10:15Z GPU gate: TE process pid 1916144: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T10:17:17Z s1b_v20-g1b-456-ke_A2 start
+2026-11-05T10:36:40Z s1b_v20-g1b-456-ke_A1 rc=0
+2026-11-05T10:36Z GPU gate: TE process pid 2022994: /work/te /usr/bin/python3 /work/te/scripts/experiments/P3-TIBERIUS-EXTERNAL-20260915/observed_tiberius.py --genome /work - waiting
+2026-11-05T10:37:41Z s1b_v20-g1b-456-ke_A3 start
+2026-11-05T10:52:16Z s1b_v20-g1b-456-ke_A2 rc=0
+2026-11-05T11:14:16Z s1b_v20-g1b-456-ke_A3 rc=0
+2026-11-05T11:14:16Z R-S1b decoded
+2026-11-05T11:15:06Z replications done
+2026-11-05T11:15:11Z chr9 feature cache deleted
+2026-11-05T11:15:11Z QUEUE_END

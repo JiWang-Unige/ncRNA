@@ -1,0 +1,19 @@
+{
+ "config_sha256": "f780522a0976aba33c21ff9942ed9c711caeb048f56e2391f8e40576baab6ca6",
+ "ok": true,
+ "runs": {
+  "v20-g1b-42-ke": {
+   "post_sha256_equal": true,
+   "diff": {}
+  },
+  "v20-g1b-123-ke": {
+   "post_sha256_equal": true,
+   "diff": {}
+  },
+  "v20-g1b-456-ke": {
+   "post_sha256_equal": true,
+   "diff": {}
+  }
+ },
+ "time": "2026-11-05T00:45:08Z"
+}

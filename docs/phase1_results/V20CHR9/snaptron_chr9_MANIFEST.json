@@ -1,0 +1,562 @@
+{
+ "fetched": "2026-11-05T02:50:10Z",
+ "query": "gtexv2, samples_count >= 5, 1 Mb windows",
+ "files": {
+  "chr9_1.tsv": {
+   "bytes": 286313,
+   "sha256": "8f926d1aae85b6cb99fa554286f73c8426af2b6d1ab338c4611316d101fd58f8"
+  },
+  "chr9_1000000.tsv": {
+   "bytes": 43690,
+   "sha256": "18f8716a5bbd93666652d5d44276ec8800d6162c3c2cc18e789cf2977740bdb6"
+  },
+  "chr9_10000000.tsv": {
+   "bytes": 17860,
+   "sha256": "96376f51b04c69ed7b0cca1d1beec7a3530d05f4fc59a9148684ae21b2dd7fca"
+  },
+  "chr9_100000000.tsv": {
+   "bytes": 130128,
+   "sha256": "181ef1b09c067234fb143926111f9bd8d6506146a6d72f561b6c341fe2432ce5"
+  },
+  "chr9_101000000.tsv": {
+   "bytes": 93746,
+   "sha256": "cf2b0ae4c2dd201ec57f1a522b84c0f993b9fa5eeca0ff1fb290fc74db18725a"
+  },
+  "chr9_102000000.tsv": {
+   "bytes": 17444,
+   "sha256": "06d542355fa7a2313e81d41ce57ec93db45612127be9bc73d31a8423dd9ffba2"
+  },
+  "chr9_103000000.tsv": {
+   "bytes": 43024,
+   "sha256": "c3a0d3610606d2915c76e7c55832a6c12e2e1049210eb74891f0e1e81c2029c0"
+  },
+  "chr9_104000000.tsv": {
+   "bytes": 113003,
+   "sha256": "5cf6a984abcec257d120edaf9c2f175fe82d75354788d793e0819650563d0561"
+  },
+  "chr9_105000000.tsv": {
+   "bytes": 103043,
+   "sha256": "a9d3543aff9d06221a8db880660b1dab53ddae5c59d15243c7b04e0a605b4b15"
+  },
+  "chr9_106000000.tsv": {
+   "bytes": 51568,
+   "sha256": "f61366ba8bafb4b1622af05a60d5261a4d67722e2a35c6576418c89d80c07e06"
+  },
+  "chr9_107000000.tsv": {
+   "bytes": 148452,
+   "sha256": "c7c7426d48b3ed211933766132af96fc82a3b2cfcd4d13f4b79fa7babf8ed3c2"
+  },
+  "chr9_108000000.tsv": {
+   "bytes": 120041,
+   "sha256": "3b79d7d2ac960b7185a595bb61d379fa9aa3634e4803af44c2e294fa497cbdd9"
+  },
+  "chr9_109000000.tsv": {
+   "bytes": 123099,
+   "sha256": "d8941ad80d5895e35e2c31fc9f721d6c873fa8192dbab0ee5912d0b28531fa1f"
+  },
+  "chr9_11000000.tsv": {
+   "bytes": 26555,
+   "sha256": "22e105b3cb868f7895af0ce4925fea2dc8095742c46cda462effa9e194a0f74b"
+  },
+  "chr9_110000000.tsv": {
+   "bytes": 120632,
+   "sha256": "4e5f5f61085ef2eabbcc2f7c5a562cff3a16aec3e56f7a29c2cc361a2f3c96a5"
+  },
+  "chr9_111000000.tsv": {
+   "bytes": 198945,
+   "sha256": "2975afdf1da1d2c79f46d431f0db6e80b80f495ca241f5aabc4e58d3901e835c"
+  },
+  "chr9_112000000.tsv": {
+   "bytes": 185404,
+   "sha256": "f14af94406764ee3bada8335fa9bd42b739467f25e75e50dc8b3f6ebbe3b2f6c"
+  },
+  "chr9_113000000.tsv": {
+   "bytes": 225420,
+   "sha256": "75ab40e57874553e4898b4b50b0195afe6e8f654b6690ec8ac1f303ff989966f"
+  },
+  "chr9_114000000.tsv": {
+   "bytes": 317971,
+   "sha256": "050ce1f04bef8b61d2d83cec4bf3d23503dcc344ff02b4ee64556e0dc05587b4"
+  },
+  "chr9_115000000.tsv": {
+   "bytes": 103151,
+   "sha256": "714ffccb11491de880fc1c106b7fa0af407e1e1c438ff5530a985add17eb5850"
+  },
+  "chr9_116000000.tsv": {
+   "bytes": 92008,
+   "sha256": "e15844326e6b5416c5a5502844e1216131ae77effe229d0ba767eda7fba09590"
+  },
+  "chr9_117000000.tsv": {
+   "bytes": 62610,
+   "sha256": "2407c3b0a868fc88c0dd026a2aba4abe43dfe5e9a8fd2da50537803d7db12686"
+  },
+  "chr9_118000000.tsv": {
+   "bytes": 46466,
+   "sha256": "ee5008d649c63a9881bb12dd9e8e687377b32a87a9eb370fc445deca1234ee33"
+  },
+  "chr9_119000000.tsv": {
+   "bytes": 39492,
+   "sha256": "9b69465a904f9ffd1a2f9a3bd023fc7b028b95a5265fa56b1c890c07c9fc634a"
+  },
+  "chr9_12000000.tsv": {
+   "bytes": 31806,
+   "sha256": "0d0204a93223a5947fc7f0fca6c6afa57837ae92ea38361856091000bba4e1f7"
+  },
+  "chr9_120000000.tsv": {
+   "bytes": 206734,
+   "sha256": "0c456dd809521a9da1a3d34317e5addd95a96d537c11476e9c244ea66bd23f55"
+  },
+  "chr9_121000000.tsv": {
+   "bytes": 305588,
+   "sha256": "dd44d327b0ddabc3a5a275bfb9a05fb3664486a41ee2e27e2af8461aef2c97e5"
+  },
+  "chr9_122000000.tsv": {
+   "bytes": 189795,
+   "sha256": "bdc196b11b1edb791cda9a8d7c138bead3218d2d3472f43090d1fbea91ed2e96"
+  },
+  "chr9_123000000.tsv": {
+   "bytes": 151128,
+   "sha256": "59885720a598dc0c35fe0603bc191765d835937bfa5853bc94eb6178b7b512df"
+  },
+  "chr9_124000000.tsv": {
+   "bytes": 231434,
+   "sha256": "a1d40d3007d6c19e7282438ba1035f102f4cc6ff23ecdf0e1edfa44be6659f49"
+  },
+  "chr9_125000000.tsv": {
+   "bytes": 224104,
+   "sha256": "d1e7c873d22f1d9cb2f7a8f3af3c150d07581f9cea7800312945be6da3702a9c"
+  },
+  "chr9_126000000.tsv": {
+   "bytes": 107897,
+   "sha256": "cc24d692e4d4f2c471fd09b8136d313be6d2054c76d3d74cfb1b43c84d08a807"
+  },
+  "chr9_127000000.tsv": {
+   "bytes": 545188,
+   "sha256": "1692175056519244f476eb45f2eabb534c5f0a8f44180389ca6f97b81b0d8a2a"
+  },
+  "chr9_128000000.tsv": {
+   "bytes": 790755,
+   "sha256": "e216f9e482e1b30a96d4f43387a5c1f539fedb2f010d9b070a5d803101d117c8"
+  },
+  "chr9_129000000.tsv": {
+   "bytes": 464214,
+   "sha256": "ef0ccbc9c208f58108037d628a6814932f16bc4cb01ac01ef8616774c5627132"
+  },
+  "chr9_13000000.tsv": {
+   "bytes": 100961,
+   "sha256": "aba41107a7cef8b567acef0859f38b6fc3e515efd0f57bf4e637e9cc270d8d81"
+  },
+  "chr9_130000000.tsv": {
+   "bytes": 287192,
+   "sha256": "ff1d305b714e86bd34fbbe171c26b54083417388f6c5e1b1c465eb0d14994852"
+  },
+  "chr9_131000000.tsv": {
+   "bytes": 381882,
+   "sha256": "d05b8e52601fe88db82b1df9400d0e5a6eff55a19a39f6d9886469577edf2036"
+  },
+  "chr9_132000000.tsv": {
+   "bytes": 223544,
+   "sha256": "8e85c940a9536d6ed6c5ee4d78e680a54c1292513afd9628ac7e73c475834e68"
+  },
+  "chr9_133000000.tsv": {
+   "bytes": 692200,
+   "sha256": "b93be92e6566c40a9ffa3ba2c010fe3143398461b8db9745018dbbbeea27a358"
+  },
+  "chr9_134000000.tsv": {
+   "bytes": 380576,
+   "sha256": "881314edaa45ff32f709bd5393b133073d578f7afc3134ebe85e94e164cc1d0b"
+  },
+  "chr9_135000000.tsv": {
+   "bytes": 280764,
+   "sha256": "a3376ec35dac693290ad09f982ff967513d0f690a1cdd5815f4b4e17a2711e7b"
+  },
+  "chr9_136000000.tsv": {
+   "bytes": 807484,
+   "sha256": "e35f51503aa607c779baa7564aed1f0cc28246183da6fe17879aa64ccbe6dcbd"
+  },
+  "chr9_137000000.tsv": {
+   "bytes": 1207631,
+   "sha256": "ca5d7a1dfcf37e5572fbb29a30a875f15e59ac7fa7e85feb78018c1384ef2664"
+  },
+  "chr9_138000000.tsv": {
+   "bytes": 133874,
+   "sha256": "60801dcbbc28290d70b2bf46f6ada1755d34eae666d7f3aa912fc0eb19e1b2ce"
+  },
+  "chr9_14000000.tsv": {
+   "bytes": 116163,
+   "sha256": "7f27693b330a3a74d3637ea8c198604600260ae39368346f78a3a60f92b3117b"
+  },
+  "chr9_15000000.tsv": {
+   "bytes": 117871,
+   "sha256": "99d74f1a909b693be1c6f67dc90bd693fd6703a6ba77ca8e000f2aaeca6e1e10"
+  },
+  "chr9_16000000.tsv": {
+   "bytes": 70109,
+   "sha256": "8c027def4a77db5a1b2a68f4c50e14ee716c368cfe05f333480cdcc76988db26"
+  },
+  "chr9_17000000.tsv": {
+   "bytes": 65851,
+   "sha256": "95c77a259c9b698df88e4da8856c0d7746e36590091de5ef4f7c61f68f090e8b"
+  },
+  "chr9_18000000.tsv": {
+   "bytes": 65802,
+   "sha256": "7a24e5302ff0f0658d51117d4685e6d4851f6dacedd3056563d8c181e320211a"
+  },
+  "chr9_19000000.tsv": {
+   "bytes": 192199,
+   "sha256": "95f50dcdf48d165c6d1057a872a1ff897e74e831b9fb05e053399b3db576da00"
+  },
+  "chr9_2000000.tsv": {
+   "bytes": 132587,
+   "sha256": "343f43b4710d84c0e8a674c31e3d10bf1265836e1ae388fcb51271d374355d51"
+  },
+  "chr9_20000000.tsv": {
+   "bytes": 68434,
+   "sha256": "7daaa9af6780a2fb2a7f22199c1180785369cfad0977caaacba3c8374172014e"
+  },
+  "chr9_21000000.tsv": {
+   "bytes": 88695,
+   "sha256": "aa5c896a46a7d3045fa54aa43009bb8a35e4258484f93bb5d8868db6afc591e7"
+  },
+  "chr9_22000000.tsv": {
+   "bytes": 53183,
+   "sha256": "c3d74412319d891524954b96dd9bc4c749c45c9425c673cbaaddac3fc6e7eea8"
+  },
+  "chr9_23000000.tsv": {
+   "bytes": 50790,
+   "sha256": "faed43e26fedd4f860215a2b2eab8c42b9ec3ac94d6c0f9d53ebb5cc80caac07"
+  },
+  "chr9_24000000.tsv": {
+   "bytes": 19760,
+   "sha256": "a3955e1b33f1792e783493ad08be3add99ad757abef192a8f90101fcf41afd58"
+  },
+  "chr9_25000000.tsv": {
+   "bytes": 23820,
+   "sha256": "8a8ea7521de4dce534e3796e3e922faa13ba83759d9a95397c4ade7d4a7089c6"
+  },
+  "chr9_26000000.tsv": {
+   "bytes": 65183,
+   "sha256": "783badc81c8fcd805bf01db8509fe942c2b68db8fc57c3c980c35c7530026823"
+  },
+  "chr9_27000000.tsv": {
+   "bytes": 105738,
+   "sha256": "9114f087f93c84de669c35ec3edd3b5ba993f72c3685d410aa3759749ed58913"
+  },
+  "chr9_28000000.tsv": {
+   "bytes": 31565,
+   "sha256": "b1dc2d048eba5d27ebf182a4ddfa8e27fe6eb6d6a1155dd9ab1d50a87e20304f"
+  },
+  "chr9_29000000.tsv": {
+   "bytes": 20388,
+   "sha256": "1ef2f506f6852fac413caa218ebfa4e62db98a9fb5c69dec1c841c5f8144c8e3"
+  },
+  "chr9_3000000.tsv": {
+   "bytes": 82657,
+   "sha256": "8a7274c5e35963365ce2bc27d6a4db6bb73391c7a7959ec0e069b74b336f02af"
+  },
+  "chr9_30000000.tsv": {
+   "bytes": 13071,
+   "sha256": "dd85c9be16dbb76571fbc74386ef9e22112a9448ec681e40f67350d1067609c5"
+  },
+  "chr9_31000000.tsv": {
+   "bytes": 18996,
+   "sha256": "49cc7e4f331540421ca5bd60a1fe1f68e98543315053e0b88ecad10704e60a74"
+  },
+  "chr9_32000000.tsv": {
+   "bytes": 147388,
+   "sha256": "23bc1da7f9815d98567789f883a2a6a536296240a53b0fe48fef1db30fdd6f20"
+  },
+  "chr9_33000000.tsv": {
+   "bytes": 357283,
+   "sha256": "f70c3f6241c5b3c282bb874f5e3afd41d31d2541f48704aa49843f4e7cb1cdfd"
+  },
+  "chr9_34000000.tsv": {
+   "bytes": 350697,
+   "sha256": "1ea20c9a60a02edafc9f5096c46a22ce0559aa1e481d2c0bc12e98682db7439a"
+  },
+  "chr9_35000000.tsv": {
+   "bytes": 654809,
+   "sha256": "592d9695976638a213e63bdf3b4941dd2b66ab819c88f8c1f6e3e712c1d5e76b"
+  },
+  "chr9_36000000.tsv": {
+   "bytes": 177660,
+   "sha256": "19175893e84944ab52ba91adedb407fe11ecaf4174a18efbc5ff653dca45b8e3"
+  },
+  "chr9_37000000.tsv": {
+   "bytes": 238011,
+   "sha256": "77d8c0f6d7e4e5ef3b4f9cd60b5884f94e65edebd199331ed59446d10eeca836"
+  },
+  "chr9_38000000.tsv": {
+   "bytes": 136690,
+   "sha256": "5f6deaf2e59f6863d60f6c410b15c5d787f6680ee2e5be0fd10a446661b2080e"
+  },
+  "chr9_39000000.tsv": {
+   "bytes": 109241,
+   "sha256": "95c509401b4ef3032cb036112f832bbaf5e0435fb4603497feea4b75fd012b8c"
+  },
+  "chr9_4000000.tsv": {
+   "bytes": 148515,
+   "sha256": "e44266b922d49f1526447b85e1491adc769d17f98636cd7b9a76ead4964f966e"
+  },
+  "chr9_40000000.tsv": {
+   "bytes": 274595,
+   "sha256": "03645772d0d4dfba31ccbc4f0a17ad9e2f9a36c80f678d30434aadec3ddbdd09"
+  },
+  "chr9_41000000.tsv": {
+   "bytes": 225082,
+   "sha256": "9249f468fd183b6daed3c8918b2514e957763d0b7b9cd9c8600d5921a8c3a6d0"
+  },
+  "chr9_42000000.tsv": {
+   "bytes": 92790,
+   "sha256": "727ae2cec9644d2dbd2bb71ed921cc828db3eeb2859eadc2d6856c5ba30b481a"
+  },
+  "chr9_43000000.tsv": {
+   "bytes": 48543,
+   "sha256": "b7e335230eeadea7b725ff11801bf21aa1755e2c7f9acc7691fa98f0c48dcacf"
+  },
+  "chr9_44000000.tsv": {
+   "bytes": 184,
+   "sha256": "c58b442cff363a3a88d1d747c7fc438c1b4375df33456337cb6c7007bd7b724a"
+  },
+  "chr9_45000000.tsv": {
+   "bytes": 184,
+   "sha256": "6d8607ed1d6b366337d0280edcda003b31a9341b896cfa293c121b063e43e9e3"
+  },
+  "chr9_46000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_47000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_48000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_49000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_5000000.tsv": {
+   "bytes": 161637,
+   "sha256": "9b331a63113481cc3ad9cbd80ee219c2f3dd2cea29bb1468fb23dae7b997619e"
+  },
+  "chr9_50000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_51000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_52000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_53000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_54000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_55000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_56000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_57000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_58000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_59000000.tsv": {
+   "bytes": 123,
+   "sha256": "5e9caac132af10246d7ef89733e26b35a937862abcd48c088a58c5b0c0313dcc"
+  },
+  "chr9_6000000.tsv": {
+   "bytes": 122503,
+   "sha256": "639defb3cc0d8ce553608c8e776f71b635716364d2d09ce10f6a1d3bed6c9433"
+  },
+  "chr9_60000000.tsv": {
+   "bytes": 19118,
+   "sha256": "3dc590e5085c496e09f4db067143c2b8353bb5691777da2694819ede92ec9b22"
+  },
+  "chr9_61000000.tsv": {
+   "bytes": 107935,
+   "sha256": "14d94daae74514fc491c19931ece788a443107ff3ab806838702c72da1ee193a"
+  },
+  "chr9_62000000.tsv": {
+   "bytes": 98424,
+   "sha256": "4c11773c29ee5cddd4070f1208d126b6df1c8af42cdba1070b7af87c076c59f3"
+  },
+  "chr9_63000000.tsv": {
+   "bytes": 258490,
+   "sha256": "dcac1d02204e926020550167289da8a40cd893987790b1198708931812dd4bba"
+  },
+  "chr9_64000000.tsv": {
+   "bytes": 196039,
+   "sha256": "acd65d8bde88016dd83634f8345b9b02fc1fb6b468760ddffa830dc3dd007c9c"
+  },
+  "chr9_65000000.tsv": {
+   "bytes": 269700,
+   "sha256": "3ae2ea7cc103401b878d68db61edabdec48d8db51bf973780a60143327761079"
+  },
+  "chr9_66000000.tsv": {
+   "bytes": 133533,
+   "sha256": "a865b4b7f163cf847ff538e6167d1d6aca7e012fedd3347b7ec2dd763a106362"
+  },
+  "chr9_67000000.tsv": {
+   "bytes": 120973,
+   "sha256": "a6e163c5b53670dc270c6b23f8a451653e433320cf84999125c74b48912bb2f7"
+  },
+  "chr9_68000000.tsv": {
+   "bytes": 152360,
+   "sha256": "17b6174884501e4fd9429e2f904d09f7a4b212a0fbfa98b880fa5d55745b0da0"
+  },
+  "chr9_69000000.tsv": {
+   "bytes": 136710,
+   "sha256": "f83f8f90812066317fcaad6a21855876bc1e4b44696ace73c140bdcbefa0f87a"
+  },
+  "chr9_7000000.tsv": {
+   "bytes": 63082,
+   "sha256": "6498d7fe18851183d81ce5b93c6a6376b9ff7fc9826beab9cf01ca3e063d2344"
+  },
+  "chr9_70000000.tsv": {
+   "bytes": 137796,
+   "sha256": "2a88bb9c634135103bb64a38b5602a0485115f8ffe454f3b3419e729424b1ef8"
+  },
+  "chr9_71000000.tsv": {
+   "bytes": 66675,
+   "sha256": "1d173744f3340a20daa5520136980d4961b19d58c5c5ef0ce968951b076a744c"
+  },
+  "chr9_72000000.tsv": {
+   "bytes": 156730,
+   "sha256": "bd7310f8654e0abbb29387a08e152773d7b115c1d4f1519d863574d0bd3ff6f3"
+  },
+  "chr9_73000000.tsv": {
+   "bytes": 76610,
+   "sha256": "4375bdeda980dbb9450dffd0fb0140e7d5f42b3ee4855e45be43dc843e83430b"
+  },
+  "chr9_74000000.tsv": {
+   "bytes": 61163,
+   "sha256": "076bb1d8f55051ac9226ca5eb01af377cfc461893539c077c255503e2033be41"
+  },
+  "chr9_75000000.tsv": {
+   "bytes": 68406,
+   "sha256": "81d94cfad0044f824e7b860ce296e74d6a40f57d31125833ac38fcfd587d1e54"
+  },
+  "chr9_76000000.tsv": {
+   "bytes": 125296,
+   "sha256": "6a96c06542685188e23cd1528fcbbff4fb263d52683316b269b5abf1f6fcad75"
+  },
+  "chr9_77000000.tsv": {
+   "bytes": 111502,
+   "sha256": "ff22583c4ee5d6ba10e5716bddb1831721fe4adab3b638e696a16ed4b0d8fe2f"
+  },
+  "chr9_78000000.tsv": {
+   "bytes": 47476,
+   "sha256": "4cdb0ae847f3eb55ed645b8f567f203515f0c32c5293d8cf69de462930049a3c"
+  },
+  "chr9_79000000.tsv": {
+   "bytes": 65167,
+   "sha256": "b23681705f84cff1e677dc9e6721826f060ecb7bcd49e1243a68386334f3d8ce"
+  },
+  "chr9_8000000.tsv": {
+   "bytes": 29792,
+   "sha256": "7f7da472d3e08039bacf37b62217434c6c454f77364c0513efa96206b8951fec"
+  },
+  "chr9_80000000.tsv": {
+   "bytes": 23511,
+   "sha256": "2fc1b006bdbf9a6639afdd65c2f5f348a36d6a05ae644f9dc40bbfdd0bac81bf"
+  },
+  "chr9_81000000.tsv": {
+   "bytes": 88619,
+   "sha256": "e027481661a2066229800c1bf31c3f1cb12a18f7a975ed066fc6bb19b7ce60e6"
+  },
+  "chr9_82000000.tsv": {
+   "bytes": 37513,
+   "sha256": "f253d70b262f99da3213d16a6d4418a94d3c70cd2c209462cf1f95a0fb8c1802"
+  },
+  "chr9_83000000.tsv": {
+   "bytes": 184081,
+   "sha256": "0926f10276fc767fd97995cea8d62c807227cab244f019de4dfdecefb815d6fc"
+  },
+  "chr9_84000000.tsv": {
+   "bytes": 73405,
+   "sha256": "2061a5eb2b6cf2289475febda0abe7fa7487d24127df55ad99ca6f1c79697a8e"
+  },
+  "chr9_85000000.tsv": {
+   "bytes": 139621,
+   "sha256": "e744915acbd93e561c27ba868fe1961627ec8601fc7efd3dc543559b542c67f3"
+  },
+  "chr9_86000000.tsv": {
+   "bytes": 136714,
+   "sha256": "86cafb92e5436f837ab014d99891f9a26e68c1a110c32b3c497593b22dcb3a4c"
+  },
+  "chr9_87000000.tsv": {
+   "bytes": 166991,
+   "sha256": "46896402432cc3036516e7a9b6b3e69c0dd5568d18a70268f6308d8df38f5902"
+  },
+  "chr9_88000000.tsv": {
+   "bytes": 131444,
+   "sha256": "f4202d3f7a6128d11fc123b71b585523e6e153e4672991753f8a7c7c44335d36"
+  },
+  "chr9_89000000.tsv": {
+   "bytes": 184325,
+   "sha256": "06eade5639aaf1d067e9933627855687757211414cb31ddd4ea18850d5adb119"
+  },
+  "chr9_9000000.tsv": {
+   "bytes": 19609,
+   "sha256": "1818c8c6f22f50cf886f5ff3b19eb2528baf2c9e7c79fd7247192928254d29f5"
+  },
+  "chr9_90000000.tsv": {
+   "bytes": 84688,
+   "sha256": "de358766b2253f4cc9ceecc30c9a898683647092a81ebafb164f6a428221cee7"
+  },
+  "chr9_91000000.tsv": {
+   "bytes": 113290,
+   "sha256": "eae69390999c89b163efa8f2f31bee8895b71a1164b452491d82796b0eb99191"
+  },
+  "chr9_92000000.tsv": {
+   "bytes": 244880,
+   "sha256": "cb0af7dacf7d2318cf794518fcc2a4e1efd14dd11aa4a33465c3d9a31bd9f13b"
+  },
+  "chr9_93000000.tsv": {
+   "bytes": 362172,
+   "sha256": "6c589166fb7fdb455fd0a318d26be5aacce9e8a6966fc10281491bfd86f1c8b5"
+  },
+  "chr9_94000000.tsv": {
+   "bytes": 163097,
+   "sha256": "19256dd4a14f866150e5e5119fc1cf7da0f27fb3ddad9ad1d4fdd7bc1f6c5396"
+  },
+  "chr9_95000000.tsv": {
+   "bytes": 155317,
+   "sha256": "fc7f5cbddb234a70764ad4376da2294d3c22c07b01e1359f4d217e8ec8e7c428"
+  },
+  "chr9_96000000.tsv": {
+   "bytes": 239786,
+   "sha256": "5bafbab6403c88bc3f98f022c2ee4a52356dce765199516873c59bc7d7f2ebe1"
+  },
+  "chr9_97000000.tsv": {
+   "bytes": 243797,
+   "sha256": "4f74eb2e4a7676a5a1dbc92a275c9178ec84d0d596a85f21d75e2dc464ded34c"
+  },
+  "chr9_98000000.tsv": {
+   "bytes": 182321,
+   "sha256": "b10f114f28931d406716ac7c3a763c1b28b7c3e33fb8d6644f6f86e085724e53"
+  },
+  "chr9_99000000.tsv": {
+   "bytes": 151354,
+   "sha256": "ff4b483ac8a425aba71f5eea91302317819020e2460140c40b1172e59361c40f"
+  }
+ }
+}
