@@ -5,7 +5,9 @@
 # to predict_sequence; projected CU of the full run within what is left of cu_cap), the full run on all chromosomes.
 # Assignment: tries each listed GPU in turn; with ASSIGN_HOURS=h (default 0: one round) repeats every 20 min for up to
 # h hours (premium GPUs are often out of capacity; a failed attempt costs nothing).  Uses ~/bin/colab_long (the stock CLI
-# with a 600 s HTTP read timeout instead of 120 s).
+# with a 600 s HTTP read timeout instead of 120 s).  Large files (weights, outputs) go over scp through the CLI's ssh
+# bridge (~/.ssh/colab.conf, host colab-<session>, key ~/.ssh/colab_ed25519): the CLI's upload / download use the Jupyter
+# contents API, which refuses files of ~100 MB and more.
 # Caps, counted from the moment a session is READY: wall clock (deadline_s) and compute units spent (cu_cap).
 # On exit, whatever happened: stop the session, unassign orphans (colab_cleanup.py --orphans), log the usage.
 set -u
@@ -17,6 +19,7 @@ P=$HOME/.local/share/uv/tools/google-colab-cli/bin/python
 D=outputs/PHASE1/S2AG/$MODE
 mkdir -p $D/raw
 TMP=$(mktemp -d)
+SCP="scp -q -F $HOME/.ssh/colab.conf"
 T0=$SECONDS
 log() { echo "$(date -u +%FT%TZ) $*" | tee -a $D/run.log; }
 bal() { $C usage 2>&1 | sed -n 's/.*Current balance: \([0-9.]*\).*/\1/p' | head -1; }
@@ -25,7 +28,7 @@ spent() { python3 -c "print(round($B0 - ${1:-$B0}, 2))"; }
 B0=$(bal)
 [ -n "$B0" ] || { echo "ABORT: no balance"; exit 1; }
 cleanup() {
-  for f in job.log job.out job.1.log job.1.out; do $C download -s $S /content/$f $D/$f >/dev/null 2>&1; done
+  for f in job.log job.out job.1.log job.1.out; do timeout 120 $SCP colab-$S:/content/$f $D/$f >/dev/null 2>&1; done
   $C stop -s $S 2>&1 | tail -1
   $P $HOME/bin/colab_cleanup.py --orphans
   log "after: $($C usage 2>&1 | grep -E 'balance|rate|assign' | tr '\n' ' ')"
@@ -37,12 +40,13 @@ log "START mode=$MODE gpu=$GPU cap=$CAP chroms=$CHROMS balance=$B0"
 
 W=data/alphagenome/hf_all_folds.tar
 [ -s $W ] || tar -cf $W -C data/alphagenome/hf_all_folds _CHECKPOINT_METADATA _METADATA manifest.ocdbt d ocdbt.process_0
+WSHA=$(sha256sum $W | cut -d' ' -f1)
 job_args() {  # mode chrom...
-  python3 - "$@" <<'EOF'
+  python3 - "$WSHA" "$@" <<'EOF'
 import json, sys
 c = json.load(open("configs/s2ag.json"))
-print(json.dumps({"mode": sys.argv[1], "chroms": sys.argv[2:], "ag_commit": c["ag_commit"],
-                  "codes_sha256": {k: c["codes_sha256"][k] for k in sys.argv[2:]}}))
+print(json.dumps({"mode": sys.argv[2], "chroms": sys.argv[3:], "ag_commit": c["ag_commit"], "ckpt_tar_sha256": sys.argv[1],
+                  "codes_sha256": {k: c["codes_sha256"][k] for k in sys.argv[3:]}}))
 EOF
 }
 cat > $TMP/launch.py <<'EOF'
@@ -73,17 +77,19 @@ done
 [ $ok = 1 ] || { log "ABORT: no session on $GPU"; exit 1; }
 T0=$SECONDS
 log "session READY on $GPU; rate: $(rate)/h"
-t=$SECONDS; $C upload -s $S $W /content/ag_ckpt.tar 2>&1 | tail -1; log "weights upload_s $((SECONDS - t)) bytes $(stat -c %s $W)"
+t=$SECONDS; timeout 1800 $SCP $W colab-$S:/content/ag_ckpt.tar; rc=$?
+log "weights scp rc=$rc s $((SECONDS - t)) bytes $(stat -c %s $W)"
+[ $rc = 0 ] || { log "ABORT: weights upload failed"; exit 1; }
 $C upload -s $S scripts/phase1/s2ag/ag_colab_job.py /content/job.py 2>&1 | tail -1
 
 fetch() {  # tag: download <tag>.done, then every file it lists, checking sha256
   local tag=$1 f want got t
   [ -e $D/raw/$tag.fetched ] && return 0
-  $C download -s $S /content/out/$tag.done $D/raw/$tag.done.json >/dev/null 2>&1 || return 1
+  timeout 120 $SCP colab-$S:/content/out/$tag.done $D/raw/$tag.done.json >/dev/null 2>&1 || return 1
   for f in $(python3 -c "import json,sys; print(' '.join(json.load(open(sys.argv[1]))['files']))" $D/raw/$tag.done.json); do
     want=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['files'][sys.argv[2]])" $D/raw/$tag.done.json $f)
     t=$SECONDS
-    $C download -s $S /content/out/$f $D/raw/$f >/dev/null 2>&1
+    timeout 1800 $SCP colab-$S:/content/out/$f $D/raw/$f >/dev/null 2>&1
     got=$(sha256sum $D/raw/$f 2>/dev/null | cut -d' ' -f1)
     log "fetch $f bytes $(stat -c %s $D/raw/$f 2>/dev/null) s $((SECONDS - t)) sha_ok $([ "$got" = "$want" ] && echo 1 || echo 0)"
     [ "$got" = "$want" ] || return 1

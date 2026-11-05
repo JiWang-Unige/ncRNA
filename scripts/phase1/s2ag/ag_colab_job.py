@@ -2,7 +2,8 @@
 """S2-AG (PLAN_S2_AG.md): AlphaGenome all_folds on hg38 chromosomes, run inside a Colab GPU VM.
 
 Started by ag_colab_run.sh, which uploads this file to /content/job.py, the checkpoint tar to /content/ag_ckpt.tar
-and /content/job_args.json {"mode": "smoke"|"full", "chroms": [...], "codes_sha256": {chrom: sha}, "ag_commit": sha}.
+and /content/job_args.json {"mode": "smoke"|"full", "chroms": [...], "codes_sha256": {chrom: sha}, "ag_commit": sha,
+"ckpt_tar_sha256": sha}.
 Writes /content/job.log (progress lines; the last line carries "total_s") and /content/out/<tag>.done
 ({"files": {name: sha256}, ...}) once the files of <tag> are complete, so the wrapper can fetch them while the job runs.
 
@@ -58,6 +59,9 @@ def setup(args):
     if not ok:
         log(step="jax_no_gpu_after_fix", msg=msg)
         raise SystemExit("FAILED: no GPU in jax")
+    got = sh("sha256sum /content/ag_ckpt.tar").split()[0]
+    if got != args["ckpt_tar_sha256"]:
+        raise SystemExit("FAILED: checkpoint tar sha256 differs from ont")
     os.makedirs("/content/ckpt", exist_ok=True)
     sh("tar -xf /content/ag_ckpt.tar -C /content/ckpt")
     log(step="setup_done", nvidia=sh("nvidia-smi --query-gpu=name,memory.total --format=csv,noheader").strip(),
