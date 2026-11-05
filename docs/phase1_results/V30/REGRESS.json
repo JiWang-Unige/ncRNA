@@ -1,0 +1,9 @@
+{
+ "train_codes.npy": true,
+ "train_bits_v50uev.npy": true,
+ "train_bits_v50f.npy": true,
+ "train_bits_v41uev.npy": true,
+ "train_bits_v50uevlnc.npy": true,
+ "train_events.npy": true,
+ "ok": true
+}

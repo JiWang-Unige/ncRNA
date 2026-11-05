@@ -1,0 +1,132 @@
+{
+ "human_new": {
+  "n": 3000,
+  "n_frac_max": 0.09639485677083333,
+  "windows": {
+   "which": "human",
+   "n": 3000,
+   "kinds": {
+    "lnc": 1200,
+    "pc": 900,
+    "rand": 900
+   },
+   "chroms": {
+    "chr1": 287,
+    "chr2": 253,
+    "chr3": 222,
+    "chr4": 213,
+    "chr5": 177,
+    "chr6": 185,
+    "chr7": 162,
+    "chr8": 159,
+    "chr10": 147,
+    "chr11": 131,
+    "chr12": 149,
+    "chr13": 147,
+    "chr14": 109,
+    "chr15": 112,
+    "chr16": 103,
+    "chr17": 107,
+    "chr19": 57,
+    "chr21": 55,
+    "chr22": 49,
+    "chrX": 176
+   },
+   "redrawn": {
+    "n": 57,
+    "overlap": 450
+   }
+  },
+  "repair": {
+   "windows_infeasible_before_repair": 293,
+   "violations_mean": 0.23766666666666666,
+   "relaxed_bp_mean": 15.871,
+   "relaxed_frac": 0.0006457926432291667
+  },
+  "events": {
+   "donor+": {
+    "pos_frac": 0.002155856662326389,
+    "ign_frac": 0.052028333875868055,
+    "n_pos_events_approx": 7568
+   },
+   "acceptor+": {
+    "pos_frac": 0.0021490342881944446,
+    "ign_frac": 0.05182504611545139,
+    "n_pos_events_approx": 7544
+   },
+   "TSS+": {
+    "pos_frac": 0.00039100477430555557,
+    "ign_frac": 0.04531203884548611,
+    "n_pos_events_approx": 1372
+   }
+  },
+  "unknown_bp_total": 222722571
+ },
+ "mouse": {
+  "n": 3000,
+  "n_frac_max": 0.0,
+  "windows": {
+   "which": "mouse",
+   "n": 3000,
+   "kinds": {
+    "lnc": 1200,
+    "pc": 900,
+    "rand": 900
+   },
+   "chroms": {
+    "chr1": 240,
+    "chr2": 230,
+    "chr3": 213,
+    "chr4": 182,
+    "chr5": 182,
+    "chr6": 154,
+    "chr7": 173,
+    "chr8": 149,
+    "chr9": 149,
+    "chr10": 134,
+    "chr11": 148,
+    "chr12": 157,
+    "chr13": 131,
+    "chr14": 164,
+    "chr15": 132,
+    "chr16": 124,
+    "chr17": 119,
+    "chrX": 219
+   },
+   "redrawn": {
+    "n": 19,
+    "overlap": 0
+   }
+  },
+  "repair": {
+   "windows_infeasible_before_repair": 310,
+   "violations_mean": 0.22333333333333333,
+   "relaxed_bp_mean": 16.057,
+   "relaxed_frac": 0.0006533610026041666
+  },
+  "events": {
+   "donor+": {
+    "pos_frac": 0.0024554985894097224,
+    "ign_frac": 0.07092975531684027,
+    "n_pos_events_approx": 8620
+   },
+   "acceptor+": {
+    "pos_frac": 0.002454793294270833,
+    "ign_frac": 0.070218994140625,
+    "n_pos_events_approx": 8618
+   },
+   "TSS+": {
+    "pos_frac": 0.00045132107204861113,
+    "ign_frac": 0.0631003146701389,
+    "n_pos_events_approx": 1584
+   }
+  },
+  "unknown_bp_total": 293180152
+ },
+ "mouse_uev_lift": {
+  "rows": 1639683,
+  "kept": 1629494,
+  "kept_frac": 0.9937859940000597
+ },
+ "ok": true
+}

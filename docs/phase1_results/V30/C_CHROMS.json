@@ -1,0 +1,124 @@
+{
+ "rule": "protocol 18 detail 2: autosome 40-80 Mb with the most ruler-lnc genes; < 200 lnc genes = descriptive only",
+ "rat": {
+  "species": "rattus_norvegicus",
+  "assembly": "GRCr8",
+  "gtf": "data/v30/ensembl/rat_Rattus_norvegicus.GRCr8.116.gtf.gz",
+  "chrom": "12",
+  "length": 52308831,
+  "lnc_genes": 498,
+  "mrna_genes": 640,
+  "in_verdict": true,
+  "candidates": {
+   "12": {
+    "length": 52308831,
+    "lnc_genes": 498,
+    "mrna_genes": 640
+   },
+   "19": {
+    "length": 74246245,
+    "lnc_genes": 482,
+    "mrna_genes": 699
+   },
+   "20": {
+    "length": 56021148,
+    "lnc_genes": 422,
+    "mrna_genes": 616
+   }
+  }
+ },
+ "cow": {
+  "species": "bos_taurus",
+  "assembly": "ARS-UCD2.0",
+  "gtf": "data/v30/ensembl/cow_Bos_taurus.ARS-UCD2.0.116.gtf.gz",
+  "chrom": "18",
+  "length": 65820629,
+  "lnc_genes": 461,
+  "mrna_genes": 1132,
+  "in_verdict": true,
+  "candidates": {
+   "17": {
+    "length": 73167244,
+    "lnc_genes": 367,
+    "mrna_genes": 542
+   },
+   "18": {
+    "length": 65820629,
+    "lnc_genes": 461,
+    "mrna_genes": 1132
+   },
+   "19": {
+    "length": 63449741,
+    "lnc_genes": 436,
+    "mrna_genes": 1126
+   },
+   "20": {
+    "length": 71974595,
+    "lnc_genes": 320,
+    "mrna_genes": 289
+   },
+   "21": {
+    "length": 69862954,
+    "lnc_genes": 371,
+    "mrna_genes": 459
+   },
+   "22": {
+    "length": 60773035,
+    "lnc_genes": 308,
+    "mrna_genes": 510
+   },
+   "23": {
+    "length": 52498615,
+    "lnc_genes": 385,
+    "mrna_genes": 630
+   },
+   "24": {
+    "length": 62317253,
+    "lnc_genes": 304,
+    "mrna_genes": 269
+   },
+   "25": {
+    "length": 42350435,
+    "lnc_genes": 292,
+    "mrna_genes": 670
+   },
+   "26": {
+    "length": 51992305,
+    "lnc_genes": 253,
+    "mrna_genes": 360
+   },
+   "27": {
+    "length": 45612108,
+    "lnc_genes": 279,
+    "mrna_genes": 220
+   },
+   "28": {
+    "length": 45940150,
+    "lnc_genes": 187,
+    "mrna_genes": 271
+   },
+   "29": {
+    "length": 51098607,
+    "lnc_genes": 220,
+    "mrna_genes": 591
+   }
+  }
+ },
+ "xtrop": {
+  "species": "xenopus_tropicalis",
+  "assembly": "UCB_Xtro_10.0",
+  "gtf": "data/v30/ensembl/xtrop_Xenopus_tropicalis.UCB_Xtro_10.0.116.gtf.gz",
+  "chrom": "10",
+  "length": 52432566,
+  "lnc_genes": 0,
+  "mrna_genes": 1115,
+  "in_verdict": false,
+  "candidates": {
+   "10": {
+    "length": 52432566,
+    "lnc_genes": 0,
+    "mrna_genes": 1115
+   }
+  }
+ }
+}

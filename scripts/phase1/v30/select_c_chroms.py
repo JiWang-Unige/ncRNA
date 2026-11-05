@@ -29,7 +29,8 @@ def main():
     for short, sp in SPECIES.items():
         url = f"https://rest.ensembl.org/info/assembly/{sp}?content-type=application/json"
         asm = json.load(urllib.request.urlopen(url, timeout=120))
-        lens = {r["name"]: r["length"] for r in asm["top_level_region"] if r.get("coord_system") == "chromosome"}
+        # karyotype regions are "chromosome" for some assemblies and "primary_assembly" for others (rat GRCr8)
+        lens = {r["name"]: r["length"] for r in asm["top_level_region"] if r.get("coord_system") in ("chromosome", "primary_assembly")}
         auto = [c for c in asm.get("karyotype", []) if c.upper() not in ("X", "Y", "Z", "W", "MT") and c in lens]
         gtf = glob.glob(f"{ROOT}/data/v30/ensembl/{short}_*.116.gtf.gz")
         assert len(gtf) == 1, gtf
