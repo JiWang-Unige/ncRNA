@@ -1,0 +1,22 @@
+{
+ "files": {
+  "ag_chr18_splice.npy": "e1ec494de801dacfa244810a393722f768dd70b82783c98992fd5b21b0039dfd",
+  "ag_chr18_rna.npy": "39498a326add23dbefedcf446543b0c99d161cd894bc362f5c33237e04b79240"
+ },
+ "L": 80373285,
+ "windows": 154,
+ "predict_s": 72,
+ "peak_gb": 31.81,
+ "rna_clipped": 0,
+ "splice_cols": [
+  "acc+",
+  "don+",
+  "acc-",
+  "don-"
+ ],
+ "n_tracks": {
+  "rna_plus": 271,
+  "rna_minus": 271,
+  "rna_unstranded": 125
+ }
+}

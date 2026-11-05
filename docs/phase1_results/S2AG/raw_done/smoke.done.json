@@ -1,0 +1,41 @@
+{
+ "files": {
+  "smoke_chr20_splice.npy": "5ee9d46b7f0ad489bef03e5383a1e14cb60c10fafb09adc729c893ccc0426913",
+  "smoke_chr20_rna.npy": "50d7b77c02812ad35b9998347c049b9a4f7aa43633f7346fad5985017c73b3e4",
+  "rna_seq_tracks.csv": "1098ccca476dc0a65490535a99cf42e81ec23d41f87430c208aa731ef811c828",
+  "splice_sites_tracks.csv": "7d18141b6a3c3948549b6d910bd5fbe84ef0b4b097e698f14ff5b8980e854d1a"
+ },
+ "windows": [
+  60,
+  61,
+  62
+ ],
+ "first_call_s": 32.7,
+ "window_s": [
+  0.34,
+  0.34,
+  0.34
+ ],
+ "public_s": 5.0,
+ "peak_gb_fast": 31.81,
+ "peak_gb_after_public": 31.81,
+ "load_s": 4.4,
+ "n_tracks": {
+  "rna_plus": 271,
+  "rna_minus": 271,
+  "rna_unstranded": 125
+ },
+ "fast_vs_public": {
+  "rna_max_value": 54.75,
+  "splice_max_value": 1.0,
+  "splice_max_abs": 0.0,
+  "rna_max_abs": 0.0
+ },
+ "zlib_ratio": {
+  "splice": 0.47,
+  "rna": 0.598,
+  "zlib1_s": 0.22
+ },
+ "windows_4chrom": 845,
+ "est_predict_min": 4.8
+}

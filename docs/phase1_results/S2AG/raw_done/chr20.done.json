@@ -1,0 +1,22 @@
+{
+ "files": {
+  "ag_chr20_splice.npy": "b9a097df5463ad563d4d326c73b39d324b79b262d34a4d6fc1688f8fd99d4b0e",
+  "ag_chr20_rna.npy": "b6174965858ac7a7754f8e49bd31498fefaa452a480e04708f2980a26a1a3f55"
+ },
+ "L": 64444167,
+ "windows": 123,
+ "predict_s": 90,
+ "peak_gb": 31.81,
+ "rna_clipped": 0,
+ "splice_cols": [
+  "acc+",
+  "don+",
+  "acc-",
+  "don-"
+ ],
+ "n_tracks": {
+  "rna_plus": 271,
+  "rna_minus": 271,
+  "rna_unstranded": 125
+ }
+}

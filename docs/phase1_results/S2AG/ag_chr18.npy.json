@@ -1,0 +1,39 @@
+{
+ "chrom": "chr18",
+ "ag_commit": "3eecf48e58d7babbbc53525a8a0cf29a179e20a6",
+ "weights_revision": "a8f293a76ee73d5b57f3bf2ae146510589fcf187",
+ "raw_sha256": "e1ec494de801dacfa244810a393722f768dd70b82783c98992fd5b21b0039dfd",
+ "splice_cols": [
+  "acc+",
+  "don+",
+  "acc-",
+  "don-"
+ ],
+ "offsets": [
+  0,
+  0,
+  0,
+  0
+ ],
+ "ap": {
+  "lnc_acc+": 0.14767488794966785,
+  "lnc_acc+_n": 1664,
+  "mrna_acc+": 0.84097562203567,
+  "mrna_acc+_n": 2356,
+  "lnc_don+": 0.1381247948223739,
+  "lnc_don+_n": 1657,
+  "mrna_don+": 0.8360910455899365,
+  "mrna_don+_n": 2416,
+  "lnc_acc-": 0.12020503706196728,
+  "lnc_acc-_n": 1641,
+  "mrna_acc-": 0.835950573976865,
+  "mrna_acc-_n": 2306,
+  "lnc_don-": 0.12290741106961477,
+  "lnc_don-_n": 1571,
+  "mrna_don-": 0.8398640783218909,
+  "mrna_don-_n": 2317,
+  "lnc_ap": 0.13222803272590594,
+  "mrna_ap": 0.8382203299810906
+ },
+ "total_s": 22
+}

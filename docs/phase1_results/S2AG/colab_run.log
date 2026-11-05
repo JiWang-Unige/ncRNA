@@ -1,0 +1,35 @@
+2026-11-05T13:37:31Z START mode=auto gpu=A100,G4 cap=12.6 chroms=chr20 chr18 chr9 chr7 balance=28.47
+2026-11-05T13:41:33Z new A100 failed: Active assignments: 0
+2026-11-05T13:45:37Z new G4 failed: Active assignments: 0
+2026-11-05T14:09:40Z new A100 failed: Active assignments: 0
+2026-11-05T14:13:44Z new G4 failed: Active assignments: 0
+2026-11-05T14:37:48Z new A100 failed: Active assignments: 0
+2026-11-05T14:40:58Z session READY on G4; rate: 10.05/h
+2026-11-05T14:42:30Z weights scp rc=0 s 90 bytes 733829120
+2026-11-05T14:42:38Z launched smoke chr20
+2026-11-05T14:43:40Z poll 164 s spent_cu 0.28 | {"step": "start", "window": 1048576, "args": {"mode": "smoke", "chroms": ["chr20"], "ag_commit": "3eecf48e58d7babbbc53525a8a0cf29a179e20a6", "ckpt_tar_sha256": "57201a6750da8e391d87251fde76f0f245e169cacd9282495063024a81d1582d"}, "t": 0.0}
+2026-11-05T14:44:43Z poll 227 s spent_cu 0.28 | {"step": "model_loaded", "load_s": 4.4, "n_tracks": {"rna_plus": 271, "rna_minus": 271, "rna_unstranded": 125}, "splice_tracks": [{"name": "donor", "strand": "+"}, {"name": "acceptor", "strand": "+"}, {"name": "donor", "strand": "-"}, {"name": "acceptor", "strand": "-"}], "t": 122.3}
+2026-11-05T14:45:45Z poll 288 s spent_cu 0.28 | {"step": "end", "total_s": 164, "t": 163.8}
+2026-11-05T14:45:51Z fetch smoke_chr20_splice.npy bytes 12583040 s 4 sha_ok 1
+2026-11-05T14:45:55Z fetch smoke_chr20_rna.npy bytes 6291584 s 4 sha_ok 1
+2026-11-05T14:45:58Z fetch rna_seq_tracks.csv bytes 93633 s 3 sha_ok 1
+2026-11-05T14:46:00Z fetch splice_sites_tracks.csv bytes 50 s 2 sha_ok 1
+2026-11-05T14:46:00Z JOB_END {"step": "end", "total_s": 164, "t": 163.8}
+2026-11-05T14:46:04Z CHECK GO {"fast_equals_public": true, "rate_per_h": 10.05, "window_s": 0.34, "chroms": ["chr20", "chr18", "chr9", "chr7"], "projected_h": 0.35, "projected_cu": 3.52, "spent_cu": 0.28, "cap": 12.6}
+2026-11-05T14:46:08Z launched full chr20 chr18 chr9 chr7
+2026-11-05T14:47:11Z poll 375 s spent_cu 0.28 | {"step": "window", "chrom": "chr20", "k": 0, "of": 123, "s": 33, "t": 58.3}
+2026-11-05T14:48:13Z poll 437 s spent_cu 1.12 | {"step": "window", "chrom": "chr18", "k": 0, "of": 154, "s": 0, "t": 119.0}
+2026-11-05T14:49:02Z fetch ag_chr20_splice.npy bytes 515553464 s 46 sha_ok 1
+2026-11-05T14:49:30Z fetch ag_chr20_rna.npy bytes 257776796 s 28 sha_ok 1
+2026-11-05T14:50:33Z poll 577 s spent_cu 1.12 | {"step": "window", "chrom": "chr9", "k": 125, "of": 264, "s": 59, "t": 254.9}
+2026-11-05T14:51:30Z fetch ag_chr18_splice.npy bytes 642986408 s 54 sha_ok 1
+2026-11-05T14:52:05Z fetch ag_chr18_rna.npy bytes 321493268 s 35 sha_ok 1
+2026-11-05T14:53:08Z poll 732 s spent_cu 1.97 | {"step": "window", "chrom": "chr7", "k": 200, "of": 304, "s": 94, "t": 418.3}
+2026-11-05T14:54:38Z fetch ag_chr9_splice.npy bytes 1107157864 s 87 sha_ok 1
+2026-11-05T14:55:26Z fetch ag_chr9_rna.npy bytes 553578996 s 48 sha_ok 1
+2026-11-05T14:56:29Z poll 932 s spent_cu 1.97 | {"step": "end", "total_s": 468, "t": 468.5}
+2026-11-05T14:58:12Z fetch ag_chr7_splice.npy bytes 1274767912 s 101 sha_ok 1
+2026-11-05T14:59:04Z fetch ag_chr7_rna.npy bytes 637384020 s 52 sha_ok 1
+2026-11-05T14:59:04Z JOB_END {"step": "end", "total_s": 468, "t": 468.5}
+2026-11-05T14:59:19Z after: Current balance: 25.67 compute units Usage rate: 0.00/hr Active assignments: 0 
+2026-11-05T14:59:20Z END wall_s 1103 spent_cu 2.8
