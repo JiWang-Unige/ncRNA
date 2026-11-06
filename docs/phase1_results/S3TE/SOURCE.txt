@@ -1,0 +1,1 @@
+source https://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/rmsk.txt.gz fetched 2026-11-06T20:25:45Z card s3-te-rmsk
