@@ -1,0 +1,51 @@
+{
+ "rule": "epoch-12 train NLL > 3 x max over H arm",
+ "H": {
+  "v20-g1b-42-ke": 0.00206,
+  "v20-g1b-123-ke": 0.00126,
+  "v20-g1b-456-ke": 0.00108
+ },
+ "threshold": 0.006180000000000001,
+ "runs": {
+  "v30h6-g1b-42-ke": {
+   "train_nll": 0.00081,
+   "failed": false
+  },
+  "v30h6-g1b-123-ke": {
+   "train_nll": 0.00775,
+   "failed": true
+  },
+  "v30h6-g1b-456-ke": {
+   "train_nll": 0.00067,
+   "failed": false
+  },
+  "v30hm-g1b-42-ke": {
+   "train_nll": 0.00068,
+   "failed": false
+  },
+  "v30hm-g1b-123-ke": {
+   "train_nll": 0.00933,
+   "failed": true
+  },
+  "v30hm-g1b-456-ke": {
+   "train_nll": 0.00067,
+   "failed": false
+  }
+ },
+ "arms": {
+  "h6": {
+   "runs": [
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke"
+   ],
+   "replacement_pending": true
+  },
+  "hm": {
+   "runs": [
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "replacement_pending": true
+  }
+ }
+}
