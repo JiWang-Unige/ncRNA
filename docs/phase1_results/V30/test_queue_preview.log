@@ -1,0 +1,164 @@
+2026-11-10T10:11:37Z START preview config b21c57305456 commit 75452809abc9f674b644b2991827adfc328f601c
+2026-11-10T10:18:06Z chr18 v20-g1b-123-ke rc=0
+2026-11-10T10:19:14Z chr18 v20-g1b-42-ke rc=0
+2026-11-10T10:24:17Z chr18 v20-g1b-456-ke rc=0
+2026-11-10T10:25:38Z chr18 v30h6-g1b-42-ke rc=0
+2026-11-10T10:30:55Z chr18 v30h6-g1b-456-ke rc=0
+2026-11-10T10:32:03Z chr18 v30hm-g1b-42-ke rc=0
+2026-11-10T10:38:44Z chr18 v30hm-g1b-456-ke rc=0
+2026-11-10T10:38:46Z REPRO_OK
+2026-11-10T10:43:34Z chicken_5 v20-g1b-123-ke rc=0
+2026-11-10T10:44:55Z chicken_5 v20-g1b-42-ke rc=0
+2026-11-10T10:47:52Z chicken_5 v20-g1b-456-ke rc=0
+2026-11-10T10:49:16Z chicken_5 v30h6-g1b-42-ke rc=0
+2026-11-10T10:52:05Z chicken_5 v30h6-g1b-456-ke rc=0
+2026-11-10T10:54:35Z chicken_5 v30hm-g1b-42-ke rc=0
+2026-11-10T10:56:06Z chicken_5 v30hm-g1b-456-ke rc=0
+2026-11-10T10:56:06Z chicken_5 read
+2026-11-10T10:59:15Z zebrafish_22 v20-g1b-123-ke rc=0
+2026-11-10T11:00:27Z zebrafish_22 v20-g1b-42-ke rc=0
+2026-11-10T11:02:00Z zebrafish_22 v20-g1b-456-ke rc=0
+2026-11-10T11:03:31Z zebrafish_22 v30h6-g1b-42-ke rc=0
+2026-11-10T11:04:53Z zebrafish_22 v30h6-g1b-456-ke rc=0
+2026-11-10T11:06:27Z zebrafish_22 v30hm-g1b-42-ke rc=0
+2026-11-10T11:07:54Z zebrafish_22 v30hm-g1b-456-ke rc=0
+2026-11-10T11:07:54Z zebrafish_22 read
+2026-11-10T11:10:01Z fly_2L v20-g1b-123-ke rc=0
+2026-11-10T11:11:05Z fly_2L v20-g1b-42-ke rc=0
+2026-11-10T11:12:25Z fly_2L v20-g1b-456-ke rc=0
+2026-11-10T11:14:09Z fly_2L v30h6-g1b-42-ke rc=0
+2026-11-10T11:15:26Z fly_2L v30h6-g1b-456-ke rc=0
+2026-11-10T11:16:54Z fly_2L v30hm-g1b-42-ke rc=0
+2026-11-10T11:18:36Z fly_2L v30hm-g1b-456-ke rc=0
+2026-11-10T11:18:36Z fly_2L read
+2026-11-10T11:19:48Z worm_I v20-g1b-123-ke rc=0
+2026-11-10T11:21:14Z worm_I v20-g1b-42-ke rc=0
+2026-11-10T11:22:39Z worm_I v20-g1b-456-ke rc=0
+2026-11-10T11:24:22Z worm_I v30h6-g1b-42-ke rc=0
+2026-11-10T11:25:45Z worm_I v30h6-g1b-456-ke rc=0
+2026-11-10T11:27:15Z worm_I v30hm-g1b-42-ke rc=0
+2026-11-10T11:28:52Z worm_I v30hm-g1b-456-ke rc=0
+2026-11-10T11:29:06Z worm_I read
+2026-11-10T11:44:49Z FEAT_FAIL mouse_chr19
+2026-11-10T12:29:34Z RETRY mouse_chr19 shard t02600_02800 (transient tokenizer TypeError; S5 extracted this chromosome before)
+2026-11-10T12:30:46Z START preview config b21c57305456 commit 75452809abc9f674b644b2991827adfc328f601c
+2026-11-10T12:30:47Z chr18 v20-g1b-123-ke rc=0
+2026-11-10T12:32:17Z chr18 v20-g1b-42-ke rc=0
+2026-11-10T12:33:47Z chr18 v20-g1b-456-ke rc=0
+2026-11-10T12:35:17Z chr18 v30h6-g1b-42-ke rc=0
+2026-11-10T12:36:48Z chr18 v30h6-g1b-456-ke rc=0
+2026-11-10T12:38:18Z chr18 v30hm-g1b-42-ke rc=0
+2026-11-10T12:39:48Z chr18 v30hm-g1b-456-ke rc=0
+2026-11-10T12:41:17Z REPRO_OK
+2026-11-10T12:41:19Z chicken_5 v20-g1b-123-ke rc=0
+2026-11-10T12:42:49Z chicken_5 v20-g1b-42-ke rc=0
+2026-11-10T12:44:19Z chicken_5 v20-g1b-456-ke rc=0
+2026-11-10T12:45:49Z chicken_5 v30h6-g1b-42-ke rc=0
+2026-11-10T12:47:19Z chicken_5 v30h6-g1b-456-ke rc=0
+2026-11-10T12:48:49Z chicken_5 v30hm-g1b-42-ke rc=0
+2026-11-10T12:50:19Z chicken_5 v30hm-g1b-456-ke rc=0
+2026-11-10T12:51:48Z chicken_5 read
+2026-11-10T12:51:49Z zebrafish_22 v20-g1b-123-ke rc=0
+2026-11-10T12:53:19Z zebrafish_22 v20-g1b-42-ke rc=0
+2026-11-10T12:55:49Z zebrafish_22 v20-g1b-456-ke rc=0
+2026-11-10T12:56:19Z zebrafish_22 v30h6-g1b-42-ke rc=0
+2026-11-10T12:57:49Z zebrafish_22 v30h6-g1b-456-ke rc=0
+2026-11-10T12:59:19Z zebrafish_22 v30hm-g1b-42-ke rc=0
+2026-11-10T13:00:49Z zebrafish_22 v30hm-g1b-456-ke rc=0
+2026-11-10T13:02:18Z zebrafish_22 read
+2026-11-10T13:02:19Z fly_2L v20-g1b-123-ke rc=0
+2026-11-10T13:03:49Z fly_2L v20-g1b-42-ke rc=0
+2026-11-10T13:05:19Z fly_2L v20-g1b-456-ke rc=0
+2026-11-10T13:06:49Z fly_2L v30h6-g1b-42-ke rc=0
+2026-11-10T13:08:19Z fly_2L v30h6-g1b-456-ke rc=0
+2026-11-10T13:09:49Z fly_2L v30hm-g1b-42-ke rc=0
+2026-11-10T13:11:19Z fly_2L v30hm-g1b-456-ke rc=0
+2026-11-10T13:12:48Z fly_2L read
+2026-11-10T13:12:49Z worm_I v20-g1b-123-ke rc=0
+2026-11-10T13:14:19Z worm_I v20-g1b-42-ke rc=0
+2026-11-10T13:15:49Z worm_I v20-g1b-456-ke rc=0
+2026-11-10T13:17:19Z worm_I v30h6-g1b-42-ke rc=0
+2026-11-10T13:18:50Z worm_I v30h6-g1b-456-ke rc=0
+2026-11-10T13:20:20Z worm_I v30hm-g1b-42-ke rc=0
+2026-11-10T13:21:50Z worm_I v30hm-g1b-456-ke rc=0
+2026-11-10T13:23:18Z worm_I read
+2026-11-10T13:31:05Z mouse_chr19 v20-g1b-123-ke rc=0
+2026-11-10T13:31:11Z mouse_chr19 v20-g1b-42-ke rc=0
+2026-11-10T13:36:36Z mouse_chr19 v20-g1b-456-ke rc=0
+2026-11-10T13:38:39Z mouse_chr19 v30h6-g1b-42-ke rc=0
+2026-11-10T13:41:55Z mouse_chr19 v30h6-g1b-456-ke rc=0
+2026-11-10T13:43:38Z mouse_chr19 v30hm-g1b-42-ke rc=0
+2026-11-10T13:46:00Z mouse_chr19 v30hm-g1b-456-ke rc=0
+2026-11-10T13:46:04Z mouse_chr19 read, feature cache deleted
+2026-11-10T13:56:42Z FEAT_FAIL rat_12
+2026-11-10T14:01:05Z RETRY rat_12 failed shards pinned to cpus 16-31 (random SystemError / segfaults on cpu 0; i9-13900K)
+2026-11-10T14:06:52Z SHARD_RECHECK_OK rat_12_t00200_00400 904d3e52ef4be7e65156ce646d2a9427fa99aa232e8b192955579ada10f960ec
+2026-11-10T14:06:53Z START preview config b21c57305456 commit 75452809abc9f674b644b2991827adfc328f601c
+2026-11-10T14:06:55Z chr18 v20-g1b-123-ke rc=0
+2026-11-10T14:08:25Z chr18 v20-g1b-42-ke rc=0
+2026-11-10T14:09:54Z chr18 v20-g1b-456-ke rc=0
+2026-11-10T14:11:25Z chr18 v30h6-g1b-42-ke rc=0
+2026-11-10T14:12:54Z chr18 v30h6-g1b-456-ke rc=0
+2026-11-10T14:14:24Z chr18 v30hm-g1b-42-ke rc=0
+2026-11-10T14:15:54Z chr18 v30hm-g1b-456-ke rc=0
+2026-11-10T14:17:25Z REPRO_OK
+2026-11-10T14:17:26Z chicken_5 v20-g1b-123-ke rc=0
+2026-11-10T14:18:56Z chicken_5 v20-g1b-42-ke rc=0
+2026-11-10T14:20:26Z chicken_5 v20-g1b-456-ke rc=0
+2026-11-10T14:21:56Z chicken_5 v30h6-g1b-42-ke rc=0
+2026-11-10T14:23:26Z chicken_5 v30h6-g1b-456-ke rc=0
+2026-11-10T14:24:56Z chicken_5 v30hm-g1b-42-ke rc=0
+2026-11-10T14:26:26Z chicken_5 v30hm-g1b-456-ke rc=0
+2026-11-10T14:27:55Z chicken_5 read
+2026-11-10T14:27:56Z zebrafish_22 v20-g1b-123-ke rc=0
+2026-11-10T14:29:26Z zebrafish_22 v20-g1b-42-ke rc=0
+2026-11-10T14:30:56Z zebrafish_22 v20-g1b-456-ke rc=0
+2026-11-10T14:32:26Z zebrafish_22 v30h6-g1b-42-ke rc=0
+2026-11-10T14:33:56Z zebrafish_22 v30h6-g1b-456-ke rc=0
+2026-11-10T14:35:26Z zebrafish_22 v30hm-g1b-42-ke rc=0
+2026-11-10T14:36:56Z zebrafish_22 v30hm-g1b-456-ke rc=0
+2026-11-10T14:38:25Z zebrafish_22 read
+2026-11-10T14:39:26Z fly_2L v20-g1b-123-ke rc=0
+2026-11-10T14:39:56Z fly_2L v20-g1b-42-ke rc=0
+2026-11-10T14:41:26Z fly_2L v20-g1b-456-ke rc=0
+2026-11-10T14:42:56Z fly_2L v30h6-g1b-42-ke rc=0
+2026-11-10T14:44:26Z fly_2L v30h6-g1b-456-ke rc=0
+2026-11-10T14:45:56Z fly_2L v30hm-g1b-42-ke rc=0
+2026-11-10T14:47:26Z fly_2L v30hm-g1b-456-ke rc=0
+2026-11-10T14:48:55Z fly_2L read
+2026-11-10T14:48:56Z worm_I v20-g1b-123-ke rc=0
+2026-11-10T14:50:26Z worm_I v20-g1b-42-ke rc=0
+2026-11-10T14:51:56Z worm_I v20-g1b-456-ke rc=0
+2026-11-10T14:53:26Z worm_I v30h6-g1b-42-ke rc=0
+2026-11-10T14:54:56Z worm_I v30h6-g1b-456-ke rc=0
+2026-11-10T14:56:26Z worm_I v30hm-g1b-42-ke rc=0
+2026-11-10T14:57:56Z worm_I v30hm-g1b-456-ke rc=0
+2026-11-10T14:59:25Z worm_I read
+2026-11-10T14:59:25Z STOP: only 127 GB free before extracting mouse_chr19
+2026-11-10T15:01:45Z RESUME (logs/v30_preview_tail.sh) from rat_12; mouse_chr19 already read
+2026-11-10T15:06:17Z rat_12 v20-g1b-123-ke rc=0
+2026-11-10T15:07:37Z rat_12 v20-g1b-42-ke rc=0
+2026-11-10T15:10:23Z rat_12 v20-g1b-456-ke rc=0
+2026-11-10T15:11:57Z rat_12 v30h6-g1b-42-ke rc=0
+2026-11-10T15:14:35Z rat_12 v30h6-g1b-456-ke rc=0
+2026-11-10T15:16:06Z rat_12 v30hm-g1b-42-ke rc=0
+2026-11-10T15:18:38Z rat_12 v30hm-g1b-456-ke rc=0
+2026-11-10T15:18:41Z rat_12 read, feature cache deleted
+2026-11-10T15:40:50Z cow_18 v20-g1b-123-ke rc=0
+2026-11-10T15:42:23Z cow_18 v20-g1b-42-ke rc=0
+2026-11-10T15:46:06Z cow_18 v20-g1b-456-ke rc=0
+2026-11-10T15:47:27Z cow_18 v30h6-g1b-42-ke rc=0
+2026-11-10T15:51:20Z cow_18 v30h6-g1b-456-ke rc=0
+2026-11-10T15:52:46Z cow_18 v30hm-g1b-42-ke rc=0
+2026-11-10T15:56:23Z cow_18 v30hm-g1b-456-ke rc=0
+2026-11-10T15:56:26Z cow_18 read, feature cache deleted
+2026-11-10T16:16:22Z xtrop_10 v20-g1b-123-ke rc=0
+2026-11-10T16:17:32Z xtrop_10 v20-g1b-42-ke rc=0
+2026-11-10T16:20:30Z xtrop_10 v20-g1b-456-ke rc=0
+2026-11-10T16:22:00Z xtrop_10 v30h6-g1b-42-ke rc=0
+2026-11-10T16:24:41Z xtrop_10 v30h6-g1b-456-ke rc=0
+2026-11-10T16:26:12Z xtrop_10 v30hm-g1b-42-ke rc=0
+2026-11-10T16:28:53Z xtrop_10 v30hm-g1b-456-ke rc=0
+2026-11-10T16:28:56Z xtrop_10 read, feature cache deleted
+2026-11-10T16:30:00Z score rc=0
+2026-11-10T16:30:00Z QUEUE_END
