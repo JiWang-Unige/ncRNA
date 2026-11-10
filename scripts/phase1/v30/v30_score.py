@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """v3.0 scoring (protocol section 18, execution detail 10; DRAFT_V30 section 5) of the reads of configs/v30.json.
 
-  v30_score.py --config configs/v30.json   -> <out_dir>/SCORE_V30.json
+  v30_score.py --config configs/v30.json           -> <out_dir>/SCORE_V30.json
+  v30_score.py --config configs/v30_preview.json   -> <out_dir>/SCORE_V30_preview.json (section 18.1 item 3, descriptive)
+Section 18.1: the final config accepts reads made with its recorded preview config (same read code, same weights);
+within each arm the bootstrap draws as many runs as the arm has (three -> identical to the section 18 rule).
 
 Per test set and run: the run's arm reports lnc genes whose calibrated probability (the arm's calibration model on
 the v20_calib.py features; raw confidence if the arm did not keep its calibration) is >= the arm's tau_v20; mRNA
@@ -62,7 +65,12 @@ def main():
         tabs[h] = json.load(open(f"{ROOT}/{h}"))
     res = {"config": a.config, "config_sha256": P.sha256(cfg_path), "script_sha256": P.sha256(os.path.abspath(__file__)),
            "arms": {k: {"tau_v20": v["tau_v20"], "calibration_kept": v["calibration"]["keep"], "runs": v["runs"]} for k, v in cfg["arms"].items()},
-           "sets": {}}
+           "stage": cfg.get("stage", "final"), "sets": {}}
+    ok_sha = {res["config_sha256"]}
+    if "preview_config" in cfg:
+        pv = cfg["preview_config"]
+        assert P.sha256(f"{ROOT}/{pv['path']}") == pv["sha256"], "preview config changed"
+        ok_sha.add(pv["sha256"])
     for t, tg in cfg["targets"].items():
         if t == "chr18":
             continue
@@ -81,7 +89,8 @@ def main():
             for run in arm["runs"]:
                 rd = f"{out_dir}/{t}/{run}"
                 meta = json.load(open(f"{rd}/read_meta.json"))
-                assert meta["config_sha256"] == res["config_sha256"], f"{t} {run}: read with another config"
+                assert meta["config_sha256"] in ok_sha, f"{t} {run}: read with another config"
+                assert meta["run"]["ckpt_sha256"] == cfg["runs"][run]["ckpt_sha256"], f"{t} {run}: other weights"
                 genes = P.load_genes(f"{rd}/genes.json")
                 post = np.load(f"{rd}/post.npy", mmap_mode="r")
                 sc = arm_scores(arm, genes, post, codes, tab)
@@ -118,7 +127,8 @@ def main():
                 idx = rng.integers(0, n, n)
                 s, p = {}, {}
                 for arm_name in ARMS:
-                    runs = rng.integers(0, 3, 3)
+                    k = len(hits[arm_name])
+                    runs = rng.integers(0, k, k)
                     s[arm_name] = float(np.mean([hits[arm_name][r][idx].mean() for r in runs]))
                     vals = []
                     for r in runs:
@@ -151,7 +161,7 @@ def main():
                               "pass": g["HM"]["sn"] >= g["H6"]["sn"] - 0.02 and g["HM"]["pr_strict"] >= g["H6"]["pr_strict"] - 0.02},
         "mouse_chr19": res["sets"].get("mouse_chr19", {}).get("delta")}
     res["seconds"] = round(time.time() - t0)
-    json.dump(res, open(f"{out_dir}/SCORE_V30.json", "w"), indent=1)
+    json.dump(res, open(f"{out_dir}/SCORE_V30{'' if res['stage'] == 'final' else '_' + res['stage']}.json", "w"), indent=1)
     print(json.dumps(res["verdict"]), flush=True)
 
 
