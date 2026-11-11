@@ -19,6 +19,10 @@
    "train_nll": 0.00067,
    "failed": false
   },
+  "v30h6-g1b-789-ke": {
+   "train_nll": 0.00412,
+   "failed": false
+  },
   "v30hm-g1b-42-ke": {
    "train_nll": 0.00068,
    "failed": false
@@ -30,22 +34,27 @@
   "v30hm-g1b-456-ke": {
    "train_nll": 0.00067,
    "failed": false
+  },
+  "v30hm-g1b-789-ke": {
+   "train_nll": 0.00653,
+   "failed": true
   }
  },
  "arms": {
   "h6": {
    "runs": [
     "v30h6-g1b-42-ke",
-    "v30h6-g1b-456-ke"
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke"
    ],
-   "replacement_pending": true
+   "replacement_pending": false
   },
   "hm": {
    "runs": [
     "v30hm-g1b-42-ke",
     "v30hm-g1b-456-ke"
    ],
-   "replacement_pending": true
+   "replacement_pending": false
   }
  }
 }

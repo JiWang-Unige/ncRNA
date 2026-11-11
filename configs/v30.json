@@ -1,0 +1,780 @@
+{
+ "protocol": "PHASE1_PROTOCOL.md section 18 (v3.0), 18.1",
+ "stage": "final",
+ "code_commit": "7c1b93a8",
+ "created": "2026-11-10T23:09:11Z",
+ "out_dir": "outputs/PHASE1/V30/read",
+ "decode": {
+  "posteriors": "exact (float64 CPU forward-backward per tile, chrom.chromosome_marginals exact=True)",
+  "checkpoint": "uniform weight average of epochs 10-12",
+  "mode": "mea",
+  "level": "exon",
+  "delta": 0.0001,
+  "gamma": 3.0,
+  "tau": 0.62,
+  "min_exon": 20,
+  "min_intron": 50,
+  "lnc_min_len": 200,
+  "transitions": "allowed transitions of g1.G1Transitions() (mea_duration scores none)"
+ },
+ "main": {
+  "family": "G1B",
+  "runs": {
+   "v20-g1b-123-ke": "v20-g1b-123-ke",
+   "v20-g1b-42-ke": "v20-g1b-42-ke",
+   "v20-g1b-456-ke": "v20-g1b-456-ke",
+   "v30h6-g1b-42-ke": "v30h6-g1b-42-ke",
+   "v30h6-g1b-456-ke": "v30h6-g1b-456-ke",
+   "v30h6-g1b-789-ke": "v30h6-g1b-789-ke",
+   "v30hm-g1b-42-ke": "v30hm-g1b-42-ke",
+   "v30hm-g1b-456-ke": "v30hm-g1b-456-ke"
+  }
+ },
+ "runs": {
+  "v20-g1b-42-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 42,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v20",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v20-g1b-42-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v20-g1b-42-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v20-g1b-42-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "3921e57c0ad7f08dcc5ab77c26d10a71d6d53c64ca37d718675f9e1e69f3b3a7",
+    "8ae6087f3323431c698a81dfb9691a7a276335d5a93362fd0ebe0c4620b6ccf0",
+    "7284e25097e98374bc10cdcc7fa598db44cd5497b5a44cbf48ba61281906ad95"
+   ]
+  },
+  "v20-g1b-123-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 123,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v20",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v20-g1b-123-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v20-g1b-123-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v20-g1b-123-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "6afcb1a4e7be9dba66edb280301d2d994a76413088d5f497e0d548f544a3dba6",
+    "9cf8b6225f3019f0fd472589044a629506baf9d06cc573f24e5108690d04b93c",
+    "5af6eed63e906a7d54fe8e833820d3e9be315efc3cb329f5f0163d5a5bfdeba6"
+   ]
+  },
+  "v20-g1b-456-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 456,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v20",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v20-g1b-456-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v20-g1b-456-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v20-g1b-456-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "061baf6445d89d2bdac2e089e5a953571efdedc76a977c86ebbc727a7d42b0a4",
+    "e063507caccd8e8d910314d657509ea8e30b2f7ea5ca627fcc03ddc2d94a6d90",
+    "61bad5bfa96deddd27c52f558130ee42b26e3cb99c3f19a273550d1af7a6a782"
+   ]
+  },
+  "v30h6-g1b-42-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 42,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v30h6",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v30h6-g1b-42-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-42-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-42-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "a02271ab7a16095da7f66e356a147e386036518ea53acf07926d9a1956d5a992",
+    "ab7b6b0d05005811db46174df6beedb7144e8fb754d6443314f3f750451e6f18",
+    "92f75150899c729f58bbff5ab255dad902543a76a5e5ce699850a7784293563d"
+   ]
+  },
+  "v30h6-g1b-456-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 456,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v30h6",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v30h6-g1b-456-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-456-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-456-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "089980e8751dd7051a237572e2ec475742954d50862e286a47b50fc8345c3e6a",
+    "5e7ca1fb3199e46597a745196bec736b1678efc6bbeeb3174d667b707ad5e0ea",
+    "8424fe84faa75c8ddd58359aea25cd3b2d47d6b6560c348f28c6af83e6786bb8"
+   ]
+  },
+  "v30hm-g1b-42-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 42,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v30hm",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v30hm-g1b-42-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v30hm-g1b-42-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v30hm-g1b-42-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "50e25fc487caa3a43c915159b49b970a4ac7c8759b0e72648062a7df3901fc20",
+    "3028e90dc8261fa905b69382c99fb5dcb776059393713182ac85c53205cd9cfc",
+    "4022d85d0129081aeffeff2a01746b8e1e5a7c5f370711e254673eb014ea9a93"
+   ]
+  },
+  "v30hm-g1b-456-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 456,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v30hm",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v30hm-g1b-456-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v30hm-g1b-456-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v30hm-g1b-456-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "90087d8b7a9d8c00527ee2a9189fad70ce7155e9d483a57eef0660a7da88d279",
+    "722ce8a148da88e04f4621c78a081656660e21c4a31f48e7a642678b40355a2d",
+    "138978be3fd34bc20033031b30146107671896565d80633c83858a292f28331a"
+   ]
+  },
+  "v30h6-g1b-789-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 789,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v30h6",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v30h6-g1b-789-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-789-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-789-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "4d65a7048cf01fcfbf1964e20cc4517554882baed8fd53fb91c6405711cbb735",
+    "ffe3115e0306119cfa5465767451dd0d4286d71f65045aa966ba113509685c30",
+    "d43092d54cc7aba9bdd1019affeea4e2084453a0700b0c19d5689d96955aef59"
+   ]
+  }
+ },
+ "arms": {
+  "H": {
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke"
+   ],
+   "calibration": {
+    "keep": true,
+    "model": {
+     "features": [
+      "conf",
+      "mrna_mass",
+      "log_len",
+      "n_exon",
+      "log_orf",
+      "orf_frac",
+      "fickett",
+      "hexamer"
+     ],
+     "mean": [
+      0.6756926516033154,
+      0.004957964442339427,
+      6.420814824983489,
+      2.7589105581708138,
+      4.833105300222522,
+      0.2640734373095254,
+      0.5741410558170823,
+      -0.21512371993035426
+     ],
+     "sd": [
+      0.22561093239116362,
+      0.027674602947970875,
+      0.784249561581244,
+      3.4392674337573603,
+      1.05458212833344,
+      0.16704071984691574,
+      0.15683809748321223,
+      0.347116492625022
+     ],
+     "coef": [
+      -0.0017353034942860276,
+      -0.3668135087109274,
+      0.09730677580227078,
+      0.40230840378688315,
+      0.10466020425559279,
+      -0.007960918721281724,
+      -0.027448883678121285,
+      -0.03956826400932934
+     ],
+     "intercept": -0.4979937024374619
+    },
+    "tau_v20": 0.36,
+    "hexamer_table": "data/p1v20/hexamer_table.json",
+    "hexamer_table_sha256": "782be49a613b6973cb08b745d70c41d8869c31066896bebac13e695f86777c8c",
+    "dev_result": "outputs/PHASE1/V20/dev/CALIB.json",
+    "dev_result_sha256": "091d743f656018e104d6d99411caa3f3ecccd9228586da62c99762410ef73703"
+   },
+   "tau_baseline": 0.62,
+   "tau_v20": 0.36,
+   "source": "configs/v20.json",
+   "source_sha256": "f780522a0976aba33c21ff9942ed9c711caeb048f56e2391f8e40576baab6ca6",
+   "chr18_dev": {
+    "v20": {
+     "sn": 0.2526013634732687,
+     "pr_strict": 0.4714375090077696,
+     "sn_runs": [
+      0.3078579117330463,
+      0.2658772874058127,
+      0.18406889128094725
+     ],
+     "pr_runs": [
+      0.4979757085020243,
+      0.4673076923076923,
+      0.44902912621359226
+     ]
+    }
+   }
+  },
+  "H6": {
+   "runs": [
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke"
+   ],
+   "calibration": {
+    "keep": true,
+    "model": {
+     "features": [
+      "conf",
+      "mrna_mass",
+      "log_len",
+      "n_exon",
+      "log_orf",
+      "orf_frac",
+      "fickett",
+      "hexamer"
+     ],
+     "mean": [
+      0.7454084561394042,
+      0.006922865514718263,
+      6.680797537453102,
+      3.6630994847403886,
+      4.977423258898891,
+      0.2388207608367523,
+      0.5630518430439965,
+      -0.19181742384542694
+     ],
+     "sd": [
+      0.22590804423866942,
+      0.03443200871833709,
+      0.8822417087460958,
+      3.902377628343154,
+      1.0762367478510095,
+      0.16114291758832944,
+      0.15599794946533116,
+      0.34174471837954595
+     ],
+     "coef": [
+      0.015722933837981953,
+      -0.09511753138602858,
+      0.056731601839293586,
+      0.7372758450401137,
+      0.12671926708992026,
+      -0.04537406761831873,
+      -0.012794929724917041,
+      -0.03585315490368047
+     ],
+     "intercept": -0.5518706136603373
+    },
+    "tau_v20": 0.33,
+    "hexamer_table": "data/p1v20/hexamer_table.json",
+    "hexamer_table_sha256": "782be49a613b6973cb08b745d70c41d8869c31066896bebac13e695f86777c8c",
+    "dev_result": "outputs/PHASE1/V30/dev/h6/CALIB.json",
+    "dev_result_sha256": "ab16717876dab26b3bf09f58ae41e7a77b2ef0cc05bc65004d600584b4069ae2"
+   },
+   "tau_baseline": 0.72,
+   "tau_v20": 0.33,
+   "tau_final": "outputs/PHASE1/V30/dev/h6/TAU_FINAL.json",
+   "tau_final_sha256": "3599faa507c7fe98233dcdf0b7d85136314ece3447935e7495af210af4559815",
+   "chr18_dev": {
+    "baseline": {
+     "sn": 0.2655184786508791,
+     "pr_strict": 0.4303781681746696,
+     "sn_runs": [
+      0.2981700753498385,
+      0.18406889128094725,
+      0.3143164693218515
+     ],
+     "pr_runs": [
+      0.44223826714801445,
+      0.46865671641791046,
+      0.38023952095808383
+     ]
+    },
+    "v20": {
+     "sn": 0.24578399712953,
+     "pr_strict": 0.5033801836510636,
+     "sn_runs": [
+      0.2874058127018299,
+      0.19590958019375673,
+      0.25403659849300325
+     ],
+     "pr_runs": [
+      0.4794816414686825,
+      0.5473684210526316,
+      0.4832904884318766
+     ]
+    }
+   }
+  },
+  "HM": {
+   "runs": [
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "calibration": {
+    "keep": true,
+    "model": {
+     "features": [
+      "conf",
+      "mrna_mass",
+      "log_len",
+      "n_exon",
+      "log_orf",
+      "orf_frac",
+      "fickett",
+      "hexamer"
+     ],
+     "mean": [
+      0.6601463150867029,
+      0.008264133439907275,
+      6.460061635726173,
+      3.1102204408817635,
+      4.830750353286082,
+      0.26325130815598247,
+      0.579199265197061,
+      -0.19662102204240692
+     ],
+     "sd": [
+      0.23744528171560783,
+      0.03446295253803728,
+      0.7896232021763088,
+      3.335084405852127,
+      1.1801250121587468,
+      0.16492161915258366,
+      0.15750488338262159,
+      0.35934999595940437
+     ],
+     "coef": [
+      0.10469750598916534,
+      -0.06412908379709563,
+      -0.09080126073118423,
+      0.5656015562485613,
+      0.09649455019045776,
+      -0.15831152771902834,
+      -0.005055747503641544,
+      0.12774513342199645
+     ],
+     "intercept": -0.3607367788313809
+    },
+    "tau_v20": 0.32,
+    "hexamer_table": "data/p1v20/hexamer_table.json",
+    "hexamer_table_sha256": "782be49a613b6973cb08b745d70c41d8869c31066896bebac13e695f86777c8c",
+    "dev_result": "outputs/PHASE1/V30/dev/hm/CALIB.json",
+    "dev_result_sha256": "53e6c5e6bd6a1530f15fda631762e008a2efdfab535743bc508ab3d266fff81e"
+   },
+   "tau_baseline": 0.37,
+   "tau_v20": 0.32,
+   "tau_final": "outputs/PHASE1/V30/dev/hm/TAU_FINAL.json",
+   "tau_final_sha256": "e7b48b5fedffdc13c0dd953bc7ae021bb0eadbd6eae0d9397df08ffd9f1b7339",
+   "chr18_dev": {
+    "baseline": {
+     "sn": 0.28363832077502693,
+     "pr_strict": 0.4307957934390205,
+     "sn_runs": [
+      0.36706135629709363,
+      0.20021528525296017
+     ],
+     "pr_runs": [
+      0.4608695652173913,
+      0.4007220216606498
+     ]
+    },
+    "v20": {
+     "sn": 0.26695371367061355,
+     "pr_strict": 0.4626802468590282,
+     "sn_runs": [
+      0.3595263724434876,
+      0.1743810548977395
+     ],
+     "pr_runs": [
+      0.48742138364779874,
+      0.4379391100702576
+     ]
+    }
+   }
+  }
+ },
+ "chr18_reference": {
+  "v20-g1b-42-ke": {
+   "read": "outputs/PHASE1/V20/dev/chr18/v20-g1b-42-ke",
+   "post_sha256": "86c0065e8f4394c3d8133973bd3465d08358a770e98d15671449464adc98b3c6",
+   "genes_sha256": "ac23c5449be0c87dfc1ea44ca66455ab675d8516741405f93d17adcbc7e97ec9"
+  },
+  "v20-g1b-123-ke": {
+   "read": "outputs/PHASE1/V20/dev/chr18/v20-g1b-123-ke",
+   "post_sha256": "0485a973577cde7a2c68e4f13431337dc14d04785f0298f098ad7135880fd000",
+   "genes_sha256": "3bfa18c53f4fb0c6fce5af2aeedb3525ac087f9f281eef51006d0021ce00f0b8"
+  },
+  "v20-g1b-456-ke": {
+   "read": "outputs/PHASE1/V20/dev/chr18/v20-g1b-456-ke",
+   "post_sha256": "d350b50fa25eaacd0266f7004b7ced685621bcf26c1dd6f2ea36edc342c2d52e",
+   "genes_sha256": "817ca38104c2362a92099a5f16a4d6814d903308962c2b962e125bcbfe98ba6d"
+  },
+  "v30h6-g1b-42-ke": {
+   "read": "outputs/PHASE1/V30/dev/chr18/v30h6-g1b-42-ke",
+   "post_sha256": "993d75ef4643e7f4bae897e4e508b9bacafd57ab22ca623a4df07efcecb453ff",
+   "genes_sha256": "91f0771201118c18b0b1c01152c175789435222bd7440c1819de270e9770ac86"
+  },
+  "v30h6-g1b-456-ke": {
+   "read": "outputs/PHASE1/V30/dev/chr18/v30h6-g1b-456-ke",
+   "post_sha256": "2b3f5b69db868f6cbbfea786fcd00536bbb68e6a8f48d591ce9318b3d0de20ce",
+   "genes_sha256": "aee4efd40426ea6d2c77bb843f335235293450db134848c3b919a7e88f036706"
+  },
+  "v30hm-g1b-42-ke": {
+   "read": "outputs/PHASE1/V30/dev/chr18/v30hm-g1b-42-ke",
+   "post_sha256": "77ba7b32fa6b1dd168ca6747b06c6ed78f1dc20a09bfae04627dd04b72ae92de",
+   "genes_sha256": "0243438419fc789e17af1ae2f675194608b915a2ac856d50fdc93ed309b9e163"
+  },
+  "v30hm-g1b-456-ke": {
+   "read": "outputs/PHASE1/V30/dev/chr18/v30hm-g1b-456-ke",
+   "post_sha256": "97fc268435abe0e6cdabb2910dfa4d6a2b8e6770c3264fbd770d651e2a369b2c",
+   "genes_sha256": "c58535bd54909c0bbf2c55e40faa24604403a3bec655953997413a04c4da6ea2"
+  },
+  "v30h6-g1b-789-ke": {
+   "read": "outputs/PHASE1/V30/dev/chr18/v30h6-g1b-789-ke",
+   "post_sha256": "b9a2e0e69cdc11975ec3dbe6a1e95fb911a672e05a9e119d17e99b9313f3cdf3",
+   "genes_sha256": "c1c26ba3998d1b3631cec50e6fa6c7501442f6ef844cb2d129e84ae891374dfe"
+  }
+ },
+ "targets": {
+  "chr18": {
+   "feats": "data/p1_feat/chr18.npy",
+   "cover": "data/p1_feat/chr18.cover.json",
+   "tiles": 3926,
+   "codes": "data/p1/chr18_codes.npy",
+   "truth": "outputs/PHASE1/DIAG_L2/chr18_v50.gtf",
+   "truth_chrom": "chr18",
+   "seqid": "chr18",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ]
+  },
+  "mouse_chr19": {
+   "feats": "data/p1_feat/mouse_chr19.npy",
+   "cover": "data/p1_feat/mouse_chr19.cover.json",
+   "tiles": 3000,
+   "codes": "data/p1/mouse_chr19_codes.npy",
+   "codes_meta": {
+    "name": "mouse_chr19",
+    "seqid": "chr19",
+    "header": ">chr19",
+    "length": 61420004,
+    "n_frac": 0.05210028967109803,
+    "fasta": "data/mouse/chr19.fa",
+    "fasta_md5": "dd9375c0cfa5de18757a0608411ff608"
+   },
+   "truth": "data/batch2/mouse/gencode.vM39.annotation.gtf.gz",
+   "truth_chrom": "chr19",
+   "seqid": "chr19",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "A",
+   "in_verdict": false
+  },
+  "chicken_5": {
+   "feats": "data/p1_feat/chicken_5.npy",
+   "cover": "data/p1_feat/chicken_5.cover.json",
+   "tiles": 2907,
+   "codes": "data/p1/chicken_5_codes.npy",
+   "codes_meta": {
+    "name": "chicken_5",
+    "seqid": "5",
+    "header": ">5",
+    "length": 59506338,
+    "n_frac": 0.00025698102948294347,
+    "fasta": "data/chicken/5.fa",
+    "fasta_md5": "047c8d8de0cdb807155417437736f758"
+   },
+   "truth": "data/chicken/Gallus_gallus.bGalGal1.mat.broiler.GRCg7b.116.gtf.gz",
+   "truth_chrom": "5",
+   "seqid": "5",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "B",
+   "in_verdict": true
+  },
+  "zebrafish_22": {
+   "feats": "data/p1_feat/zebrafish_22.npy",
+   "cover": "data/p1_feat/zebrafish_22.cover.json",
+   "tiles": 1912,
+   "codes": "data/p1/zebrafish_22_codes.npy",
+   "codes_meta": {
+    "name": "zebrafish_22",
+    "seqid": "22",
+    "header": ">22",
+    "length": 39133080,
+    "n_frac": 0.002228881549829454,
+    "fasta": "data/zebrafish/22.fa",
+    "fasta_md5": "f0c44ca712a10a0907d6f2873decf0ce"
+   },
+   "truth": "data/zebrafish/Danio_rerio.GRCz11.116.gtf.gz",
+   "truth_chrom": "22",
+   "seqid": "22",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "B",
+   "in_verdict": true
+  },
+  "fly_2L": {
+   "feats": "data/p1_feat/fly_2L.npy",
+   "cover": "data/p1_feat/fly_2L.cover.json",
+   "tiles": 1149,
+   "codes": "data/p1/fly_2L_codes.npy",
+   "codes_meta": {
+    "name": "fly_2L",
+    "seqid": "2L",
+    "header": ">2L",
+    "length": 23513712,
+    "n_frac": 8.505675326805058e-06,
+    "fasta": "data/fly/2L.fa",
+    "fasta_md5": "0d699fc9cde33df5830dd0785166b5be"
+   },
+   "truth": "data/fly/Drosophila_melanogaster.BDGP6.54.63.gtf.gz",
+   "truth_chrom": "2L",
+   "seqid": "2L",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "B",
+   "in_verdict": true
+  },
+  "worm_I": {
+   "feats": "data/p1_feat/worm_I.npy",
+   "cover": "data/p1_feat/worm_I.cover.json",
+   "tiles": 737,
+   "codes": "data/p1/worm_I_codes.npy",
+   "codes_meta": {
+    "name": "worm_I",
+    "seqid": "I",
+    "header": ">I",
+    "length": 15072434,
+    "n_frac": 0.0,
+    "fasta": "data/worm/I.fa",
+    "fasta_md5": "ee545f64f70c72622216614081c81237"
+   },
+   "truth": "data/worm/Caenorhabditis_elegans.WBcel235.63.gtf.gz",
+   "truth_chrom": "I",
+   "seqid": "I",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "B",
+   "in_verdict": true
+  },
+  "rat_12": {
+   "feats": "data/p1_feat/rat_12.npy",
+   "cover": "data/p1_feat/rat_12.cover.json",
+   "tiles": 2555,
+   "codes": "data/p1/rat_12_codes.npy",
+   "codes_meta": {
+    "name": "rat_12",
+    "seqid": "12",
+    "header": ">12",
+    "length": 52308831,
+    "n_frac": 9.998311757339789e-06,
+    "fasta": "data/rat/12.fa",
+    "fasta_md5": "294a15c273fd4c80910f2aa8396397f0"
+   },
+   "truth": "data/v30/ensembl/rat_Rattus_norvegicus.GRCr8.116.gtf.gz",
+   "truth_chrom": "12",
+   "seqid": "12",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "C",
+   "in_verdict": true
+  },
+  "cow_18": {
+   "feats": "data/p1_feat/cow_18.npy",
+   "cover": "data/p1_feat/cow_18.cover.json",
+   "tiles": 3215,
+   "codes": "data/p1/cow_18_codes.npy",
+   "codes_meta": {
+    "name": "cow_18",
+    "seqid": "18",
+    "header": ">18",
+    "length": 65820629,
+    "n_frac": 5.3174818490415826e-06,
+    "fasta": "data/cow/18.fa",
+    "fasta_md5": "fb1cfb87cf6b4c50e8db1064a9e4c5e3"
+   },
+   "truth": "data/v30/ensembl/cow_Bos_taurus.ARS-UCD2.0.116.gtf.gz",
+   "truth_chrom": "18",
+   "seqid": "18",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "C",
+   "in_verdict": true
+  },
+  "xtrop_10": {
+   "feats": "data/p1_feat/xtrop_10.npy",
+   "cover": "data/p1_feat/xtrop_10.cover.json",
+   "tiles": 2561,
+   "codes": "data/p1/xtrop_10_codes.npy",
+   "codes_meta": {
+    "name": "xtrop_10",
+    "seqid": "10",
+    "header": ">10",
+    "length": 52432566,
+    "n_frac": 0.0019480831817386163,
+    "fasta": "data/xtrop/10.fa",
+    "fasta_md5": "b1fd1d299d9b4a710809d537f71c0194"
+   },
+   "truth": "data/v30/ensembl/xtrop_Xenopus_tropicalis.UCB_Xtro_10.0.116.gtf.gz",
+   "truth_chrom": "10",
+   "seqid": "10",
+   "runs": [
+    "v20-g1b-123-ke",
+    "v20-g1b-42-ke",
+    "v20-g1b-456-ke",
+    "v30h6-g1b-42-ke",
+    "v30h6-g1b-456-ke",
+    "v30h6-g1b-789-ke",
+    "v30hm-g1b-42-ke",
+    "v30hm-g1b-456-ke"
+   ],
+   "group": "C",
+   "in_verdict": false
+  }
+ },
+ "c_chroms": {
+  "file": "data/v30/C_CHROMS.json",
+  "sha256": "b966e040fb3e936334fcf4dac5d960712883742fd22d4a4830fa53d3e254cc26"
+ },
+ "code_files": {
+  "scripts/phase1/p15_read.py": "552064deef209683bd735bfc81cfe87382e4795b29f921d7b7ca0c9062075b61",
+  "scripts/phase1/p16_read.py": "8f0f754bb05b30f363a11fac020250b4d16a3e3718555c7ea07f9cfdaee6aef0",
+  "src/ncrna_annot/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/evidence.py": "f342c83f6e938b14a4da293d198fe20f14ec7afbde4686a0da4efa10eaa57a9d",
+  "src/ncrna_annot/data/labels.py": "0f2e206547f6c091c760849592b16c66a8569c0eee632415c57967cde6ac5f87",
+  "src/ncrna_annot/decode/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/decode/chrom.py": "e326772c08d16916aedc27f30d4827d20de47fee6b97020a2012e02d9a62a0b3",
+  "src/ncrna_annot/decode/g2cand.py": "546de0b37607ac79cc1e41568454a45a88cb30eda7a3519238fd068d01a33a36",
+  "src/ncrna_annot/decode/genes.py": "c24c3cc9719c681222e1ac06cad06d62bac410cd3519ea23f7868517a93b7161",
+  "src/ncrna_annot/decode/scratch.py": "707cf4797b1dd0ccffd29af9f656c6dd510c4dc59c7777bd7f25d2a8c1ab8a54",
+  "src/ncrna_annot/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/eval/prcurve.py": "8b72a6a0fafa469e657d48fde8fb9b3db3f2f312bc77fbd243cb68b51779604a",
+  "src/ncrna_annot/eval/ruler.py": "4d482d4b1541109dd438f385df97c7cb57f5bfdbd2f5485f2f4f6a8e426dc427",
+  "src/ncrna_annot/features/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/features/generanno.py": "57ed6c2d08c8b2893075a5e5d3df3e2b67542f4f7edd0aa6e28fd8ed7e345b41",
+  "src/ncrna_annot/features/online.py": "a9d8d1dd3f3404b8ee1fc78ededa5ebf5c372f6c5ebcf91e5ccf3be4bd2b47d3",
+  "src/ncrna_annot/grammar/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/grammar/g1.py": "8ca4b80c6f4417112e559320be65ca04f844be1ab5763b1b75e65045f2f8099c",
+  "src/ncrna_annot/grammar/g2.py": "4263179662a4a2551cfe3af64e17ec75a7a2c976099731889e05256936cd0e25",
+  "src/ncrna_annot/grammar/g2ph.py": "5532c90f68d3e04a4753687f5179c23d0fe1cdbf85b2b620045879dee753a161",
+  "src/ncrna_annot/heads/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/heads/c0.py": "d1abdc1ef7e43903bac68209fdbbd0a1e196509016f935f85748ed7796b154b9",
+  "src/ncrna_annot/train/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/train/loop.py": "ebcdebc303587af06f7dbc801f530dd2421045ac8811c568997be73412326486",
+  "src/ncrna_annot/train/screen.py": "7a8841d2acddd1594536ddc89a0602517d7b49fda9cb0c5e08b9a1855ba92fb7",
+  "src/ncrna_annot/train/screen2.py": "0d27213751148b41db87cc9aadba03fbc1e8c2689e595b4f3b1ac593e133b31b",
+  "src/ncrna_annot/train/screen_g1b.py": "26f66756664e0c26c44df6148444ee394f183f13931072e73dd832036379679f",
+  "src/ncrna_annot/train/screen_g2ph.py": "719b74f3e867b91ecb54d82acd13cb288c651dffff4bc4775bc0e7980befaa5d"
+ },
+ "preview_config": {
+  "path": "configs/v30_preview.json",
+  "sha256": "b21c57305456c809cd261ac6c402d45f12e8655a06421d43f457492c1e63d90e"
+ }
+}

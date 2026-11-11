@@ -1,0 +1,34 @@
+{
+ "rule": "development curve outputs/PHASE1/V20/dev/TAU_CURVE.json (tau 0.20-0.90 in steps of 0.01, three-run means):\n  tau_base = section 16 rule on the 0.01 grid: among tau with mean strict Pr >= 0.43, the largest mean lnc L1 Sn;\n  tau_v20  = among tau with mean Sn >= Sn(tau_base) - 0.02, the largest mean strict Pr (ties: larger Sn).",
+ "tau_curve_sha256": "b1eefda674fff4a8468a4e01fdf23fa37383a95448552446854984f8f5a0f02b",
+ "tau_baseline": 0.72,
+ "baseline_chr18": {
+  "sn": 0.2655184786508791,
+  "pr_strict": 0.4303781681746696,
+  "sn_runs": [
+   0.2981700753498385,
+   0.18406889128094725,
+   0.3143164693218515
+  ],
+  "pr_runs": [
+   0.44223826714801445,
+   0.46865671641791046,
+   0.38023952095808383
+  ]
+ },
+ "tau_v20": 0.33,
+ "v20_chr18": {
+  "sn": 0.24578399712953,
+  "pr_strict": 0.5033801836510636,
+  "sn_runs": [
+   0.2874058127018299,
+   0.19590958019375673,
+   0.25403659849300325
+  ],
+  "pr_runs": [
+   0.4794816414686825,
+   0.5473684210526316,
+   0.4832904884318766
+  ]
+ }
+}
