@@ -1,0 +1,84 @@
+2026-11-11T08:49:32Z START final config 0849021f8d50 commit a19e2d50b05977333c70c985345c8eff510a5441
+2026-11-11T11:04:39Z chr18 v20-g1b-123-ke rc=0
+2026-11-11T11:04:40Z chr18 v20-g1b-456-ke rc=0
+2026-11-11T11:05:09Z chr18 v20-g1b-42-ke rc=0
+2026-11-11T11:06:10Z chr18 v30h6-g1b-42-ke rc=0
+2026-11-11T11:07:40Z chr18 v30h6-g1b-456-ke rc=0
+2026-11-11T11:12:40Z chr18 v30hm-g1b-42-ke rc=0
+2026-11-11T11:12:41Z chr18 v30hm-g1b-456-ke rc=0
+2026-11-11T11:15:42Z chr18 v30h6-g1b-789-ke rc=0
+2026-11-11T11:15:44Z REPRO_OK
+2026-11-11T11:15:45Z chicken_5 v20-g1b-123-ke rc=0
+2026-11-11T11:17:15Z chicken_5 v20-g1b-42-ke rc=0
+2026-11-11T11:18:45Z chicken_5 v20-g1b-456-ke rc=0
+2026-11-11T11:20:16Z chicken_5 v30h6-g1b-42-ke rc=0
+2026-11-11T11:21:46Z chicken_5 v30h6-g1b-456-ke rc=0
+2026-11-11T11:24:46Z chicken_5 v30hm-g1b-42-ke rc=0
+2026-11-11T11:26:15Z chicken_5 v30hm-g1b-456-ke rc=0
+2026-11-11T11:28:12Z chicken_5 v30h6-g1b-789-ke rc=0
+2026-11-11T11:28:12Z chicken_5 read
+2026-11-11T11:28:13Z zebrafish_22 v20-g1b-123-ke rc=0
+2026-11-11T11:29:44Z zebrafish_22 v20-g1b-42-ke rc=0
+2026-11-11T11:31:14Z zebrafish_22 v20-g1b-456-ke rc=0
+2026-11-11T23:00:41Z zebrafish_22 v30h6-g1b-456-ke rc=0
+2026-11-11T23:08:11Z zebrafish_22 v30h6-g1b-42-ke rc=0
+2026-11-11T23:08:13Z zebrafish_22 v30hm-g1b-42-ke rc=0
+2026-11-11T23:09:43Z zebrafish_22 v30hm-g1b-456-ke rc=0
+2026-11-11T23:10:52Z zebrafish_22 v30h6-g1b-789-ke rc=0
+2026-11-11T23:11:11Z zebrafish_22 read
+2026-11-11T23:11:13Z fly_2L v20-g1b-123-ke rc=0
+2026-11-11T23:12:42Z fly_2L v20-g1b-42-ke rc=0
+2026-11-11T23:14:12Z fly_2L v20-g1b-456-ke rc=0
+2026-11-11T23:15:42Z fly_2L v30h6-g1b-42-ke rc=0
+2026-11-11T23:17:13Z fly_2L v30h6-g1b-456-ke rc=0
+2026-11-11T23:20:13Z fly_2L v30hm-g1b-42-ke rc=0
+2026-11-11T23:20:30Z fly_2L v30h6-g1b-789-ke rc=0
+2026-11-11T23:21:43Z fly_2L v30hm-g1b-456-ke rc=0
+2026-11-11T23:23:11Z fly_2L read
+2026-11-11T23:23:13Z worm_I v20-g1b-123-ke rc=0
+2026-11-11T23:24:43Z worm_I v20-g1b-42-ke rc=0
+2026-11-11T23:26:13Z worm_I v20-g1b-456-ke rc=0
+2026-11-11T23:27:43Z worm_I v30h6-g1b-42-ke rc=0
+2026-11-11T23:29:13Z worm_I v30h6-g1b-456-ke rc=0
+2026-11-11T23:31:50Z worm_I v30h6-g1b-789-ke rc=0
+2026-11-11T23:32:13Z worm_I v30hm-g1b-42-ke rc=0
+2026-11-11T23:33:43Z worm_I v30hm-g1b-456-ke rc=0
+2026-11-11T23:35:12Z worm_I read
+2026-11-12T02:17:54Z mouse_chr19 v20-g1b-42-ke rc=0
+2026-11-12T02:17:55Z mouse_chr19 v20-g1b-456-ke rc=0
+2026-11-12T02:18:24Z mouse_chr19 v20-g1b-123-ke rc=0
+2026-11-12T03:16:57Z mouse_chr19 v30h6-g1b-456-ke rc=0
+2026-11-12T03:17:27Z mouse_chr19 v30h6-g1b-42-ke rc=0
+2026-11-12T03:18:28Z mouse_chr19 v30hm-g1b-42-ke rc=0
+2026-11-12T03:19:58Z mouse_chr19 v30hm-g1b-456-ke rc=0
+2026-11-12T03:20:50Z mouse_chr19 v30h6-g1b-789-ke rc=0
+2026-11-12T03:21:36Z mouse_chr19 read, feature cache deleted
+2026-11-12T05:53:09Z rat_12 v20-g1b-123-ke rc=0
+2026-11-12T05:54:39Z rat_12 v20-g1b-42-ke rc=0
+2026-11-12T05:56:09Z rat_12 v20-g1b-456-ke rc=0
+2026-11-12T05:57:39Z rat_12 v30h6-g1b-42-ke rc=0
+2026-11-12T05:59:09Z rat_12 v30h6-g1b-456-ke rc=0
+2026-11-12T06:02:09Z rat_12 v30hm-g1b-42-ke rc=0
+2026-11-12T06:03:37Z rat_12 v30h6-g1b-789-ke rc=0
+2026-11-12T06:03:39Z rat_12 v30hm-g1b-456-ke rc=0
+2026-11-12T06:05:13Z rat_12 read, feature cache deleted
+2026-11-12T06:19:47Z cow_18 v20-g1b-42-ke rc=0
+2026-11-12T06:20:17Z cow_18 v20-g1b-123-ke rc=0
+2026-11-12T06:21:17Z cow_18 v20-g1b-456-ke rc=0
+2026-11-12T06:22:47Z cow_18 v30h6-g1b-42-ke rc=0
+2026-11-12T06:24:17Z cow_18 v30h6-g1b-456-ke rc=0
+2026-11-12T06:34:17Z cow_18 v30hm-g1b-42-ke rc=0
+2026-11-12T06:34:18Z cow_18 v30hm-g1b-456-ke rc=0
+2026-11-12T06:37:40Z cow_18 v30h6-g1b-789-ke rc=0
+2026-11-12T06:37:47Z cow_18 read, feature cache deleted
+2026-11-12T08:26:25Z xtrop_10 v20-g1b-123-ke rc=0
+2026-11-12T08:27:55Z xtrop_10 v20-g1b-42-ke rc=0
+2026-11-12T08:34:25Z xtrop_10 v20-g1b-456-ke rc=0
+2026-11-12T08:34:26Z xtrop_10 v30h6-g1b-456-ke rc=0
+2026-11-12T08:34:55Z xtrop_10 v30h6-g1b-42-ke rc=0
+2026-11-12T09:25:28Z xtrop_10 v30hm-g1b-42-ke rc=0
+2026-11-12T09:25:29Z xtrop_10 v30hm-g1b-456-ke rc=0
+2026-11-12T09:37:05Z xtrop_10 v30h6-g1b-789-ke rc=0
+2026-11-12T09:37:10Z xtrop_10 read, feature cache deleted
+2026-11-12T09:38:24Z score rc=0
+2026-11-12T09:38:24Z QUEUE_END
