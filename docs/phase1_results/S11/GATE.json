@@ -1,0 +1,74 @@
+{
+ "plan": "docs/phase1_results/PLAN_S11.md",
+ "n_genes": 200,
+ "max_span": 60000,
+ "summary": {
+  "A": {
+   "n_genes": 200,
+   "chain_correct": 0.37,
+   "junction_precision": 0.4897959183673469,
+   "junction_recall": 0.2033898305084746,
+   "rejected": 0.0,
+   "single_exon": 0.065
+  },
+  "B": {
+   "n_genes": 200,
+   "chain_correct": 0.355,
+   "junction_precision": 0.4931972789115646,
+   "junction_recall": 0.20480225988700565,
+   "rejected": 0.0,
+   "single_exon": 0.07
+  },
+  "O1": {
+   "n_genes": 200,
+   "chain_correct": 0.03,
+   "junction_precision": 0.11977715877437325,
+   "junction_recall": 0.06073446327683616,
+   "rejected": 0.02,
+   "single_exon": 0.04
+  },
+  "O5": {
+   "n_genes": 200,
+   "chain_correct": 0.0,
+   "junction_precision": 0.03986710963455149,
+   "junction_recall": 0.01694915254237288,
+   "rejected": 0.185,
+   "single_exon": 0.04
+  },
+  "O10": {
+   "n_genes": 200,
+   "chain_correct": 0.0,
+   "junction_precision": 0.012295081967213115,
+   "junction_recall": 0.00423728813559322,
+   "rejected": 0.31,
+   "single_exon": 0.005
+  },
+  "O20": {
+   "n_genes": 200,
+   "chain_correct": 0.0,
+   "junction_precision": 0.0,
+   "junction_recall": 0.0,
+   "rejected": 0.575,
+   "single_exon": 0.02
+  },
+  "I1": {
+   "n_genes": 200,
+   "chain_correct": 0.01,
+   "junction_precision": 0.11731843575418995,
+   "junction_recall": 0.029661016949152543,
+   "rejected": 0.345,
+   "single_exon": 0.105
+  },
+  "I5": {
+   "n_genes": 200,
+   "chain_correct": 0.0,
+   "junction_precision": 0.047058823529411764,
+   "junction_recall": 0.005649717514124294,
+   "rejected": 0.7,
+   "single_exon": 0.035
+  }
+ },
+ "reference": 0.37,
+ "verdict": "stop: O10 < 0.2 x reference",
+ "seconds": 470.5
+}
