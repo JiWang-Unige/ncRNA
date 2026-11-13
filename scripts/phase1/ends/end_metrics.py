@@ -152,23 +152,29 @@ def main():
         if os.path.exists(p + ".done"):
             res["sources"][f"stage0/{run}"] = score_source("stage0", np.load(p, mmap_mode="r"), rows)
             print("scored", run, round(time.time() - t0), flush=True)
+    seeds = {}
     for arm in ("ann", "ev"):
-        d = f"{E}/end-{arm}-42"
-        if os.path.exists(f"{d}/CHR18_DONE"):
-            res["sources"][f"P-{arm}"] = score_source("probe", np.load(f"{d}/chr18_end.npy", mmap_mode="r"), rows)
-            print("scored", arm, round(time.time() - t0), flush=True)
+        for seed in (42, 123):
+            d = f"{E}/end-{arm}-{seed}"
+            if os.path.exists(f"{d}/CHR18_DONE"):
+                res["sources"][f"P-{arm}-{seed}"] = score_source("probe", np.load(f"{d}/chr18_end.npy", mmap_mode="r"), rows)
+                seeds.setdefault(arm, []).append(seed)
+                print("scored", arm, seed, round(time.time() - t0), flush=True)
 
     S = res["sources"]
     g = lambda src, key, sub="with_evidence", m="loc1k": S[src][key][sub].get(m) if src in S else None  # noqa: E731
     s0 = [g(f"stage0/{r}", "lnc_TSS") for r in STAGE0_RUNS if f"stage0/{r}" in S]
     st0 = float(np.mean(s0)) if s0 else None
-    pa, pe = g("P-ann", "lnc_TSS"), g("P-ev", "lnc_TSS")
-    ma, me = g("P-ann", "mrna_TSS"), g("P-ev", "mrna_TSS")
+    # grey-zone rule (PLAN_END section 4): seed 123 added, the verdict uses the mean over the seeds read
+    common = sorted(set(seeds.get("ann", [])) & set(seeds.get("ev", [])))
+    mean = lambda arm, key: float(np.mean([g(f"P-{arm}-{sd}", key) for sd in common])) if common else None  # noqa: E731
+    pa, pe = mean("ann", "lnc_TSS"), mean("ev", "lnc_TSS")
+    ma, me = mean("ann", "mrna_TSS"), mean("ev", "mrna_TSS")
     if None not in (pa, pe, ma, me, st0):
         A = pe >= 0.50 and pe >= pa + 0.15
         B = pa >= 0.50 and st0 <= pa - 0.15
         C = pa < 0.30 and pe < 0.30 and ma >= 0.60 and me >= 0.60
-        res["verdict"] = {"lnc_TSS_loc1k_with_CAGE": {"stage0_mean": st0, "P-ann": pa, "P-ev": pe},
+        res["verdict"] = {"seeds": common, "lnc_TSS_loc1k_with_CAGE": {"stage0_mean": st0, "P-ann": pa, "P-ev": pe},
                           "mrna_TSS_loc1k_with_CAGE": {"P-ann": ma, "P-ev": me},
                           "A_labels": A, "B_structure": B, "C_not_locatable": C,
                           "outcome": "A" if A else "B" if B else "C" if C else "grey"}
