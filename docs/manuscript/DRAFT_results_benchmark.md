@@ -47,7 +47,7 @@ lncRNA and 546 mRNA genes) with a stranded ruler (Methods) [Fig. 2a; `0.3_fp_aud
 Running the released GENATATOR pipeline ourselves on hg38 chr20 against GENCODE v50 gave the same picture
 (lncRNA locus Sn 0.028 [95% CI 0.019–0.040], intron chain 0.012; mRNA locus Sn 0.967, intron chain 0.708;
 46 lncRNA loci reported only as mRNA) [`0.1_genatator/PANEL_SUMMARY.json`]. Under the stricter one-to-one span
-criterion of section 7 (S50), its lncRNA recall is 0.006 and its mRNA recall 0.794 [`B1/B1.json`]. The bottleneck is interval discovery:
+criterion of section 12 (S50), its lncRNA recall is 0.006 and its mRNA recall 0.794 [`B1/B1.json`]. The bottleneck is interval discovery:
 on chr21, only 33 of 590 lncRNA genes were touched by any predicted transcript [`RESULT_0.1a_0.3`].
 
 For a representative coding annotator (Helixer, vertebrate model, hg38 chr20), 97% of lncRNA loci are not
@@ -127,8 +127,8 @@ annotated gene spans are subtracted.
 3. Cross-lineage transfer of GENATATOR (mRNA and lncRNA).
 4. Probe AUPRC per layer and backbone.
 5. Unknown-handling: Δ recovery and AUPRC (supplementary).
-6. (Method results, after Phase 1: locus detection, section L, not drafted yet.)
-7. End localisation: see `DRAFT_results_ends.md` (sections 7–10).
+6. Locus detection: see `DRAFT_results_locus.md` (sections 7–11).
+7. End localisation: see `DRAFT_results_ends.md` (sections 12–15).
 
 ---
 

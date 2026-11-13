@@ -1,0 +1,1524 @@
+{
+ "plan": "docs/phase1_results/PLAN_B1.md (definitions); manuscript section L",
+ "sets": {
+  "v19_t2t_chr20": {
+   "tau": 0.6,
+   "runs": {
+    "g1b-42-ke": {
+     "lnc": {
+      "n_truth": 434,
+      "n_pred": 500,
+      "S50": {
+       "matched": 14,
+       "sn": 0.03225806451612903,
+       "pr": 0.028,
+       "median_iou": 0.7900881857167645
+      },
+      "S25": {
+       "matched": 43,
+       "sn": 0.09907834101382489,
+       "pr": 0.086,
+       "median_iou": 0.3649611572461827
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 130,
+       "median_span_ratio": 4.175474597884723,
+       "median_tss_offset": 9268.5,
+       "median_tes_offset": 22058.0
+      },
+      "L1": {
+       "sn": 0.3064516129032258,
+       "pr_strict": 0.222,
+       "frac_hit_preds_with_2plus_truth": 0.18018018018018017,
+       "mean_truth_per_hit_pred": 1.2522522522522523,
+       "max_truth_per_hit_pred": 5
+      }
+     },
+     "mrna": {
+      "n_truth": 546,
+      "n_pred": 627,
+      "S50": {
+       "matched": 324,
+       "sn": 0.5934065934065934,
+       "pr": 0.5167464114832536,
+       "median_iou": 0.9336865182075084
+      },
+      "S25": {
+       "matched": 389,
+       "sn": 0.7124542124542125,
+       "pr": 0.620414673046252,
+       "median_iou": 0.8968913812019993
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 592,
+       "median_span_ratio": 0.641417553601594,
+       "median_tss_offset": 570.5,
+       "median_tes_offset": 1307.0
+      },
+      "L1": {
+       "sn": 0.836996336996337,
+       "pr_strict": 0.9266347687400319,
+       "frac_hit_preds_with_2plus_truth": 0.04475043029259897,
+       "mean_truth_per_hit_pred": 1.0499139414802066,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    },
+    "g1b-123-ke": {
+     "lnc": {
+      "n_truth": 434,
+      "n_pred": 932,
+      "S50": {
+       "matched": 57,
+       "sn": 0.1313364055299539,
+       "pr": 0.0611587982832618,
+       "median_iou": 0.6860177587950995
+      },
+      "S25": {
+       "matched": 106,
+       "sn": 0.24423963133640553,
+       "pr": 0.11373390557939914,
+       "median_iou": 0.5078130460436578
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 223,
+       "median_span_ratio": 1.3215750615258408,
+       "median_tss_offset": 8206,
+       "median_tes_offset": 9929
+      },
+      "L1": {
+       "sn": 0.4976958525345622,
+       "pr_strict": 0.22317596566523606,
+       "frac_hit_preds_with_2plus_truth": 0.11538461538461539,
+       "mean_truth_per_hit_pred": 1.1346153846153846,
+       "max_truth_per_hit_pred": 3
+      }
+     },
+     "mrna": {
+      "n_truth": 546,
+      "n_pred": 584,
+      "S50": {
+       "matched": 290,
+       "sn": 0.5311355311355311,
+       "pr": 0.4965753424657534,
+       "median_iou": 0.9291089211908193
+      },
+      "S25": {
+       "matched": 364,
+       "sn": 0.6666666666666666,
+       "pr": 0.6232876712328768,
+       "median_iou": 0.8574075725380338
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 561,
+       "median_span_ratio": 0.5479692848552132,
+       "median_tss_offset": 984,
+       "median_tes_offset": 1142
+      },
+      "L1": {
+       "sn": 0.8168498168498168,
+       "pr_strict": 0.9554794520547946,
+       "frac_hit_preds_with_2plus_truth": 0.03942652329749104,
+       "mean_truth_per_hit_pred": 1.043010752688172,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    },
+    "g1b-456-ke": {
+     "lnc": {
+      "n_truth": 434,
+      "n_pred": 516,
+      "S50": {
+       "matched": 38,
+       "sn": 0.08755760368663594,
+       "pr": 0.07364341085271318,
+       "median_iou": 0.7124008282574692
+      },
+      "S25": {
+       "matched": 72,
+       "sn": 0.16589861751152074,
+       "pr": 0.13953488372093023,
+       "median_iou": 0.47083545690737
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 142,
+       "median_span_ratio": 0.5337995680757113,
+       "median_tss_offset": 4358.5,
+       "median_tes_offset": 6174.5
+      },
+      "L1": {
+       "sn": 0.30184331797235026,
+       "pr_strict": 0.2616279069767442,
+       "frac_hit_preds_with_2plus_truth": 0.05925925925925926,
+       "mean_truth_per_hit_pred": 1.0592592592592593,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 546,
+      "n_pred": 637,
+      "S50": {
+       "matched": 345,
+       "sn": 0.6318681318681318,
+       "pr": 0.5416012558869702,
+       "median_iou": 0.9420498084291188
+      },
+      "S25": {
+       "matched": 413,
+       "sn": 0.7564102564102564,
+       "pr": 0.6483516483516484,
+       "median_iou": 0.894622939903446
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 607,
+       "median_span_ratio": 0.6719825769284811,
+       "median_tss_offset": 509,
+       "median_tes_offset": 683
+      },
+      "L1": {
+       "sn": 0.8827838827838828,
+       "pr_strict": 0.9434850863422292,
+       "frac_hit_preds_with_2plus_truth": 0.04159733777038269,
+       "mean_truth_per_hit_pred": 1.0465890183028286,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    }
+   },
+   "mean": {
+    "lnc": {
+     "S50_sn": 0.08371735791090629,
+     "S50_pr": 0.05426740304532499,
+     "S25_sn": 0.16973886328725038,
+     "S25_pr": 0.11308959643344312,
+     "L1_sn": 0.3686635944700461,
+     "L1_pr_strict": 0.2356012908806601
+    },
+    "mrna": {
+     "S50_sn": 0.5854700854700855,
+     "S50_pr": 0.5183076699453258,
+     "S25_sn": 0.7118437118437119,
+     "S25_pr": 0.6306846642102589,
+     "L1_sn": 0.8455433455433455,
+     "L1_pr_strict": 0.941866435712352
+    }
+   }
+  },
+  "genatator_t2t_chr20": {
+   "lnc": {
+    "n_truth": 434,
+    "n_pred": 47,
+    "S50": {
+     "matched": 6,
+     "sn": 0.013824884792626729,
+     "pr": 0.1276595744680851,
+     "median_iou": 0.9009664411010279
+    },
+    "S25": {
+     "matched": 9,
+     "sn": 0.020737327188940093,
+     "pr": 0.19148936170212766,
+     "median_iou": 0.8312653243183
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 13,
+     "median_span_ratio": 0.9992265193370166,
+     "median_tss_offset": 56,
+     "median_tes_offset": 2335
+    },
+    "L1": {
+     "sn": 0.03456221198156682,
+     "pr_strict": 0.2765957446808511,
+     "frac_hit_preds_with_2plus_truth": 0.15384615384615385,
+     "mean_truth_per_hit_pred": 1.1538461538461537,
+     "max_truth_per_hit_pred": 2
+    }
+   },
+   "mrna": {
+    "n_truth": 546,
+    "n_pred": 532,
+    "S50": {
+     "matched": 452,
+     "sn": 0.8278388278388278,
+     "pr": 0.849624060150376,
+     "median_iou": 0.9971829957287075
+    },
+    "S25": {
+     "matched": 476,
+     "sn": 0.8717948717948718,
+     "pr": 0.8947368421052632,
+     "median_iou": 0.9963596312155001
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 492,
+     "median_span_ratio": 0.9994875497142647,
+     "median_tss_offset": 17.5,
+     "median_tes_offset": 4.0
+    },
+    "L1": {
+     "sn": 0.9322344322344323,
+     "pr_strict": 0.924812030075188,
+     "frac_hit_preds_with_2plus_truth": 0.052845528455284556,
+     "mean_truth_per_hit_pred": 1.0548780487804879,
+     "max_truth_per_hit_pred": 3
+    }
+   }
+  },
+  "v19_mouse_chr19": {
+   "tau": 0.6,
+   "runs": {
+    "g1b-42-ke": {
+     "lnc": {
+      "n_truth": 875,
+      "n_pred": 505,
+      "S50": {
+       "matched": 42,
+       "sn": 0.048,
+       "pr": 0.08316831683168317,
+       "median_iou": 0.707314440692155
+      },
+      "S25": {
+       "matched": 89,
+       "sn": 0.10171428571428572,
+       "pr": 0.17623762376237623,
+       "median_iou": 0.4841109451424889
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 226,
+       "median_span_ratio": 2.2967045752263218,
+       "median_tss_offset": 6272.5,
+       "median_tes_offset": 12032.0
+      },
+      "L1": {
+       "sn": 0.26057142857142856,
+       "pr_strict": 0.3920792079207921,
+       "frac_hit_preds_with_2plus_truth": 0.20202020202020202,
+       "mean_truth_per_hit_pred": 1.2626262626262625,
+       "max_truth_per_hit_pred": 4
+      }
+     },
+     "mrna": {
+      "n_truth": 723,
+      "n_pred": 739,
+      "S50": {
+       "matched": 411,
+       "sn": 0.5684647302904564,
+       "pr": 0.5561569688768606,
+       "median_iou": 0.900560565439922
+      },
+      "S25": {
+       "matched": 507,
+       "sn": 0.7012448132780082,
+       "pr": 0.6860622462787551,
+       "median_iou": 0.8341579259845636
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 707,
+       "median_span_ratio": 0.6879327638086674,
+       "median_tss_offset": 588,
+       "median_tes_offset": 1870
+      },
+      "L1": {
+       "sn": 0.8423236514522822,
+       "pr_strict": 0.952638700947226,
+       "frac_hit_preds_with_2plus_truth": 0.05965909090909091,
+       "mean_truth_per_hit_pred": 1.0767045454545454,
+       "max_truth_per_hit_pred": 4
+      }
+     }
+    },
+    "g1b-123-ke": {
+     "lnc": {
+      "n_truth": 875,
+      "n_pred": 883,
+      "S50": {
+       "matched": 91,
+       "sn": 0.104,
+       "pr": 0.10305775764439411,
+       "median_iou": 0.6863564041368337
+      },
+      "S25": {
+       "matched": 166,
+       "sn": 0.18971428571428572,
+       "pr": 0.18799546998867497,
+       "median_iou": 0.49444809914687715
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 356,
+       "median_span_ratio": 1.1309026001292373,
+       "median_tss_offset": 4525.0,
+       "median_tes_offset": 9018.0
+      },
+      "L1": {
+       "sn": 0.376,
+       "pr_strict": 0.3646659116647792,
+       "frac_hit_preds_with_2plus_truth": 0.09316770186335403,
+       "mean_truth_per_hit_pred": 1.1055900621118013,
+       "max_truth_per_hit_pred": 3
+      }
+     },
+     "mrna": {
+      "n_truth": 723,
+      "n_pred": 734,
+      "S50": {
+       "matched": 380,
+       "sn": 0.5255878284923928,
+       "pr": 0.5177111716621253,
+       "median_iou": 0.9122949243504791
+      },
+      "S25": {
+       "matched": 491,
+       "sn": 0.6791147994467497,
+       "pr": 0.6689373297002725,
+       "median_iou": 0.8494924746237312
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 723,
+       "median_span_ratio": 0.5731546572934973,
+       "median_tss_offset": 737,
+       "median_tes_offset": 1171
+      },
+      "L1": {
+       "sn": 0.8464730290456431,
+       "pr_strict": 0.9822888283378747,
+       "frac_hit_preds_with_2plus_truth": 0.04854368932038835,
+       "mean_truth_per_hit_pred": 1.058252427184466,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    },
+    "g1b-456-ke": {
+     "lnc": {
+      "n_truth": 875,
+      "n_pred": 538,
+      "S50": {
+       "matched": 44,
+       "sn": 0.05028571428571429,
+       "pr": 0.08178438661710037,
+       "median_iou": 0.7761992285458381
+      },
+      "S25": {
+       "matched": 75,
+       "sn": 0.08571428571428572,
+       "pr": 0.13940520446096655,
+       "median_iou": 0.5430654133896029
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 212,
+       "median_span_ratio": 0.28550318693661464,
+       "median_tss_offset": 5776.5,
+       "median_tes_offset": 6072.0
+      },
+      "L1": {
+       "sn": 0.2022857142857143,
+       "pr_strict": 0.36059479553903345,
+       "frac_hit_preds_with_2plus_truth": 0.02577319587628866,
+       "mean_truth_per_hit_pred": 1.0309278350515463,
+       "max_truth_per_hit_pred": 3
+      }
+     },
+     "mrna": {
+      "n_truth": 723,
+      "n_pred": 768,
+      "S50": {
+       "matched": 394,
+       "sn": 0.5449515905947441,
+       "pr": 0.5130208333333334,
+       "median_iou": 0.9113541395074142
+      },
+      "S25": {
+       "matched": 505,
+       "sn": 0.6984785615491009,
+       "pr": 0.6575520833333334,
+       "median_iou": 0.8328571428571429
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 747,
+       "median_span_ratio": 0.5771292435973794,
+       "median_tss_offset": 981,
+       "median_tes_offset": 1111
+      },
+      "L1": {
+       "sn": 0.8686030428769018,
+       "pr_strict": 0.9674479166666666,
+       "frac_hit_preds_with_2plus_truth": 0.05114401076716016,
+       "mean_truth_per_hit_pred": 1.065948855989233,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    }
+   },
+   "mean": {
+    "lnc": {
+     "S50_sn": 0.06742857142857143,
+     "S50_pr": 0.08933682036439256,
+     "S25_sn": 0.1257142857142857,
+     "S25_pr": 0.16787943273733927,
+     "L1_sn": 0.2796190476190476,
+     "L1_pr_strict": 0.3724466383748682
+    },
+    "mrna": {
+     "S50_sn": 0.5463347164591977,
+     "S50_pr": 0.5289629912907731,
+     "S25_sn": 0.6929460580912862,
+     "S25_pr": 0.6708505531041203,
+     "L1_sn": 0.8524665744582757,
+     "L1_pr_strict": 0.9674584819839224
+    }
+   }
+  },
+  "v19_chicken_5": {
+   "tau": 0.6,
+   "runs": {
+    "g1b-42-ke": {
+     "lnc": {
+      "n_truth": 694,
+      "n_pred": 827,
+      "S50": {
+       "matched": 69,
+       "sn": 0.0994236311239193,
+       "pr": 0.08343409915356712,
+       "median_iou": 0.5972436045171698
+      },
+      "S25": {
+       "matched": 125,
+       "sn": 0.18011527377521613,
+       "pr": 0.15114873035066506,
+       "median_iou": 0.46523388116308473
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 198,
+       "median_span_ratio": 1.5582462224478757,
+       "median_tss_offset": 7884.5,
+       "median_tes_offset": 9018.5
+      },
+      "L1": {
+       "sn": 0.2968299711815562,
+       "pr_strict": 0.21644498186215236,
+       "frac_hit_preds_with_2plus_truth": 0.19553072625698323,
+       "mean_truth_per_hit_pred": 1.2569832402234637,
+       "max_truth_per_hit_pred": 5
+      }
+     },
+     "mrna": {
+      "n_truth": 991,
+      "n_pred": 1144,
+      "S50": {
+       "matched": 499,
+       "sn": 0.5035317860746721,
+       "pr": 0.4361888111888112,
+       "median_iou": 0.8271631055637825
+      },
+      "S25": {
+       "matched": 644,
+       "sn": 0.649848637739657,
+       "pr": 0.5629370629370629,
+       "median_iou": 0.7525405078261711
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1065,
+       "median_span_ratio": 0.4837322431751741,
+       "median_tss_offset": 2173,
+       "median_tes_offset": 2617
+      },
+      "L1": {
+       "sn": 0.7870837537840565,
+       "pr_strict": 0.9134615384615384,
+       "frac_hit_preds_with_2plus_truth": 0.049760765550239235,
+       "mean_truth_per_hit_pred": 1.0535885167464114,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    },
+    "g1b-123-ke": {
+     "lnc": {
+      "n_truth": 694,
+      "n_pred": 1112,
+      "S50": {
+       "matched": 71,
+       "sn": 0.10230547550432277,
+       "pr": 0.06384892086330936,
+       "median_iou": 0.6949425880531545
+      },
+      "S25": {
+       "matched": 149,
+       "sn": 0.21469740634005763,
+       "pr": 0.13399280575539568,
+       "median_iou": 0.4474570999014983
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 337,
+       "median_span_ratio": 0.46295762467569906,
+       "median_tss_offset": 8400,
+       "median_tes_offset": 10290
+      },
+      "L1": {
+       "sn": 0.39481268011527376,
+       "pr_strict": 0.2607913669064748,
+       "frac_hit_preds_with_2plus_truth": 0.12413793103448276,
+       "mean_truth_per_hit_pred": 1.1586206896551725,
+       "max_truth_per_hit_pred": 5
+      }
+     },
+     "mrna": {
+      "n_truth": 991,
+      "n_pred": 1254,
+      "S50": {
+       "matched": 549,
+       "sn": 0.5539858728557013,
+       "pr": 0.43779904306220097,
+       "median_iou": 0.7947005601034037
+      },
+      "S25": {
+       "matched": 704,
+       "sn": 0.7103935418768921,
+       "pr": 0.5614035087719298,
+       "median_iou": 0.6986788632731071
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1131,
+       "median_span_ratio": 0.5341541001918361,
+       "median_tss_offset": 1407,
+       "median_tes_offset": 2143
+      },
+      "L1": {
+       "sn": 0.9041372351160444,
+       "pr_strict": 0.8883572567783095,
+       "frac_hit_preds_with_2plus_truth": 0.07360861759425494,
+       "mean_truth_per_hit_pred": 1.0816876122082586,
+       "max_truth_per_hit_pred": 4
+      }
+     }
+    },
+    "g1b-456-ke": {
+     "lnc": {
+      "n_truth": 694,
+      "n_pred": 810,
+      "S50": {
+       "matched": 44,
+       "sn": 0.06340057636887608,
+       "pr": 0.05432098765432099,
+       "median_iou": 0.6412146205159883
+      },
+      "S25": {
+       "matched": 85,
+       "sn": 0.12247838616714697,
+       "pr": 0.10493827160493827,
+       "median_iou": 0.42535305985205113
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 228,
+       "median_span_ratio": 0.23801291532684893,
+       "median_tss_offset": 5650.0,
+       "median_tes_offset": 7638.5
+      },
+      "L1": {
+       "sn": 0.2622478386167147,
+       "pr_strict": 0.26049382716049385,
+       "frac_hit_preds_with_2plus_truth": 0.04739336492890995,
+       "mean_truth_per_hit_pred": 1.052132701421801,
+       "max_truth_per_hit_pred": 3
+      }
+     },
+     "mrna": {
+      "n_truth": 991,
+      "n_pred": 1308,
+      "S50": {
+       "matched": 576,
+       "sn": 0.5812310797174571,
+       "pr": 0.44036697247706424,
+       "median_iou": 0.8717074683579962
+      },
+      "S25": {
+       "matched": 731,
+       "sn": 0.7376387487386479,
+       "pr": 0.558868501529052,
+       "median_iou": 0.7760407518004567
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1119,
+       "median_span_ratio": 0.6241753063147973,
+       "median_tss_offset": 990,
+       "median_tes_offset": 1772
+      },
+      "L1": {
+       "sn": 0.8960645812310797,
+       "pr_strict": 0.8348623853211009,
+       "frac_hit_preds_with_2plus_truth": 0.08241758241758242,
+       "mean_truth_per_hit_pred": 1.0897435897435896,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    }
+   },
+   "mean": {
+    "lnc": {
+     "S50_sn": 0.08837656099903939,
+     "S50_pr": 0.06720133589039916,
+     "S25_sn": 0.17243035542747356,
+     "S25_pr": 0.13002660257033302,
+     "L1_sn": 0.3179634966378482,
+     "L1_pr_strict": 0.24591005864304036
+    },
+    "mrna": {
+     "S50_sn": 0.5462495795492769,
+     "S50_pr": 0.4381182755760255,
+     "S25_sn": 0.6992936427850657,
+     "S25_pr": 0.5610696910793482,
+     "L1_sn": 0.8624285233770602,
+     "L1_pr_strict": 0.8788937268536495
+    }
+   }
+  },
+  "genatator_chicken_5": {
+   "lnc": {
+    "n_truth": 694,
+    "n_pred": 1,
+    "S50": {
+     "matched": 0,
+     "sn": 0.0,
+     "pr": 0.0,
+     "median_iou": null
+    },
+    "S25": {
+     "matched": 0,
+     "sn": 0.0,
+     "pr": 0.0,
+     "median_iou": null
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 0,
+     "median_span_ratio": null,
+     "median_tss_offset": null,
+     "median_tes_offset": null
+    },
+    "L1": {
+     "sn": 0.0,
+     "pr_strict": 0.0,
+     "frac_hit_preds_with_2plus_truth": null,
+     "mean_truth_per_hit_pred": null,
+     "max_truth_per_hit_pred": null
+    }
+   },
+   "mrna": {
+    "n_truth": 991,
+    "n_pred": 836,
+    "S50": {
+     "matched": 663,
+     "sn": 0.669021190716448,
+     "pr": 0.7930622009569378,
+     "median_iou": 0.9405576890966773
+    },
+    "S25": {
+     "matched": 742,
+     "sn": 0.7487386478304743,
+     "pr": 0.8875598086124402,
+     "median_iou": 0.9207562075949651
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 797,
+     "median_span_ratio": 0.9768320119991429,
+     "median_tss_offset": 151,
+     "median_tes_offset": 411
+    },
+    "L1": {
+     "sn": 0.8365287588294652,
+     "pr_strict": 0.9509569377990431,
+     "frac_hit_preds_with_2plus_truth": 0.06289308176100629,
+     "mean_truth_per_hit_pred": 1.069182389937107,
+     "max_truth_per_hit_pred": 3
+    }
+   }
+  },
+  "v19_zebrafish_22": {
+   "tau": 0.6,
+   "runs": {
+    "g1b-42-ke": {
+     "lnc": {
+      "n_truth": 135,
+      "n_pred": 745,
+      "S50": {
+       "matched": 11,
+       "sn": 0.08148148148148149,
+       "pr": 0.01476510067114094,
+       "median_iou": 0.6806609232351807
+      },
+      "S25": {
+       "matched": 27,
+       "sn": 0.2,
+       "pr": 0.036241610738255034,
+       "median_iou": 0.43608124253285546
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 55,
+       "median_span_ratio": 1.560215053763441,
+       "median_tss_offset": 5677,
+       "median_tes_offset": 4904
+      },
+      "L1": {
+       "sn": 0.3333333333333333,
+       "pr_strict": 0.06040268456375839,
+       "frac_hit_preds_with_2plus_truth": 0.044444444444444446,
+       "mean_truth_per_hit_pred": 1.0444444444444445,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 1007,
+      "n_pred": 1441,
+      "S50": {
+       "matched": 470,
+       "sn": 0.4667328699106256,
+       "pr": 0.32616238723108953,
+       "median_iou": 0.8190045709876345
+      },
+      "S25": {
+       "matched": 610,
+       "sn": 0.605759682224429,
+       "pr": 0.42331714087439276,
+       "median_iou": 0.7098805086563951
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1054,
+       "median_span_ratio": 0.5569937706144906,
+       "median_tss_offset": 2778.0,
+       "median_tes_offset": 3061.5
+      },
+      "L1": {
+       "sn": 0.8222442899702085,
+       "pr_strict": 0.6932685634975712,
+       "frac_hit_preds_with_2plus_truth": 0.0970970970970971,
+       "mean_truth_per_hit_pred": 1.11011011011011,
+       "max_truth_per_hit_pred": 4
+      }
+     }
+    },
+    "g1b-123-ke": {
+     "lnc": {
+      "n_truth": 135,
+      "n_pred": 1013,
+      "S50": {
+       "matched": 18,
+       "sn": 0.13333333333333333,
+       "pr": 0.017769002961500493,
+       "median_iou": 0.6126424324346976
+      },
+      "S25": {
+       "matched": 26,
+       "sn": 0.1925925925925926,
+       "pr": 0.02566633761105627,
+       "median_iou": 0.5582890320101966
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 76,
+       "median_span_ratio": 0.5147981612162595,
+       "median_tss_offset": 6350.0,
+       "median_tes_offset": 5199.5
+      },
+      "L1": {
+       "sn": 0.35555555555555557,
+       "pr_strict": 0.05824284304047384,
+       "frac_hit_preds_with_2plus_truth": 0.01694915254237288,
+       "mean_truth_per_hit_pred": 1.0169491525423728,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 1007,
+      "n_pred": 1142,
+      "S50": {
+       "matched": 519,
+       "sn": 0.5153922542204568,
+       "pr": 0.45446584938704027,
+       "median_iou": 0.8662207357859532
+      },
+      "S25": {
+       "matched": 655,
+       "sn": 0.6504468718967229,
+       "pr": 0.5735551663747811,
+       "median_iou": 0.7769688507695888
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 930,
+       "median_span_ratio": 0.8634950763630782,
+       "median_tss_offset": 579.5,
+       "median_tes_offset": 1669.5
+      },
+      "L1": {
+       "sn": 0.8619662363455809,
+       "pr_strict": 0.7819614711033275,
+       "frac_hit_preds_with_2plus_truth": 0.11534154535274356,
+       "mean_truth_per_hit_pred": 1.1578947368421053,
+       "max_truth_per_hit_pred": 7
+      }
+     }
+    },
+    "g1b-456-ke": {
+     "lnc": {
+      "n_truth": 135,
+      "n_pred": 673,
+      "S50": {
+       "matched": 19,
+       "sn": 0.14074074074074075,
+       "pr": 0.02823179791976226,
+       "median_iou": 0.6650366748166259
+      },
+      "S25": {
+       "matched": 31,
+       "sn": 0.22962962962962963,
+       "pr": 0.04606240713224369,
+       "median_iou": 0.5258964143426295
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 58,
+       "median_span_ratio": 0.5160206521907196,
+       "median_tss_offset": 2067.0,
+       "median_tes_offset": 759.5
+      },
+      "L1": {
+       "sn": 0.35555555555555557,
+       "pr_strict": 0.07726597325408618,
+       "frac_hit_preds_with_2plus_truth": 0.019230769230769232,
+       "mean_truth_per_hit_pred": 1.0192307692307692,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 1007,
+      "n_pred": 1391,
+      "S50": {
+       "matched": 560,
+       "sn": 0.5561072492552135,
+       "pr": 0.402588066139468,
+       "median_iou": 0.8586757019445508
+      },
+      "S25": {
+       "matched": 691,
+       "sn": 0.6861966236345581,
+       "pr": 0.49676491732566497,
+       "median_iou": 0.7980858289595554
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1097,
+       "median_span_ratio": 0.6938958707360862,
+       "median_tss_offset": 1165,
+       "median_tes_offset": 1491
+      },
+      "L1": {
+       "sn": 0.843098311817279,
+       "pr_strict": 0.7505391804457225,
+       "frac_hit_preds_with_2plus_truth": 0.07662835249042145,
+       "mean_truth_per_hit_pred": 1.089080459770115,
+       "max_truth_per_hit_pred": 5
+      }
+     }
+    }
+   },
+   "mean": {
+    "lnc": {
+     "S50_sn": 0.11851851851851852,
+     "S50_pr": 0.020255300517467895,
+     "S25_sn": 0.2074074074074074,
+     "S25_pr": 0.03599011849385166,
+     "L1_sn": 0.34814814814814815,
+     "L1_pr_strict": 0.06530383361943948
+    },
+    "mrna": {
+     "S50_sn": 0.5127441244620986,
+     "S50_pr": 0.39440543425253266,
+     "S25_sn": 0.6474677259185699,
+     "S25_pr": 0.4978790748582796,
+     "L1_sn": 0.8424362793776895,
+     "L1_pr_strict": 0.7419230716822071
+    }
+   }
+  },
+  "genatator_zebrafish_22": {
+   "lnc": {
+    "n_truth": 135,
+    "n_pred": 13,
+    "S50": {
+     "matched": 1,
+     "sn": 0.007407407407407408,
+     "pr": 0.07692307692307693,
+     "median_iou": 0.7699403147042865
+    },
+    "S25": {
+     "matched": 1,
+     "sn": 0.007407407407407408,
+     "pr": 0.07692307692307693,
+     "median_iou": 0.7699403147042865
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 2,
+     "median_span_ratio": 0.5392485028363802,
+     "median_tss_offset": 3586.0,
+     "median_tes_offset": 10879.5
+    },
+    "L1": {
+     "sn": 0.022222222222222223,
+     "pr_strict": 0.15384615384615385,
+     "frac_hit_preds_with_2plus_truth": 0.5,
+     "mean_truth_per_hit_pred": 1.5,
+     "max_truth_per_hit_pred": 2
+    }
+   },
+   "mrna": {
+    "n_truth": 1007,
+    "n_pred": 486,
+    "S50": {
+     "matched": 339,
+     "sn": 0.33664349553128103,
+     "pr": 0.6975308641975309,
+     "median_iou": 0.9546271338724169
+    },
+    "S25": {
+     "matched": 403,
+     "sn": 0.4001986097318769,
+     "pr": 0.8292181069958847,
+     "median_iou": 0.912076222191388
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 448,
+     "median_span_ratio": 0.9924312745244936,
+     "median_tss_offset": 132.5,
+     "median_tes_offset": 369.5
+    },
+    "L1": {
+     "sn": 0.4885799404170804,
+     "pr_strict": 0.9135802469135802,
+     "frac_hit_preds_with_2plus_truth": 0.1036036036036036,
+     "mean_truth_per_hit_pred": 1.135135135135135,
+     "max_truth_per_hit_pred": 4
+    }
+   }
+  },
+  "v19_fly_2L": {
+   "tau": 0.6,
+   "runs": {
+    "g1b-42-ke": {
+     "lnc": {
+      "n_truth": 619,
+      "n_pred": 939,
+      "S50": {
+       "matched": 19,
+       "sn": 0.030694668820678513,
+       "pr": 0.02023429179978701,
+       "median_iou": 0.6237402015677491
+      },
+      "S25": {
+       "matched": 37,
+       "sn": 0.05977382875605816,
+       "pr": 0.039403620873269436,
+       "median_iou": 0.4927194018103109
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 111,
+       "median_span_ratio": 5.205063291139241,
+       "median_tss_offset": 1769,
+       "median_tes_offset": 2069
+      },
+      "L1": {
+       "sn": 0.13247172859450726,
+       "pr_strict": 0.08200212992545261,
+       "frac_hit_preds_with_2plus_truth": 0.09090909090909091,
+       "mean_truth_per_hit_pred": 1.0909090909090908,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 2657,
+      "n_pred": 1705,
+      "S50": {
+       "matched": 620,
+       "sn": 0.23334587881068874,
+       "pr": 0.36363636363636365,
+       "median_iou": 0.774374350060727
+      },
+      "S25": {
+       "matched": 883,
+       "sn": 0.33232969514490024,
+       "pr": 0.5178885630498534,
+       "median_iou": 0.6520695860827834
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1573,
+       "median_span_ratio": 0.39779154322650145,
+       "median_tss_offset": 1105,
+       "median_tes_offset": 822
+      },
+      "L1": {
+       "sn": 0.48739179525780957,
+       "pr_strict": 0.9032258064516129,
+       "frac_hit_preds_with_2plus_truth": 0.11233766233766233,
+       "mean_truth_per_hit_pred": 1.1324675324675324,
+       "max_truth_per_hit_pred": 5
+      }
+     }
+    },
+    "g1b-123-ke": {
+     "lnc": {
+      "n_truth": 619,
+      "n_pred": 1589,
+      "S50": {
+       "matched": 29,
+       "sn": 0.046849757673667204,
+       "pr": 0.01825047199496539,
+       "median_iou": 0.6635911994322214
+      },
+      "S25": {
+       "matched": 54,
+       "sn": 0.08723747980613894,
+       "pr": 0.033983637507866586,
+       "median_iou": 0.4773396726591508
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 162,
+       "median_span_ratio": 2.6567807181680476,
+       "median_tss_offset": 1201.0,
+       "median_tes_offset": 828.5
+      },
+      "L1": {
+       "sn": 0.2455573505654281,
+       "pr_strict": 0.09439899307740718,
+       "frac_hit_preds_with_2plus_truth": 0.07333333333333333,
+       "mean_truth_per_hit_pred": 1.0733333333333333,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 2657,
+      "n_pred": 2324,
+      "S50": {
+       "matched": 1394,
+       "sn": 0.5246518630033873,
+       "pr": 0.5998278829604131,
+       "median_iou": 0.8167180069478015
+      },
+      "S25": {
+       "matched": 1697,
+       "sn": 0.6386902521640948,
+       "pr": 0.7302065404475043,
+       "median_iou": 0.758220502901354
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 2259,
+       "median_span_ratio": 0.7844865579550463,
+       "median_tss_offset": 274,
+       "median_tes_offset": 295
+      },
+      "L1": {
+       "sn": 0.815205118554761,
+       "pr_strict": 0.9591222030981067,
+       "frac_hit_preds_with_2plus_truth": 0.1633019291161956,
+       "mean_truth_per_hit_pred": 1.1987438313144907,
+       "max_truth_per_hit_pred": 4
+      }
+     }
+    },
+    "g1b-456-ke": {
+     "lnc": {
+      "n_truth": 619,
+      "n_pred": 1707,
+      "S50": {
+       "matched": 41,
+       "sn": 0.06623586429725363,
+       "pr": 0.02401874633860574,
+       "median_iou": 0.6264150943396226
+      },
+      "S25": {
+       "matched": 89,
+       "sn": 0.14378029079159935,
+       "pr": 0.05213825424721734,
+       "median_iou": 0.44126074498567336
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 157,
+       "median_span_ratio": 2.3981042654028437,
+       "median_tss_offset": 758,
+       "median_tes_offset": 791
+      },
+      "L1": {
+       "sn": 0.2633279483037157,
+       "pr_strict": 0.09021675454012888,
+       "frac_hit_preds_with_2plus_truth": 0.08441558441558442,
+       "mean_truth_per_hit_pred": 1.0844155844155845,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 2657,
+      "n_pred": 1812,
+      "S50": {
+       "matched": 818,
+       "sn": 0.3078660143018442,
+       "pr": 0.45143487858719644,
+       "median_iou": 0.7775721022406299
+      },
+      "S25": {
+       "matched": 1114,
+       "sn": 0.41926985321791493,
+       "pr": 0.6147902869757175,
+       "median_iou": 0.6701836342273868
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1716,
+       "median_span_ratio": 0.5911889485294414,
+       "median_tss_offset": 752.5,
+       "median_tes_offset": 630.0
+      },
+      "L1": {
+       "sn": 0.6176138502070003,
+       "pr_strict": 0.9249448123620309,
+       "frac_hit_preds_with_2plus_truth": 0.19689737470167065,
+       "mean_truth_per_hit_pred": 1.2523866348448687,
+       "max_truth_per_hit_pred": 5
+      }
+     }
+    }
+   },
+   "mean": {
+    "lnc": {
+     "S50_sn": 0.04792676359719978,
+     "S50_pr": 0.020834503377786046,
+     "S25_sn": 0.09693053311793215,
+     "S25_pr": 0.041841837542784456,
+     "L1_sn": 0.21378567582121702,
+     "L1_pr_strict": 0.08887262584766288
+    },
+    "mrna": {
+     "S50_sn": 0.3552879187053067,
+     "S50_pr": 0.47163304172799103,
+     "S25_sn": 0.46342993350897,
+     "S25_pr": 0.6209617968243584,
+     "L1_sn": 0.6400702546731903,
+     "L1_pr_strict": 0.9290976073039169
+    }
+   }
+  },
+  "genatator_fly_2L": {
+   "lnc": {
+    "n_truth": 619,
+    "n_pred": 0,
+    "S50": {
+     "matched": 0,
+     "sn": 0.0,
+     "pr": null,
+     "median_iou": null
+    },
+    "S25": {
+     "matched": 0,
+     "sn": 0.0,
+     "pr": null,
+     "median_iou": null
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 0,
+     "median_span_ratio": null,
+     "median_tss_offset": null,
+     "median_tes_offset": null
+    },
+    "L1": {
+     "sn": 0.0,
+     "pr_strict": null,
+     "frac_hit_preds_with_2plus_truth": null,
+     "mean_truth_per_hit_pred": null,
+     "max_truth_per_hit_pred": null
+    }
+   },
+   "mrna": {
+    "n_truth": 2657,
+    "n_pred": 434,
+    "S50": {
+     "matched": 306,
+     "sn": 0.11516748212269477,
+     "pr": 0.7050691244239631,
+     "median_iou": 0.771774751038886
+    },
+    "S25": {
+     "matched": 385,
+     "sn": 0.14490026345502446,
+     "pr": 0.8870967741935484,
+     "median_iou": 0.6934221964647929
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 434,
+     "median_span_ratio": 0.7744367476875572,
+     "median_tss_offset": 704.5,
+     "median_tes_offset": 347.0
+    },
+    "L1": {
+     "sn": 0.21377493413624388,
+     "pr_strict": 1.0,
+     "frac_hit_preds_with_2plus_truth": 0.21658986175115208,
+     "mean_truth_per_hit_pred": 1.3110599078341014,
+     "max_truth_per_hit_pred": 5
+    }
+   }
+  },
+  "v19_worm_I": {
+   "tau": 0.6,
+   "runs": {
+    "g1b-42-ke": {
+     "lnc": {
+      "n_truth": 150,
+      "n_pred": 2167,
+      "S50": {
+       "matched": 1,
+       "sn": 0.006666666666666667,
+       "pr": 0.00046146746654360867,
+       "median_iou": 0.5927114608137488
+      },
+      "S25": {
+       "matched": 5,
+       "sn": 0.03333333333333333,
+       "pr": 0.0023073373327180432,
+       "median_iou": 0.3416536661466459
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 22,
+       "median_span_ratio": 10.534493723521873,
+       "median_tss_offset": 3046.5,
+       "median_tes_offset": 1131.0
+      },
+      "L1": {
+       "sn": 0.10666666666666667,
+       "pr_strict": 0.007383479464697739,
+       "frac_hit_preds_with_2plus_truth": 0.0,
+       "mean_truth_per_hit_pred": 1.0,
+       "max_truth_per_hit_pred": 1
+      }
+     },
+     "mrna": {
+      "n_truth": 2878,
+      "n_pred": 3253,
+      "S50": {
+       "matched": 380,
+       "sn": 0.1320361362056984,
+       "pr": 0.1168152474638795,
+       "median_iou": 0.6149121136273629
+      },
+      "S25": {
+       "matched": 884,
+       "sn": 0.3071577484364142,
+       "pr": 0.2717491546264986,
+       "median_iou": 0.41403297595386723
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 2769,
+       "median_span_ratio": 0.20253505933117583,
+       "median_tss_offset": 1676,
+       "median_tes_offset": 1402
+      },
+      "L1": {
+       "sn": 0.5142460041695622,
+       "pr_strict": 0.8441438671995082,
+       "frac_hit_preds_with_2plus_truth": 0.10742898761835397,
+       "mean_truth_per_hit_pred": 1.1161689730517115,
+       "max_truth_per_hit_pred": 3
+      }
+     }
+    },
+    "g1b-123-ke": {
+     "lnc": {
+      "n_truth": 150,
+      "n_pred": 763,
+      "S50": {
+       "matched": 2,
+       "sn": 0.013333333333333334,
+       "pr": 0.002621231979030144,
+       "median_iou": 0.6508911619641939
+      },
+      "S25": {
+       "matched": 4,
+       "sn": 0.02666666666666667,
+       "pr": 0.005242463958060288,
+       "median_iou": 0.458266689818733
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 9,
+       "median_span_ratio": 2.059122695486332,
+       "median_tss_offset": 1231,
+       "median_tes_offset": 833
+      },
+      "L1": {
+       "sn": 0.05333333333333334,
+       "pr_strict": 0.010484927916120577,
+       "frac_hit_preds_with_2plus_truth": 0.0,
+       "mean_truth_per_hit_pred": 1.0,
+       "max_truth_per_hit_pred": 1
+      }
+     },
+     "mrna": {
+      "n_truth": 2878,
+      "n_pred": 5028,
+      "S50": {
+       "matched": 1203,
+       "sn": 0.4179986101459347,
+       "pr": 0.2392601431980907,
+       "median_iou": 0.696291936433196
+      },
+      "S25": {
+       "matched": 1962,
+       "sn": 0.6817234190410006,
+       "pr": 0.3902147971360382,
+       "median_iou": 0.5172601924988618
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 4759,
+       "median_span_ratio": 0.275553533515317,
+       "median_tss_offset": 909,
+       "median_tes_offset": 945
+      },
+      "L1": {
+       "sn": 0.8578874218207089,
+       "pr_strict": 0.9415274463007159,
+       "frac_hit_preds_with_2plus_truth": 0.13793831854668356,
+       "mean_truth_per_hit_pred": 1.1624419095901986,
+       "max_truth_per_hit_pred": 5
+      }
+     }
+    },
+    "g1b-456-ke": {
+     "lnc": {
+      "n_truth": 150,
+      "n_pred": 1356,
+      "S50": {
+       "matched": 0,
+       "sn": 0.0,
+       "pr": 0.0,
+       "median_iou": null
+      },
+      "S25": {
+       "matched": 1,
+       "sn": 0.006666666666666667,
+       "pr": 0.0007374631268436578,
+       "median_iou": 0.31747473600545023
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 11,
+       "median_span_ratio": 16.252747252747252,
+       "median_tss_offset": 2850,
+       "median_tes_offset": 2096
+      },
+      "L1": {
+       "sn": 0.06,
+       "pr_strict": 0.0058997050147492625,
+       "frac_hit_preds_with_2plus_truth": 0.125,
+       "mean_truth_per_hit_pred": 1.125,
+       "max_truth_per_hit_pred": 2
+      }
+     },
+     "mrna": {
+      "n_truth": 2878,
+      "n_pred": 1803,
+      "S50": {
+       "matched": 682,
+       "sn": 0.23697011813759555,
+       "pr": 0.37825845812534664,
+       "median_iou": 0.7265520867607306
+      },
+      "S25": {
+       "matched": 1084,
+       "sn": 0.3766504517025712,
+       "pr": 0.6012201885745979,
+       "median_iou": 0.5605087780224588
+      },
+      "span": {
+       "n_pred_overlapping_truth_span": 1588,
+       "median_span_ratio": 0.897379962405797,
+       "median_tss_offset": 1111.0,
+       "median_tes_offset": 659.5
+      },
+      "L1": {
+       "sn": 0.6775538568450312,
+       "pr_strict": 0.8618968386023295,
+       "frac_hit_preds_with_2plus_truth": 0.3063063063063063,
+       "mean_truth_per_hit_pred": 1.472972972972973,
+       "max_truth_per_hit_pred": 9
+      }
+     }
+    }
+   },
+   "mean": {
+    "lnc": {
+     "S50_sn": 0.006666666666666667,
+     "S50_pr": 0.0010275664818579177,
+     "S25_sn": 0.022222222222222223,
+     "S25_pr": 0.0027624214725406634,
+     "L1_sn": 0.07333333333333333,
+     "L1_pr_strict": 0.00792270413185586
+    },
+    "mrna": {
+     "S50_sn": 0.2623349548297429,
+     "S50_pr": 0.24477794959577226,
+     "S25_sn": 0.45517720639332865,
+     "S25_pr": 0.4210613801123782,
+     "L1_sn": 0.6832290942784341,
+     "L1_pr_strict": 0.882522717367518
+    }
+   }
+  },
+  "genatator_worm_I": {
+   "lnc": {
+    "n_truth": 150,
+    "n_pred": 0,
+    "S50": {
+     "matched": 0,
+     "sn": 0.0,
+     "pr": null,
+     "median_iou": null
+    },
+    "S25": {
+     "matched": 0,
+     "sn": 0.0,
+     "pr": null,
+     "median_iou": null
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 0,
+     "median_span_ratio": null,
+     "median_tss_offset": null,
+     "median_tes_offset": null
+    },
+    "L1": {
+     "sn": 0.0,
+     "pr_strict": null,
+     "frac_hit_preds_with_2plus_truth": null,
+     "mean_truth_per_hit_pred": null,
+     "max_truth_per_hit_pred": null
+    }
+   },
+   "mrna": {
+    "n_truth": 2878,
+    "n_pred": 13,
+    "S50": {
+     "matched": 11,
+     "sn": 0.003822098679638638,
+     "pr": 0.8461538461538461,
+     "median_iou": 0.8150798018712163
+    },
+    "S25": {
+     "matched": 12,
+     "sn": 0.004169562195969423,
+     "pr": 0.9230769230769231,
+     "median_iou": 0.8127041084558366
+    },
+    "span": {
+     "n_pred_overlapping_truth_span": 13,
+     "median_span_ratio": 0.9484698292817245,
+     "median_tss_offset": 80,
+     "median_tes_offset": 275
+    },
+    "L1": {
+     "sn": 0.00590687977762335,
+     "pr_strict": 1.0,
+     "frac_hit_preds_with_2plus_truth": 0.23076923076923078,
+     "mean_truth_per_hit_pred": 1.3076923076923077,
+     "max_truth_per_hit_pred": 3
+    }
+   }
+  }
+ },
+ "seconds": 10.6
+}
