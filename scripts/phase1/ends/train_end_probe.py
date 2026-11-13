@@ -98,7 +98,7 @@ def main():
         for i in range(0, N, a.batch):
             if nb % 25 == 0:
                 why = gate_busy()
-                if why:
+                if why and not why.startswith("only "):   # our own allocation counts as used memory: never yield for it
                     say(yield_gpu=why, epoch=ep + 1, batch=nb)
                     sys.exit(75)
             idx = np.sort(order[i:i + a.batch])
