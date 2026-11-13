@@ -1,6 +1,6 @@
 # Draft — benchmark sections (plan B) of the joint coding × lncRNA annotation paper
 
-> Status: first draft, 2026-10-20. Numbers are from the Phase 0 reports (`05_phase0/results/`); every number
+> Status: first draft, 2026-10-20; 2026-11-13: S50 numbers and the L1 caveat added (see `DRAFT_results_ends.md`). Numbers are from the Phase 0 reports (`05_phase0/results/`); every number
 > has a pointer to its JSON. Not yet checked by a second reader. Figures are planned, not drawn.
 > Language: English (manuscript); discussion notes for the authors are in Chinese at the end.
 
@@ -46,7 +46,8 @@ lncRNA and 546 mRNA genes) with a stranded ruler (Methods) [Fig. 2a; `0.3_fp_aud
 
 Running the released GENATATOR pipeline ourselves on hg38 chr20 against GENCODE v50 gave the same picture
 (lncRNA locus Sn 0.028 [95% CI 0.019–0.040], intron chain 0.012; mRNA locus Sn 0.967, intron chain 0.708;
-46 lncRNA loci reported only as mRNA) [`0.1_genatator/PANEL_SUMMARY.json`]. The bottleneck is interval discovery:
+46 lncRNA loci reported only as mRNA) [`0.1_genatator/PANEL_SUMMARY.json`]. Under the stricter one-to-one span
+criterion of section 7 (S50), its lncRNA recall is 0.006 and its mRNA recall 0.794 [`B1/B1.json`]. The bottleneck is interval discovery:
 on chr21, only 33 of 590 lncRNA genes were touched by any predicted transcript [`RESULT_0.1a_0.3`].
 
 For a representative coding annotator (Helixer, vertebrate model, hg38 chr20), 97% of lncRNA loci are not
@@ -91,7 +92,9 @@ report it as an ablation rather than as the main contribution.
 
 **Ruler.** Predictions and references are reduced to transcripts (chromosome, strand, exons). Metrics per class
 (lncRNA, mRNA, small RNA):
-* L1 locus: exon overlap on the same strand; Sn over reference genes, Pr over predicted transcripts.
+* L1 locus: exon overlap on the same strand; Sn over reference genes, Pr over predicted transcripts. L1 does not
+  require a prediction to delimit a gene (one prediction may hit several genes); the one-to-one span criterion
+  S50 / S25 (`DRAFT_results_ends.md`, Methods) is reported alongside it for every locus-level claim.
 * L2 intron chain: exact match with any reference isoform.
 * L3 junction and L4 exon: exact; terminal exons are matched on their inner boundary only.
 * L5 single-exon: reciprocal overlap ≥ 0.5.
@@ -124,7 +127,8 @@ annotated gene spans are subtracted.
 3. Cross-lineage transfer of GENATATOR (mRNA and lncRNA).
 4. Probe AUPRC per layer and backbone.
 5. Unknown-handling: Δ recovery and AUPRC (supplementary).
-6. (Method results, after Phase 1.)
+6. (Method results, after Phase 1: locus detection, section L, not drafted yet.)
+7. End localisation: see `DRAFT_results_ends.md` (sections 7–10).
 
 ---
 
