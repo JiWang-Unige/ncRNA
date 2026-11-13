@@ -1,0 +1,112 @@
+{
+ "ann": {
+  "lTSS+": {
+   "pos_events": 840,
+   "unsupported_ignored": 0,
+   "pos_bases": 17619,
+   "ign_bases": 3079982
+  },
+  "lTES+": {
+   "pos_events": 828,
+   "unsupported_ignored": 0,
+   "pos_bases": 17367,
+   "ign_bases": 3119104
+  },
+  "mTSS+": {
+   "pos_events": 527,
+   "unsupported_ignored": 0,
+   "pos_bases": 10919,
+   "ign_bases": 3113743
+  },
+  "mTES+": {
+   "pos_events": 565,
+   "unsupported_ignored": 0,
+   "pos_bases": 11793,
+   "ign_bases": 3182133
+  },
+  "lTSS-": {
+   "pos_events": 963,
+   "unsupported_ignored": 0,
+   "pos_bases": 20136,
+   "ign_bases": 3090473
+  },
+  "lTES-": {
+   "pos_events": 829,
+   "unsupported_ignored": 0,
+   "pos_bases": 17420,
+   "ign_bases": 3116367
+  },
+  "mTSS-": {
+   "pos_events": 463,
+   "unsupported_ignored": 0,
+   "pos_bases": 9665,
+   "ign_bases": 3092776
+  },
+  "mTES-": {
+   "pos_events": 547,
+   "unsupported_ignored": 0,
+   "pos_bases": 11377,
+   "ign_bases": 3173611
+  }
+ },
+ "ev": {
+  "lTSS+": {
+   "pos_events": 277,
+   "unsupported_ignored": 563,
+   "pos_bases": 5775,
+   "ign_bases": 4126885
+  },
+  "lTES+": {
+   "pos_events": 313,
+   "unsupported_ignored": 515,
+   "pos_bases": 6531,
+   "ign_bases": 4104272
+  },
+  "mTSS+": {
+   "pos_events": 497,
+   "unsupported_ignored": 30,
+   "pos_bases": 10095,
+   "ign_bases": 3171329
+  },
+  "mTES+": {
+   "pos_events": 493,
+   "unsupported_ignored": 72,
+   "pos_bases": 10248,
+   "ign_bases": 3311417
+  },
+  "lTSS-": {
+   "pos_events": 279,
+   "unsupported_ignored": 684,
+   "pos_bases": 5838,
+   "ign_bases": 4317465
+  },
+  "lTES-": {
+   "pos_events": 316,
+   "unsupported_ignored": 513,
+   "pos_bases": 6641,
+   "ign_bases": 4108623
+  },
+  "mTSS-": {
+   "pos_events": 424,
+   "unsupported_ignored": 39,
+   "pos_bases": 8747,
+   "ign_bases": 3163615
+  },
+  "mTES-": {
+   "pos_events": 472,
+   "unsupported_ignored": 74,
+   "pos_bases": 9723,
+   "ign_bases": 3307645
+  }
+ },
+ "channels": [
+  "lTSS+",
+  "lTES+",
+  "mTSS+",
+  "mTES+",
+  "lTSS-",
+  "lTES-",
+  "mTSS-",
+  "mTES-"
+ ]
+}
