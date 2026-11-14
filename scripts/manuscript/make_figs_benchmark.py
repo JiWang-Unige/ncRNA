@@ -65,7 +65,7 @@ def fig1(root, out):
     ax.scatter(x, [r["lnc_sn"] for r in rows], s=12, color=LNC, label="lncRNA loci", zorder=3)
     for c, col in (("lnc", LNC), ("mrna", MRNA)):
         ax.axhline(gw[c], color=col, linewidth=0.8, linestyle=(0, (3, 2)))
-        ax.text(-0.4, gw[c] + (0.025 if c == "mrna" else -0.06), f"genome-wide {gw[c]:.3f}", ha="left", fontsize=5.8, color=INK2)
+        ax.text(-0.4, gw[c] + (0.025 if c == "mrna" else -0.16), f"genome-wide {gw[c]:.3f}", ha="left", fontsize=5.8, color=INK2)
     ax.set_xticks(x, [r["chrom"][3:] for r in rows], fontsize=5.6)
     ax.set_xlabel("Chromosome")
     ax.set_ylabel("v50 loci recovered by v41")

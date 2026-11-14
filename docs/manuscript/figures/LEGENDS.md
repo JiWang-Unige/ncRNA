@@ -26,3 +26,34 @@ CpG quartile: our boundary logits and end probes (seven models; line, mean; band
 chr20, and Puffin on its own held-out chromosomes chr8 and chr9. **d**, The same read-out for polyA-supported
 transcript ends: our seven models (bars, mean; dots, individual models) and PolyaID / PolyaStrength (strongest
 site among positions classified as polyadenylation sites). Dashed line, chance (2 kb of a 40-kb window).
+
+# Figure legends (Figures 1–5, first versions, 2026-11-14)
+
+> Drawn by `scripts/manuscript/make_figs_benchmark.py` from the Phase 0 JSONs copied into `docs/phase0_results/data/`
+> (from `05_phase0/results`); every plotted value is in `fig_data_benchmark.json`. Chromosome lengths in Fig. 1b are
+> the values of `RESULT_truth_density.md`.
+
+**Figure 1 | Reference lncRNA annotation is incomplete and uneven.** **a**, Share of GENCODE v50 loci on each
+chromosome (chr1–22, X) that GENCODE v41 already contained (same-strand exon overlap), for lncRNA (blue) and
+protein-coding (orange) genes; dashed lines, genome-wide means weighted by gene number. **b**, Annotated lncRNA
+genes per Mb and lncRNA : mRNA gene ratio on the five chromosomes of the evaluation panel (human GENCODE v50;
+others Ensembl 116 / Metazoa 63).
+
+**Figure 2 | Existing ab initio annotators do not recover lncRNA genes.** **a**, Recovery of lncRNA and mRNA loci
+(exon overlap) by the 13 public predictions of the T2T-CHM13 chr20 leaderboard (RefSeq truth: 434 lncRNA, 546 mRNA
+genes); unstranded segmenters are scored strand-agnostically. **b**, The leaderboard's own segmentation recall at
+its headline tolerance (k = 250 bp) for GENATATOR, lnc_RNA versus mRNA. **c**, lncRNA loci covered by a predicted
+coding gene that hits no reference mRNA, per gene annotator.
+
+**Figure 3 | Transfer beyond the training clade.** Locus recovery by GENATATOR (trained on 39 mammals) on human
+chr20 and four non-mammalian chromosomes, mRNA and lncRNA; labels give the number of lncRNA transcripts predicted.
+
+**Figure 4 | Weak but present sequence signal for lncRNA exons.** Linear-probe AUPRC divided by the class prior
+across the layers of four frozen DNA language models (hg38 chr21 training, chr20 evaluation; 300,000 positions):
+**a**, lncRNA exon; **b**, mRNA exon; **c**, lncRNA transcription start. Dashed line, prior.
+
+**Figure 5 | Treating evidence-supported unannotated sequence as unknown (supplementary).** Pre-registered test
+on frozen features with a minimal decoder, three seeds per arm (dots; bars, mean): unannotated sequence treated
+as background (F), as unknown where pre-2022 RNA-seq junctions support it (U-ev), or everywhere (U-pu). **a**,
+Recovery of lncRNA loci first annotated after GENCODE v41 (n = 473, chr20); **b**, AUPRC for exons of those loci
+(exploratory, post hoc); **c**, strict precision against v50.
