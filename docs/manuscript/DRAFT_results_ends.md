@@ -79,7 +79,7 @@ mRNA). The model knows that a region
 belongs to an lncRNA gene but not where the gene begins. Predicted lncRNA starts are nonetheless promoter-like:
 8–11% lie within 200 bp of a same-strand CAGE peak, against 0.3–0.6% after shifting them by 50 kb.
 
-### 15. With DNA language-model features, only CpG-island lncRNA promoters can be located, and lncRNA ends cannot
+### 15. With current sequence models, only CpG-island lncRNA promoters can be located, and lncRNA ends cannot
 
 The boundary component of our model is a single set of start / end logits shared by mRNA and lncRNA genes, trained
 on the canonical-transcript ends of both classes. In the training windows, 93% of mRNA start labels but only 31%
@@ -110,21 +110,35 @@ at enhancers rather than at promoters (Hon et al., 2017), and lincRNA core promo
 than mRNA promoters (Mattioli et al., 2019). Our data quantify this for a genome-scale, sequence-only annotator:
 the lncRNA starts that lack a CpG island — most of them — are placed no better than chance.
 
+A dedicated model of transcription initiation shows the same limit. We scored Puffin (Dudnyk et al., 2024), which
+predicts CAGE and related initiation signals at base resolution, with the same read-out on its own held-out
+chromosomes, chr8 and chr9, under pre-registered criteria [`PLAN_DEDEND.md`, `RESULT_DEDEND.md`]. Puffin placed
+71% of CAGE-supported mRNA starts within 1 kb, but only 8.6% of lncRNA starts in the two lowest promoter-CpG
+quartiles (7.9% and 9.4%), against 21% in the third and 56% in the highest quartile; for all lncRNA starts it
+reached 24% and for CAGE-supported ones 40% [Fig. 7d]. On chr18 and chr20, which were in Puffin's training data,
+the gradient was the same (lowest quartile 3–9%, highest 49–51%). The CpG-island dependence is therefore not a
+weakness of general-purpose language-model features: a model trained directly on initiation data cannot place
+low-CpG lncRNA starts either.
+
 Second, with these features, lncRNA transcript ends are not locatable: 4.5–8.7% of polyA-supported lncRNA ends
 on chr18 and 4.7–9.9% on chr20 lie within 1 kb of the top-scoring position, in every model. On chr18 mRNA ends
 were equally unlocatable (2.2–12.6%), but on chr20 two probes placed 17–18% of them within 1 kb, so the pre-registered
 replication criterion, which required both classes to stay at or below 15%, was not met; for mRNA we therefore
 report only that the end signal in the features is weak. The mRNA ends that our full model places correctly
 (28–41% of detected genes within 1 kb on chr18, 49–58% on chr20) are thus set mostly by the gene grammar (exon
-structure, coding frame). This is a statement about frozen, general-purpose DNA language-model features and a light probe, not
-about the information in the sequence: dedicated models of 3′-end processing predict cleavage and polyadenylation
-sites at nucleotide resolution within a given region (Bogard et al., 2019; Stroup et al., 2023), and whether they
-can pick the terminal site of a gene from a ±20-kb search window was not tested here.
+structure, coding frame). A dedicated model of 3′-end processing does not change this. PolyaID and PolyaStrength (Stroup et al., 2023)
+identify cleavage and polyadenylation sites at nucleotide resolution; scored at every position within ±20 kb of
+each gene end on the gene's strand (pre-registered: the strongest site among those classified as polyadenylation
+sites), they placed 7.1% (chr18) and 11.9% (chr20) of polyA-supported lncRNA ends within 1 kb, and only 12% and
+19% of polyA-supported mRNA ends [Fig. 7d; `RESULT_DEDEND.md`]. About 5% of all positions in these windows were
+classified as cleavage-competent, so recognising polyadenylation signals does not identify which of them ends a
+gene. Both chromosomes may have been in PolyaID's training data, which would favour it.
 
 *Taken together, sections 12–15 identify the localisation of transcription-unit ends as the rate-limiting step of
 end-to-end lncRNA annotation: structure becomes partly recoverable once the ends are known to within a kilobase,
-but with current DNA language-model features the start can be placed only for CpG-island promoters and the lncRNA
-end not at all. Each of these observations except the mRNA end result was replicated on held-out chr20.*
+but with current sequence models — general DNA language-model features as well as dedicated models of
+initiation and polyadenylation — the start can be placed only for CpG-island promoters and the lncRNA end not at
+all. Each of these observations except the mRNA end result was replicated on held-out chr20.*
 
 ## Methods (additions)
 
@@ -161,6 +175,15 @@ position ± 10 bp; unsupported canonical ends are ignored ± 1 kb. Read-out on c
 evidence and by promoter CpG o/e (TSS ± 500 bp) quartile. Pre-registered decision rules and the grey-zone rule
 (second seed) in [`PLAN_END.md` §4].
 
+**Dedicated end models.** Puffin (github.com/jzhoulab/puffin, commit 9bc81eb; FANTOM_CAGE output, + and − strand
+channels; forward pass re-implemented without selene_sdk, weights loaded with all parameters matched) over whole
+chromosomes in 200-kb pieces with 325-bp context; PolyaID and PolyaStrength (github.com/zhejilab/PolyaModelsHuman,
+commit d70bcd0; published weights, sha256 checked) on 240-nt windows centred on every position within ± 20 kb of
+a canonical end, on the gene's strand. Score for an end: Puffin argmax; PolyaID — the maximum PolyaStrength among
+positions with PolyaID ≥ 0.75, or the PolyaID maximum if there is none. Truth, evidence, CpG strata and Loc1k as
+for the probes; CpG quartiles per chromosome group. Puffin was read on its test chromosomes chr8 and chr9 (primary)
+and on chr18 and chr20 (in its training set); PolyaID on chr18 and chr20. Decision rules in [`PLAN_DEDEND.md` §4].
+
 ## Figure plan (Figure 7)
 
 * a) lncRNA and mRNA recall under exon overlap versus S50 for our models, GENATATOR, SegmentNT, Tiberius and
@@ -168,12 +191,15 @@ evidence and by promoter CpG o/e (TSS ± 500 bp) quartile. Pre-registered decisi
 * b) Exact intron chains of GENATATOR segmentation against interval padding / trimming (chr18).
 * c) Start localisation (Loc1k) by promoter CpG quartile for the seven models; end localisation for lncRNA and
   mRNA alongside.
+* d) Dedicated end models: Puffin start localisation by promoter CpG quartile on its held-out chr8 + chr9 (and on
+  chr18 / chr20), next to our probes; PolyaID end localisation for lncRNA and mRNA (chr18, chr20).
 * Supplementary: tiling, decoder and reference-support controls (section 14); label support statistics; per-seed
   probe tables.
 
 ## References cited in sections 12–15
 
 * Bogard N et al. A deep neural network for predicting and engineering alternative polyadenylation. *Cell* 2019.
+* Dudnyk K et al. Sequence basis of transcription initiation in the human genome. *Science* 2024.
 * Hannenhalli S, Levy S. Promoter prediction in the human genome. *Bioinformatics* 2001.
 * Hon CC et al. An atlas of human long non-coding RNAs with accurate 5′ ends. *Nature* 2017.
 * Kaur G, Perteghella T et al. GENCODE: massively expanding the lncRNA catalog through capture long-read RNA

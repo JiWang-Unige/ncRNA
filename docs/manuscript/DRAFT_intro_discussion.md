@@ -54,7 +54,8 @@ and the detection transfers to mouse and to non-mammalian vertebrates. Under the
 however, only about 7% of lncRNA genes are delimited, against 55% of coding genes. Finally, we decompose this gap.
 Exon structure becomes partly recoverable once the ends of the transcription unit are known to within a kilobase;
 the model's posteriors carry no lncRNA end signal, for reasons that lie neither in tiling, decoding nor unreliable
-reference ends; and with these features the start of an lncRNA gene can be placed only where its promoter is a
+reference ends; and with these features — and equally with dedicated models of transcription initiation and
+polyadenylation — the start of an lncRNA gene can be placed only where its promoter is a
 CpG island, while lncRNA transcript ends cannot be placed at all — observations that we replicated on a held-out
 chromosome. The ends of transcription units, not exon
 structure, are the rate-limiting step of ab initio lncRNA annotation.
@@ -90,11 +91,13 @@ length of the transcription unit, not exon sequence, are what distinguish the ln
 **What would close the gap.** Three directions follow. First, end evidence, where it exists, should enter the
 decoder directly: CAGE or long-read 5′ ends and polyA-site data constrain exactly the quantity that sequence
 fails to provide, and the grammar can take them as position-dependent bonuses without retraining (Methods,
-boundary logits). Second, for genomes without such data, dedicated sequence models of transcription initiation
-(Puffin, ProCapNet; Dudnyk et al., 2024; Cochran et al., 2024) and of 3′-end processing (APARENT; Bogard et al.,
-2019; Stroup et al., 2023) predict initiation and cleavage within a given region at base resolution. Whether they
-can choose the true gene start or end among the many candidate sites in a 20-kb window — the task our probes
-failed — was not tested here and is, in our view, the most direct next experiment. Third, the tolerance of
+boundary logits). Second, for genomes without such data, plugging in dedicated sequence models is not enough on its own. A model
+of transcription initiation (Puffin; Dudnyk et al., 2024) placed CpG-island lncRNA starts well on its held-out
+chromosomes but low-CpG starts at near chance, and a polyadenylation model (PolyaID; Stroup et al., 2023) found
+cleavage-competent sites throughout each 40-kb window and picked the gene end for about one lncRNA in ten
+(section 15). Initiation models remain useful as start scores for CpG-island genes; for the rest, the missing
+information is which of many candidate sites is used, which is a property of the cell rather than of the local
+sequence alone, and points to expression data or models conditioned on cell type. Third, the tolerance of
 structure recovery to end error is now measured (below 1 kb for exact intron chains, section 13), which gives a
 concrete target: an end predictor that reaches sub-kilobase precision for most lncRNA genes would make existing
 segmentation models usable end to end.
@@ -154,5 +157,6 @@ the end evidence that a decoder can take directly — is the step on which ab in
 - **引言里刻意没写的**：没有说「首次」，没有说「序列不含端点信号」（查新禁用说法）；端点注释不完整只作背景。
 - **[verify] 条目**：Tiberius/Helixer/ANNEVO 的具体数字、AlphaGenome 的引用、Mele 2017 与 Schlackow 2017 的具体结论（剪接效率低、终止方式不同）都要读原文确认后再保留。Schlackow 2017 那句若核对不上就删掉，不影响论证。
 - **讨论里提出的「下一步实验」**：把 Puffin/ProCapNet 类起始模型、APARENT 类 polyA 模型放进 ±20 kb 搜索窗口，看能否选出真实端点。这是对主说法最直接的补强，也可能被审稿人要求；算力不大（推理为主），是否投稿前做，等你决定。
+- **专用端点模型（DEDEND，2026-11-14）**：T0 有效（Puffin mRNA 0.71），T1 = B（低 CpG lnc 起点 0.086），T2 灰区（有 CAGE 的 lnc 起点 0.40），P1 = B（PolyaID lnc 终点 0.07 / 0.12）。讨论第二条方向已据此改写。「which is a property of the cell rather than of the local sequence alone」是解释，不是我们测出来的，审稿人可能挑；如不想冒险可删。
 - **局限 (ii)**：2026-11-14 已在 chr20 上复现第 14–15 节（`RESULT_REP20.md`）：R1–R3 成立，R4 只对 lnc 成立（两个探针的 mRNA 终点 0.17–0.18）。正文已按事前规则把「终点对两类都定位不了」改成「lnc 终点定位不了，mRNA 终点信号弱」。第 13 节（S11）未复现。
 - **没写进来**：摘要；统一 GFF3（编码结构用 Tiberius）在讨论里只提了「实际注释应组合」，还没实现。
