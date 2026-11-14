@@ -3,7 +3,8 @@
 > Status: first draft, 2026-11-13. Covers the end-localisation line (B1, S11, BND, END). Every number points to
 > its result document in `docs/phase1_results/` and its JSON. Not yet checked by a second reader; figures planned,
 > not drawn. Sections 12–15; they follow the benchmark (`DRAFT_results_benchmark.md`, sections 1–6) and the
-> locus-detection results (`DRAFT_results_locus.md`, sections 7–11). Renumbered from 7–10 on 2026-11-14.
+> locus-detection results (`DRAFT_results_locus.md`, sections 7–11). Renumbered from 7–10 on 2026-11-14;
+> wording and citations revised after the novelty check (`NOVELTY_ends.md`) on the same day.
 > Language: English (manuscript); notes for the authors in Chinese at the end.
 
 ## Results
@@ -48,7 +49,10 @@ The same model collapses when the interval is imprecise: padding both ends by 1 
 padding by 5 kb or more to 0%, and trimming 1 kb from each end to 1%. Junction precision falls from 0.49 to 0.12
 (+1 kb) and 0.01 (+10 kb). The tolerance of interval segmentation (below 1 kb) is an order of magnitude tighter
 than the end error of ab initio lncRNA locus prediction (section 12). Exon structure is therefore not the first
-obstacle to end-to-end lncRNA annotation; the ends of the transcription unit are.
+obstacle to end-to-end lncRNA annotation; the ends of the transcription unit are. A recent benchmark of fine-tuned
+DNA language models for within-interval segmentation lists gene-boundary identification among the problems that
+remain open for all tools (Shmelev et al., 2026), but scores neither transcript starts nor ends; the experiments
+here measure how precise the ends must be and how far ab initio predictions are from that precision.
 
 ### 14. The posteriors carry no lncRNA end signal, and the cause is not in decoding
 
@@ -59,7 +63,8 @@ We next asked where in our pipeline the end information is lost (chr18, three v1
   2.1% of the time against 1.0% expected by chance.
 * *Decoding.* Decoding the same posteriors by per-base argmax instead of maximum expected accuracy does not help
   (S50 recall 4.3% against 5.4%).
-* *Unreliable reference ends.* Only 16.8% of chr18 lncRNA genes have a FANTOM5 CAGE peak within 200 bp of their
+* *Unreliable reference ends.* Annotated lncRNA ends are known to be often incomplete and are revised as
+  full-length and 5′-end data accumulate (Hon et al., 2017; Lagarde et al., 2017; Kaur et al., 2024). Only 16.8% of chr18 lncRNA genes have a FANTOM5 CAGE peak within 200 bp of their
   outermost start and 32.7% a PolyASite cluster within 100 bp of their end, but genes with both kinds of support
   are delimited no better (S50 6.4%) than genes with neither (5.1%).
 
@@ -69,7 +74,7 @@ detected genes; for lncRNA the step is ~0.05 and the onset lies within 1 kb for 
 belongs to an lncRNA gene but not where the gene begins. Predicted lncRNA starts are nonetheless promoter-like:
 8–11% lie within 200 bp of a same-strand CAGE peak, against 0.3–0.6% after shifting them by 50 kb.
 
-### 15. Only CpG-island lncRNA promoters can be located from sequence, and no transcript ends can
+### 15. With DNA language-model features, only CpG-island lncRNA promoters can be located, and no transcript ends
 
 The boundary component of our model is a single set of start / end logits shared by mRNA and lncRNA genes, trained
 on the canonical-transcript ends of both classes. In the training windows, 93% of mRNA start labels but only 31%
@@ -91,13 +96,25 @@ share within 1 kb stays near chance in the two lowest quartiles (2.6–8.6% in t
 the highest; in every model the third quartile exceeds the two lowest and the highest exceeds the third [Fig. 7c]. This mirrors what drives detection itself — promoter CpG and transcription-unit length are the
 features associated with a lncRNA locus being found (section 11; `RESULT_S3.md`), and lncRNA genes whose start
 lies in a transposable element are harder to find mainly because they lack CpG-island promoters
-(`RESULT_S3_TE.md`). Second, transcript ends are not locatable for either class: 2–13% of polyA-supported ends,
+(`RESULT_S3_TE.md`). The dependence on CpG islands is not new in itself: CpG islands have long been the dominant
+signal in promoter prediction, and promoters without them were suggested to be unpredictable from local sequence
+(Hannenhalli and Levy, 2001). What it implies for lncRNA follows from their origin: most intergenic lncRNAs start
+at enhancers rather than at promoters (Hon et al., 2017), and lincRNA core promoters carry simpler motif profiles
+than mRNA promoters (Mattioli et al., 2019). Our data quantify this for a genome-scale, sequence-only annotator:
+the lncRNA starts that lack a CpG island — most of them — are placed no better than chance.
+
+Second, with these features, transcript ends are not locatable for either class: 2–13% of polyA-supported ends,
 for lncRNA and mRNA alike, lie within 1 kb of the top-scoring position. The mRNA ends that our full model places
-correctly are therefore set by the gene grammar (exon structure, coding frame), not by an end signal.
+correctly are therefore set by the gene grammar (exon structure, coding frame), not by an end signal in the
+features. This is a statement about frozen, general-purpose DNA language-model features and a light probe, not
+about the information in the sequence: dedicated models of 3′-end processing predict cleavage and polyadenylation
+sites at nucleotide resolution within a given region (Bogard et al., 2019; Stroup et al., 2023), and whether they
+can pick the terminal site of a gene from a ±20-kb search window was not tested here.
 
 *Taken together, sections 12–15 identify the localisation of transcription-unit ends as the rate-limiting step of
 end-to-end lncRNA annotation: structure becomes partly recoverable once the ends are known to within a kilobase,
-but from sequence alone the start can be placed only for CpG-island promoters and the end not at all.*
+but with current DNA language-model features the start can be placed only for CpG-island promoters and the end
+not at all.*
 
 ## Methods (additions)
 
@@ -144,6 +161,21 @@ evidence and by promoter CpG o/e (TSS ± 500 bp) quartile. Pre-registered decisi
 * Supplementary: tiling, decoder and reference-support controls (section 14); label support statistics; per-seed
   probe tables.
 
+## References cited in sections 12–15
+
+* Bogard N et al. A deep neural network for predicting and engineering alternative polyadenylation. *Cell* 2019.
+* Hannenhalli S, Levy S. Promoter prediction in the human genome. *Bioinformatics* 2001.
+* Hon CC et al. An atlas of human long non-coding RNAs with accurate 5′ ends. *Nature* 2017.
+* Kaur G, Perteghella T et al. GENCODE: massively expanding the lncRNA catalog through capture long-read RNA
+  sequencing. *bioRxiv* 2024, doi:10.1101/2024.10.29.620654.
+* Lagarde J et al. High-throughput annotation of full-length long noncoding RNAs with capture long-read
+  sequencing. *Nat Genet* 2017;49:1731, doi:10.1038/ng.3988.
+* Mattioli K et al. High-throughput functional analysis of lncRNA core promoters elucidates rules governing
+  tissue specificity. *Genome Res* 2019.
+* Shmelev A et al. GENATATORs: ab initio gene annotation with DNA language models. *bioRxiv* 2026,
+  doi:10.64898/2026.06.17.732686.
+* Stroup EK et al. Deep learning of human polyadenylation sites at nucleotide resolution. *Nat Commun* 2023.
+
 ---
 
 ## 作者备注（中文）
@@ -154,6 +186,6 @@ evidence and by promoter CpG o/e (TSS ± 500 bp) quartile. Pre-registered decisi
   1. 只在 chr18 上做（BND、END、S11）。chr18 是开发染色体；S11 对 GENATATOR 是训练染色体（已注明是上界）。如果要求，可在 chr20 上重复 BND 与 END 的读数（不涉及任何调参，chr20 的后验需要重新计算）。
   2. 「CAGE 支持」与「CpG 高」没有拆开；FANTOM5 CAGE 偏向高表达转录本。
   3. END 两个臂的 seed 方差很大（同一臂 mRNA 起点 0.785 对 0.414），所以第 15 节对两种改进办法不下结论。返修时如被要求，可补 seed。
-  4. 「终点定位不了」是在这套特征（GENERanno 第 17、23 层，24.6 kb 窗口）和这个头下的结论，不是对序列信息的一般断言。正文措辞已限定在「from sequence alone」——成稿时应再收紧为「with current DNA language-model features」。
-- **与文献的关系**：lncRNA 剪接效率低（Mele 2017）、SPLAIRE（低使用量位点难预测）、GENATATORs（区间内分割）都需要在讨论里引用；本节的新意在于端到端地把瓶颈定位到转录单位的端点，并量化区间分割对端点误差的容忍度。查新没有专门针对这一点做过，成稿前要补一次。
+  4. 「终点定位不了」是在这套特征（GENERanno 第 17、23 层，24.6 kb 窗口）和这个头下的结论，不是对序列信息的一般断言。2026-11-14 已按查新把第 15 节标题和结论句收紧为「with (current) DNA language-model features」，并引 APARENT（Bogard 2019）、Stroup 2023，说明专用 polyA 模型未测。
+- **与文献的关系**：lncRNA 剪接效率低（Mele 2017）、SPLAIRE（低使用量位点难预测）、GENATATORs（区间内分割）都需要在讨论里引用；本节的新意在于端到端地把瓶颈定位到转录单位的端点，并量化区间分割对端点误差的容忍度。查新已做（`NOVELTY_ends.md`，2026-11-14）：主说法未见先例；CpG 分层写成对 Hannenhalli 2001 的印证并用 Hon 2017（增强子起源）、Mattioli 2019 解释；端点注释不完整（Lagarde 2017、Hon 2017、Kaur 2024）只作背景。禁用说法：「首次发现 lncRNA 端点难注释」「序列不含终点信号」。
 - **没写进来的**：S1 / S1R（剪接使用量）那条机制线；它与本节的关系是「端点已知之后，结构恢复受剪接使用量限制」，放在第 13 节之后还是讨论里，待全文结构定下来再决定。

@@ -1,6 +1,6 @@
 # Draft — benchmark sections (plan B) of the joint coding × lncRNA annotation paper
 
-> Status: first draft, 2026-10-20; 2026-11-13: S50 numbers and the L1 caveat added (see `DRAFT_results_ends.md`). Numbers are from the Phase 0 reports (`05_phase0/results/`); every number
+> Status: first draft, 2026-10-20; 2026-11-13: S50 numbers and the L1 caveat added (see `DRAFT_results_ends.md`); 2026-11-14: GENATATORs (2026) noted in section 2. Numbers are from the Phase 0 reports (`05_phase0/results/`); every number
 > has a pointer to its JSON. Not yet checked by a second reader. Figures are planned, not drawn.
 > Language: English (manuscript); discussion notes for the authors are in Chinese at the end.
 
@@ -48,7 +48,10 @@ Running the released GENATATOR pipeline ourselves on hg38 chr20 against GENCODE 
 (lncRNA locus Sn 0.028 [95% CI 0.019–0.040], intron chain 0.012; mRNA locus Sn 0.967, intron chain 0.708;
 46 lncRNA loci reported only as mRNA) [`0.1_genatator/PANEL_SUMMARY.json`]. Under the stricter one-to-one span
 criterion of section 12 (S50), its lncRNA recall is 0.006 and its mRNA recall 0.794 [`B1/B1.json`]. The bottleneck is interval discovery:
-on chr21, only 33 of 590 lncRNA genes were touched by any predicted transcript [`RESULT_0.1a_0.3`].
+on chr21, only 33 of 590 lncRNA genes were touched by any predicted transcript [`RESULT_0.1a_0.3`]. A later
+release of the same group's models (GENATATORs; Shmelev et al., 2026) fine-tunes DNA language models for
+segmentation into exon, intron and UTR classes and reports that lncRNA segmentation is harder than mRNA; it scores
+segmentation, not the end-to-end discovery and delimitation of loci measured here, and we did not run it.
 
 For a representative coding annotator (Helixer, vertebrate model, hg38 chr20), 97% of lncRNA loci are not
 touched at all, and **56% of its locus-level false positives fall on annotated lncRNA loci** (18 of 32)
