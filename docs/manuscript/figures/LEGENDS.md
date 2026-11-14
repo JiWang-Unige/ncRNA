@@ -53,7 +53,7 @@ across the layers of four frozen DNA language models (hg38 chr21 training, chr20
 **a**, lncRNA exon; **b**, mRNA exon; **c**, lncRNA transcription start. Dashed line, prior.
 
 **Figure 5 | Treating evidence-supported unannotated sequence as unknown (supplementary).** Pre-registered test
-on frozen features with a minimal decoder, three seeds per arm (dots; bars, mean): unannotated sequence treated
+on frozen features with a minimal decoder, three seeds per arm (dots; short lines, mean): unannotated sequence treated
 as background (F), as unknown where pre-2022 RNA-seq junctions support it (U-ev), or everywhere (U-pu). **a**,
 Recovery of lncRNA loci first annotated after GENCODE v41 (n = 473, chr20); **b**, AUPRC for exons of those loci
 (exploratory, post hoc); **c**, strict precision against v50.
