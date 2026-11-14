@@ -8,7 +8,7 @@
 set -u
 cd ~/ncrna-annot
 PY=~/envs/generanno/bin/python; export PYTHONPATH=src
-DONE=data/p1_shards/ont; STG=data/p1_shards/stage; FEAT=data/p1_feat; mkdir -p $DONE $STG $FEAT logs
+DONE=${P1_DONE:-data/p1_shards/ont}; STG=data/p1_shards/stage; FEAT=data/p1_feat; mkdir -p $DONE $STG $FEAT logs
 LOCK=logs/p1_feat_ont.lock
 if [ -e $LOCK ] && kill -0 "$(cat $LOCK)" 2>/dev/null; then echo "another runner (pid $(cat $LOCK)) is active"; exit 1; fi
 echo $$ > $LOCK; trap 'rm -f $LOCK' EXIT

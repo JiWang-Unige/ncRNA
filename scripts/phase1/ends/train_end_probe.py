@@ -40,6 +40,9 @@ def main():
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--accum", type=int, default=2)
     ap.add_argument("--lr", type=float, default=1e-3)
+    ap.add_argument("--chrom", default="chr18", help="chromosome for the forward pass")
+    ap.add_argument("--forward-only", action="store_true",
+                    help="no training: load ep<epochs>.pt of an existing run and run the forward on --chrom (PLAN_REP20)")
     ap.add_argument("--smoke", action="store_true", help="16 windows, 1 epoch, first 2 Mb of chr18")
     a = ap.parse_args()
     import torch
@@ -50,7 +53,7 @@ def main():
     dev = torch.device("cuda")
     out = f"{ROOT}/outputs/PHASE1/ENDS/{a.name}"
     os.makedirs(out, exist_ok=True)
-    log = open(f"{out}/train.log", "a")
+    log = open(f"{out}/train.log" if not a.forward_only else f"{out}/forward_{a.chrom}.log", "a")
 
     def say(**kw):
         kw["t"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -83,14 +86,20 @@ def main():
     sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=epochs * math.ceil(N / a.batch), eta_min=1e-5)
     start = 0
     last = f"{out}/last.pt"
-    if os.path.exists(last):
+    if a.forward_only:
+        st = torch.load(f"{out}/ep{epochs:02d}.pt", map_location=dev, weights_only=False)
+        model.load_state_dict(st["model"])
+        start = epochs
+        say(forward_only=a.chrom, weights=f"ep{epochs:02d}.pt", epoch=st["epoch"])
+    elif os.path.exists(last):
         st = torch.load(last, map_location=dev, weights_only=False)
         model.load_state_dict(st["model"]); opt.load_state_dict(st["opt"]); sched.load_state_dict(st["sched"])
         rng.bit_generator.state = st["rng"]; torch.set_rng_state(st["torch_rng"].cpu())
         start = st["epoch"]
         say(resume_from_epoch=start)
     meta = dict(vars(a), n_windows=N, epochs_run=epochs, host=os.uname().nodename)
-    json.dump(meta, open(f"{out}/run_meta.json", "w"), indent=1)
+    if not a.forward_only:
+        json.dump(meta, open(f"{out}/run_meta.json", "w"), indent=1)
     t0 = time.time()
     for ep in range(start, epochs):
         model.train()
@@ -124,17 +133,18 @@ def main():
         torch.save({"model": model.state_dict(), "opt": opt.state_dict(), "sched": sched.state_dict(),
                     "rng": rng.bit_generator.state, "torch_rng": torch.get_rng_state(), "epoch": ep + 1}, last)
 
-    # chr18 forward with the last epoch
-    if os.path.exists(f"{out}/chr18_end.npy") and os.path.exists(f"{out}/CHR18_DONE"):
-        say(chr18="already done")
+    # forward on --chrom with the last epoch
+    C, CU = a.chrom, a.chrom.upper()
+    if os.path.exists(f"{out}/{C}_end.npy") and os.path.exists(f"{out}/{CU}_DONE"):
+        say(forward=C, status="already done")
         return
     model.eval()
-    cf = mm(f"{ROOT}/data/p1_feat/chr18.npy")
-    cc = mm(f"{ROOT}/data/p1/chr18_codes.npy")
+    cf = mm(f"{ROOT}/data/p1_feat/{C}.npy")
+    cc = mm(f"{ROOT}/data/p1/{C}_codes.npy")
     L = len(cf) * TOK
     if a.smoke:
         L = min(WIN * 8 * 10, L)
-    res = np.lib.format.open_memmap(f"{out}/chr18_end.npy", mode="w+", dtype=np.float16, shape=(L, 8))
+    res = np.lib.format.open_memmap(f"{out}/{C}_end.npy", mode="w+", dtype=np.float16, shape=(L, 8))
     t1 = time.time()
     with torch.no_grad():
         for s in range(0, L, WIN * 8):
@@ -143,8 +153,8 @@ def main():
             c = torch.as_tensor(np.asarray(cc[s:e], np.int64), device=dev)[None]
             res[s:e] = model(f, c)[0].float().cpu().numpy().astype(np.float16)
     res.flush()
-    open(f"{out}/CHR18_DONE", "w").write(f"{L}\n")
-    say(chr18_done=L, s=round(time.time() - t1))
+    open(f"{out}/{CU}_DONE", "w").write(f"{L}\n")
+    say(forward_done=C, L=L, s=round(time.time() - t1))
 
 
 if __name__ == "__main__":

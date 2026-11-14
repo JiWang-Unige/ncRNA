@@ -22,6 +22,7 @@ TOK, WIN = 6, 24576
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--name", required=True)
+    ap.add_argument("--chrom", default="chr18")
     ap.add_argument("--runs", default="v20-g1b-42-ke,v20-g1b-123-ke,v20-g1b-456-ke")
     a = ap.parse_args()
     import torch
@@ -31,8 +32,8 @@ def main():
     dev = torch.device("cuda")
     out = f"{ROOT}/outputs/PHASE1/ENDS/{a.name}"
     os.makedirs(out, exist_ok=True)
-    cf = np.load(f"{ROOT}/data/p1_feat/chr18.npy", mmap_mode="r")
-    cc = np.load(f"{ROOT}/data/p1/chr18_codes.npy", mmap_mode="r")
+    cf = np.load(f"{ROOT}/data/p1_feat/{a.chrom}.npy", mmap_mode="r")
+    cc = np.load(f"{ROOT}/data/p1/{a.chrom}_codes.npy", mmap_mode="r")
     L = len(cf) * TOK
     for run in a.runs.split(","):
         dst = f"{out}/{run}_bnd.npy"

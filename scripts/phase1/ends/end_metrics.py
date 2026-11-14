@@ -30,16 +30,18 @@ import prep_events as PE  # noqa: E402
 import s3_features as S3  # noqa: E402
 from ncrna_annot.data import labels  # noqa: E402
 
-TRUTH = f"{ROOT}/outputs/PHASE1/DIAG_L2/chr18_v50.gtf"
+TRUTH = {"chr18": f"{ROOT}/outputs/PHASE1/DIAG_L2/chr18_v50.gtf",
+         "chr20": f"{ROOT}/data/human/gencode.v50.annotation.gtf.gz"}
+CHROM = "chr18"
 HALF, TOPK, MATCH = 20_000, 20_000, 500
 STAGE0_RUNS = ("v20-g1b-42-ke", "v20-g1b-123-ke", "v20-g1b-456-ke")
 BND = {"TSS+": 0, "TES+": 1, "TSS-": 2, "TES-": 3}
 
 
 def ends_table(seq):
-    tx = labels.read_transcripts(TRUTH, {"chr18"})["chr18"]
-    cage = S3.load_peaks(PL.CAGE, "chr18", 5, 6, 7)
-    pas = S3.load_peaks(PL.PAS, "chr18", 5, 1, 2, skip_header=True, chrom_name="18")
+    tx = labels.read_transcripts(TRUTH[CHROM], {CHROM})[CHROM]
+    cage = S3.load_peaks(PL.CAGE, CHROM, 5, 6, 7)
+    pas = S3.load_peaks(PL.PAS, CHROM, 5, 1, 2, skip_header=True, chrom_name=CHROM.replace("chr", ""))
     rows = []
     for k, s, ex, canon in tx:
         if not canon:
@@ -139,16 +141,21 @@ def score_source(src, track, rows):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--ends", default="outputs/PHASE1/ENDS")
+    ap.add_argument("--chrom", default="chr18", help="chr20: PLAN_REP20 (stage 0 in <ends>/stage0_chr20)")
     a = ap.parse_args()
+    global CHROM
+    CHROM = a.chrom
+    C, CU = CHROM, CHROM.upper()
+    sd0 = "stage0" if C == "chr18" else f"stage0_{C}"
     t0 = time.time()
     E = f"{ROOT}/{a.ends}"
-    seq = S3.read_fasta(f"{ROOT}/data/human/chr18.fa").upper()
+    seq = S3.read_fasta(f"{ROOT}/data/human/{C}.fa").upper()
     rows = ends_table(seq)
-    res = {"plan": "docs/phase1_results/PLAN_END.md", "n_ends": {
+    res = {"plan": "docs/phase1_results/PLAN_END.md", "chrom": C, "n_ends": {
         f"{c}_{e}{'_ev' if ev else ''}": sum(r["k"] == c and (not ev or r[f'{e}_ev']) for r in rows)
         for c in ("l", "m") for e in ("TSS", "TES") for ev in (False, True)}, "sources": {}}
     for run in STAGE0_RUNS:
-        p = f"{E}/stage0/{run}_bnd.npy"
+        p = f"{E}/{sd0}/{run}_bnd.npy"
         if os.path.exists(p + ".done"):
             res["sources"][f"stage0/{run}"] = score_source("stage0", np.load(p, mmap_mode="r"), rows)
             print("scored", run, round(time.time() - t0), flush=True)
@@ -156,8 +163,8 @@ def main():
     for arm in ("ann", "ev"):
         for seed in (42, 123):
             d = f"{E}/end-{arm}-{seed}"
-            if os.path.exists(f"{d}/CHR18_DONE"):
-                res["sources"][f"P-{arm}-{seed}"] = score_source("probe", np.load(f"{d}/chr18_end.npy", mmap_mode="r"), rows)
+            if os.path.exists(f"{d}/{CU}_DONE"):
+                res["sources"][f"P-{arm}-{seed}"] = score_source("probe", np.load(f"{d}/{C}_end.npy", mmap_mode="r"), rows)
                 seeds.setdefault(arm, []).append(seed)
                 print("scored", arm, seed, round(time.time() - t0), flush=True)
 
@@ -180,7 +187,7 @@ def main():
                           "outcome": "A" if A else "B" if B else "C" if C else "grey"}
         print(json.dumps(res["verdict"], indent=1))
     res["seconds"] = round(time.time() - t0, 1)
-    json.dump(res, open(f"{E}/ENDS.json", "w"), indent=1)
+    json.dump(res, open(f"{E}/ENDS.json" if C == "chr18" else f"{E}/ENDS_{C}.json", "w"), indent=1)
 
 
 if __name__ == "__main__":

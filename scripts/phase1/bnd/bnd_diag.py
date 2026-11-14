@@ -199,19 +199,20 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="outputs/PHASE1/BND")
     ap.add_argument("--skip-s1", action="store_true")
+    ap.add_argument("--chrom", default="chr18", help="chr20: PLAN_REP20 replication")
     a = ap.parse_args()
     t0 = time.time()
     os.makedirs(f"{ROOT}/{a.out}", exist_ok=True)
     cfg = json.load(open(f"{ROOT}/configs/p15_v19.json"))
-    d, tg = cfg["decode"], cfg["targets"]["chr18"]
+    d, tg = cfg["decode"], cfg["targets"][a.chrom]
     truth = ruler.read_gtf(f"{ROOT}/{tg['truth']}", tg["truth_chrom"])
     codes = np.load(f"{ROOT}/{tg['codes']}", mmap_mode="r")
-    cage = S3.load_peaks(f"{ROOT}/data/bioval/raw/fantom5_cage_peaks.bed.gz", "chr18", 5, 6, 7)
-    polya = S3.load_peaks(f"{ROOT}/data/bioval/raw/polyasite2_GRCh38.96.tsv.gz", "chr18", 5, 1, 2, skip_header=True,
-                          chrom_name="18")
-    res = {"plan": "docs/phase1_results/PLAN_BND.md", "runs": {}}
+    cage = S3.load_peaks(f"{ROOT}/data/bioval/raw/fantom5_cage_peaks.bed.gz", a.chrom, 5, 6, 7)
+    polya = S3.load_peaks(f"{ROOT}/data/bioval/raw/polyasite2_GRCh38.96.tsv.gz", a.chrom, 5, 1, 2, skip_header=True,
+                          chrom_name=a.chrom.replace("chr", ""))
+    res = {"plan": "docs/phase1_results/PLAN_BND.md", "chrom": a.chrom, "runs": {}}
     for run in cfg["main"]["runs"].values():
-        rd = f"{ROOT}/{cfg['out_dir']}/chr18/{run}"
+        rd = f"{ROOT}/{cfg['out_dir']}/{a.chrom}/{run}"
         genes = P.load_genes(f"{rd}/genes.json")
         post = np.load(f"{rd}/post.npy", mmap_mode="r")
         preds = P.final_preds(genes, d["tau"])
