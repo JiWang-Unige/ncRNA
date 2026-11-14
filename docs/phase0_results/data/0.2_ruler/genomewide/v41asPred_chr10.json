@@ -1,0 +1,283 @@
+{
+ "ruler": "ruler-v1-20261020",
+ "label": "gw_chr10",
+ "chrom": "chr10",
+ "pred": "data/human/gencode.v41.annotation.gtf.gz",
+ "truth": {
+  "new": "data/human/gencode.v50.annotation.gtf.gz",
+  "old": "data/human/gencode.v41.annotation.gtf.gz"
+ },
+ "basic_only": false,
+ "n_pred_tx": {
+  "lnc": 2102,
+  "mrna": 5951
+ },
+ "scores": {
+  "new": {
+   "lnc": {
+    "n_truth_genes": 1634,
+    "n_pred_tx": 2102,
+    "L1_locus": {
+     "sn": 0.4467564259485924,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 0.41188524590163933,
+     "sn_ci95": null,
+     "pr_strict": 0.9727085478887745,
+     "pr_strict_ci95": null,
+     "pr_lenient": 0.9727085478887745,
+     "n_truth_multi_genes": 1464,
+     "n_pred_multi_tx": 1942
+    },
+    "L3_junction": {
+     "precision": 0.9975035663338089,
+     "recall": 0.31019185982033937,
+     "f1": 0.4732256154301666,
+     "n_pred": 2804,
+     "n_truth": 9017
+    },
+    "L4_exon": {
+     "precision": 0.9881297046902142,
+     "recall": 0.34260188717125073,
+     "f1": 0.5087954680977937,
+     "n_pred": 3454,
+     "n_truth": 9962
+    },
+    "L5_single_exon": {
+     "precision": 0.925,
+     "recall": 0.4713375796178344,
+     "f1": 0.6244725738396624,
+     "n_pred": 160,
+     "n_truth": 314
+    },
+    "L6_base": {
+     "precision": 0.999433888127532,
+     "recall": 0.470968326737694,
+     "f1": 0.6402353059832883,
+     "n_pred": 1460842,
+     "n_truth": 3100028
+    }
+   },
+   "mrna": {
+    "n_truth_genes": 732,
+    "n_pred_tx": 5951,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 0.9971988795518207,
+     "sn_ci95": null,
+     "pr_strict": 0.9878254988163679,
+     "pr_strict_ci95": null,
+     "pr_lenient": 0.9878254988163679,
+     "n_truth_multi_genes": 714,
+     "n_pred_multi_tx": 5914
+    },
+    "L3_junction": {
+     "precision": 0.9985510746196571,
+     "recall": 0.6230224499020642,
+     "f1": 0.7673037669326406,
+     "n_pred": 12423,
+     "n_truth": 19911
+    },
+    "L4_exon": {
+     "precision": 0.996348058150151,
+     "recall": 0.7326482131790952,
+     "f1": 0.8443888938487636,
+     "n_pred": 14239,
+     "n_truth": 19364
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 37,
+     "n_truth": 37
+    },
+    "L6_base": {
+     "precision": 0.9999803188302082,
+     "recall": 0.7449402081202914,
+     "f1": 0.85382174754679,
+     "n_pred": 4217229,
+     "n_truth": 5661053
+    }
+   }
+  },
+  "old": {
+   "lnc": {
+    "n_truth_genes": 761,
+    "n_pred_tx": 2102,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 644,
+     "n_pred_multi_tx": 1942
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2804,
+     "n_truth": 2804
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3454,
+     "n_truth": 3454
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 160,
+     "n_truth": 160
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 1460842,
+     "n_truth": 1460842
+    }
+   },
+   "mrna": {
+    "n_truth_genes": 730,
+    "n_pred_tx": 5951,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 710,
+     "n_pred_multi_tx": 5914
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 12423,
+     "n_truth": 12423
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 14239,
+     "n_truth": 14239
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 37,
+     "n_truth": 37
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 4217229,
+     "n_truth": 4217229
+    }
+   }
+  }
+ },
+ "delta": {
+  "n_genes": 826,
+  "lnc": {
+   "n_truth_genes": 826,
+   "n_pred_tx": 2102,
+   "L1_locus": {
+    "sn": 0.0,
+    "sn_ci95": null,
+    "pr_strict": 0.0,
+    "pr_strict_ci95": null,
+    "pr_lenient": 0.0,
+    "n_novel_pred": 2023,
+    "pred_hits_other_class_only": {
+     "mrna": 63,
+     "small": 5,
+     "pseudo": 11
+    }
+   },
+   "L2_intron_chain": {
+    "sn": 0.0,
+    "sn_ci95": null,
+    "pr_strict": 0.0,
+    "pr_strict_ci95": null,
+    "pr_lenient": 0.0,
+    "n_truth_multi_genes": 746,
+    "n_pred_multi_tx": 1942
+   },
+   "L3_junction": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "n_pred": 2804,
+    "n_truth": 2295
+   },
+   "L4_exon": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "n_pred": 3454,
+    "n_truth": 2996
+   },
+   "L5_single_exon": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "n_pred": 160,
+    "n_truth": 106
+   },
+   "L6_base": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "n_pred": 1460842,
+    "n_truth": 809729
+   }
+  }
+ },
+ "fp_old_to_tp_new": {
+  "n_fp_old": 0,
+  "n_rescued": 0,
+  "frac": null
+ }
+}

@@ -1,0 +1,328 @@
+{
+ "backbone": "ntv2",
+ "repo": "InstaDeepAI/nucleotide-transformer-v2-500m-multi-species",
+ "n_layers": 30,
+ "hidden": 1024,
+ "n_eval_positions": 300000,
+ "prevalence": {
+  "lnc_exon": 0.15942999720573425,
+  "lnc_intron": 0.3589499890804291,
+  "mrna_exon": 0.05147000029683113,
+  "mrna_intron": 0.31915000081062317,
+  "lnc_splice": 0.002400000113993883,
+  "lnc_tss": 0.013439999893307686,
+  "lnc_tes": 0.016209999099373817
+ },
+ "auprc": {
+  "0": {
+   "lnc_exon": 0.1703,
+   "lnc_intron": 0.3637,
+   "mrna_exon": 0.0588,
+   "mrna_intron": 0.3236,
+   "lnc_splice": 0.0053,
+   "lnc_tss": 0.0158,
+   "lnc_tes": 0.0174
+  },
+  "1": {
+   "lnc_exon": 0.1748,
+   "lnc_intron": 0.3693,
+   "mrna_exon": 0.0625,
+   "mrna_intron": 0.3267,
+   "lnc_splice": 0.0084,
+   "lnc_tss": 0.0172,
+   "lnc_tes": 0.0198
+  },
+  "2": {
+   "lnc_exon": 0.1969,
+   "lnc_intron": 0.3756,
+   "mrna_exon": 0.1015,
+   "mrna_intron": 0.3514,
+   "lnc_splice": 0.0106,
+   "lnc_tss": 0.0228,
+   "lnc_tes": 0.0222
+  },
+  "3": {
+   "lnc_exon": 0.2069,
+   "lnc_intron": 0.3829,
+   "mrna_exon": 0.1432,
+   "mrna_intron": 0.3369,
+   "lnc_splice": 0.0117,
+   "lnc_tss": 0.0363,
+   "lnc_tes": 0.0262
+  },
+  "4": {
+   "lnc_exon": 0.2229,
+   "lnc_intron": 0.4178,
+   "mrna_exon": 0.175,
+   "mrna_intron": 0.3555,
+   "lnc_splice": 0.0189,
+   "lnc_tss": 0.0468,
+   "lnc_tes": 0.0336
+  },
+  "5": {
+   "lnc_exon": 0.229,
+   "lnc_intron": 0.4277,
+   "mrna_exon": 0.2012,
+   "mrna_intron": 0.3429,
+   "lnc_splice": 0.0455,
+   "lnc_tss": 0.0593,
+   "lnc_tes": 0.0463
+  },
+  "6": {
+   "lnc_exon": 0.2438,
+   "lnc_intron": 0.4301,
+   "mrna_exon": 0.3059,
+   "mrna_intron": 0.3486,
+   "lnc_splice": 0.0564,
+   "lnc_tss": 0.0617,
+   "lnc_tes": 0.0493
+  },
+  "7": {
+   "lnc_exon": 0.2413,
+   "lnc_intron": 0.422,
+   "mrna_exon": 0.3797,
+   "mrna_intron": 0.3718,
+   "lnc_splice": 0.0614,
+   "lnc_tss": 0.0621,
+   "lnc_tes": 0.0489
+  },
+  "8": {
+   "lnc_exon": 0.2436,
+   "lnc_intron": 0.4208,
+   "mrna_exon": 0.3825,
+   "mrna_intron": 0.3745,
+   "lnc_splice": 0.0593,
+   "lnc_tss": 0.0646,
+   "lnc_tes": 0.0451
+  },
+  "9": {
+   "lnc_exon": 0.2382,
+   "lnc_intron": 0.4143,
+   "mrna_exon": 0.3686,
+   "mrna_intron": 0.3904,
+   "lnc_splice": 0.0539,
+   "lnc_tss": 0.064,
+   "lnc_tes": 0.0428
+  },
+  "10": {
+   "lnc_exon": 0.2418,
+   "lnc_intron": 0.4181,
+   "mrna_exon": 0.3697,
+   "mrna_intron": 0.3941,
+   "lnc_splice": 0.0508,
+   "lnc_tss": 0.0621,
+   "lnc_tes": 0.0458
+  },
+  "11": {
+   "lnc_exon": 0.2441,
+   "lnc_intron": 0.4168,
+   "mrna_exon": 0.3342,
+   "mrna_intron": 0.3981,
+   "lnc_splice": 0.046,
+   "lnc_tss": 0.0622,
+   "lnc_tes": 0.0465
+  },
+  "12": {
+   "lnc_exon": 0.2447,
+   "lnc_intron": 0.4119,
+   "mrna_exon": 0.3238,
+   "mrna_intron": 0.3926,
+   "lnc_splice": 0.0485,
+   "lnc_tss": 0.0615,
+   "lnc_tes": 0.0454
+  },
+  "13": {
+   "lnc_exon": 0.2415,
+   "lnc_intron": 0.4056,
+   "mrna_exon": 0.3389,
+   "mrna_intron": 0.3948,
+   "lnc_splice": 0.0461,
+   "lnc_tss": 0.0667,
+   "lnc_tes": 0.0453
+  },
+  "14": {
+   "lnc_exon": 0.2421,
+   "lnc_intron": 0.4108,
+   "mrna_exon": 0.3696,
+   "mrna_intron": 0.4075,
+   "lnc_splice": 0.0428,
+   "lnc_tss": 0.0615,
+   "lnc_tes": 0.0444
+  },
+  "15": {
+   "lnc_exon": 0.2399,
+   "lnc_intron": 0.415,
+   "mrna_exon": 0.3613,
+   "mrna_intron": 0.4222,
+   "lnc_splice": 0.0353,
+   "lnc_tss": 0.0608,
+   "lnc_tes": 0.041
+  },
+  "16": {
+   "lnc_exon": 0.2384,
+   "lnc_intron": 0.4165,
+   "mrna_exon": 0.4041,
+   "mrna_intron": 0.4134,
+   "lnc_splice": 0.0365,
+   "lnc_tss": 0.0639,
+   "lnc_tes": 0.0414
+  },
+  "17": {
+   "lnc_exon": 0.2377,
+   "lnc_intron": 0.413,
+   "mrna_exon": 0.4029,
+   "mrna_intron": 0.422,
+   "lnc_splice": 0.0335,
+   "lnc_tss": 0.0628,
+   "lnc_tes": 0.039
+  },
+  "18": {
+   "lnc_exon": 0.2337,
+   "lnc_intron": 0.4103,
+   "mrna_exon": 0.3927,
+   "mrna_intron": 0.4104,
+   "lnc_splice": 0.0293,
+   "lnc_tss": 0.064,
+   "lnc_tes": 0.0359
+  },
+  "19": {
+   "lnc_exon": 0.2289,
+   "lnc_intron": 0.404,
+   "mrna_exon": 0.3975,
+   "mrna_intron": 0.3973,
+   "lnc_splice": 0.0297,
+   "lnc_tss": 0.0634,
+   "lnc_tes": 0.0333
+  },
+  "20": {
+   "lnc_exon": 0.2246,
+   "lnc_intron": 0.3979,
+   "mrna_exon": 0.4225,
+   "mrna_intron": 0.3905,
+   "lnc_splice": 0.0265,
+   "lnc_tss": 0.0647,
+   "lnc_tes": 0.0306
+  },
+  "21": {
+   "lnc_exon": 0.2233,
+   "lnc_intron": 0.3973,
+   "mrna_exon": 0.4523,
+   "mrna_intron": 0.3878,
+   "lnc_splice": 0.033,
+   "lnc_tss": 0.0613,
+   "lnc_tes": 0.032
+  },
+  "22": {
+   "lnc_exon": 0.2143,
+   "lnc_intron": 0.3963,
+   "mrna_exon": 0.4524,
+   "mrna_intron": 0.3683,
+   "lnc_splice": 0.0252,
+   "lnc_tss": 0.0653,
+   "lnc_tes": 0.0304
+  },
+  "23": {
+   "lnc_exon": 0.2165,
+   "lnc_intron": 0.3977,
+   "mrna_exon": 0.4712,
+   "mrna_intron": 0.3588,
+   "lnc_splice": 0.0245,
+   "lnc_tss": 0.0665,
+   "lnc_tes": 0.0309
+  },
+  "24": {
+   "lnc_exon": 0.2192,
+   "lnc_intron": 0.3935,
+   "mrna_exon": 0.4618,
+   "mrna_intron": 0.3567,
+   "lnc_splice": 0.0204,
+   "lnc_tss": 0.0675,
+   "lnc_tes": 0.0305
+  },
+  "25": {
+   "lnc_exon": 0.2266,
+   "lnc_intron": 0.3954,
+   "mrna_exon": 0.4508,
+   "mrna_intron": 0.3598,
+   "lnc_splice": 0.0226,
+   "lnc_tss": 0.0678,
+   "lnc_tes": 0.0315
+  },
+  "26": {
+   "lnc_exon": 0.2416,
+   "lnc_intron": 0.3962,
+   "mrna_exon": 0.4493,
+   "mrna_intron": 0.3688,
+   "lnc_splice": 0.0243,
+   "lnc_tss": 0.0714,
+   "lnc_tes": 0.0325
+  },
+  "27": {
+   "lnc_exon": 0.2462,
+   "lnc_intron": 0.3925,
+   "mrna_exon": 0.4343,
+   "mrna_intron": 0.3733,
+   "lnc_splice": 0.0329,
+   "lnc_tss": 0.0641,
+   "lnc_tes": 0.0344
+  },
+  "28": {
+   "lnc_exon": 0.2543,
+   "lnc_intron": 0.3991,
+   "mrna_exon": 0.4234,
+   "mrna_intron": 0.3742,
+   "lnc_splice": 0.0313,
+   "lnc_tss": 0.0648,
+   "lnc_tes": 0.036
+  },
+  "29": {
+   "lnc_exon": 0.2505,
+   "lnc_intron": 0.3952,
+   "mrna_exon": 0.2964,
+   "mrna_intron": 0.3907,
+   "lnc_splice": 0.0217,
+   "lnc_tss": 0.0561,
+   "lnc_tes": 0.0341
+  }
+ },
+ "best": {
+  "lnc_exon": {
+   "layer": 28,
+   "auprc": 0.2543,
+   "prevalence": 0.15942999720573425
+  },
+  "lnc_intron": {
+   "layer": 6,
+   "auprc": 0.4301,
+   "prevalence": 0.3589499890804291
+  },
+  "mrna_exon": {
+   "layer": 23,
+   "auprc": 0.4712,
+   "prevalence": 0.05147000029683113
+  },
+  "mrna_intron": {
+   "layer": 15,
+   "auprc": 0.4222,
+   "prevalence": 0.31915000081062317
+  },
+  "lnc_splice": {
+   "layer": 7,
+   "auprc": 0.0614,
+   "prevalence": 0.002400000113993883
+  },
+  "lnc_tss": {
+   "layer": 26,
+   "auprc": 0.0714,
+   "prevalence": 0.013439999893307686
+  },
+  "lnc_tes": {
+   "layer": 6,
+   "auprc": 0.0493,
+   "prevalence": 0.016209999099373817
+  }
+ },
+ "elapsed_s": 110.2,
+ "gpu": "NVIDIA A10",
+ "dtype": "torch.bfloat16"
+}

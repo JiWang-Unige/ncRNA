@@ -1,0 +1,111 @@
+{
+ "note": "EXPLORATORY, post hoc; not used for GATE_0.5",
+ "prevalence": {
+  "A": 0.021493202561106546,
+  "B": 0.02618508636406549
+ },
+ "runs": {
+  "F_s42": {
+   "A_delta_vs_intergenic_ap": 0.12302341763146486,
+   "B_v50_lnc_exon_ap": 0.14282984543472352
+  },
+  "F_s123": {
+   "A_delta_vs_intergenic_ap": 0.11453894778760108,
+   "B_v50_lnc_exon_ap": 0.14669164733378537
+  },
+  "F_s456": {
+   "A_delta_vs_intergenic_ap": 0.12683921663918898,
+   "B_v50_lnc_exon_ap": 0.14869067509298317
+  },
+  "Uev_s42": {
+   "A_delta_vs_intergenic_ap": 0.1396873971872879,
+   "B_v50_lnc_exon_ap": 0.15240450098832145
+  },
+  "Uev_s123": {
+   "A_delta_vs_intergenic_ap": 0.12319508336961249,
+   "B_v50_lnc_exon_ap": 0.14349464962315145
+  },
+  "Uev_s456": {
+   "A_delta_vs_intergenic_ap": 0.13395242039603503,
+   "B_v50_lnc_exon_ap": 0.15265676306980483
+  },
+  "Upu_s42": {
+   "A_delta_vs_intergenic_ap": 0.1393762145461556,
+   "B_v50_lnc_exon_ap": 0.15809738694898487
+  },
+  "Upu_s123": {
+   "A_delta_vs_intergenic_ap": 0.13050797011971038,
+   "B_v50_lnc_exon_ap": 0.14681432047679194
+  },
+  "Upu_s456": {
+   "A_delta_vs_intergenic_ap": 0.13364845513484291,
+   "B_v50_lnc_exon_ap": 0.1480824429314001
+  }
+ },
+ "arms": {
+  "F": {
+   "A_delta_vs_intergenic_ap": [
+    0.1215,
+    0.0051
+   ],
+   "B_v50_lnc_exon_ap": [
+    0.1461,
+    0.0024
+   ]
+  },
+  "Uev": {
+   "A_delta_vs_intergenic_ap": [
+    0.1323,
+    0.0068
+   ],
+   "B_v50_lnc_exon_ap": [
+    0.1495,
+    0.0043
+   ]
+  },
+  "Upu": {
+   "A_delta_vs_intergenic_ap": [
+    0.1345,
+    0.0037
+   ],
+   "B_v50_lnc_exon_ap": [
+    0.151,
+    0.005
+   ]
+  }
+ },
+ "diff_vs_F": {
+  "Uev|A_delta_vs_intergenic_ap": {
+   "mean": 0.0108,
+   "per_seed": [
+    0.0167,
+    0.0087,
+    0.0071
+   ]
+  },
+  "Uev|B_v50_lnc_exon_ap": {
+   "mean": 0.0034,
+   "per_seed": [
+    0.0096,
+    -0.0032,
+    0.004
+   ]
+  },
+  "Upu|A_delta_vs_intergenic_ap": {
+   "mean": 0.013,
+   "per_seed": [
+    0.0164,
+    0.016,
+    0.0068
+   ]
+  },
+  "Upu|B_v50_lnc_exon_ap": {
+   "mean": 0.0049,
+   "per_seed": [
+    0.0153,
+    0.0001,
+    -0.0006
+   ]
+  }
+ }
+}

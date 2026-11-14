@@ -1,0 +1,374 @@
+{
+ "human_chr20": {
+  "n_truth": 196,
+  "n_pred": 570,
+  "L1_sn": 0.7806122448979592,
+  "L1_sn_ci95": [
+   0.7193877551020408,
+   0.8418367346938775
+  ],
+  "L1_pr_strict": 0.26842105263157895,
+  "L1_pr_lenient": 0.884393063583815,
+  "n_novel_pred": 397,
+  "L5_recall": 0.7551020408163265,
+  "L5_precision": 0.2601054481546573,
+  "recall_by_biotype": {
+   "misc_RNA": [
+    52,
+    68
+   ],
+   "miRNA": [
+    26,
+    48
+   ],
+   "snRNA": [
+    45,
+    46
+   ],
+   "snoRNA": [
+    24,
+    28
+   ],
+   "rRNA": [
+    5,
+    5
+   ],
+   "scaRNA": [
+    1,
+    1
+   ]
+  },
+  "pred_by_source": [
+   [
+    "",
+    389
+   ],
+   [
+    "snRNA",
+    83
+   ],
+   [
+    "miRNA",
+    68
+   ],
+   [
+    "rRNA",
+    24
+   ],
+   [
+    "tRNA",
+    4
+   ],
+   [
+    "tRNA-Undet",
+    1
+   ],
+   [
+    "tRNA-Leu",
+    1
+   ]
+  ],
+  "cmscan_cpu_h": 17.62,
+  "bp": 64444167
+ },
+ "chicken_5": {
+  "n_truth": 58,
+  "n_pred": 53,
+  "L1_sn": 0.3793103448275862,
+  "L1_sn_ci95": [
+   0.25862068965517243,
+   0.5
+  ],
+  "L1_pr_strict": 0.41509433962264153,
+  "L1_pr_lenient": 1.0,
+  "n_novel_pred": 31,
+  "L5_recall": 0.3793103448275862,
+  "L5_precision": 0.55,
+  "recall_by_biotype": {
+   "miRNA": [
+    4,
+    40
+   ],
+   "snoRNA": [
+    10,
+    10
+   ],
+   "misc_RNA": [
+    4,
+    4
+   ],
+   "snRNA": [
+    2,
+    2
+   ],
+   "vault_RNA": [
+    1,
+    1
+   ],
+   "scaRNA": [
+    1,
+    1
+   ]
+  },
+  "pred_by_source": [
+   [
+    "snRNA",
+    14
+   ],
+   [
+    "tRNA",
+    13
+   ],
+   [
+    "",
+    6
+   ],
+   [
+    "miRNA",
+    5
+   ],
+   [
+    "tRNA-Ala",
+    3
+   ],
+   [
+    "tRNA-Gly",
+    3
+   ],
+   [
+    "rRNA",
+    2
+   ],
+   [
+    "tRNA-Ile",
+    1
+   ]
+  ],
+  "cmscan_cpu_h": 9.11,
+  "bp": 59506338
+ },
+ "zebrafish_22": {
+  "n_truth": 76,
+  "n_pred": 842,
+  "L1_sn": 0.5526315789473685,
+  "L1_sn_ci95": [
+   0.4473684210526316,
+   0.6578947368421053
+  ],
+  "L1_pr_strict": 0.0498812351543943,
+  "L1_pr_lenient": 0.9545454545454546,
+  "n_novel_pred": 798,
+  "L5_recall": 0.56,
+  "L5_precision": 0.08187134502923976,
+  "recall_by_biotype": {
+   "rRNA": [
+    27,
+    55
+   ],
+   "miRNA": [
+    10,
+    10
+   ],
+   "snoRNA": [
+    3,
+    7
+   ],
+   "snRNA": [
+    2,
+    2
+   ],
+   "processed_transcript": [
+    0,
+    1
+   ],
+   "misc_RNA": [
+    0,
+    1
+   ]
+  },
+  "pred_by_source": [
+   [
+    "tRNA",
+    333
+   ],
+   [
+    "tRNA-iMet",
+    218
+   ],
+   [
+    "rRNA",
+    116
+   ],
+   [
+    "tRNA-Arg",
+    114
+   ],
+   [
+    "miRNA",
+    11
+   ],
+   [
+    "tRNA-Undet",
+    10
+   ],
+   [
+    "tRNA-Val",
+    9
+   ],
+   [
+    "snRNA",
+    5
+   ]
+  ],
+  "cmscan_cpu_h": 7.77,
+  "bp": 39133080
+ },
+ "fly_2L": {
+  "n_truth": 283,
+  "n_pred": 133,
+  "L1_sn": 0.5265017667844523,
+  "L1_sn_ci95": [
+   0.4664310954063604,
+   0.5865724381625441
+  ],
+  "L1_pr_strict": 0.9924812030075187,
+  "L1_pr_lenient": 1.0,
+  "n_novel_pred": 1,
+  "L5_recall": 0.31785714285714284,
+  "L5_precision": 0.956989247311828,
+  "recall_by_biotype": {
+   "ncRNA": [
+    87,
+    185
+   ],
+   "tRNA": [
+    41,
+    41
+   ],
+   "snoRNA": [
+    6,
+    41
+   ],
+   "snRNA": [
+    15,
+    16
+   ]
+  },
+  "pred_by_source": [
+   [
+    "tRNA",
+    40
+   ],
+   [
+    "miRNA",
+    31
+   ],
+   [
+    "snRNA",
+    21
+   ],
+   [
+    "tRNA-Asp",
+    10
+   ],
+   [
+    "tRNA-Gly",
+    8
+   ],
+   [
+    "tRNA-Gln",
+    6
+   ],
+   [
+    "tRNA-Pro",
+    4
+   ],
+   [
+    "tRNA-Arg",
+    3
+   ]
+  ],
+  "cmscan_cpu_h": 3.86,
+  "bp": 23513712
+ },
+ "worm_I": {
+  "n_truth": 988,
+  "n_pred": 194,
+  "L1_sn": 0.11639676113360324,
+  "L1_sn_ci95": [
+   0.09615384615384616,
+   0.13866396761133604
+  ],
+  "L1_pr_strict": 0.9329896907216495,
+  "L1_pr_lenient": 0.9526315789473684,
+  "n_novel_pred": 4,
+  "L5_recall": 0.10888252148997135,
+  "L5_precision": 0.8931297709923665,
+  "recall_by_biotype": {
+   "ncRNA": [
+    4,
+    696
+   ],
+   "piRNA": [
+    0,
+    98
+   ],
+   "snoRNA": [
+    17,
+    74
+   ],
+   "tRNA": [
+    66,
+    66
+   ],
+   "miRNA": [
+    8,
+    33
+   ],
+   "snRNA": [
+    16,
+    16
+   ],
+   "rRNA": [
+    4,
+    5
+   ]
+  },
+  "pred_by_source": [
+   [
+    "tRNA",
+    66
+   ],
+   [
+    "snRNA",
+    31
+   ],
+   [
+    "tRNA-Gly",
+    17
+   ],
+   [
+    "miRNA",
+    13
+   ],
+   [
+    "tRNA-Lys",
+    13
+   ],
+   [
+    "rRNA",
+    5
+   ],
+   [
+    "tRNA-Arg",
+    5
+   ],
+   [
+    "tRNA-Ile",
+    5
+   ]
+  ],
+  "cmscan_cpu_h": 3.65,
+  "bp": 15072434
+ }
+}

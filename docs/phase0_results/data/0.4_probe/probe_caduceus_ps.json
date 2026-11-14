@@ -1,0 +1,211 @@
+{
+ "backbone": "caduceus_ps",
+ "repo": "kuleshov-group/caduceus-ps_seqlen-131k_d_model-256_n_layer-16",
+ "n_layers": 17,
+ "hidden": 512,
+ "n_eval_positions": 300000,
+ "prevalence": {
+  "lnc_exon": 0.15942999720573425,
+  "lnc_intron": 0.3589499890804291,
+  "mrna_exon": 0.05147000029683113,
+  "mrna_intron": 0.31915000081062317,
+  "lnc_splice": 0.002400000113993883,
+  "lnc_tss": 0.013439999893307686,
+  "lnc_tes": 0.016209999099373817
+ },
+ "auprc": {
+  "0": {
+   "lnc_exon": 0.1648,
+   "lnc_intron": 0.3573,
+   "mrna_exon": 0.0557,
+   "mrna_intron": 0.3204,
+   "lnc_splice": 0.0026,
+   "lnc_tss": 0.0155,
+   "lnc_tes": 0.0178
+  },
+  "1": {
+   "lnc_exon": 0.2325,
+   "lnc_intron": 0.3764,
+   "mrna_exon": 0.153,
+   "mrna_intron": 0.3256,
+   "lnc_splice": 0.0078,
+   "lnc_tss": 0.0459,
+   "lnc_tes": 0.0352
+  },
+  "2": {
+   "lnc_exon": 0.2219,
+   "lnc_intron": 0.38,
+   "mrna_exon": 0.1516,
+   "mrna_intron": 0.3264,
+   "lnc_splice": 0.0103,
+   "lnc_tss": 0.0338,
+   "lnc_tes": 0.0298
+  },
+  "3": {
+   "lnc_exon": 0.2239,
+   "lnc_intron": 0.3734,
+   "mrna_exon": 0.159,
+   "mrna_intron": 0.3243,
+   "lnc_splice": 0.008,
+   "lnc_tss": 0.039,
+   "lnc_tes": 0.0339
+  },
+  "4": {
+   "lnc_exon": 0.217,
+   "lnc_intron": 0.3792,
+   "mrna_exon": 0.1581,
+   "mrna_intron": 0.3145,
+   "lnc_splice": 0.0055,
+   "lnc_tss": 0.047,
+   "lnc_tes": 0.0267
+  },
+  "5": {
+   "lnc_exon": 0.2088,
+   "lnc_intron": 0.3891,
+   "mrna_exon": 0.1429,
+   "mrna_intron": 0.3157,
+   "lnc_splice": 0.0045,
+   "lnc_tss": 0.0392,
+   "lnc_tes": 0.0272
+  },
+  "6": {
+   "lnc_exon": 0.2086,
+   "lnc_intron": 0.3896,
+   "mrna_exon": 0.121,
+   "mrna_intron": 0.3258,
+   "lnc_splice": 0.0036,
+   "lnc_tss": 0.0323,
+   "lnc_tes": 0.0248
+  },
+  "7": {
+   "lnc_exon": 0.1951,
+   "lnc_intron": 0.3839,
+   "mrna_exon": 0.1312,
+   "mrna_intron": 0.3364,
+   "lnc_splice": 0.0041,
+   "lnc_tss": 0.0369,
+   "lnc_tes": 0.0239
+  },
+  "8": {
+   "lnc_exon": 0.2078,
+   "lnc_intron": 0.3741,
+   "mrna_exon": 0.1434,
+   "mrna_intron": 0.343,
+   "lnc_splice": 0.0039,
+   "lnc_tss": 0.0456,
+   "lnc_tes": 0.0202
+  },
+  "9": {
+   "lnc_exon": 0.2168,
+   "lnc_intron": 0.3894,
+   "mrna_exon": 0.1821,
+   "mrna_intron": 0.3282,
+   "lnc_splice": 0.0041,
+   "lnc_tss": 0.0398,
+   "lnc_tes": 0.0266
+  },
+  "10": {
+   "lnc_exon": 0.2054,
+   "lnc_intron": 0.3938,
+   "mrna_exon": 0.2755,
+   "mrna_intron": 0.3417,
+   "lnc_splice": 0.0059,
+   "lnc_tss": 0.0438,
+   "lnc_tes": 0.0285
+  },
+  "11": {
+   "lnc_exon": 0.216,
+   "lnc_intron": 0.3736,
+   "mrna_exon": 0.2575,
+   "mrna_intron": 0.3329,
+   "lnc_splice": 0.0059,
+   "lnc_tss": 0.0509,
+   "lnc_tes": 0.0239
+  },
+  "12": {
+   "lnc_exon": 0.2109,
+   "lnc_intron": 0.3958,
+   "mrna_exon": 0.2945,
+   "mrna_intron": 0.3463,
+   "lnc_splice": 0.0076,
+   "lnc_tss": 0.0484,
+   "lnc_tes": 0.025
+  },
+  "13": {
+   "lnc_exon": 0.2304,
+   "lnc_intron": 0.3842,
+   "mrna_exon": 0.1581,
+   "mrna_intron": 0.3502,
+   "lnc_splice": 0.0087,
+   "lnc_tss": 0.0388,
+   "lnc_tes": 0.0345
+  },
+  "14": {
+   "lnc_exon": 0.2203,
+   "lnc_intron": 0.3964,
+   "mrna_exon": 0.2401,
+   "mrna_intron": 0.3685,
+   "lnc_splice": 0.0092,
+   "lnc_tss": 0.0396,
+   "lnc_tes": 0.029
+  },
+  "15": {
+   "lnc_exon": 0.2156,
+   "lnc_intron": 0.3872,
+   "mrna_exon": 0.2523,
+   "mrna_intron": 0.3532,
+   "lnc_splice": 0.0048,
+   "lnc_tss": 0.0419,
+   "lnc_tes": 0.0287
+  },
+  "16": {
+   "lnc_exon": 0.1926,
+   "lnc_intron": 0.3813,
+   "mrna_exon": 0.1021,
+   "mrna_intron": 0.3358,
+   "lnc_splice": 0.003,
+   "lnc_tss": 0.0294,
+   "lnc_tes": 0.0226
+  }
+ },
+ "best": {
+  "lnc_exon": {
+   "layer": 1,
+   "auprc": 0.2325,
+   "prevalence": 0.15942999720573425
+  },
+  "lnc_intron": {
+   "layer": 14,
+   "auprc": 0.3964,
+   "prevalence": 0.3589499890804291
+  },
+  "mrna_exon": {
+   "layer": 12,
+   "auprc": 0.2945,
+   "prevalence": 0.05147000029683113
+  },
+  "mrna_intron": {
+   "layer": 14,
+   "auprc": 0.3685,
+   "prevalence": 0.31915000081062317
+  },
+  "lnc_splice": {
+   "layer": 2,
+   "auprc": 0.0103,
+   "prevalence": 0.002400000113993883
+  },
+  "lnc_tss": {
+   "layer": 11,
+   "auprc": 0.0509,
+   "prevalence": 0.013439999893307686
+  },
+  "lnc_tes": {
+   "layer": 1,
+   "auprc": 0.0352,
+   "prevalence": 0.016209999099373817
+  }
+ },
+ "elapsed_s": 88.4,
+ "gpu": "NVIDIA A10",
+ "dtype": "torch.bfloat16"
+}

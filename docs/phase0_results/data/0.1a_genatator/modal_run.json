@@ -1,0 +1,23 @@
+{
+ "rc": 0,
+ "elapsed_s": 4546.1,
+ "cmd": [
+  "python",
+  "-u",
+  "/root/genatator_cli.py",
+  "--fasta",
+  "/vol/data/human/chr21.fa",
+  "--output-gff",
+  "/tmp/genatator/pred.gff3",
+  "--config",
+  "/vol/outputs/PHASE0/0.1a_genatator/chr21_try2/config.json",
+  "--devices",
+  "0",
+  "--checkpoint-dir",
+  "/tmp/genatator/ckpt",
+  "--cpu-ram-limit-gib-per-node",
+  "24",
+  "--local-files-only"
+ ],
+ "gpu": "A10G"
+}

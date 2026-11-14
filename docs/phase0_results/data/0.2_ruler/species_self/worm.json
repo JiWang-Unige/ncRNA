@@ -1,0 +1,177 @@
+{
+ "ruler": "ruler-v1.2-20261020",
+ "label": "self_worm",
+ "chrom": "I",
+ "pred": "data/worm/Caenorhabditis_elegans.WBcel235.63.gtf.gz",
+ "truth": {
+  "new": "data/worm/Caenorhabditis_elegans.WBcel235.63.gtf.gz",
+  "old": null
+ },
+ "basic_only": false,
+ "n_pred_tx": {
+  "lnc": 153,
+  "mrna": 4786,
+  "small": 1048
+ },
+ "truth_genes_by_class": {
+  "lnc": 150,
+  "mrna": 2878,
+  "small": 988,
+  "pseudo": 188,
+  "other": 0
+ },
+ "scores": {
+  "new": {
+   "lnc": {
+    "n_truth_genes": 150,
+    "n_pred_tx": 153,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 26,
+     "n_pred_multi_tx": 28
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 35,
+     "n_truth": 35
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 61,
+     "n_truth": 61
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 125,
+     "n_truth": 125
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 64057,
+     "n_truth": 64057
+    }
+   },
+   "mrna": {
+    "n_truth_genes": 2878,
+    "n_pred_tx": 4786,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 2799,
+     "n_pred_multi_tx": 4667
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 17045,
+     "n_truth": 17045
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 20672,
+     "n_truth": 20672
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 119,
+     "n_truth": 119
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 4729647,
+     "n_truth": 4729647
+    }
+   },
+   "small": {
+    "n_truth_genes": 988,
+    "n_pred_tx": 1048,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 1,
+     "n_pred_multi_tx": 1
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 1,
+     "n_truth": 1
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 2,
+     "n_truth": 2
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 1047,
+     "n_truth": 1047
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 105320,
+     "n_truth": 105320
+    }
+   }
+  }
+ }
+}

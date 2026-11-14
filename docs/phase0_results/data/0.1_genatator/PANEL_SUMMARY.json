@@ -1,0 +1,154 @@
+{
+ "human_chr20": {
+  "status": "rc=0",
+  "elapsed_h": 2.57,
+  "n_pred": {
+   "lnc": 83,
+   "mrna": 1103
+  },
+  "truth_genes": {
+   "lnc": 955,
+   "mrna": 548,
+   "small": 196,
+   "pseudo": 263,
+   "other": 10
+  },
+  "lnc_L1_sn": 0.028272251308900525,
+  "lnc_L1_sn_ci95": [
+   0.018848167539267015,
+   0.039790575916230364
+  ],
+  "lnc_L1_pr": 0.42168674698795183,
+  "lnc_L2_sn": 0.012091898428053204,
+  "mrna_L1_sn": 0.9671532846715328,
+  "mrna_L1_pr": 0.9510426110607434,
+  "mrna_L2_sn": 0.7075471698113207,
+  "mrna_L2_pr": 0.423728813559322,
+  "lnc_genes_touched_by_any_pred": 71,
+  "mrna_pred_hits_lnc_only": 46,
+  "ratio_lnc_over_mrna_L1": 0.0292,
+  "ratio_lnc_over_mrna_L2": 0.0171,
+  "delta_lnc_L1_sn": 0.014799154334038054,
+  "old_truth_lnc_L1_sn": 0.04219409282700422
+ },
+ "chicken_5": {
+  "status": "rc=0",
+  "elapsed_h": 1.7,
+  "n_pred": {
+   "lnc": 1,
+   "mrna": 1375
+  },
+  "truth_genes": {
+   "lnc": 694,
+   "mrna": 991,
+   "small": 58,
+   "pseudo": 2,
+   "other": 0
+  },
+  "lnc_L1_sn": 0.0,
+  "lnc_L1_sn_ci95": [
+   0.0,
+   0.0
+  ],
+  "lnc_L1_pr": 0.0,
+  "lnc_L2_sn": 0.0,
+  "mrna_L1_sn": 0.8365287588294652,
+  "mrna_L1_pr": 0.96,
+  "mrna_L2_sn": 0.24312896405919662,
+  "mrna_L2_pr": 0.18462757527733756,
+  "lnc_genes_touched_by_any_pred": 26,
+  "mrna_pred_hits_lnc_only": 7,
+  "ratio_lnc_over_mrna_L1": 0.0,
+  "ratio_lnc_over_mrna_L2": 0.0
+ },
+ "zebrafish_22": {
+  "status": "rc=0",
+  "elapsed_h": 0.51,
+  "n_pred": {
+   "lnc": 13,
+   "mrna": 749
+  },
+  "truth_genes": {
+   "lnc": 135,
+   "mrna": 1007,
+   "small": 76,
+   "pseudo": 9,
+   "other": 0
+  },
+  "lnc_L1_sn": 0.022222222222222223,
+  "lnc_L1_sn_ci95": [
+   0.0,
+   0.05185185185185185
+  ],
+  "lnc_L1_pr": 0.15384615384615385,
+  "lnc_L2_sn": 0.007462686567164179,
+  "mrna_L1_sn": 0.4885799404170804,
+  "mrna_L1_pr": 0.9212283044058746,
+  "mrna_L2_sn": 0.15698267074413863,
+  "mrna_L2_pr": 0.22454672245467225,
+  "lnc_genes_touched_by_any_pred": 19,
+  "mrna_pred_hits_lnc_only": 10,
+  "ratio_lnc_over_mrna_L1": 0.0455,
+  "ratio_lnc_over_mrna_L2": 0.0475
+ },
+ "fly_2L": {
+  "status": "rc=0",
+  "elapsed_h": 0.24,
+  "n_pred": {
+   "lnc": 0,
+   "mrna": 643
+  },
+  "truth_genes": {
+   "lnc": 619,
+   "mrna": 2657,
+   "small": 283,
+   "pseudo": 52,
+   "other": 953
+  },
+  "lnc_L1_sn": 0.0,
+  "lnc_L1_sn_ci95": [
+   0.0,
+   0.0
+  ],
+  "lnc_L1_pr": null,
+  "lnc_L2_sn": 0.0,
+  "mrna_L1_sn": 0.21377493413624388,
+  "mrna_L1_pr": 1.0,
+  "mrna_L2_sn": 0.05620608899297424,
+  "mrna_L2_pr": 0.23314065510597304,
+  "lnc_genes_touched_by_any_pred": 3,
+  "mrna_pred_hits_lnc_only": 0,
+  "ratio_lnc_over_mrna_L1": 0.0,
+  "ratio_lnc_over_mrna_L2": 0.0
+ },
+ "worm_I": {
+  "status": "rc=0",
+  "elapsed_h": 0.11,
+  "n_pred": {
+   "lnc": 0,
+   "mrna": 15
+  },
+  "truth_genes": {
+   "lnc": 150,
+   "mrna": 2878,
+   "small": 988,
+   "pseudo": 188,
+   "other": 0
+  },
+  "lnc_L1_sn": 0.0,
+  "lnc_L1_sn_ci95": [
+   0.0,
+   0.0
+  ],
+  "lnc_L1_pr": null,
+  "lnc_L2_sn": 0.0,
+  "mrna_L1_sn": 0.00590687977762335,
+  "mrna_L1_pr": 1.0,
+  "mrna_L2_sn": 0.0017863522686673813,
+  "mrna_L2_pr": 0.4166666666666667,
+  "lnc_genes_touched_by_any_pred": 0,
+  "mrna_pred_hits_lnc_only": 0,
+  "ratio_lnc_over_mrna_L1": 0.0,
+  "ratio_lnc_over_mrna_L2": 0.0
+ }
+}

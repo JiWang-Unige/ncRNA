@@ -1,0 +1,177 @@
+{
+ "ruler": "ruler-v1.2-20261020",
+ "label": "self_fly",
+ "chrom": "2L",
+ "pred": "data/fly/Drosophila_melanogaster.BDGP6.54.63.gtf.gz",
+ "truth": {
+  "new": "data/fly/Drosophila_melanogaster.BDGP6.54.63.gtf.gz",
+  "old": null
+ },
+ "basic_only": false,
+ "n_pred_tx": {
+  "lnc": 724,
+  "mrna": 5711,
+  "small": 283
+ },
+ "truth_genes_by_class": {
+  "lnc": 619,
+  "mrna": 2657,
+  "small": 283,
+  "pseudo": 52,
+  "other": 953
+ },
+ "scores": {
+  "new": {
+   "lnc": {
+    "n_truth_genes": 619,
+    "n_pred_tx": 724,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 227,
+     "n_pred_multi_tx": 299
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 332,
+     "n_truth": 332
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 566,
+     "n_truth": 566
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 425,
+     "n_truth": 425
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 538079,
+     "n_truth": 538079
+    }
+   },
+   "mrna": {
+    "n_truth_genes": 2657,
+    "n_pred_tx": 5711,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 2135,
+     "n_pred_multi_tx": 5034
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 10208,
+     "n_truth": 10208
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 12388,
+     "n_truth": 12388
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 666,
+     "n_truth": 666
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 6157653,
+     "n_truth": 6157653
+    }
+   },
+   "small": {
+    "n_truth_genes": 283,
+    "n_pred_tx": 283,
+    "L1_locus": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_novel_pred": 0,
+     "pred_hits_other_class_only": {}
+    },
+    "L2_intron_chain": {
+     "sn": 1.0,
+     "sn_ci95": null,
+     "pr_strict": 1.0,
+     "pr_strict_ci95": null,
+     "pr_lenient": 1.0,
+     "n_truth_multi_genes": 3,
+     "n_pred_multi_tx": 3
+    },
+    "L3_junction": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 3,
+     "n_truth": 3
+    },
+    "L4_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 6,
+     "n_truth": 6
+    },
+    "L5_single_exon": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 280,
+     "n_truth": 280
+    },
+    "L6_base": {
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "n_pred": 16698,
+     "n_truth": 16698
+    }
+   }
+  }
+ }
+}
