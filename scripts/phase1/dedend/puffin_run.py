@@ -20,7 +20,7 @@ import numpy as np
 
 ROOT = os.path.expanduser(os.environ.get("NCRNA_ROOT", "~/ncrna-annot"))
 PUFFIN = os.path.expanduser(os.environ.get("PUFFIN_DIR", "~/tools/dedend/puffin"))
-PAD, CHUNK = 325, 2_000_000
+PAD, CHUNK = 325, 200_000   # FFT conv pads the 601-wide kernel to the chunk length: keep chunks small (2 Mb OOM at 7 GB)
 
 
 def gate_busy():
