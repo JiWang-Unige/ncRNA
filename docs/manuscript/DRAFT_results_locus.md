@@ -49,8 +49,8 @@ Our models report fewer lncRNA genes as protein-coding than any coding annotator
 predicted mRNA that hits no reference mRNA, against 15 for Tiberius, 14 for Helixer and 34 for GENATATOR. On the
 coding side, however, our gene structures are far weaker than those of dedicated tools: mRNA L1 recall 0.861
 (Tiberius 0.964), mRNA intron-chain recall 0.054 (Tiberius 0.557) [`RESULT_BASELINES.md`]. We therefore do not
-claim competitive coding-gene annotation; in the unified output (section 11, Methods) coding structures are best
-taken from a dedicated annotator.
+claim competitive coding-gene annotation; in the unified output (Methods) coding structures are taken from
+Tiberius.
 
 Recall differs between the three models trained with different seeds (chr20 L1 0.214–0.402; S50 0.041–0.102),
 mostly because they report different numbers of lncRNA genes (500–891); strict precision is stable (0.41–0.43).
@@ -159,6 +159,20 @@ prediction is supported if the predicted region contains a same-strand spliced j
 within 500 bp of its start and a polyA cluster within 500 bp of its end. Controls: 100 placements per prediction at
 the same length and strand on the same chromosome, outside v50 genes as the prediction.
 
+**Unified annotation.** For each chromosome we write one GFF3 with three layers [`RESULT_UGFF.md`]. Coding genes are
+Tiberius predictions (mammalia_nosofttmasking_v2; CDS only). lncRNA genes are those of the shipped model (seed 42;
+chr20 v1.9, chr18 and chr9 v2.0) that pass the reporting threshold and do not overlap a Tiberius CDS on the same
+strand; this guardrail, fixed in advance, raised strict precision by 0–0.04 and lowered recall by 0.01–0.05 (three
+chromosomes, three seeds), and the values in the text are for the predictions without it. A lncRNA transcript model
+is written only when every predicted intron has a mean intron posterior above a threshold chosen on chr18 as the
+lowest value giving an exact-intron precision of at least 0.5. No threshold reached it (at 0.95 the precision was
+0.04; with all decoded introns written it was 0.003–0.015 on chr18 and below 0.01 on chr20 and chr9), so every
+lncRNA gene is reported at locus level, with its decoded exons as an attribute and not as a transcript model. Each
+lncRNA gene carries the CpG observed/expected ratio of ±500 bp around its predicted start and a class (CpG-rich:
+above the upper quartile of annotated lncRNA starts on chr18, 0.46): on chr18, 73% of CpG-rich predicted starts of
+predictions overlapping an annotated lncRNA gene lay within 1 kb of an annotated start of that gene, against 29% of
+the others. Small structured RNAs (Rfam, tRNAscan-SE; Phase 0 integration rules) are included for chr20.
+
 ## Figure plan (Figure 6)
 
 * a) lncRNA recall and strict precision on chr20, T2T chr20 and chr9, exon overlap and S50 side by side, for our
@@ -179,7 +193,7 @@ the same length and strand on the same chromosome, outside v50 genes as the pred
 - **T2T 上 GENATATOR 的严格 Pr**：按转录本算是 0.259（P1.5 发表值），按基因合并后是 0.277；正文用前者，方法里已注明。
 - **会被问到的**：
   1. seed 方差大（Sn 0.21–0.40）。正文已如实报告，未加 seed（按「投稿前不在稳健性上循环」的原则）。
-  2. 编码侧结构远弱于 Tiberius。已写明不主张编码注释有竞争力；统一 GFF3 里编码结构建议用专门工具——这一点还需要真正实现（`CONVERGENCE_20261112.md` 第 5 项）。
+  2. 编码侧结构远弱于 Tiberius。已写明不主张编码注释有竞争力；统一 GFF3 已实现（2026-11-14，`RESULT_UGFF.md`），编码层直接用 Tiberius，lncRNA 只输出位点级（内含子精确率达不到门槛），方法里新增「Unified annotation」一段。
   3. AlphaGenome 的比较是样本内、且是我们自己的朴素分段，正文已限定。
   4. 第 10 节的证据是「有转录」，不是「结构对」，正文已写明。
   5. v3.0（加小鼠）是负结果，放在正文还是补充材料，待全文篇幅定了再决定。

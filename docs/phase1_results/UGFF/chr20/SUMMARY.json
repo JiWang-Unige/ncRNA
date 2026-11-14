@@ -1,0 +1,111 @@
+{
+ "chrom": "chr20",
+ "model": "v1.9",
+ "shipped_run": "g1b-42-ke",
+ "tau": 0.6,
+ "t_int": null,
+ "cpg_cut": 0.45940420560747663,
+ "n_coding_tx": 565,
+ "n_lnc_genes": 422,
+ "n_lnc_resolved_tx": 0,
+ "n_small": 570,
+ "validation": {
+  "n_rows": 13098,
+  "n_ids": 13098,
+  "problems": 0,
+  "first": []
+ },
+ "roundtrip": {
+  "n_lnc_RNA_read": 0,
+  "n_mRNA_read": 565
+ },
+ "coding_tiberius": {
+  "sn": 0.9635036496350365,
+  "pr_strict": 0.9168141592920354,
+  "n_pred": 565,
+  "L2": {
+   "sn": 0.5566037735849056,
+   "sn_ci95": null,
+   "pr_strict": 0.5849802371541502,
+   "pr_strict_ci95": null,
+   "pr_lenient": 0.5873015873015873,
+   "n_truth_multi_genes": 530,
+   "n_pred_multi_tx": 506
+  }
+ },
+ "guard": {
+  "g1b-42-ke": {
+   "lnc": 21,
+   "other": 4,
+   "mrna_only": 54,
+   "none": 1,
+   "total": 80
+  },
+  "g1b-123-ke": {
+   "mrna_only": 98,
+   "other": 5,
+   "lnc": 25,
+   "none": 2,
+   "total": 130
+  },
+  "g1b-456-ke": {
+   "mrna_only": 61,
+   "lnc": 16,
+   "none": 1,
+   "other": 1,
+   "total": 79
+  }
+ },
+ "lnc_L1_before_guard": {
+  "g1b-42-ke": {
+   "sn": 0.30261780104712044,
+   "pr_strict": 0.4103585657370518,
+   "n_pred": 502
+  },
+  "g1b-123-ke": {
+   "sn": 0.40209424083769635,
+   "pr_strict": 0.42424242424242425,
+   "n_pred": 891
+  },
+  "g1b-456-ke": {
+   "sn": 0.2136125654450262,
+   "pr_strict": 0.432,
+   "n_pred": 500
+  }
+ },
+ "lnc_L1_after_guard": {
+  "g1b-42-ke": {
+   "sn": 0.2732984293193717,
+   "pr_strict": 0.43838862559241704,
+   "n_pred": 422
+  },
+  "g1b-123-ke": {
+   "sn": 0.37591623036649213,
+   "pr_strict": 0.46386333771353483,
+   "n_pred": 761
+  },
+  "g1b-456-ke": {
+   "sn": 0.2031413612565445,
+   "pr_strict": 0.4750593824228028,
+   "n_pred": 421
+  }
+ },
+ "structure": {
+  "forced": {
+   "n_tx_multi": 389,
+   "n_introns": 1655,
+   "intron_pr_lnc": 0.009667673716012085,
+   "intron_pr_any": 0.01027190332326284,
+   "exact_lnc_chains": 0
+  },
+  "selective": {
+   "n_tx_multi": 0
+  }
+ },
+ "start_class_counts": {
+  "other": 267,
+  "CpG_rich": 155
+ },
+ "seconds": 13,
+ "sha256": "9d8815def8ae4ad711e1a73eb96bdd097d1c0b1bfd5916b6f5c6cf5c1ad0d5ec"
+}

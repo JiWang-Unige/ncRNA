@@ -112,6 +112,9 @@ structure than our joint model, and some of their false positives are lncRNA loc
 (section 2). A practical annotation therefore combines a dedicated coding annotator with a non-coding layer like
 ours, and the joint grammar remains useful in that combination: removing the coding pathway lowered lncRNA
 performance in all seeds (section 8), and our model reports fewer lncRNA loci as coding than any coding annotator.
+The annotation we release follows the results rather than the format: coding genes from Tiberius, lncRNA genes as
+loci with calibrated confidence and a start class, and no lncRNA transcript models, because fewer than 2% of the
+decoded lncRNA introns matched an annotated intron exactly (Methods).
 
 **Limitations.** (i) We used a single, frozen backbone (GENERanno-1.2b); a backbone fine-tuned end to end or with
 a longer receptive field might carry more end information, although the end-localisation probe on frozen features
@@ -159,4 +162,4 @@ the end evidence that a decoder can take directly — is the step on which ab in
 - **讨论里提出的「下一步实验」**：把 Puffin/ProCapNet 类起始模型、APARENT 类 polyA 模型放进 ±20 kb 搜索窗口，看能否选出真实端点。这是对主说法最直接的补强，也可能被审稿人要求；算力不大（推理为主），是否投稿前做，等你决定。
 - **专用端点模型（DEDEND，2026-11-14）**：T0 有效（Puffin mRNA 0.71），T1 = B（低 CpG lnc 起点 0.086），T2 灰区（有 CAGE 的 lnc 起点 0.40），P1 = B（PolyaID lnc 终点 0.07 / 0.12）。讨论第二条方向已据此改写。「which is a property of the cell rather than of the local sequence alone」是解释，不是我们测出来的，审稿人可能挑；如不想冒险可删。
 - **局限 (ii)**：2026-11-14 已在 chr20 上复现第 14–15 节（`RESULT_REP20.md`）：R1–R3 成立，R4 只对 lnc 成立（两个探针的 mRNA 终点 0.17–0.18）。正文已按事前规则把「终点对两类都定位不了」改成「lnc 终点定位不了，mRNA 终点信号弱」。第 13 节（S11）未复现。
-- **没写进来**：摘要；统一 GFF3（编码结构用 Tiberius）在讨论里只提了「实际注释应组合」，还没实现。
+- **没写进来**：摘要（已另写 `DRAFT_abstract.md`）。统一 GFF3 已实现（`RESULT_UGFF.md`），讨论「Relation to other approaches」末尾加了一句发布形式。
