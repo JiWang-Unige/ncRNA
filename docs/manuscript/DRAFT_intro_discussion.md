@@ -55,7 +55,8 @@ however, only about 7% of lncRNA genes are delimited, against 55% of coding gene
 Exon structure becomes partly recoverable once the ends of the transcription unit are known to within a kilobase;
 the model's posteriors carry no lncRNA end signal, for reasons that lie neither in tiling, decoding nor unreliable
 reference ends; and with these features the start of an lncRNA gene can be placed only where its promoter is a
-CpG island, while transcript ends cannot be placed for either class. The ends of transcription units, not exon
+CpG island, while lncRNA transcript ends cannot be placed at all — observations that we replicated on a held-out
+chromosome. The ends of transcription units, not exon
 structure, are the rate-limiting step of ab initio lncRNA annotation.
 
 ## Discussion
@@ -77,8 +78,9 @@ and near chance elsewhere. This echoes the long-standing observation that CpG is
 promoter prediction and that promoters without them are hard to find from local sequence (Hannenhalli and Levy,
 2001), and it matters more for lncRNA than for coding genes because most intergenic lncRNAs initiate at
 enhancer-like elements (Hon et al., 2017) whose core promoters have simpler motif content (Mattioli et al., 2019).
-Transcript ends were not locatable for either class with our features; the coding ends our full model places
-correctly are set by the gene grammar — exon structure and reading frame — which lncRNA genes lack. lncRNA
+lncRNA transcript ends were not locatable with our features, and the end signal for coding genes was weak; the
+coding ends our full model places correctly are set mostly by the gene grammar — exon structure and reading
+frame — which lncRNA genes lack. lncRNA
 transcripts are also less efficiently spliced and, for a subset, terminated in ways less tied to canonical
 polyadenylation than mRNAs (Mele et al., 2017; Schlackow et al., 2017) [verify], which would leave even less for a
 sequence model to anchor an end on. Detection itself follows the same features: promoter CpG content and the
@@ -110,8 +112,9 @@ performance in all seeds (section 8), and our model reports fewer lncRNA loci as
 
 **Limitations.** (i) We used a single, frozen backbone (GENERanno-1.2b); a backbone fine-tuned end to end or with
 a longer receptive field might carry more end information, although the end-localisation probe on frozen features
-did not suggest that labels or class sharing were the main limit. (ii) The end-localisation analyses (sections
-13–15) were run on the development chromosome; the detection results were read once on held-out chromosomes.
+did not suggest that labels or class sharing were the main limit. (ii) The end-localisation analyses were developed on chr18; the posterior and probe read-outs (sections 14–15)
+were then repeated once on held-out chr20 under pre-registered criteria, but the structure-tolerance experiment
+(section 13) was not, and the reference-end control on chr20 came close to its threshold (two-fold).
 (iii) Models trained with different seeds differ substantially in recall (chr20 L1 0.21–0.40), mostly through
 the number of genes reported; strict precision is stable. (iv) Every lncRNA reference used here is incomplete,
 and FANTOM5 CAGE, used to identify supported ends, favours broadly and highly expressed transcripts; the
@@ -151,5 +154,5 @@ the end evidence that a decoder can take directly — is the step on which ab in
 - **引言里刻意没写的**：没有说「首次」，没有说「序列不含端点信号」（查新禁用说法）；端点注释不完整只作背景。
 - **[verify] 条目**：Tiberius/Helixer/ANNEVO 的具体数字、AlphaGenome 的引用、Mele 2017 与 Schlackow 2017 的具体结论（剪接效率低、终止方式不同）都要读原文确认后再保留。Schlackow 2017 那句若核对不上就删掉，不影响论证。
 - **讨论里提出的「下一步实验」**：把 Puffin/ProCapNet 类起始模型、APARENT 类 polyA 模型放进 ±20 kb 搜索窗口，看能否选出真实端点。这是对主说法最直接的补强，也可能被审稿人要求；算力不大（推理为主），是否投稿前做，等你决定。
-- **局限 (ii)**：端点分析只在 chr18 上。审稿人最可能抓这一点；在 chr20 上重复 BND/END 读数不涉及调参，成本约 1–2 GPU 小时。
+- **局限 (ii)**：2026-11-14 已在 chr20 上复现第 14–15 节（`RESULT_REP20.md`）：R1–R3 成立，R4 只对 lnc 成立（两个探针的 mRNA 终点 0.17–0.18）。正文已按事前规则把「终点对两类都定位不了」改成「lnc 终点定位不了，mRNA 终点信号弱」。第 13 节（S11）未复现。
 - **没写进来**：摘要；统一 GFF3（编码结构用 Tiberius）在讨论里只提了「实际注释应组合」，还没实现。

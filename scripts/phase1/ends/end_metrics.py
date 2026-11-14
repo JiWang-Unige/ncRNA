@@ -187,7 +187,7 @@ def main():
                           "outcome": "A" if A else "B" if B else "C" if C else "grey"}
         print(json.dumps(res["verdict"], indent=1))
     res["seconds"] = round(time.time() - t0, 1)
-    json.dump(res, open(f"{E}/ENDS.json" if C == "chr18" else f"{E}/ENDS_{C}.json", "w"), indent=1)
+    json.dump(res, open(f"{E}/ENDS.json" if CHROM == "chr18" else f"{E}/ENDS_{CHROM}.json", "w"), indent=1)  # C is reused for rule C above
 
 
 if __name__ == "__main__":

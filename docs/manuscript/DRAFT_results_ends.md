@@ -57,24 +57,29 @@ here measure how precise the ends must be and how far ab initio predictions are 
 ### 14. The posteriors carry no lncRNA end signal, and the cause is not in decoding
 
 We next asked where in our pipeline the end information is lost (chr18, three v1.9 models)
-[`RESULT_BND.md`]. Three explanations that would not require retraining were ruled out:
+[`RESULT_BND.md`], and repeated every read-out on held-out chr20 under pre-registered replication criteria
+[`PLAN_REP20.md`, `RESULT_REP20.md`]. Three explanations that would not require retraining were ruled out on both
+chromosomes:
 
 * *Tiling.* Posteriors are computed on 24.6-kb tiles; predicted lncRNA ends fall within 100 bp of a tile seam
-  2.1% of the time against 1.0% expected by chance.
+  2.1% of the time against 1.0% expected by chance (chr20: 2.3%).
 * *Decoding.* Decoding the same posteriors by per-base argmax instead of maximum expected accuracy does not help
-  (S50 recall 4.3% against 5.4%).
+  (S50 recall 4.3% against 5.4%; chr20: 5.6% against 6.4%).
 * *Unreliable reference ends.* Annotated lncRNA ends are known to be often incomplete and are revised as
   full-length and 5′-end data accumulate (Hon et al., 2017; Lagarde et al., 2017; Kaur et al., 2024). Only 16.8% of chr18 lncRNA genes have a FANTOM5 CAGE peak within 200 bp of their
   outermost start and 32.7% a PolyASite cluster within 100 bp of their end, but genes with both kinds of support
-  are delimited no better (S50 6.4%) than genes with neither (5.1%).
+  are delimited only slightly better than genes with neither (S50 6.4% against 5.1%; on chr20, 10.9% of 92 genes
+  against 5.7% of 466, below the pre-registered two-fold threshold). Even fully supported reference ends leave
+  about nine in ten lncRNA genes undelimited.
 
 What remains is the posterior itself. Taking the summed gene-state posterior of the gene's class and strand, the
 annotated start of an mRNA is a step of ~0.4 and the onset of the posterior lies within 1 kb of it for 70% of
-detected genes; for lncRNA the step is ~0.05 and the onset lies within 1 kb for 23%. The model knows that a region
+detected genes; for lncRNA the step is ~0.05 and the onset lies within 1 kb for 23% (chr20: 25% against 69% for
+mRNA). The model knows that a region
 belongs to an lncRNA gene but not where the gene begins. Predicted lncRNA starts are nonetheless promoter-like:
 8–11% lie within 200 bp of a same-strand CAGE peak, against 0.3–0.6% after shifting them by 50 kb.
 
-### 15. With DNA language-model features, only CpG-island lncRNA promoters can be located, and no transcript ends
+### 15. With DNA language-model features, only CpG-island lncRNA promoters can be located, and lncRNA ends cannot
 
 The boundary component of our model is a single set of start / end logits shared by mRNA and lncRNA genes, trained
 on the canonical-transcript ends of both classes. In the training windows, 93% of mRNA start labels but only 31%
@@ -90,10 +95,12 @@ reach 40.5% and 21.4% (two seeds), evidence-filtered labels 15.6% and 26.0%; for
 41–79%. None of the pre-registered outcomes (labels limiting, channel sharing limiting, or not locatable) was met
 after the second seed, so we draw no conclusion on the two remedies.
 
-Two patterns, however, held in all seven models (three full models, four probes). First, lncRNA starts are
+Two patterns, however, held in all seven models (three full models, four probes) on chr18. First, lncRNA starts are
 locatable only where the promoter is CpG-rich: across quartiles of promoter CpG observed/expected ratio, the
 share within 1 kb stays near chance in the two lowest quartiles (2.6–8.6% in the lowest) and rises to 17–61% in
-the highest; in every model the third quartile exceeds the two lowest and the highest exceeds the third [Fig. 7c]. This mirrors what drives detection itself — promoter CpG and transcription-unit length are the
+the highest; in every model the third quartile exceeds the two lowest and the highest exceeds the third [Fig. 7c].
+On held-out chr20, read once with the same models, the ordering held in six of seven models (two lowest quartiles
+5–10%, highest 16–54%), meeting the pre-registered replication criterion [`RESULT_REP20.md`]. This mirrors what drives detection itself — promoter CpG and transcription-unit length are the
 features associated with a lncRNA locus being found (section 11; `RESULT_S3.md`), and lncRNA genes whose start
 lies in a transposable element are harder to find mainly because they lack CpG-island promoters
 (`RESULT_S3_TE.md`). The dependence on CpG islands is not new in itself: CpG islands have long been the dominant
@@ -103,18 +110,21 @@ at enhancers rather than at promoters (Hon et al., 2017), and lincRNA core promo
 than mRNA promoters (Mattioli et al., 2019). Our data quantify this for a genome-scale, sequence-only annotator:
 the lncRNA starts that lack a CpG island — most of them — are placed no better than chance.
 
-Second, with these features, transcript ends are not locatable for either class: 2–13% of polyA-supported ends,
-for lncRNA and mRNA alike, lie within 1 kb of the top-scoring position. The mRNA ends that our full model places
-correctly are therefore set by the gene grammar (exon structure, coding frame), not by an end signal in the
-features. This is a statement about frozen, general-purpose DNA language-model features and a light probe, not
+Second, with these features, lncRNA transcript ends are not locatable: 4.5–8.7% of polyA-supported lncRNA ends
+on chr18 and 4.7–9.9% on chr20 lie within 1 kb of the top-scoring position, in every model. On chr18 mRNA ends
+were equally unlocatable (2.2–12.6%), but on chr20 two probes placed 17–18% of them within 1 kb, so the pre-registered
+replication criterion, which required both classes to stay at or below 15%, was not met; for mRNA we therefore
+report only that the end signal in the features is weak. The mRNA ends that our full model places correctly
+(28–41% of detected genes within 1 kb on chr18, 49–58% on chr20) are thus set mostly by the gene grammar (exon
+structure, coding frame). This is a statement about frozen, general-purpose DNA language-model features and a light probe, not
 about the information in the sequence: dedicated models of 3′-end processing predict cleavage and polyadenylation
 sites at nucleotide resolution within a given region (Bogard et al., 2019; Stroup et al., 2023), and whether they
 can pick the terminal site of a gene from a ±20-kb search window was not tested here.
 
 *Taken together, sections 12–15 identify the localisation of transcription-unit ends as the rate-limiting step of
 end-to-end lncRNA annotation: structure becomes partly recoverable once the ends are known to within a kilobase,
-but with current DNA language-model features the start can be placed only for CpG-island promoters and the end
-not at all.*
+but with current DNA language-model features the start can be placed only for CpG-island promoters and the lncRNA
+end not at all. Each of these observations except the mRNA end result was replicated on held-out chr20.*
 
 ## Methods (additions)
 
