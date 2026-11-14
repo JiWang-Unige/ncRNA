@@ -1,7 +1,7 @@
 # Draft — benchmark sections (plan B) of the joint coding × lncRNA annotation paper
 
 > Status: first draft, 2026-10-20; 2026-11-13: S50 numbers and the L1 caveat added (see `DRAFT_results_ends.md`); 2026-11-14: GENATATORs (2026) noted in section 2. Numbers are from the Phase 0 reports (`05_phase0/results/`); every number
-> has a pointer to its JSON. Not yet checked by a second reader. Figures are planned, not drawn.
+> has a pointer to its JSON. 2026-11-15: read-through; figures drawn (Figures 1–4, Supplementary Fig. 1; `figures/LEGENDS.md`).
 > Language: English (manuscript); discussion notes for the authors are in Chinese at the end.
 
 ## Working title
@@ -36,17 +36,18 @@ We scored the 13 public predictions of the GENATATOR leaderboard (T2T-CHM13 chr2
 lncRNA and 546 mRNA genes) with a stranded ruler (Methods) [Fig. 2a; `0.3_fp_audit/t2t_chr20/T2T_PANEL_SUMMARY.json`]:
 
 * The protein-coding annotators — Tiberius, ANNEVO, Helixer and AUGUSTUS — output no lncRNA. Each reports
-  some lncRNA loci as protein-coding genes (3, 8, 4 and 52 loci respectively).
+  some lncRNA loci as protein-coding genes (3, 8, 4 and 52 loci respectively; GENATATOR 22) [Fig. 2c].
 * GENATATOR, the only pipeline designed to output lncRNA, recovers **3.5%** of lncRNA loci (locus-level,
   any exon overlap) and **0.7%** of lncRNA intron chains, while recovering 93% of mRNA loci and 65% of mRNA
   intron chains. With the leaderboard's own metric at its headline tolerance (k = 250 bp), lnc_RNA
-  segmentation recall is **0.7%** (precision 3.7%), versus 49.6% for mRNA [`official_metric_lnc_vs_mrna.json`].
+  segmentation recall is **0.7%** (precision 3.7%), versus 49.6% for mRNA [Fig. 2b; `official_metric_lnc_vs_mrna.json`].
 * Unstranded segmenters (NTv3, SegmentNT) mark 7–51% of lncRNA loci as transcribed but produce no correct
   lncRNA intron chain (≤ 0.5%), with locus precision 0.09–0.23.
 
 Running the released GENATATOR pipeline ourselves on hg38 chr20 against GENCODE v50 gave the same picture
 (lncRNA locus Sn 0.028 [95% CI 0.019–0.040], intron chain 0.012; mRNA locus Sn 0.967, intron chain 0.708;
-46 lncRNA loci reported only as mRNA) [`0.1_genatator/PANEL_SUMMARY.json`]. Under the stricter one-to-one span
+34 lncRNA genes covered by a predicted mRNA that hits no reference mRNA, and 46 predicted mRNAs that fall only on
+lncRNA loci) [`0.1_genatator/PANEL_SUMMARY.json`]. Under the stricter one-to-one span
 criterion of section 12 (S50), its lncRNA recall is 0.006 and its mRNA recall 0.794 [`B1/B1.json`]. The bottleneck is interval discovery:
 on chr21, only 33 of 590 lncRNA genes were touched by any predicted transcript [`RESULT_0.1a_0.3`]. A later
 release of the same group's models (GENATATORs; Shmelev et al., 2026) fine-tunes DNA language models for
@@ -63,7 +64,7 @@ annotated non-coding transcripts (different metric) [ANNEVO, Nat Methods 2026].
 GENATATOR is trained on 39 mammals. On four non-mammalian chromosomes (Ensembl 116), it emits almost no lncRNA
 (0–13 transcripts; locus Sn ≤ 0.022), and its mRNA recovery falls with phylogenetic distance: locus Sn 0.84
 (chicken chr5), 0.49 (zebrafish chr22), 0.21 (*Drosophila* 2L) and 0.006 (*C. elegans* chr I, 15 genes
-predicted on the whole chromosome) [Fig. 3; `RESULT_0.1b_cross_lineage.md`].
+predicted on the whole chromosome), against 0.97 on human chr20 [Fig. 3; `RESULT_0.1b_cross_lineage.md`].
 
 ### 4. Structured small RNAs are well served by covariance models; the gaps are elsewhere
 
@@ -79,7 +80,7 @@ integration component, not as a method claim.
 Linear probes on frozen DNA language models (hg38 chr21 → chr20) show that lncRNA exon positions are
 separable from background, but far less than mRNA exons: best AUPRC 0.38 versus a 0.16 prior
 (GENERanno-1.2b, CDS-annotation checkpoint), compared with ~9× the prior for mRNA exons; TSS/TES signals are
-weak for every backbone (AUPRC < 0.09) [`RESULT_0.4_probe.md`]. A CDS-supervised backbone was *better*, not
+weak for every backbone (AUPRC < 0.09) [Fig. 4; `RESULT_0.4_probe.md`]. A CDS-supervised backbone was *better*, not
 worse, for lncRNA exons and splice sites than the self-supervised ones (NT-v2-500M, GENERanno-0.5b,
 Caduceus-PS) — exon/splice features learned from coding supervision transfer to non-coding exons.
 
@@ -87,8 +88,8 @@ Caduceus-PS) — exon/splice features learned from coding supervision transfer t
 
 In a pre-registered test (frozen features, minimal decoder), marginalising the labels of unannotated regions
 that carry pre-2022 RNA-seq junction evidence improved recovery of loci first annotated after 2022 by 1.7
-percentage points (95% CI 0.4–3.2; pre-declared threshold 5 points, not met) and their ranking (AUPRC +9–11%
-relative, all seeds positive) [`RESULT_0.5_unknown.md`]. We therefore use unknown-handling as a component and
+percentage points (95% CI 0.4–3.2; pre-declared threshold 5 points, not met) and, in a post hoc analysis, their
+ranking (AUPRC +9–11% relative, all seeds positive) [Supplementary Fig. 1; `RESULT_0.5_unknown.md`]. We therefore use unknown-handling as a component and
 report it as an ablation rather than as the main contribution.
 
 ## Methods (evaluation framework)
@@ -106,7 +107,8 @@ report it as an ablation rather than as the main contribution.
 
 Strict precision counts predictions in unannotated sequence as errors; lenient precision excludes them
 ("novel"). Truth incompleteness is quantified as the fraction of old-reference false positives that become
-true positives under a newer release. Confidence intervals come from 1,000 bootstrap resamples of genes.
+true positives under a newer release. Confidence intervals come from bootstrap resamples of genes (1,000 for the benchmark, 2,000 for the held-out reads
+of sections 7–15).
 Supported inputs: GENCODE/Ensembl GTF, RefSeq GFF3, and unstranded predictors (scored strand-agnostically,
 as in the GENATATOR leaderboard). Unit tests check synthetic cases and the identity truth = prediction for
 all classes. [`ruler.py` v1.3]
@@ -124,14 +126,14 @@ annotated gene spans are subtracted.
 
 ## Figure plan
 
-1. a) v41 → v50 growth per chromosome, lncRNA vs mRNA; b) truth density across lineages.
-2. a) T2T chr20 leaderboard panel, lncRNA vs mRNA recovery for 13 predictors; b) the official-metric check;
-   c) lncRNA loci misreported as mRNA.
-3. Cross-lineage transfer of GENATATOR (mRNA and lncRNA).
-4. Probe AUPRC per layer and backbone.
-5. Unknown-handling: Δ recovery and AUPRC (supplementary).
-6. Locus detection: see `DRAFT_results_locus.md` (sections 7–11).
-7. End localisation: see `DRAFT_results_ends.md` (sections 12–15).
+Drawn (2026-11-15 numbering; legends in `figures/LEGENDS.md`):
+1. a) v41 → v50 growth per chromosome, lncRNA vs mRNA; b) truth density across lineages (section 1).
+2. a) T2T chr20 leaderboard panel, 13 predictors; b) official metric; c) lncRNA loci reported as coding (section 2).
+3. Cross-lineage transfer of GENATATOR (section 3).
+4. Probe AUPRC per layer and backbone (section 5).
+5. Locus detection (sections 7, 9–11; `DRAFT_results_locus.md`).
+6. End localisation (sections 12–15; `DRAFT_results_ends.md`).
+Supplementary Fig. 1: unknown handling (section 6). Section 4 (small RNA) has no figure.
 
 ---
 

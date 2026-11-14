@@ -1,10 +1,10 @@
-# Figure legends (Figures 6 and 7, first versions, 2026-11-14)
+# Figure legends (Figures 5 and 6, first versions, 2026-11-14; renumbered 2026-11-15)
 
 > Drawn by `scripts/manuscript/make_figs.py` from the result JSONs only; every plotted value is in `fig_data.json`.
-> Figures 1–5 (benchmark) are not drawn yet. The ablation panel planned for Figure 6 moved to a supplementary table
+> The ablation panel planned for this figure moved to Supplementary Table 2
 > (the per-seed deltas for the third seed live in the batch-2 tables of `RESULT_P15.md`, not in one JSON).
 
-**Figure 6 | Sequence-only detection of lncRNA-associated transcribed regions.**
+**Figure 5 | Sequence-only detection of lncRNA-associated transcribed regions.**
 **a**, Recall of annotated lncRNA genes on held-out human chromosomes (hg38 chr20 and chr9, T2T-CHM13 chr20) and,
 without any training on them, on chromosomes of other species. Filled circles, exon-overlap criterion (L1); open
 circles, one-to-one span criterion (S50; each prediction and gene cover ≥ 50% of the other's span); diamonds,
@@ -15,7 +15,7 @@ gene within 5 kb on either strand; last pair: regions called by at least two of 
 rate of lncRNA genes by quartile of promoter CpG observed/expected ratio and of gene span, chr18 (development) and
 chr20 (held-out).
 
-**Figure 7 | The ends of transcription units limit ab initio lncRNA annotation.**
+**Figure 6 | The ends of transcription units limit ab initio lncRNA annotation.**
 **a**, Recall of lncRNA and mRNA genes under exon overlap (filled) and one-to-one span matching (hatched) for our
 models (chr20, v1.9; chr9, v2.0), GENCODE v41 scored as a prediction of v50, GENATATOR, SegmentNT and Tiberius
 (chr20). **b**, Exact lncRNA intron chains recovered by GENATATOR's interval segmentation model when given the
@@ -27,7 +27,7 @@ chr20, and Puffin on its own held-out chromosomes chr8 and chr9. **d**, The same
 transcript ends: our seven models (bars, mean; dots, individual models) and PolyaID / PolyaStrength (strongest
 site among positions classified as polyadenylation sites). Dashed line, chance (2 kb of a 40-kb window).
 
-# Figure legends (Figures 1–5, first versions, 2026-11-14)
+# Figure legends (Figures 1–4 and Supplementary Fig. 1, first versions, 2026-11-14; renumbered 2026-11-15)
 
 > Drawn by `scripts/manuscript/make_figs_benchmark.py` from the Phase 0 JSONs copied into `docs/phase0_results/data/`
 > (from `05_phase0/results`); every plotted value is in `fig_data_benchmark.json`. Chromosome lengths in Fig. 1b are
@@ -52,7 +52,7 @@ chr20 and four non-mammalian chromosomes, mRNA and lncRNA; labels give the numbe
 across the layers of four frozen DNA language models (hg38 chr21 training, chr20 evaluation; 300,000 positions):
 **a**, lncRNA exon; **b**, mRNA exon; **c**, lncRNA transcription start. Dashed line, prior.
 
-**Figure 5 | Treating evidence-supported unannotated sequence as unknown (supplementary).** Pre-registered test
+**Supplementary Figure 1 | Treating evidence-supported unannotated sequence as unknown.** Pre-registered test
 on frozen features with a minimal decoder, three seeds per arm (dots; short lines, mean): unannotated sequence treated
 as background (F), as unknown where pre-2022 RNA-seq junctions support it (U-ev), or everywhere (U-pu). **a**,
 Recovery of lncRNA loci first annotated after GENCODE v41 (n = 473, chr20); **b**, AUPRC for exons of those loci

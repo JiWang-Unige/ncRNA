@@ -18,8 +18,9 @@ Most newly sequenced eukaryotic genomes are annotated without matched transcript
 developmental stage, so gene models come in large part from ab initio predictors that read the genome sequence
 alone. For protein-coding genes these predictors have improved markedly: deep-learning models combined with
 hidden-Markov decoding now recover most human coding genes at gene level and transfer across distant lineages
-(Tiberius, Helixer, ANNEVO) [verify exact figures before citing]. Long non-coding RNA (lncRNA) genes are as
-numerous as protein-coding genes in the human reference, yet they are absent from the output of these tools.
+(Tiberius, Helixer, ANNEVO) [verify exact figures before citing]. Long non-coding RNA (lncRNA) genes are now
+more numerous than protein-coding genes in the human reference (34,677 against 20,033 in GENCODE v50, section 1),
+yet they are absent from the output of these tools.
 Their annotation still rests on transcript evidence — short- and long-read RNA-seq, 5′-end and 3′-end
 sequencing — which is tissue-limited and, for lncRNAs, low in expression and often specific to a few cell types
 (Derrien et al., 2012). As a result, lncRNA annotation outside a handful of model organisms is sparse and uneven,

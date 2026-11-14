@@ -2,7 +2,7 @@
 
 > Status: first draft, 2026-11-14. Sections 7–11, between the benchmark (`DRAFT_results_benchmark.md`, sections 1–6)
 > and end localisation (`DRAFT_results_ends.md`, sections 12–15). Every number points to a result document in
-> `docs/phase1_results/` and its JSON. Not yet checked by a second reader; figures planned, not drawn.
+> `docs/phase1_results/` and its JSON. 2026-11-15: read-through; figure drawn (Figure 5).
 > Wording follows the pre-registered rule of `PLAN_B1.md`: locus-level results are reported under both the
 > exon-overlap measure (L1) and the one-to-one span measure (S50), and are described as the detection of
 > lncRNA-associated transcribed regions, not as the discovery of lncRNA genes.
@@ -23,7 +23,7 @@ had been frozen (Methods; `PHASE1_PROTOCOL.md` §16–17).
 
 On chr20, the three v1.9 models recover 30.6% of the 955 GENCODE v50 lncRNA genes (exon overlap, L1) at a strict
 precision of 0.422, where every prediction outside the reference counts as an error; GENATATOR recovers 2.8% at the
-same precision (gain +0.278, 95% CI 0.256–0.300) [Fig. 6a; `RESULT_P15.md`]. Under the one-to-one span measure the
+same precision (gain +0.278, 95% CI 0.256–0.300) [Fig. 5a; `RESULT_P15.md`]. Under the one-to-one span measure the
 recall is 6.4% (precision 9.4%) against 0.6% for GENATATOR [`RESULT_B1.md`]. On the T2T-CHM13 chr20 benchmark
 (RefSeq truth) the picture is the same: L1 recall 36.9% against 3.5%, S50 recall 8.4% against 1.4%, with lower
 strict precision than on hg38 (L1 0.236; GENATATOR 0.259) [`P15/t2t_chr20_SCORE.json`; `B1/B1_MORE.json`].
@@ -36,7 +36,7 @@ exon count, coding-state posterior mass, open-reading-frame and hexamer features
 gene confidence from 0.295 to 0.041. The gains on chr9 matched those predicted on chr18 (+0.041 and −0.014).
 
 Other sequence-based models scored with the same measures recover fewer lncRNA regions or do so at much lower
-precision [Fig. 6b; `RESULT_BASELINES.md`, `RESULT_S2_AG.md`]:
+precision [Supplementary Table 1; `RESULT_BASELINES.md`, `RESULT_S2_AG.md`]:
 
 * SegmentNT, the only deep-learning annotator with an lncRNA class that was not trained on chr20: L1 recall
   10.8% at strict precision 0.113 (S50 0.8%); 97% of its lncRNA calls carry no strand.
@@ -61,7 +61,7 @@ homology to any training window (29.2%) as for all genes [`RESULT_P15.md` §5].
 ### 8. Each component of the grammar contributes; a richer grammar does not help
 
 Pre-registered ablations, each trained with three seeds and read once on chr20, all lowered the area under the
-precision–recall curve for lncRNA genes relative to the same-seed full model [Fig. 6c; `RESULT_P15.md` §7]:
+precision–recall curve for lncRNA genes relative to the same-seed full model [Supplementary Table 2; `RESULT_P15.md` §7]:
 removing the gene-entry and -exit bonuses (−0.056, three of three seeds lower), replacing unknown handling by
 treating all unannotated sequence as background (−0.039, 3/3), and removing the coding-gene pathway so that the
 model learns lncRNA genes alone (−0.061, 3/3). The last result means that learning what a coding gene is helps
@@ -77,7 +77,7 @@ Without any training or tuning on other species, the human-trained models detect
 (GENCODE vM39; L1 recall 28.0% at strict precision 0.372, S50 6.7%), close to the held-out human chromosome
 [`RESULT_S5.md`; `B1/B1_MORE.json`]. On four non-mammalian chromosomes with sparser annotation, L1 recall is 31.8%
 (chicken chr5), 34.8% (zebrafish chr22), 21.4% (*Drosophila* 2L) and 7.3% (*C. elegans* chr I), where GENATATOR
-recovers 0–2.2% [Fig. 6d; `RESULT_P16.md`]. Strict precision is low on these chromosomes (0.246, 0.065, 0.089 and
+recovers 0–2.2% [Fig. 5a; `RESULT_P16.md`]. Strict precision is low on these chromosomes (0.246, 0.065, 0.089 and
 0.008), partly because few lncRNA genes are annotated there (135 on zebrafish chr22, 150 on worm chr I); on
 *C. elegans* the failure is real, as half to four-fifths of the lncRNA calls fall on coding genes. The coding
 pathway transfers too (mRNA L1 recall 0.86, 0.84, 0.64 and 0.68, against 0.84, 0.49, 0.21 and 0.006 for GENATATOR).
@@ -94,7 +94,7 @@ divergence criterion).
 The strict precision counts every prediction outside GENCODE v50 as wrong. We asked, in a pre-registered analysis
 with public data (FANTOM5 CAGE, PolyASite 2.0, Snaptron GTEx junctions, CHESS 3 and GTEx long-read transcripts),
 how many of these chr20 predictions carry evidence of transcription on the predicted strand, against position-
-matched random intervals (100 placements per prediction) [Fig. 6e; `RESULT_BIOVAL.md`].
+matched random intervals (100 placements per prediction) [Fig. 5b; `RESULT_BIOVAL.md`].
 
 Of the predictions outside the reference, 59.4% carry such evidence against 29.4% of matched intervals
 (P < 0.01 for each of the three models). The cleanest set is predictions with no annotated gene on either strand
@@ -113,7 +113,7 @@ but the evidence supports transcribed regions, not new gene models.
 Which lncRNA genes are found? In a multivariable analysis of all lncRNA genes on chr18 and chr20, and in a pre-registered
 replication on chr9, detection was associated with promoter CpG observed/expected ratio
 (standardised coefficients +0.35, +0.34 and +0.32) and with gene span (+0.55, +0.70 and +0.58), but not consistently, after
-these, with CAGE support at the start, repeat content or exon number [Fig. 6f; `RESULT_S3.md`,
+these, with CAGE support at the start, repeat content or exon number [Fig. 5c; `RESULT_S3.md`,
 `RESULT_V20_CHR9.md`]. Detection rates rose from 22–24% in the lowest to 41–42% in the highest CpG quartile and
 from 12–13% to 48–54% across span quartiles. In post hoc analyses, lncRNA genes antisense to a coding gene were
 harder to detect (−0.26 and −0.29), and lncRNA genes whose start lies in a transposable element (about a quarter)
@@ -140,7 +140,7 @@ logits; AdamW, 12 epochs; the model is the uniform average of the weights of epo
 
 **Decoding and calibration.** Exact float64 forward-backward posteriors on overlapping tiles; exon-level maximum
 expected accuracy decoding (γ = 3) on the posteriors; lncRNA genes kept when their mean posterior is ≥ 0.6 (v1.9).
-v2.0 replaces the 154 training windows on chr9 and adds a gene-level logistic calibration fitted on chr18 (features:
+v2.0 adds a gene-level logistic calibration fitted on chr18 (features:
 posterior confidence, exon count, coding-state posterior mass over the exons, log ORF length, ORF fraction, hexamer
 and Fickett scores, log length), with a threshold of 0.36 on the calibrated probability chosen on chr18 by a
 pre-registered rule.
@@ -173,16 +173,13 @@ above the upper quartile of annotated lncRNA starts on chr18, 0.46): on chr18, 7
 predictions overlapping an annotated lncRNA gene lay within 1 kb of an annotated start of that gene, against 29% of
 the others. Small structured RNAs (Rfam, tRNAscan-SE; Phase 0 integration rules) are included for chr20.
 
-## Figure plan (Figure 6)
+## Figure 5 (drawn) and supplementary tables
 
-* a) lncRNA recall and strict precision on chr20, T2T chr20 and chr9, exon overlap and S50 side by side, for our
-  three models (points) and GENATATOR.
-* b) Same-ruler comparison with SegmentNT, AlphaGenome RNA-seq segmentation, Tiberius, Helixer: lncRNA recall
-  against strict precision; inset: lncRNA genes reported as coding.
-* c) Ablations: ΔAUPRC per seed, chr18 and chr20.
-* d) Cross-species: mouse chr19 and four panel chromosomes, ours against GENATATOR (lncRNA and mRNA).
-* e) Transcription evidence for predictions outside the reference, by stratum, against matched controls.
-* f) Detection against promoter CpG and gene span quartiles (chr18, chr20, chr9).
+* a) lncRNA recall, L1 and S50, on held-out human chromosomes and other species, with GENATATOR (sections 7, 9).
+* b) Transcription evidence for predictions outside the reference, by stratum, against matched controls (section 10).
+* c) Detection by promoter CpG and gene-span quartile, chr18 and chr20 (section 11; chr9 in the text only).
+* Supplementary Table 1: same-ruler comparison with SegmentNT, AlphaGenome segmentation, Tiberius, Helixer, Vipsania.
+* Supplementary Table 2: ablations, ΔAUPRC per seed on chr18 and chr20 (section 8).
 
 ---
 
@@ -197,4 +194,4 @@ the others. Small structured RNAs (Rfam, tRNAscan-SE; Phase 0 integration rules)
   3. AlphaGenome 的比较是样本内、且是我们自己的朴素分段，正文已限定。
   4. 第 10 节的证据是「有转录」，不是「结构对」，正文已写明。
   5. v3.0（加小鼠）是负结果，放在正文还是补充材料，待全文篇幅定了再决定。
-- **章节编号**：本节为 7–11，端点一节已顺延为 12–15，基准一节为 1–6。图号：本节图 6，端点一节图 7。
+- **章节编号**：本节为 7–11，端点一节已顺延为 12–15，基准一节为 1–6。图号（2026-11-15 重排）：本节图 5，端点一节图 6，原图 5 改为补充图 1。

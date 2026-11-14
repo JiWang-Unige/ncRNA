@@ -1,8 +1,8 @@
 # Draft — results section: locating the ends of lncRNA transcription units
 
 > Status: first draft, 2026-11-13. Covers the end-localisation line (B1, S11, BND, END). Every number points to
-> its result document in `docs/phase1_results/` and its JSON. Not yet checked by a second reader; figures planned,
-> not drawn. Sections 12–15; they follow the benchmark (`DRAFT_results_benchmark.md`, sections 1–6) and the
+> its result document in `docs/phase1_results/` and its JSON. 2026-11-15: read-through; figure drawn
+> (Figure 6). Sections 12–15; they follow the benchmark (`DRAFT_results_benchmark.md`, sections 1–6) and the
 > locus-detection results (`DRAFT_results_locus.md`, sections 7–11). Renumbered from 7–10 on 2026-11-14;
 > wording and citations revised after the novelty check (`NOVELTY_ends.md`) on the same day.
 > Language: English (manuscript); notes for the authors in Chinese at the end.
@@ -20,7 +20,7 @@ a reference gene of the same class and strand are matched when each covers at le
 span, and a maximum bipartite matching makes the pairs unique (S50; Methods).
 
 Under S50 the lncRNA recall of our models falls to **6.4%** on chr20 (three models 4.1%, 10.2%, 5.0%; precision
-9.4%) and **6.9%** on chr9 with the calibrated v2.0 models (precision 10.8%) [Fig. 7a; `RESULT_B1.md`,
+9.4%) and **6.9%** on chr9 with the calibrated v2.0 models (precision 10.8%) [Fig. 6a; `RESULT_B1.md`,
 `B1/B1.json`]. The relative advantage over existing tools remains (GENATATOR 0.6%, SegmentNT 0.8%), but in
 absolute terms only about one annotated lncRNA gene in fifteen is delimited by a single prediction. The criterion
 is not unattainable: GENCODE v41, scored as a prediction of v50, keeps 39.6% of lncRNA genes under S50 against
@@ -42,7 +42,7 @@ Is exon structure the harder problem once the ends are known? Two experiments on
 chains for 0.3% of genes, with the annotated splice sites imposed for 16.8%, and with both for 34.1% (three-model
 means) [`RESULT_S1B.md`]. Second, GENATATOR's segmentation model — designed to segment a given transcript
 interval — reconstructs the exact intron chain of 37% of 200 multi-exon lncRNA genes when given the annotated
-transcript interval and 35.5% when given the gene span [Fig. 7b; `RESULT_S11.md`]. (chr18 is part of GENATATOR's
+transcript interval and 35.5% when given the gene span [Fig. 6b; `RESULT_S11.md`]. (chr18 is part of GENATATOR's
 training data, so this is an upper bound.)
 
 The same model collapses when the interval is imprecise: padding both ends by 1 kb lowers exact chains to 3%,
@@ -98,7 +98,7 @@ after the second seed, so we draw no conclusion on the two remedies.
 Two patterns, however, held in all seven models (three full models, four probes) on chr18. First, lncRNA starts are
 locatable only where the promoter is CpG-rich: across quartiles of promoter CpG observed/expected ratio, the
 share within 1 kb stays near chance in the two lowest quartiles (2.6–8.6% in the lowest) and rises to 17–61% in
-the highest; in every model the third quartile exceeds the two lowest and the highest exceeds the third [Fig. 7c].
+the highest; in every model the third quartile exceeds the two lowest and the highest exceeds the third [Fig. 6c].
 On held-out chr20, read once with the same models, the ordering held in six of seven models (two lowest quartiles
 5–10%, highest 16–54%), meeting the pre-registered replication criterion [`RESULT_REP20.md`]. This mirrors what drives detection itself — promoter CpG and transcription-unit length are the
 features associated with a lncRNA locus being found (section 11; `RESULT_S3.md`), and lncRNA genes whose start
@@ -115,7 +115,7 @@ predicts CAGE and related initiation signals at base resolution, with the same r
 chromosomes, chr8 and chr9, under pre-registered criteria [`PLAN_DEDEND.md`, `RESULT_DEDEND.md`]. Puffin placed
 71% of CAGE-supported mRNA starts within 1 kb, but only 8.6% of lncRNA starts in the two lowest promoter-CpG
 quartiles (7.9% and 9.4%), against 21% in the third and 56% in the highest quartile; for all lncRNA starts it
-reached 24% and for CAGE-supported ones 40% [Fig. 7d]. On chr18 and chr20, which were in Puffin's training data,
+reached 24% and for CAGE-supported ones 40% [Fig. 6c]. On chr18 and chr20, which were in Puffin's training data,
 the gradient was the same (lowest quartile 3–9%, highest 49–51%). The CpG-island dependence is therefore not a
 weakness of general-purpose language-model features: a model trained directly on initiation data cannot place
 low-CpG lncRNA starts either.
@@ -130,7 +130,7 @@ structure, coding frame). A dedicated model of 3′-end processing does not chan
 identify cleavage and polyadenylation sites at nucleotide resolution; scored at every position within ±20 kb of
 each gene end on the gene's strand (pre-registered: the strongest site among those classified as polyadenylation
 sites), they placed 7.1% (chr18) and 11.9% (chr20) of polyA-supported lncRNA ends within 1 kb, and only 12% and
-19% of polyA-supported mRNA ends [Fig. 7d; `RESULT_DEDEND.md`]. About 5% of all positions in these windows were
+19% of polyA-supported mRNA ends [Fig. 6d; `RESULT_DEDEND.md`]. About 5% of all positions in these windows were
 classified as cleavage-competent, so recognising polyadenylation signals does not identify which of them ends a
 gene. Both chromosomes may have been in PolyaID's training data, which would favour it.
 
@@ -184,15 +184,14 @@ positions with PolyaID ≥ 0.75, or the PolyaID maximum if there is none. Truth,
 for the probes; CpG quartiles per chromosome group. Puffin was read on its test chromosomes chr8 and chr9 (primary)
 and on chr18 and chr20 (in its training set); PolyaID on chr18 and chr20. Decision rules in [`PLAN_DEDEND.md` §4].
 
-## Figure plan (Figure 7)
+## Figure 6 (drawn)
 
-* a) lncRNA and mRNA recall under exon overlap versus S50 for our models, GENATATOR, SegmentNT, Tiberius and
-  GENCODE v41 (chr20, chr9); inset: start / end offsets.
-* b) Exact intron chains of GENATATOR segmentation against interval padding / trimming (chr18).
-* c) Start localisation (Loc1k) by promoter CpG quartile for the seven models; end localisation for lncRNA and
-  mRNA alongside.
-* d) Dedicated end models: Puffin start localisation by promoter CpG quartile on its held-out chr8 + chr9 (and on
-  chr18 / chr20), next to our probes; PolyaID end localisation for lncRNA and mRNA (chr18, chr20).
+* a) lncRNA and mRNA recall under exon overlap versus S50 for our models, GENCODE v41, GENATATOR, SegmentNT and
+  Tiberius (section 12).
+* b) Exact intron chains of GENATATOR segmentation against interval padding / trimming, chr18 (section 13).
+* c) lncRNA start localisation by promoter CpG quartile: our seven models on chr18 and chr20, Puffin on chr8 + chr9
+  (section 15).
+* d) polyA-supported end localisation, lncRNA and mRNA: our seven models and PolyaID (section 15).
 * Supplementary: tiling, decoder and reference-support controls (section 14); label support statistics; per-seed
   probe tables.
 
@@ -219,7 +218,7 @@ and on chr18 and chr20 (in its training set); PolyaID on chr18 and chr20. Decisi
 - **这一节改变了全文的定位**：原 L1 的 0.306 不能再写成「发现了三成 lncRNA 基因位点」。第 12 节末尾的斜体句是事前规则给出的措辞（`PLAN_B1.md` 第 3 节，落在最低一档）。「section L」（v1.9 / v2.0 的位点检出结果）成稿时要同步改口径：两种口径并列，标题和摘要用 S50 能支撑的说法。
 - **哪些是检验、哪些是描述**：B1 的措辞规则、S11 的停止规则、END 的判读规则都是事前写定的。BND 是事前写定读数的诊断。END 里的 CpG 分层和终点结论是**描述性**的，7 个模型方向一致，但不是事前判据；正文已写成「held in all seven models」，不要写成检验结论。
 - **审稿人可能会问**：
-  1. 只在 chr18 上做（BND、END、S11）。chr18 是开发染色体；S11 对 GENATATOR 是训练染色体（已注明是上界）。如果要求，可在 chr20 上重复 BND 与 END 的读数（不涉及任何调参，chr20 的后验需要重新计算）。
+  1. 开发在 chr18 上做（BND、END、S11）。BND 与 END 的读数已于 2026-11-14 在 chr20 上按事前规则复现（`RESULT_REP20.md`）；S11 未复现，且 chr18 对 GENATATOR 是训练染色体（已注明是上界）。
   2. 「CAGE 支持」与「CpG 高」没有拆开；FANTOM5 CAGE 偏向高表达转录本。
   3. END 两个臂的 seed 方差很大（同一臂 mRNA 起点 0.785 对 0.414），所以第 15 节对两种改进办法不下结论。返修时如被要求，可补 seed。
   4. 「终点定位不了」是在这套特征（GENERanno 第 17、23 层，24.6 kb 窗口）和这个头下的结论，不是对序列信息的一般断言。2026-11-14 已按查新把第 15 节标题和结论句收紧为「with (current) DNA language-model features」，并引 APARENT（Bogard 2019）、Stroup 2023，说明专用 polyA 模型未测。
