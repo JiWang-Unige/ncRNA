@@ -65,7 +65,7 @@ def fig1(root, out):
     ax.scatter(x, [r["lnc_sn"] for r in rows], s=12, color=LNC, label="lncRNA loci", zorder=3)
     for c, col in (("lnc", LNC), ("mrna", MRNA)):
         ax.axhline(gw[c], color=col, linewidth=0.8, linestyle=(0, (3, 2)))
-        ax.text(len(rows) - 0.4, gw[c] + 0.02, f"genome-wide {gw[c]:.3f}", ha="right", fontsize=5.8, color=INK2)
+        ax.text(-0.4, gw[c] + (0.025 if c == "mrna" else -0.06), f"genome-wide {gw[c]:.3f}", ha="left", fontsize=5.8, color=INK2)
     ax.set_xticks(x, [r["chrom"][3:] for r in rows], fontsize=5.6)
     ax.set_xlabel("Chromosome")
     ax.set_ylabel("v50 loci recovered by v41")
@@ -103,8 +103,8 @@ def fig2(root, out):
         ax.scatter(r["lnc"], yi, s=16, color=LNC, zorder=3, label="lncRNA loci" if yi == y[0] else None)
     ns = sum(r["stranded"] for r in rows)
     ax.axhline(y[ns - 1] - 0.5, color=MUTED, linewidth=0.5)
-    ax.text(1.0, y[0] + 0.3, "gene annotators (stranded)", ha="right", fontsize=5.6, color=MUTED)
-    ax.text(1.0, y[ns] + 0.3, "segmenters (unstranded)", ha="right", fontsize=5.6, color=MUTED)
+    ax.text(0.5, y[0] + 0.55, "gene annotators (stranded)", ha="center", fontsize=5.6, color=MUTED)
+    ax.text(0.03, y[ns] + 0.0, "segmenters\n(unstranded)", ha="left", va="center", fontsize=5.6, color=MUTED)
     ax.set_yticks(y, [r["model"] for r in order], fontsize=5.8)
     ax.set_xlabel("Loci recovered (exon overlap, L1)")
     ax.set_xlim(0, 1.02)
@@ -129,7 +129,7 @@ def fig2(root, out):
     for yi, r in zip(y2, st):
         ax.text(r["lnc_reported_as_coding"] + 1, yi, str(r["lnc_reported_as_coding"]), va="center", fontsize=5.8, color=INK2)
     ax.set_yticks(y2, [r["model"] for r in st], fontsize=5.8)
-    ax.set_xlabel("lncRNA loci reported as coding")
+    ax.set_xlabel("lncRNA loci called coding")
     ax.set_xlim(0, 62)
     ygrid(ax, "x")
     ax.set_title("c  Misreported")
@@ -169,7 +169,8 @@ def fig4(root, out):
             fold = np.array([d["auprc"][str(L)][task] for L in layers]) / d["prevalence"][task]
             res[lab][task] = {"prior": d["prevalence"][task], "auprc_by_layer": [d["auprc"][str(L)][task] for L in layers]}
             ax.plot(depth, fold, color=col, label=lab, linewidth=1.2)
-    for ax, title in zip(axs, ("a  lncRNA exon", "b  mRNA exon", "c  lncRNA TSS")):
+    pri = J(root, "0.4_probe/probe_generanno_cds.json")["prevalence"]
+    for ax, title in zip(axs, (f"a  lncRNA exon (prior {pri['lnc_exon']:.3f})", f"b  mRNA exon (prior {pri['mrna_exon']:.3f})", f"c  lncRNA TSS (prior {pri['lnc_tss']:.3f})")):
         ax.axhline(1, color=MUTED, linewidth=0.8, linestyle=(0, (3, 2)))
         ax.set_xlabel("Relative layer depth")
         ax.set_ylabel("AUPRC / prior")
