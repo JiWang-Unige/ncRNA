@@ -96,6 +96,9 @@ def windows(codes, pos, strand):
 
 
 def tes_rows(chrom):
+    cache = f"{ROOT}/outputs/PHASE1/DEDEND/tes_{chrom}.json"   # written by --write-tes in an env with torch
+    if os.path.exists(cache):
+        return [tuple(t) for t in json.load(open(cache))]
     sys.path.insert(0, os.path.join(ROOT, "scripts/phase1/ends"))
     sys.path.insert(0, os.path.join(ROOT, "scripts/phase1"))
     sys.path.insert(0, os.path.join(ROOT, "scripts/phase1/s3"))
@@ -109,10 +112,15 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--name", required=True)
     ap.add_argument("--chroms", default="chr18,chr20")
+    ap.add_argument("--write-tes", action="store_true", help="only write tes_<chrom>.json (needs torch: run with the generanno env)")
     ap.add_argument("--smoke", action="store_true", help="first 30 TES of chr18 only, out dir <name>_smoke")
     a = ap.parse_args()
     out = f"{ROOT}/outputs/PHASE1/DEDEND/{a.name}{'_smoke' if a.smoke else ''}"
     os.makedirs(out, exist_ok=True)
+    if a.write_tes:
+        for c in a.chroms.split(","):
+            json.dump([[s, int(x)] for s, x in tes_rows(c)], open(f"{ROOT}/outputs/PHASE1/DEDEND/tes_{c}.json", "w"))
+        return
     pid, pst = models()
     for c in (["chr18"] if a.smoke else a.chroms.split(",")):
         codes = codes_of(f"{ROOT}/data/human/{c}.fa")

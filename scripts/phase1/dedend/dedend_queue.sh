@@ -7,6 +7,7 @@ export NCRNA_CPUS=${NCRNA_CPUS:-2-31} NCRNA_NICE=${NCRNA_NICE:-10}
 R=scripts/phase1/run_formal_ont.sh
 log() { echo "$(date -u +%Y-%m-%dT%H:%MZ) $*"; }
 NCRNA_PY=~/envs/puffin/bin/python bash $R puffin --script dedend/puffin_run.py --chroms chr8,chr9,chr18,chr20 || exit 1
+PYTHONPATH=src ~/envs/generanno/bin/python scripts/phase1/dedend/polya_run.py --name polya --write-tes --chroms chr18,chr20 || exit 1
 NCRNA_PY=~/envs/polya/bin/python bash $R polya --script dedend/polya_run.py --chroms chr18,chr20 || exit 1
 PYTHONPATH=src nice -n 10 ~/envs/generanno/bin/python scripts/phase1/dedend/dedend_metrics.py || exit 1
 log "QUEUE_END"
