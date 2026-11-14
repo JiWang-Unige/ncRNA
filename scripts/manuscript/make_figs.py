@@ -40,7 +40,7 @@ def chance(ax, y=0.05, label="chance (±1 kb of ±20 kb)"):
 
 
 # ---------------------------------------------------------------- Figure 7
-def fig7(root, out):
+def fig6(root, out):
     b1 = J(root, "B1/B1.json")["sets"]
     sets = [("Ours\nchr20", "v19_chr20", True), ("Ours\nchr9", "v20_chr9", True),
             ("v41 as\nprediction", "gencode_v41_as_pred_chr20", False), ("GENA-\nTATOR", "genatator_chr20", False),
@@ -49,22 +49,22 @@ def fig7(root, out):
     for lab, k, mean in sets:
         v = b1[k]["mean"] if mean else {c: {"L1_sn": b1[k][c]["L1"]["sn"], "S50_sn": b1[k][c]["S50"]["sn"]} for c in ("lnc", "mrna")}
         rows.append((lab, v["lnc"]["L1_sn"], v["lnc"]["S50_sn"], v["mrna"]["L1_sn"], v["mrna"]["S50_sn"]))
-    DATA["fig7a"] = [dict(zip(("set", "lnc_L1", "lnc_S50", "mrna_L1", "mrna_S50"), r)) for r in rows]
+    DATA["fig6a"] = [dict(zip(("set", "lnc_L1", "lnc_S50", "mrna_L1", "mrna_S50"), r)) for r in rows]
 
     s11 = J(root, "S11/GATE.json")["summary"]
     cond = [("−1 kb", "I1"), ("transcript\ninterval", "A"), ("gene\nspan", "B"), ("+1 kb", "O1"), ("+5 kb", "O5"),
             ("+10 kb", "O10"), ("+20 kb", "O20")]
-    DATA["fig7b"] = {c: s11[k]["chain_correct"] for c, k in cond}
+    DATA["fig6b"] = {c: s11[k]["chain_correct"] for c, k in cond}
 
     e18, e20, dd = J(root, "ENDS/ENDS.json")["sources"], J(root, "REP20/ENDS_chr20.json")["sources"], J(root, "DEDEND/DEDEND.json")
     q = lambda src: [[s["lnc_TSS"][f"cpg_q{i}"]["loc1k"] for i in range(1, 5)] for s in src.values()]  # noqa: E731
     c18, c20 = np.array(q(e18)), np.array(q(e20))
     pf = {g: [dd["puffin"][g]["lnc_TSS"][f"cpg_q{i}"]["loc1k"] for i in range(1, 5)] for g in dd["puffin"]}
-    DATA["fig7c"] = {"ours_chr18_7models": c18.tolist(), "ours_chr20_7models": c20.tolist(), "puffin": pf}
+    DATA["fig6c"] = {"ours_chr18_7models": c18.tolist(), "ours_chr20_7models": c20.tolist(), "puffin": pf}
 
     tes = lambda src, k: [s[f"{k}_TES"]["with_evidence"]["loc1k"] for s in src.values()]  # noqa: E731
     pa = {c: {k: dd["polya"][c]["primary"][f"{k}_TES"]["with_evidence"]["loc1k"] for k in ("lnc", "mrna")} for c in ("chr18", "chr20")}
-    DATA["fig7d"] = {"ours_chr18": {k: tes(e18, k) for k in ("lnc", "mrna")}, "ours_chr20": {k: tes(e20, k) for k in ("lnc", "mrna")},
+    DATA["fig6d"] = {"ours_chr18": {k: tes(e18, k) for k in ("lnc", "mrna")}, "ours_chr20": {k: tes(e20, k) for k in ("lnc", "mrna")},
                      "polyaid": pa}
 
     fig, axs = plt.subplots(2, 2, figsize=(7.2, 5.6), gridspec_kw={"hspace": 0.62, "wspace": 0.38})
@@ -86,7 +86,7 @@ def fig7(root, out):
     # b
     ax = axs[0, 1]
     xs = np.arange(len(cond))
-    vals = [DATA["fig7b"][c] for c, _ in cond]
+    vals = [DATA["fig6b"][c] for c, _ in cond]
     ax.plot(xs, vals, color=LNC, marker="o", markersize=4)
     for xi, v in zip(xs, vals):
         ax.text(xi + 0.12, v + 0.025, f"{v:.2f}", ha="left", fontsize=5.8, color=INK2)
@@ -115,7 +115,7 @@ def fig7(root, out):
     ax.set_title("c  Starts: only at CpG-island promoters")
     # d
     ax = axs[1, 1]
-    groups = [("Our features\nchr18", DATA["fig7d"]["ours_chr18"]), ("Our features\nchr20", DATA["fig7d"]["ours_chr20"]),
+    groups = [("Our features\nchr18", DATA["fig6d"]["ours_chr18"]), ("Our features\nchr20", DATA["fig6d"]["ours_chr20"]),
               ("PolyaID\nchr18", {k: [pa["chr18"][k]] for k in ("lnc", "mrna")}), ("PolyaID\nchr20", {k: [pa["chr20"][k]] for k in ("lnc", "mrna")})]
     for gi, (lab, d) in enumerate(groups):
         for j, (k, col) in enumerate((("lnc", LNC), ("mrna", MRNA))):
@@ -133,12 +133,12 @@ def fig7(root, out):
     ax.legend(frameon=False, loc="upper left", fontsize=5.8)
     ax.set_title("d  Ends: not located, even by a polyA model")
     for f in ("pdf", "png"):
-        fig.savefig(f"{out}/fig7.{f}", dpi=300, bbox_inches="tight")
+        fig.savefig(f"{out}/fig6.{f}", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 
 # ---------------------------------------------------------------- Figure 6
-def fig6(root, out):
+def fig5(root, out):
     b1, bm = J(root, "B1/B1.json")["sets"], J(root, "B1/B1_MORE.json")["sets"]
     sets = [("chr20", b1["v19_chr20"]["mean"], b1["genatator_chr20"]),
             ("T2T chr20", bm["v19_t2t_chr20"]["mean"], bm["genatator_t2t_chr20"]),
@@ -152,16 +152,16 @@ def fig6(root, out):
     for lab, m, g in sets:
         rows.append({"set": lab, "ours_L1": m["lnc"]["L1_sn"], "ours_S50": m["lnc"]["S50_sn"], "ours_pr": m["lnc"]["L1_pr_strict"],
                      "gen_L1": g["lnc"]["L1"]["sn"] if g else None, "gen_S50": g["lnc"]["S50"]["sn"] if g else None})
-    DATA["fig6a"] = rows
+    DATA["fig5a"] = rows
 
     bv = J(root, "BIOVAL/RESULT.json")
     strata = [("All", "all"), ("Inter-\ngenic", "S_inter"), ("Other", "S_other")]
     bvals = [(lab, bv["mean"][k]["primary"], bv["mean_ctrl"][k]["primary"]) for lab, k in strata]
     bvals.append(("≥2 of 3\nmodels", bv["consensus"]["primary"], bv["consensus"]["ctrl_mean"]))
-    DATA["fig6b"] = bvals
+    DATA["fig5b"] = bvals
 
     s3 = {c: J(root, f"S3/S3_{c}.json")["R2"] for c in ("chr18", "chr20")}
-    DATA["fig6c"] = {c: {f: [s3[c][f][f"Q{i}"]["detected"] for i in range(1, 5)] for f in ("cpg_oe", "log_span")} for c in s3}
+    DATA["fig5c"] = {c: {f: [s3[c][f][f"Q{i}"]["detected"] for i in range(1, 5)] for f in ("cpg_oe", "log_span")} for c in s3}
 
     fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.6), gridspec_kw={"wspace": 0.42, "width_ratios": [1.5, 1.1, 1.0]})
     ax = axs[0]
@@ -198,7 +198,7 @@ def fig6(root, out):
     xq = np.arange(1, 5)
     for f, col, lab in (("cpg_oe", LNC, "promoter CpG o/e"), ("log_span", AQUA, "gene span")):
         for c, ls in (("chr18", (0, (2, 1.5))), ("chr20", "-")):
-            ax.plot(xq, DATA["fig6c"][c][f], color=col, linestyle=ls, marker="o", markersize=3, label=f"{lab}, {c}")
+            ax.plot(xq, DATA["fig5c"][c][f], color=col, linestyle=ls, marker="o", markersize=3, label=f"{lab}, {c}")
     ax.set_xticks(xq, ["Q1", "Q2", "Q3", "Q4"])
     ax.set_ylabel("lncRNA genes detected (L1)")
     ax.set_ylim(0, 0.65)
@@ -206,7 +206,7 @@ def fig6(root, out):
     ax.legend(frameon=False, loc="upper left", fontsize=5.4)
     ax.set_title("c  What is detected")
     for f in ("pdf", "png"):
-        fig.savefig(f"{out}/fig6.{f}", dpi=300, bbox_inches="tight")
+        fig.savefig(f"{out}/fig5.{f}", dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -216,8 +216,8 @@ def main():
     a = ap.parse_args()
     out = os.path.join(a.root, "docs/manuscript/figures")
     os.makedirs(out, exist_ok=True)
+    fig5(a.root, out)
     fig6(a.root, out)
-    fig7(a.root, out)
     json.dump(DATA, open(f"{out}/fig_data.json", "w"), indent=1, default=float)
     print("ok", out)
 

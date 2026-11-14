@@ -182,7 +182,7 @@ def fig4(root, out):
     save(fig, out, "fig4")
 
 
-def fig5(root, out):
+def figS1(root, out):
     s = J(root, "0.5_unknown/SUMMARY_0.5.json")
     e = J(root, "0.5_unknown/EXPLORATORY_auprc.json")
     arms = [("F", "Background\n(F)"), ("Uev", "Unknown,\nevidence (U-ev)"), ("Upu", "Unknown,\nall (U-pu)")]
@@ -190,7 +190,7 @@ def fig5(root, out):
     rec = {a: [s["runs"][f"{a}_{sd}"]["delta_L1_sn"] for sd in seeds] for a, _ in arms}
     ap = {a: [e["runs"][f"{a}_{sd}"]["A_delta_vs_intergenic_ap"] for sd in seeds] for a, _ in arms}
     pr = {a: [s["runs"][f"{a}_{sd}"]["strict_pr_v50"] for sd in seeds] for a, _ in arms}
-    DATA["fig5"] = {"delta_L1_sn": rec, "A_ap": ap, "strict_pr_v50": pr, "Uev_minus_F": s["Uev_minus_F"], "Upu_minus_F": s["Upu_minus_F"]}
+    DATA["figS1"] = {"delta_L1_sn": rec, "A_ap": ap, "strict_pr_v50": pr, "Uev_minus_F": s["Uev_minus_F"], "Upu_minus_F": s["Upu_minus_F"]}
     fig, axs = plt.subplots(1, 3, figsize=(7.2, 2.3), gridspec_kw={"wspace": 0.45})
     for ax, d, lab, t in ((axs[0], rec, "Post-2022 loci recovered (L1)", "a  Recovery of new loci"),
                           (axs[1], ap, "AUPRC, new-locus exons", "b  Ranking (exploratory)"),
@@ -209,7 +209,7 @@ def fig5(root, out):
         ax.set_title(t)
     axs[0].text(0.02, 0.97, "U-ev − F: +{:.3f} (95% CI {:.3f}–{:.3f})".format(s["Uev_minus_F"]["delta_L1_sn_diff"], *s["Uev_minus_F"]["ci95"]),
                 transform=axs[0].transAxes, fontsize=5.4, color=INK2, va="top")
-    save(fig, out, "fig5")
+    save(fig, out, "figS1")
 
 
 def main():
@@ -218,7 +218,7 @@ def main():
     a = ap.parse_args()
     out = os.path.join(a.root, "docs/manuscript/figures")
     os.makedirs(out, exist_ok=True)
-    for f in (fig1, fig2, fig3, fig4, fig5):
+    for f in (fig1, fig2, fig3, fig4, figS1):
         f(a.root, out)
     json.dump(DATA, open(f"{out}/fig_data_benchmark.json", "w"), indent=1, default=float)
     print("ok")
