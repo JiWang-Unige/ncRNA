@@ -42,9 +42,9 @@ def chance(ax, y=0.05, label="chance (±1 kb of ±20 kb)"):
 # ---------------------------------------------------------------- Figure 7
 def fig7(root, out):
     b1 = J(root, "B1/B1.json")["sets"]
-    sets = [("Ours v1.9\nchr20", "v19_chr20", True), ("Ours v2.0\nchr9", "v20_chr9", True),
-            ("GENCODE v41\nas prediction", "gencode_v41_as_pred_chr20", False), ("GENATATOR", "genatator_chr20", False),
-            ("SegmentNT", "segnt_t0.5_both_chr20", False), ("Tiberius", "tiberius_chr20", False)]
+    sets = [("Ours\nchr20", "v19_chr20", True), ("Ours\nchr9", "v20_chr9", True),
+            ("v41 as\nprediction", "gencode_v41_as_pred_chr20", False), ("GENA-\nTATOR", "genatator_chr20", False),
+            ("Segment-\nNT", "segnt_t0.5_both_chr20", False), ("Tiberius", "tiberius_chr20", False)]
     rows = []
     for lab, k, mean in sets:
         v = b1[k]["mean"] if mean else {c: {"L1_sn": b1[k][c]["L1"]["sn"], "S50_sn": b1[k][c]["S50"]["sn"]} for c in ("lnc", "mrna")}
@@ -81,20 +81,22 @@ def fig7(root, out):
     ax.set_ylabel("Recall of reference genes")
     ax.set_ylim(0, 1)
     ygrid(ax)
-    ax.legend(frameon=False, ncol=2, loc="upper right", bbox_to_anchor=(1.0, 1.14), fontsize=5.8, handlelength=1.2)
-    ax.set_title("a  Detected but not delimited", pad=16)
+    ax.legend(frameon=False, ncol=2, loc="lower left", bbox_to_anchor=(0.0, 1.01), fontsize=5.8, handlelength=1.2)
+    ax.set_title("a  Detected but not delimited", pad=30)
     # b
     ax = axs[0, 1]
     xs = np.arange(len(cond))
     vals = [DATA["fig7b"][c] for c, _ in cond]
     ax.plot(xs, vals, color=LNC, marker="o", markersize=4)
     for xi, v in zip(xs, vals):
-        ax.text(xi, v + 0.02, f"{v:.2f}", ha="center", fontsize=5.8, color=INK2)
+        ax.text(xi + 0.12, v + 0.025, f"{v:.2f}", ha="left", fontsize=5.8, color=INK2)
     ax.set_xticks(xs, [c for c, _ in cond], fontsize=5.8)
     ax.set_ylabel("Exact lncRNA intron chain")
     ax.set_ylim(0, 0.45)
     ygrid(ax)
-    ax.set_title("b  Structure needs sub-kilobase ends")
+    ax.set_title("b  Structure needs sub-kilobase ends", pad=30)
+    ax.text(0, -0.2, "← trimmed", transform=ax.get_xaxis_transform(), fontsize=5.6, color=MUTED, ha="center")
+    ax.text(4.5, -0.2, "padded →", transform=ax.get_xaxis_transform(), fontsize=5.6, color=MUTED, ha="center")
     ax.text(0.98, 0.95, "GENATATOR segmentation,\n200 lncRNA genes, chr18", transform=ax.transAxes, ha="right", va="top", fontsize=5.8, color=MUTED)
     # c
     ax = axs[1, 0]
@@ -153,9 +155,9 @@ def fig6(root, out):
     DATA["fig6a"] = rows
 
     bv = J(root, "BIOVAL/RESULT.json")
-    strata = [("All outside\nreference", "all"), ("Intergenic\n(no gene ±5 kb)", "S_inter"), ("Other", "S_other")]
+    strata = [("All", "all"), ("Inter-\ngenic", "S_inter"), ("Other", "S_other")]
     bvals = [(lab, bv["mean"][k]["primary"], bv["mean_ctrl"][k]["primary"]) for lab, k in strata]
-    bvals.append(("Called by ≥2\nof 3 models", bv["consensus"]["primary"], bv["consensus"]["ctrl_mean"]))
+    bvals.append(("≥2 of 3\nmodels", bv["consensus"]["primary"], bv["consensus"]["ctrl_mean"]))
     DATA["fig6b"] = bvals
 
     s3 = {c: J(root, f"S3/S3_{c}.json")["R2"] for c in ("chr18", "chr20")}
@@ -176,10 +178,10 @@ def fig6(root, out):
     ax.set_xlim(0, 0.45)
     ax.xaxis.grid(True, color=GRID, linewidth=0.6)
     ax.set_axisbelow(True)
-    ax.axhline(5.5, color=MUTED, linewidth=0.5)
-    ax.text(0.44, 6.5, "human", ha="right", fontsize=5.8, color=MUTED)
-    ax.text(0.44, 4.6, "other species\n(zero-shot)", ha="right", va="top", fontsize=5.8, color=MUTED)
-    ax.legend(frameon=False, loc="lower right", fontsize=5.6)
+    ax.axhline(4.5, color=MUTED, linewidth=0.5)
+    ax.text(0.445, 4.62, "human (held-out)", ha="right", va="bottom", fontsize=5.6, color=MUTED)
+    ax.text(0.445, 4.38, "other species (zero-shot)", ha="right", va="top", fontsize=5.6, color=MUTED)
+    ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.45, -0.2), ncol=2, fontsize=5.6)
     ax.set_title("a  Held-out detection")
     ax = axs[1]
     x = np.arange(len(bvals))
@@ -190,7 +192,8 @@ def fig6(root, out):
     ax.set_ylim(0, 1)
     ygrid(ax)
     ax.legend(frameon=False, loc="upper left", fontsize=5.8)
-    ax.set_title("b  Outside the reference (chr20)")
+    ax.set_title("b  Outside the reference")
+    ax.set_xlabel("chr20 predictions outside GENCODE v50", fontsize=6)
     ax = axs[2]
     xq = np.arange(1, 5)
     for f, col, lab in (("cpg_oe", LNC, "promoter CpG o/e"), ("log_span", AQUA, "gene span")):
