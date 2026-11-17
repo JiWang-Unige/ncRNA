@@ -3,6 +3,8 @@
 > 依据：`docs/review/DECISION_20261117.md` 第 2 节实验 3（判据按 ChatGPT 第二轮修改）。
 > 设计与 `PLAN_DEDEND.md`（Puffin，冻结 8deaaff）完全对齐，这样可以在同一批基因上配对比较。
 > **状态**：草案。没有下载任何东西，没有产生任何 AlphaGenome 输出。批准事项见第 7 节。
+> - 2026-11-17：作者已在 Hugging Face 接受四个 fold 仓库的条款；Baobab 上用作者的登录核对过，四个仓库的文件都能访问（fold-0 修订 4ce9fd40、fold-1 ebbc6ab6、fold-2 8b7e73c4、fold-3 75fa73c8，各约 0.75 GB）。
+> - 代码已写好（`scripts/m1/ag/`）：`ag_fold_prep.py` 起点表与 fold 分配，`ag_fold_job.py` Colab 作业，`ag_fold_run.sh` Colab 包装（沿用 S2-AG 的会话、超时、CU 上限与清理），`ag_fold_metrics.py` 打分与判读。尚未运行。
 > 只作对照：按 AlphaGenome 条款，输出不用于训练或改进我们的方法。
 
 ## 1. 问题
