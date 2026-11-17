@@ -1,0 +1,62 @@
+2026-11-17T08:20:35Z START mode=auto gpu=G4,A100 cap=10 balance=25.67
+2026-11-17T10:17:12Z session READY on A100; rate: 6.73/h
+2026-11-17T10:21:58Z weights fold-0 scp rc=0 s 282
+2026-11-17T10:26:36Z weights fold-1 scp rc=0 s 278
+2026-11-17T10:31:19Z weights fold-2 scp rc=0 s 283
+2026-11-17T10:36:03Z weights fold-3 scp rc=0 s 284
+2026-11-17T10:36:21Z launched smoke
+2026-11-17T10:37:26Z poll 1215 s spent_cu 2.14 | {"step": "start", "mode": "smoke", "models": ["fold-0", "fold-1", "fold-2", "fold-3"], "t": 0.0}
+2026-11-17T10:38:31Z poll 1280 s spent_cu 2.14 | {"step": "start", "mode": "smoke", "models": ["fold-0", "fold-1", "fold-2", "fold-3"], "t": 0.0}
+2026-11-17T10:39:35Z poll 1344 s spent_cu 2.14 | {"step": "start", "mode": "smoke", "models": ["fold-0", "fold-1", "fold-2", "fold-3"], "t": 0.0}
+2026-11-17T10:40:40Z poll 1409 s spent_cu 2.14 | {"step": "codes", "chrom": "chr8", "L": 145138636, "match": true, "t": 255.5}
+2026-11-17T10:41:51Z poll 1480 s spent_cu 2.71 | {"step": "end", "total_s": 311, "t": 311.2}
+2026-11-17T10:42:05Z fetch tracks_cage_+.csv bytes 26043 s 7 sha_ok 1
+2026-11-17T10:42:11Z fetch tracks_cage_-.csv bytes 26043 s 6 sha_ok 1
+2026-11-17T10:42:17Z fetch tracks_procap_+.csv bytes 637 s 6 sha_ok 1
+2026-11-17T10:42:24Z fetch tracks_procap_-.csv bytes 637 s 7 sha_ok 1
+2026-11-17T10:42:30Z fetch smoke_fold-0.npz bytes 31248 s 6 sha_ok 1
+2026-11-17T10:42:30Z JOB_END {"step": "end", "total_s": 311, "t": 311.2}
+2026-11-17T10:42:35Z CHECK GO {"fast_equals_public": true, "check": {"public_mean_argmax": -6206, "fast_mean_argmax": -6206, "n_public_tracks": 273, "n_fast_tracks": 273}, "rate_per_h": 6.73, "window_s": 0.55, "windows": 712, "projected_h": 0.42, "projected_cu": 2.84, "spent_cu": 2.71, "cap": 10.0}
+2026-11-17T10:42:46Z launched full
+2026-11-17T10:43:51Z poll 1600 s spent_cu 2.71 | {"step": "setup_done", "nvidia": "NVIDIA A100-SXM4-40GB, 40960 MiB", "versions": "alphagenome                           2.0.0\nalphagenome_research                  0.3.0\ndm-haiku                              0.0.17\njax                                   0.11.1\njaxlib                              
+2026-11-17T10:44:56Z poll 1665 s spent_cu 2.71 | {"step": "codes", "chrom": "chr8", "L": 145138636, "match": true, "t": 73.4}
+2026-11-17T10:46:00Z poll 1729 s spent_cu 2.71 | {"step": "codes", "chrom": "chr8", "L": 145138636, "match": true, "t": 187.7}
+2026-11-17T10:46:14Z fetch fold-0.npz bytes 1035242 s 8 sha_ok 1
+2026-11-17T10:47:19Z poll 1808 s spent_cu 3.27 | {"step": "window", "model": "fold-1", "n": 125, "s": 81, "t": 266.7}
+2026-11-17T10:48:24Z poll 1873 s spent_cu 3.27 | {"step": "window", "model": "fold-1", "n": 225, "s": 146, "t": 331.3}
+2026-11-17T10:49:29Z poll 1938 s spent_cu 3.27 | {"step": "FAILED", "error": "SystemExit('FAILED: wget -q -O /content/chr20.fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr20.fa.gz')", "total_s": 383, "t": 383.2}
+2026-11-17T10:49:29Z JOB_END {"step": "FAILED", "error": "SystemExit('FAILED: wget -q -O /content/chr20.fa.gz https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr20.fa.gz')", "total_s": 383, "t": 383.2}
+2026-11-17T10:50:35Z after: Current balance: 22.40 compute units Usage rate: 0.00/hr Active assignments: 0 
+2026-11-17T10:50:36Z END wall_s 2004 spent_cu 3.27
+2026-11-17T10:53:56Z RESUME 2df837b: MODELS=fold-1,fold-2,fold-3 cap=6.7 (10 - 3.27 spent in run 1)
+2026-11-17T10:53:56Z START mode=full gpu=G4,A100 cap=6.7 balance=22.40
+2026-11-17T17:07:20Z ABORT: no session on G4,A100
+2026-11-17T17:07:33Z after: Current balance: 22.40 compute units Usage rate: 0.00/hr Active assignments: 0 
+2026-11-17T17:07:34Z END wall_s 22417 spent_cu 0.0
+2026-11-17T17:09:19Z RESUME2 2df837b: same as RESUME, ASSIGN_HOURS=12 (RESUME got no G4/A100 in 6 h, 0 CU)
+2026-11-17T17:09:20Z START mode=full gpu=G4,A100 cap=6.7 balance=22.40
+2026-11-17T19:33:36Z session READY on G4; rate: 10.05/h
+2026-11-17T19:35:04Z weights fold-1 scp rc=0 s 87
+2026-11-17T19:36:34Z weights fold-2 scp rc=0 s 90
+2026-11-17T19:38:02Z weights fold-3 scp rc=0 s 88
+2026-11-17T19:38:09Z sequence chr18 scp rc=0 s 7
+2026-11-17T19:38:15Z sequence chr20 scp rc=0 s 6
+2026-11-17T19:38:27Z sequence chr8 scp rc=0 s 12
+2026-11-17T19:38:36Z sequence chr9 scp rc=0 s 9
+2026-11-17T19:38:43Z launched full
+2026-11-17T19:39:45Z poll 370 s spent_cu 0.48 | {"step": "start", "mode": "full", "models": ["fold-1", "fold-2", "fold-3"], "t": 0.0}
+2026-11-17T19:40:48Z poll 433 s spent_cu 0.48 | {"step": "codes", "chrom": "chr8", "L": 145138636, "match": true, "t": 110.9}
+2026-11-17T19:41:50Z poll 495 s spent_cu 0.48 | {"step": "window", "model": "fold-1", "n": 125, "s": 76, "t": 186.1}
+2026-11-17T19:42:53Z poll 558 s spent_cu 1.31 | {"step": "window", "model": "fold-1", "n": 300, "s": 138, "t": 247.8}
+2026-11-17T19:43:55Z poll 620 s spent_cu 1.31 | {"step": "window", "model": "fold-3", "n": 25, "s": 13, "t": 309.1}
+2026-11-17T19:44:00Z fetch tracks_cage_+.csv bytes 26043 s 2 sha_ok 1
+2026-11-17T19:44:03Z fetch tracks_cage_-.csv bytes 26043 s 3 sha_ok 1
+2026-11-17T19:44:06Z fetch tracks_procap_+.csv bytes 637 s 3 sha_ok 1
+2026-11-17T19:44:08Z fetch tracks_procap_-.csv bytes 637 s 2 sha_ok 1
+2026-11-17T19:44:12Z fetch fold-1.npz bytes 6166802 s 4 sha_ok 1
+2026-11-17T19:44:18Z fetch fold-2.npz bytes 937088 s 4 sha_ok 1
+2026-11-17T19:45:20Z poll 705 s spent_cu 1.31 | {"step": "end", "total_s": 370, "t": 369.6}
+2026-11-17T19:45:27Z fetch fold-3.npz bytes 3469576 s 4 sha_ok 1
+2026-11-17T19:45:27Z JOB_END {"step": "end", "total_s": 370, "t": 369.6}
+2026-11-17T19:45:40Z after: Current balance: 21.09 compute units Usage rate: 0.00/hr Active assignments: 0 
+2026-11-17T19:45:41Z END wall_s 725 spent_cu 1.31

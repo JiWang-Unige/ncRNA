@@ -1,0 +1,20 @@
+{
+ "lnc_lowcpg": {
+  "n": 1384,
+  "best_track_true": 0.458,
+  "best_track_decoy_pm10kb": 0.23,
+  "mean_track_true": 0.133,
+  "mean_track_decoy_pm10kb": 0.039,
+  "median_tracks_hitting_true": 0.0,
+  "frac_starts_ge_half_tracks_hit_true": 0.128
+ },
+ "mrna_cage": {
+  "n": 1286,
+  "best_track_true": 0.927,
+  "best_track_decoy_pm10kb": 0.052,
+  "mean_track_true": 0.841,
+  "mean_track_decoy_pm10kb": 0.01,
+  "median_tracks_hitting_true": 272.0,
+  "frac_starts_ge_half_tracks_hit_true": 0.83
+ }
+}
