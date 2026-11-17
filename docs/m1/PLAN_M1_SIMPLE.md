@@ -1,5 +1,7 @@
-# M1 实验 2 计划：简单特征的 lncRNA 位点检出对照（草案，待作者冻结，2026-11-17）
+# M1 实验 2 计划：简单特征的 lncRNA 位点检出对照（冻结 2026-11-17）
 
+> **冻结**：作者 2026-11-17 在对话中回复「冻结并读取」。第 2–4 节（检测器、选中配置、N、判据）自此不改；RULES.json sha256 `f43a4ce4…`、代码 sha256 `deb931dc…` 在 ont 上核对一致后写入 `outputs/M1/SIMPLE/FROZEN`。实现中如有偏离，记在结果文档里，不改本文件。
+>
 > 依据：`docs/review/DECISION_20261117.md` 第 2 节实验 2（判据按 ChatGPT 第二轮修改）。
 > **状态**：chr18 开发已完成；chr20 / chr9 **尚未读取**。作者批准冻结后，在 ont 写入 `outputs/M1/SIMPLE/FROZEN`（内容为 RULES.json 的 sha256），读取脚本才会运行，且每条染色体只读一次。
 > 代码：`scripts/m1/simple_det.py`（sha256 `deb931dc…`）。开发产物：`docs/m1/SIMPLE/{DEV.json, RULES.json, dryrun_chr18_SCORE.json}`；RULES.json sha256 `f43a4ce4…`。
