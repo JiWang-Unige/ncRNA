@@ -1,0 +1,92 @@
+{
+ "dna_v20-g1b-42-ke": {
+  "n_truth": 38,
+  "n_pred": 494,
+  "S50_sn": 0.079,
+  "S50_pr": 0.006,
+  "L1_sn": 0.5,
+  "L1_pr": 0.038,
+  "n_unknown": 172,
+  "S50_pr_known": 0.009
+ },
+ "dna_v20-g1b-123-ke": {
+  "n_truth": 38,
+  "n_pred": 520,
+  "S50_sn": 0.026,
+  "S50_pr": 0.002,
+  "L1_sn": 0.474,
+  "L1_pr": 0.037,
+  "n_unknown": 145,
+  "S50_pr_known": 0.003
+ },
+ "dna_v20-g1b-456-ke": {
+  "n_truth": 38,
+  "n_pred": 412,
+  "S50_sn": 0.132,
+  "S50_pr": 0.012,
+  "L1_sn": 0.421,
+  "L1_pr": 0.041,
+  "n_unknown": 93,
+  "S50_pr_known": 0.016
+ },
+ "snap1k_v20-g1b-42-ke": {
+  "n_truth": 38,
+  "n_pred": 494,
+  "S50_sn": 0.079,
+  "S50_pr": 0.006,
+  "L1_sn": 0.5,
+  "L1_pr": 0.038,
+  "n_unknown": 173,
+  "S50_pr_known": 0.009
+ },
+ "snap1k_v20-g1b-123-ke": {
+  "n_truth": 38,
+  "n_pred": 520,
+  "S50_sn": 0.053,
+  "S50_pr": 0.004,
+  "L1_sn": 0.474,
+  "L1_pr": 0.037,
+  "n_unknown": 144,
+  "S50_pr_known": 0.005
+ },
+ "snap1k_v20-g1b-456-ke": {
+  "n_truth": 38,
+  "n_pred": 409,
+  "S50_sn": 0.132,
+  "S50_pr": 0.012,
+  "L1_sn": 0.447,
+  "L1_pr": 0.044,
+  "n_unknown": 93,
+  "S50_pr_known": 0.016
+ },
+ "pair50k": {
+  "n_truth": 38,
+  "n_pred": 214,
+  "S50_sn": 0.263,
+  "S50_pr": 0.047,
+  "L1_sn": 0.658,
+  "L1_pr": 0.126,
+  "n_unknown": 154,
+  "S50_pr_known": 0.167
+ },
+ "stringtie": {
+  "n_truth": 38,
+  "n_pred": 113,
+  "S50_sn": 0.368,
+  "S50_pr": 0.124,
+  "L1_sn": 0.5,
+  "L1_pr": 0.204,
+  "n_unknown": 78,
+  "S50_pr_known": 0.4
+ },
+ "isoquant": {
+  "n_truth": 38,
+  "n_pred": 57,
+  "S50_sn": 0.421,
+  "S50_pr": 0.281,
+  "L1_sn": 0.526,
+  "L1_pr": 0.404,
+  "n_unknown": 37,
+  "S50_pr_known": 0.8
+ }
+}
