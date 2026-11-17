@@ -1,0 +1,218 @@
+{
+ "checked": "2026-11-17",
+ "encode": {
+  "ENCSR322MWL": {
+   "assay_title": "PAS-seq",
+   "description": "WTC11 QuantSeq",
+   "biosample": "Homo sapiens WTC11",
+   "lab": "Ali Mortazavi, UCI",
+   "date_released": "2022-03-24",
+   "files": [
+    {
+     "accession": "ENCFF603KSV",
+     "format": "bed",
+     "output_type": "polyA sites",
+     "rep": [
+      1
+     ],
+     "size": 8732845,
+     "md5": "bd57bd296ee0c8b13dfc20a4baf3a3f1",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF603KSV/@@download/ENCFF603KSV.bed.gz"
+    },
+    {
+     "accession": "ENCFF937BYX",
+     "format": "bed",
+     "output_type": "polyA sites",
+     "rep": [
+      2
+     ],
+     "size": 8726692,
+     "md5": "d427c97d7151170fa73bf4d2bb07a1c5",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF937BYX/@@download/ENCFF937BYX.bed.gz"
+    },
+    {
+     "accession": "ENCFF004EPK",
+     "format": "bed",
+     "output_type": "polyA sites",
+     "rep": [
+      3
+     ],
+     "size": 8731650,
+     "md5": "021e6713c8f0bcf202795c14d5884f14",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF004EPK/@@download/ENCFF004EPK.bed.gz"
+    }
+   ]
+  },
+  "ENCSR507JOF": {
+   "assay_title": "long read RNA-seq",
+   "description": "LRGASP WTC11",
+   "biosample": "Homo sapiens WTC11",
+   "lab": "Ali Mortazavi, UCI",
+   "date_released": "2021-05-04",
+   "files": [
+    {
+     "accession": "ENCFF373TKM",
+     "format": "bam",
+     "output_type": "alignments",
+     "rep": [
+      1
+     ],
+     "size": 878433020,
+     "md5": "4dc9013c1315114604ff0e25697972eb",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF373TKM/@@download/ENCFF373TKM.bam"
+    },
+    {
+     "accession": "ENCFF985LGZ",
+     "format": "bam",
+     "output_type": "alignments",
+     "rep": [
+      2
+     ],
+     "size": 393981849,
+     "md5": "34404865ca04fd00e407684a1f43dec6",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF985LGZ/@@download/ENCFF985LGZ.bam"
+    },
+    {
+     "accession": "ENCFF388HXU",
+     "format": "bam",
+     "output_type": "alignments",
+     "rep": [
+      3
+     ],
+     "size": 873221328,
+     "md5": "d59c8c2251093f53c34ceadbe0ab455e",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF388HXU/@@download/ENCFF388HXU.bam"
+    },
+    {
+     "accession": "ENCFF370SDY",
+     "format": "gtf",
+     "output_type": "transcriptome annotations",
+     "rep": [
+      1
+     ],
+     "size": 96004557,
+     "md5": "45e7f7a314038b09829065defeb86263",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF370SDY/@@download/ENCFF370SDY.gtf.gz"
+    },
+    {
+     "accession": "ENCFF798DWV",
+     "format": "gtf",
+     "output_type": "transcriptome annotations",
+     "rep": [
+      2
+     ],
+     "size": 66168772,
+     "md5": "6f981bcacedcf9d2843ae3f1dceeebca",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF798DWV/@@download/ENCFF798DWV.gtf.gz"
+    },
+    {
+     "accession": "ENCFF422CGK",
+     "format": "gtf",
+     "output_type": "transcriptome annotations",
+     "rep": [
+      3
+     ],
+     "size": 96589860,
+     "md5": "2e50f7e5b95a6c505d8ddbcb00d17a9c",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF422CGK/@@download/ENCFF422CGK.gtf.gz"
+    },
+    {
+     "accession": "ENCFF803XYM",
+     "format": "tsv",
+     "output_type": "transcript quantifications",
+     "rep": [
+      1
+     ],
+     "size": 33895273,
+     "md5": "c122cfd4c1e6cbdd0bc7a3a21292e562",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF803XYM/@@download/ENCFF803XYM.tsv"
+    },
+    {
+     "accession": "ENCFF527KWD",
+     "format": "tsv",
+     "output_type": "transcript quantifications",
+     "rep": [
+      2
+     ],
+     "size": 21042167,
+     "md5": "2f38cf227b11f8c45d8439d95ccc6cc4",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF527KWD/@@download/ENCFF527KWD.tsv"
+    },
+    {
+     "accession": "ENCFF486EKE",
+     "format": "tsv",
+     "output_type": "transcript quantifications",
+     "rep": [
+      3
+     ],
+     "size": 36898333,
+     "md5": "0f66575306c109c11cf1488c337fce55",
+     "assembly": "GRCh38",
+     "annotation": "V29",
+     "url": "https://www.encodeproject.org/files/ENCFF486EKE/@@download/ENCFF486EKE.tsv"
+    }
+   ]
+  },
+  "ENCSR673UKZ": {
+   "assay_title": "total RNA-seq",
+   "biosample": "Homo sapiens WTC11",
+   "note": "fastq only; not downloaded"
+  }
+ },
+ "geo": {
+  "GSE185917": {
+   "title": "LRGASP challenge WTC11 ssCAGE sequencing derived peaks",
+   "public": "2021-10-27",
+   "samples": {
+    "GSM5625727": "WTC11-1 rep1",
+    "GSM5625728": "WTC11-1 rep2",
+    "GSM5625729": "WTC11-1 rep3",
+    "GSM5625730": "WTC11-3 rep1",
+    "GSM5625731": "WTC11-3 rep2",
+    "GSM5625732": "WTC11-3 rep3"
+   },
+   "files_bytes": {
+    "count.bed.gz": [
+     1951516,
+     1907890,
+     1952935,
+     1977460,
+     1976242,
+     2014462
+    ],
+    "ctss.bed.gz (optional)": [
+     45704196,
+     40892110,
+     44537521,
+     50143720,
+     51344829,
+     57779123
+    ]
+   },
+   "processing": "fastx trimming, rRNAdust, STAR 2.5.0a to hg38"
+  }
+ },
+ "required_bytes": 2534206851
+}
