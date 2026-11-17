@@ -47,12 +47,19 @@ fi
 for t in giraffe_14a giraffe_14b giraffe_14c; do
   done_all=1; for r in $RUNS; do [ -s $O/read/$t/$r/read_meta.json ] || done_all=0; done
   [ $done_all = 1 ] && { log "$t already read"; continue; }
-  if [ ! -s data/p1_feat/$t.npy ]; then
-    free=$(df --output=avail -BG / | tail -1 | tr -dc 0-9)
-    [ "$free" -ge 50 ] || { log "STOP: only ${free} GB free before extracting $t"; exit 1; }
-    rm -f data/p1_feat/$t.cover.json data/p1_shards/ont/${t}_t*.json
-    NAMES=$t CHROM_ONLY=1 NCRNA_GPU_FRAC=0.28 bash scripts/phase1/p1_feat_ont.sh >> $O/feat_$t.log 2>&1
-    grep -q "ALL DONE fails=0" $O/feat_$t.log || { log "FEAT_FAIL $t"; exit 1; }
+  if [ ! -e $O/feat_$t.complete ]; then   # a partial cache is never reused: start the part from scratch
+    ok=0
+    for attempt in 1 2; do
+      rm -f data/p1_feat/$t.npy data/p1_feat/$t.cover.json data/p1_shards/ont/${t}_t*.json
+      free=$(df --output=avail -BG / | tail -1 | tr -dc 0-9)
+      [ "$free" -ge 50 ] || { log "STOP: only ${free} GB free before extracting $t"; exit 1; }
+      # pinned to cores 2-31 like every other step (ont kernel log: repeated segfaults on CPU 0)
+      taskset -c 2-31 env NAMES=$t CHROM_ONLY=1 NCRNA_GPU_FRAC=0.28 bash scripts/phase1/p1_feat_ont.sh >> $O/feat_$t.log 2>&1
+      grep "ALL DONE" $O/feat_$t.log | tail -1 | grep -q "fails=0" && { ok=1; break; }
+      log "feature extraction of $t failed (attempt $attempt)"
+    done
+    [ $ok = 1 ] || { log "FEAT_FAIL $t"; exit 1; }
+    touch $O/feat_$t.complete
   fi
   echo "$(date -u +%FT%TZ) $t $(sha256sum data/p1_feat/$t.npy | cut -c1-64)" >> $O/feat_sha.log
   read_all $t
