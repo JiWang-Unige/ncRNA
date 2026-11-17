@@ -1,0 +1,78 @@
+{
+ "codes_sha256": {
+  "chr8": "3ef4b8179494737d65def11122412b761cac4ad65f6702c2cd87080ea260be0d",
+  "chr9": "742b09cce95d29d1622be6a1776528d886f94527751d2f97bb19d3a9a23cccab",
+  "chr18": "0c20711724717ee5fd8dbe1b83f56598c3e4f405635b1059cf2a7bd8591bd78c",
+  "chr20": "1bd402266d6bef2ddf8661cab43d8960688948b216c1c0877cf3973925a7bb5e"
+ },
+ "chroms": {
+  "chr8": {
+   "L": 145138636,
+   "n_rows": 2312,
+   "by_class_model": {
+    "l|fold-0": 236,
+    "l|fold-1": 1153,
+    "l|fold-2": 1,
+    "l|fold-3": 117,
+    "l|None": 99,
+    "m|fold-0": 96,
+    "m|fold-1": 510,
+    "m|fold-3": 27,
+    "m|None": 73
+   }
+  },
+  "chr9": {
+   "L": 138394717,
+   "n_rows": 2201,
+   "by_class_model": {
+    "l|fold-1": 763,
+    "l|fold-3": 461,
+    "l|None": 201,
+    "m|fold-1": 510,
+    "m|fold-3": 248,
+    "m|None": 18
+   }
+  },
+  "chr18": {
+   "L": 80373285,
+   "n_rows": 1196,
+   "by_class_model": {
+    "l|fold-0": 198,
+    "l|fold-1": 74,
+    "l|fold-2": 414,
+    "l|fold-3": 195,
+    "l|None": 48,
+    "m|fold-0": 70,
+    "m|fold-1": 26,
+    "m|fold-2": 129,
+    "m|fold-3": 31,
+    "m|None": 11
+   }
+  },
+  "chr20": {
+   "L": 64444167,
+   "n_rows": 1503,
+   "by_class_model": {
+    "l|fold-1": 358,
+    "l|fold-3": 568,
+    "l|None": 29,
+    "m|fold-1": 186,
+    "m|fold-3": 362
+   }
+  }
+ },
+ "windows": {
+  "fold-0": 96,
+  "fold-1": 361,
+  "fold-2": 57,
+  "fold-3": 198
+ },
+ "starts": {
+  "fold-0": 600,
+  "fold-1": 3580,
+  "fold-2": 543,
+  "fold-3": 2009
+ },
+ "bed_sha256": "13724966c9378c2fd024c62e6bb72b94850e12d96d23a419f60040ae50b98ba3",
+ "margin": 430000
+}

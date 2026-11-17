@@ -1,0 +1,109 @@
+{
+ "plan": "docs/m1/PLAN_M1_AG.md",
+ "model": "AlphaGenome 1 (AG1), fold models",
+ "weights": {
+  "fold-0": {
+   "hf_repo": "google/alphagenome-fold-0",
+   "hf_revision": "4ce9fd40aa9a3161644efcb69c47551454c6e5ad",
+   "local_dir": "data/alphagenome/hf_fold-0",
+   "files_sha256": {
+    ".gitattributes": "f9c75196dfb304b8fc9b37943a205b50afe43ea1b24c222961425ca1ab45414e",
+    "README.md": "b5688a405e4f372cc164526f0d2f185bd4596691df2a6b6a5e2ea77af794b744",
+    "_CHECKPOINT_METADATA": "9db9b0ea0ac49b97f65fd614eda84ad5cb3440498e4532840e6cb0c6c56ee690",
+    "_METADATA": "df68f8d9ded2bd7464027b87d8f4916cd7dcb7b4e18321ad4779ab1663177c1e",
+    "d/569dbac139b7946fab2f10f57d7d96c8": "9569ed4c3f95b2aea2fd4ab23c02793fe9faa3d06efee580b1d5d01d9a769cc0",
+    "manifest.ocdbt": "c30b12fc89f984e11e23c968e83e2b967a1c5c5e8b4bb7b57e15936b421ee1b5",
+    "notebook.ipynb": "9a614e649527dc0dd53fb4854fc4056f50e311817a42a6f72e14f6a0047d5134",
+    "ocdbt.process_0/d/36cf7d674bedcd37cc906b3cdc396781": "1f7e92a1ebcf04c6512636c65cf28784d13f6263a3be7c0c492bab38b9db2213",
+    "ocdbt.process_0/d/45320157615ab3ea5cd47df095cc09bc": "c719b2ec5476203fb043a0a43b68d4fef6f4f304d7c7539132f4916c3a1ce6f0",
+    "ocdbt.process_0/d/cef1679b4a9653f56e2c394b01f7013d": "975908279a10bba03148e789a8e6c152a251c1788594af6c561da416dffcb424",
+    "ocdbt.process_0/d/eaef10c0cdc5e4b9b2306904f620187f": "315bb7e9926fe765d955d5fdac08ed65327a18e44697dbcdd9c6e2d1fb7c6d68",
+    "ocdbt.process_0/manifest.ocdbt": "f62cfc973600acefa3a0451ac8f3efe5186da36f02e9ae97b57fba6c70d4a4a4"
+   }
+  },
+  "fold-1": {
+   "hf_repo": "google/alphagenome-fold-1",
+   "hf_revision": "ebbc6ab6e61d1e5a1dfe6e19a67379e45eb95116",
+   "local_dir": "data/alphagenome/hf_fold-1",
+   "files_sha256": {
+    ".gitattributes": "cfa7910a0545d74b60c5b66730ffb02a9c37dd9a45e26cf883100cfc5ae5d206",
+    "README.md": "b5688a405e4f372cc164526f0d2f185bd4596691df2a6b6a5e2ea77af794b744",
+    "_CHECKPOINT_METADATA": "6bccdbf0efe08c2025c2c106b92874e7681114c33bac9f9e86eb63ae48195917",
+    "_METADATA": "df68f8d9ded2bd7464027b87d8f4916cd7dcb7b4e18321ad4779ab1663177c1e",
+    "d/022bf57c8b99c8d22c88235a8c89c76d": "5f583738870b76fa7936c7cab48eb8cee1b87b5be6e4b0f7f3a0ef8685c262e5",
+    "manifest.ocdbt": "d0684effb5ce1cbcc62b2155827c39d975094690f7add095dc0ce4512a422f54",
+    "notebook.ipynb": "9a614e649527dc0dd53fb4854fc4056f50e311817a42a6f72e14f6a0047d5134",
+    "ocdbt.process_0/d/84d95ae8121adb40a1edab8640ca44a0": "213f980fbc0153236b882b5721a6be81d70c2dc455c6df8bc7c1b3b2cec88a41",
+    "ocdbt.process_0/d/87705490cd799b0d020e02bedb8b7d5a": "2127cfdb54da320effc9cfde873cc0c87b26461fca55cbce5275b37401271038",
+    "ocdbt.process_0/d/98313318079a135ed6c55f83fee8401f": "63c7f19bde250af5a4ed17c362b40c58a101da6204ef11ca41251199584c73fe",
+    "ocdbt.process_0/d/ffd95e84e84ffc4c235700606155b748": "666597cd8bdce58350e7a51e93e51837acb012c562d4300125f3b6df8fa66a32",
+    "ocdbt.process_0/manifest.ocdbt": "331d368092887592fd8f28d6b59044c237cb54272ce5a8d5878ce99e3d41c3d9"
+   }
+  },
+  "fold-2": {
+   "hf_repo": "google/alphagenome-fold-2",
+   "hf_revision": "8b7e73c4287c9986d265e77db0edd42ddaaf8ce9",
+   "local_dir": "data/alphagenome/hf_fold-2",
+   "files_sha256": {
+    ".gitattributes": "e1bc8545b482357d5ed19b38b54f74e83cf668d558748ac0685ae8d02be6d211",
+    "README.md": "b5688a405e4f372cc164526f0d2f185bd4596691df2a6b6a5e2ea77af794b744",
+    "_CHECKPOINT_METADATA": "8e1a34118243b209f195d0713f546d137a710f7b694e9c1a8fc77c40d1edad5e",
+    "_METADATA": "df68f8d9ded2bd7464027b87d8f4916cd7dcb7b4e18321ad4779ab1663177c1e",
+    "d/7b684cf5a79e17c25dc9382bb1554d1c": "669802574a3d472f99dee943a5c446da2fd10eab1391d80a38a1603136b5cf85",
+    "manifest.ocdbt": "d9b7bd989c52adf4a4df3c292c91c393301d3510f9ec904581ff385e5a9dc987",
+    "notebook.ipynb": "9a614e649527dc0dd53fb4854fc4056f50e311817a42a6f72e14f6a0047d5134",
+    "ocdbt.process_0/d/184c1eb49d00b6d3ea9b5b04d542a83f": "df2f4578f4566ec564765eb724bb5ad0a2397263d08774d2691925dac2fb6861",
+    "ocdbt.process_0/d/35c550cfedf12692061de793eb35f01d": "cee38e3081a10bc309b962735db03f786125fb142875bed862bc72cd5d959020",
+    "ocdbt.process_0/d/3ab3a241eb3670eac150ea27b1d5a73f": "85504f44381ef865f0b858c03d9da44f615c273df6764264d8f6c7be16ace06d",
+    "ocdbt.process_0/d/e5ad3e70e951ce81af20e90f89b2aa6d": "59bcaf0bf25cea5f94ee6ea31b87fbfae25e8d3614b2c78f5d23affaa9301e5a",
+    "ocdbt.process_0/manifest.ocdbt": "f851d9b9865f10386132dad1550a825799257cc2daf2dfe14f459f9e0f47628f"
+   }
+  },
+  "fold-3": {
+   "hf_repo": "google/alphagenome-fold-3",
+   "hf_revision": "75fa73c8c40a3411b99cbd600f940c8aaf5d0aff",
+   "local_dir": "data/alphagenome/hf_fold-3",
+   "files_sha256": {
+    ".gitattributes": "baded783da53c43464ae366e7e669f31c7fb0873e6b839d2443d8ddcfdd99faa",
+    "README.md": "b5688a405e4f372cc164526f0d2f185bd4596691df2a6b6a5e2ea77af794b744",
+    "_CHECKPOINT_METADATA": "2a3235bfba25289e71f42bd51d8984928264466903df0c6ff858fcc8166909e9",
+    "_METADATA": "df68f8d9ded2bd7464027b87d8f4916cd7dcb7b4e18321ad4779ab1663177c1e",
+    "d/2f010c4bd7a6c041f6e8248fa3b6486e": "519a66c62b969b95607dac859e9596f4fcc320ea1d51c4e1f3592dafd9ef7da2",
+    "manifest.ocdbt": "2c983c798ba2c3e58b59819817c0c3cf21b9b5a44f66541d19ab8f946d0ca768",
+    "notebook.ipynb": "9a614e649527dc0dd53fb4854fc4056f50e311817a42a6f72e14f6a0047d5134",
+    "ocdbt.process_0/d/2646a721633e1055c46e8aa050654a01": "2efffda914b74cbd71c558dd4eedbba7abc81d043a7e658fc1bcc8cc6f195cdf",
+    "ocdbt.process_0/d/51fe280c4fef83ea6bbf44442b73a44e": "1a940aee31775c35e584314bab709d3c9d39393eaa544e75227719d622f8e8ad",
+    "ocdbt.process_0/d/706c7bbb969c1658ee5b7545e4bede05": "cac2ae7cda1015a195a2facba13b276818ae8c7842c5c4988f75dd2d55366ab3",
+    "ocdbt.process_0/d/f56234d4c794bc42f867e3a067843388": "55acf37e143afa62b7fbe23e1b1bf2827688195068890fa475bce6d49836acd0",
+    "ocdbt.process_0/manifest.ocdbt": "67eebd3b98393b6409359a9484083a0f8212feb95cfaa335ff383fbea9bd7fa8"
+   }
+  }
+ },
+ "ag_commit": "3eecf48e58d7babbbc53525a8a0cf29a179e20a6",
+ "borzoi_intervals": {
+  "url": "https://github.com/calico/borzoi/raw/5c9358222b5026abb733ed5fb84f3f6c77239b37/data/sequences_human.bed.gz",
+  "local": "data/alphagenome/borzoi_sequences_human.bed.gz",
+  "sha256": "13724966c9378c2fd024c62e6bb72b94850e12d96d23a419f60040ae50b98ba3"
+ },
+ "codes_sha256": {
+  "chr8": "3ef4b8179494737d65def11122412b761cac4ad65f6702c2cd87080ea260be0d",
+  "chr9": "742b09cce95d29d1622be6a1776528d886f94527751d2f97bb19d3a9a23cccab",
+  "chr18": "0c20711724717ee5fd8dbe1b83f56598c3e4f405635b1059cf2a7bd8591bd78c",
+  "chr20": "1bd402266d6bef2ddf8661cab43d8960688948b216c1c0877cf3973925a7bb5e"
+ },
+ "margin_bp": 430000,
+ "windows": {
+  "fold-0": 96,
+  "fold-1": 361,
+  "fold-2": 57,
+  "fold-3": 198
+ },
+ "starts": {
+  "fold-0": 600,
+  "fold-1": 3580,
+  "fold-2": 543,
+  "fold-3": 2009
+ },
+ "cu_cap": 10,
+ "out_dir": "outputs/M1/AG"
+}
