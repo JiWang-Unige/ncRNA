@@ -1,0 +1,90 @@
+{
+ "plan": "docs/m1/PLAN_M1_AG_B.md",
+ "inputs": {
+  "/home/ji/ncrna-annot/data/fantom5_stageB/hg38_fair+new_CAGE_peaks_phase1and2_counts.osc.txt.gz": "8c03e1554e322c3b0a8916a60a998c5312d836b7670d03fe1d3f5daa86b09ed6",
+  "/home/ji/ncrna-annot/data/bioval/raw/fantom5_cage_peaks.bed.gz": "7e007c3e1fd7a2e24404ad9d5a57d27f76cd7920a6fdc1acaa06b5c4fcfcb018",
+  "/home/ji/ncrna-annot/data/fantom5_stageB/HumanSamples2.0.sdrf.xlsx": "fb4a091b531dc2f8fc49de034fc88d3cf6ddd0fcd4d487ee31a747aa61683da3",
+  "/home/ji/ncrna-annot/data/fantom5_stageB/ff-phase2-170801.obo.txt": "c34a4439696c548a4e19784b9f022ce64094324a8740e760f6baddd30283800c",
+  "/home/ji/ncrna-annot/outputs/M1/AG/tss.json": "5954b3c425e0299214d00aee0b318388aa840295721589abf04c7a44229c4f32"
+ },
+ "libraries": {
+  "category:time courses": 785,
+  "used": 678,
+  "category:cell lines": 271,
+  "no_ag_curie": 74,
+  "category:fractionations and perturbations": 21
+ },
+ "hcage_tracks": 258,
+ "groups_with_libs": 239,
+ "libs_per_group": {
+  "1": 70,
+  "2": 29,
+  "3": 76,
+  "4": 17,
+  "5": 11,
+  "6": 12,
+  "7": 6,
+  "8": 2,
+  "9": 4,
+  "10": 1,
+  "11": 2,
+  "12": 2,
+  "13": 3,
+  "15": 1,
+  "33": 1,
+  "66": 1,
+  "152": 1
+ },
+ "peaks_needed": 7000,
+ "peaks_found": 7000,
+ "sets": {
+  "main_chr8_chr9|l": {
+   "n_cage_starts": 680,
+   "n_evaluable": 562,
+   "n_no_peak_found": 0,
+   "matched_tracks_median": 6.0,
+   "unmatched_tracks_median": 176.0,
+   "n_test_only": 230
+  },
+  "main_chr8_chr9|m": {
+   "n_cage_starts": 1286,
+   "n_evaluable": 776,
+   "n_no_peak_found": 0,
+   "matched_tracks_median": 127.0,
+   "unmatched_tracks_median": 33.0,
+   "n_test_only": 302
+  },
+  "chr18|l": {
+   "n_cage_starts": 165,
+   "n_evaluable": 135,
+   "n_no_peak_found": 0,
+   "matched_tracks_median": 6.0,
+   "unmatched_tracks_median": 184.0,
+   "n_test_only": 107
+  },
+  "chr18|m": {
+   "n_cage_starts": 247,
+   "n_evaluable": 157,
+   "n_no_peak_found": 0,
+   "matched_tracks_median": 114.0,
+   "unmatched_tracks_median": 47.0,
+   "n_test_only": 137
+  },
+  "chr20|l": {
+   "n_cage_starts": 231,
+   "n_evaluable": 191,
+   "n_no_peak_found": 0,
+   "matched_tracks_median": 6.0,
+   "unmatched_tracks_median": 180.0,
+   "n_test_only": 70
+  },
+  "chr20|m": {
+   "n_cage_starts": 518,
+   "n_evaluable": 314,
+   "n_no_peak_found": 0,
+   "matched_tracks_median": 76.5,
+   "unmatched_tracks_median": 76.5,
+   "n_test_only": 108
+  }
+ }
+}
