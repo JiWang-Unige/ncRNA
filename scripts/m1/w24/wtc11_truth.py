@@ -26,7 +26,8 @@ ROOT = os.path.expanduser(os.environ.get("NCRNA_ROOT", "~/ncrna-annot"))
 E = f"{ROOT}/data/wtc11/encode"
 OUT = f"{ROOT}/outputs/M1/W24"
 REPS = {"rep2": ("ENCFF527KWD.tsv", "ENCFF798DWV.gtf.gz"), "rep3": ("ENCFF486EKE.tsv", "ENCFF422CGK.gtf.gz")}
-CHROMS = ("chr12", "chr18")
+CHROMS = ("chr18", "chr9", "chr12", "chr20", "chr13")   # dev chr18; test chr9 + chr12 + chr20 + chr13 (author, option A)
+TEST = ("chr9", "chr12", "chr20", "chr13")
 KEEP = {"Known", "NIC", "NNC", "Antisense", "Intergenic"}
 LNC_TYPES = {"lincRNA", "antisense", "processed_transcript", "sense_intronic", "sense_overlapping", "3prime_overlapping_ncRNA",
              "bidirectional_promoter_lncRNA", "macro_lncRNA", "non_coding", "lncRNA"}
@@ -174,8 +175,10 @@ def main():
                       "median_len_eval": sorted(x["end"] - x["start"] + 1 for x in ok)[len(ok) // 2] if ok else None}
         stats["chroms"][c] = {"zone_bp": zl, "zone_intervals": len(zone), "classes": cs,
                               "tx_by_novelty_lnc": dict(Counter(t["nov"] for t in trs if t["k"] == "l"))}
-    stats["power_rule"] = "chr12 evaluable lnc loci >= 150"
-    stats["power_ok"] = stats["chroms"]["chr12"]["classes"]["l"]["evaluable"] >= 150
+    n_test = sum(stats["chroms"][c]["classes"]["l"]["evaluable"] for c in TEST)
+    stats["power_rule"] = "test chromosomes (chr9 + chr12 + chr20 + chr13) evaluable lnc loci >= 150"
+    stats["test_evaluable_lnc"] = n_test
+    stats["power_ok"] = n_test >= 150
     json.dump(stats, open(f"{OUT}/TRUTH_STATS.json", "w"), indent=1)
     print(json.dumps({k: v for k, v in stats.items() if k != "rules"}, indent=1))
 
