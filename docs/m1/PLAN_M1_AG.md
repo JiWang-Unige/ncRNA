@@ -1,4 +1,6 @@
-# M1 实验 3 计划：AlphaGenome 留出 fold 模型能否定位 lncRNA 起点（草案，待作者批准，2026-11-17）
+# M1 实验 3 计划：AlphaGenome 留出 fold 模型能否定位 lncRNA 起点（冻结 2026-11-17）
+
+> **冻结**：作者 2026-11-17 回复「批准并冻结」，同时批准第 7 节第 2–4 项（下载四个 fold 权重与 Borzoi 区间文件、Colab ≤ 10 CU）。第 2–5 节（fold 归属规则、真值、打分、判读）自此不改。实现细节以 `scripts/m1/ag/`（5e97f4a）为准；如有偏离，记在结果文档里，不改本文件。
 
 > 依据：`docs/review/DECISION_20261117.md` 第 2 节实验 3（判据按 ChatGPT 第二轮修改）。
 > 设计与 `PLAN_DEDEND.md`（Puffin，冻结 8deaaff）完全对齐，这样可以在同一批基因上配对比较。
