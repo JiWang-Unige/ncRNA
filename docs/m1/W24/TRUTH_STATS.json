@@ -1,0 +1,77 @@
+{
+ "rules": "(written before any prediction on these chromosomes is read):\n- Replicate roles: rep1 (ENCFF373TKM BAM) is the input of the full-transcriptome baselines; truth = transcripts observed in\n  BOTH rep2 (ENCFF527KWD / ENCFF798DWV) and rep3 (ENCFF486EKE / ENCFF422CGK).\n- Observed in a replicate: listed in its TALON quantification with count >= 1 and transcript_novelty in\n  {Known, NIC, NNC, Antisense, Intergenic} (ISM fragments and 'Genomic' are dropped).\n- Identity across replicates (TALON ran per replicate, novel IDs differ): Known -> GENCODE transcript id; other ->\n  (chrom, strand, intron chain); novel single-exon transcripts are dropped (no reliable cross-replicate identity).\n- Coordinates: outer bounds of the two replicates' models (exons from rep3's model, the deeper replicate).\n- Class: lnc if the GENCODE V29 gene_type is a long non-coding type, or the gene is novel (gene_novelty Antisense /\n  Intergenic); m if gene_type protein_coding; everything else is ignored.\n- Loci: truth transcripts of one class clustered by same-strand exon overlap; locus span >= 200 bp.\n- Exclusion zone (low-cost option, author 2026-11-17): every v2.0 training window (data/p1v20/train_windows.tsv) +- 24,576 bp,\n  merged; a locus is evaluable only if its whole span lies outside.",
+ "observed": {
+  "rep2": 7672,
+  "rep3": 14560
+ },
+ "in_both": 3773,
+ "chroms": {
+  "chr12": {
+   "zone_bp": 10217493,
+   "zone_intervals": 133,
+   "classes": {
+    "l": {
+     "loci": 62,
+     "evaluable": 47,
+     "excluded": 15,
+     "evaluable_novel": 3,
+     "evaluable_spliced": 27,
+     "median_count_eval": 7,
+     "median_count_excl": 6,
+     "median_len_eval": 4708
+    },
+    "m": {
+     "loci": 623,
+     "evaluable": 525,
+     "excluded": 98,
+     "evaluable_novel": 0,
+     "evaluable_spliced": 519,
+     "median_count_eval": 87,
+     "median_count_excl": 73,
+     "median_len_eval": 28541
+    }
+   },
+   "tx_by_novelty_lnc": {
+    "Known": 55,
+    "NIC": 19,
+    "NNC": 20,
+    "Antisense": 3
+   }
+  },
+  "chr18": {
+   "zone_bp": 0,
+   "zone_intervals": 0,
+   "classes": {
+    "l": {
+     "loci": 38,
+     "evaluable": 38,
+     "excluded": 0,
+     "evaluable_novel": 4,
+     "evaluable_spliced": 21,
+     "median_count_eval": 7,
+     "median_count_excl": null,
+     "median_len_eval": 5518
+    },
+    "m": {
+     "loci": 175,
+     "evaluable": 175,
+     "excluded": 0,
+     "evaluable_novel": 0,
+     "evaluable_spliced": 173,
+     "median_count_eval": 88,
+     "median_count_excl": null,
+     "median_len_eval": 53909
+    }
+   },
+   "tx_by_novelty_lnc": {
+    "NIC": 15,
+    "Known": 31,
+    "NNC": 16,
+    "Intergenic": 1,
+    "Antisense": 1
+   }
+  }
+ },
+ "power_rule": "chr12 evaluable lnc loci >= 150",
+ "power_ok": false
+}
