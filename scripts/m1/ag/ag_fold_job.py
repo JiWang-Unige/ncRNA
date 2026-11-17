@@ -76,8 +76,9 @@ def codes_of(chrom, want):
     if chrom in _CODES:
         return _CODES[chrom]
     path = f"/content/{chrom}.fa.gz"
-    if not os.path.exists(path):
-        sh(f"wget -q -O {path} https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/{chrom}.fa.gz")
+    if not os.path.exists(path):   # normally uploaded from ont by ag_fold_run.sh; UCSC only as a fallback
+        sh(f"wget -q --tries=5 --waitretry=30 --timeout=120 -O {path} "
+           f"https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/{chrom}.fa.gz")
     with gzip.open(path, "rb") as f:
         lines = f.read().split(b"\n")
     seq = b"".join(lines[1:])

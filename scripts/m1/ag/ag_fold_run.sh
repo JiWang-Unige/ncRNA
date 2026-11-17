@@ -12,7 +12,7 @@ cd ~/ncrna-annot || exit 1
 S=agfold
 C="timeout 900 $HOME/bin/colab_long --auth oauth2"
 P=$HOME/.local/share/uv/tools/google-colab-cli/bin/python
-D=outputs/M1/AG/colab_$MODE
+D=${RUN_DIR:-outputs/M1/AG/colab_$MODE}   # RUN_DIR: resume into an earlier run's directory
 mkdir -p $D/raw
 TMP=$(mktemp -d)
 SSH="ssh -F $HOME/.ssh/colab.conf colab-$S"
@@ -40,7 +40,7 @@ trap cleanup EXIT
 trap 'log "signal: exiting"; exit 1' TERM INT HUP
 log "START mode=$MODE gpu=$GPU cap=$CAP balance=$B0"
 
-MODELS="fold-0 fold-1 fold-2 fold-3"
+MODELS=${MODELS:-"fold-0 fold-1 fold-2 fold-3"}   # MODELS: subset, to resume after a failure
 declare -A WSHA
 for m in $MODELS; do
   W=data/alphagenome/hf_$m.tar
@@ -48,12 +48,13 @@ for m in $MODELS; do
   WSHA[$m]=$(sha256sum $W | cut -d' ' -f1)
 done
 job_args() {  # mode
-  python3 - "$1" "${WSHA[fold-0]}" "${WSHA[fold-1]}" "${WSHA[fold-2]}" "${WSHA[fold-3]}" <<'EOF'
+  python3 - "$1" "$MODELS" "${WSHA[fold-0]:-}" "${WSHA[fold-1]:-}" "${WSHA[fold-2]:-}" "${WSHA[fold-3]:-}" <<'EOF'
 import json, sys
 c = json.load(open("configs/m1_ag.json"))
 jw = json.load(open("outputs/M1/AG/job_windows.json"))
-sha = dict(zip(["fold-0", "fold-1", "fold-2", "fold-3"], sys.argv[2:6]))
-models = {m: {"tar_sha256": sha[m], "windows": jw[m]} for m in ["fold-0", "fold-1", "fold-2", "fold-3"] if m in jw}
+sel = sys.argv[2].split()
+sha = dict(zip(["fold-0", "fold-1", "fold-2", "fold-3"], sys.argv[3:7]))
+models = {m: {"tar_sha256": sha[m], "windows": jw[m]} for m in ["fold-0", "fold-1", "fold-2", "fold-3"] if m in jw and m in sel}
 print(json.dumps({"mode": sys.argv[1], "ag_commit": c["ag_commit"], "codes_sha256": c["codes_sha256"], "models": models}))
 EOF
 }
@@ -79,6 +80,11 @@ for m in $MODELS; do
   t=$SECONDS; timeout 1800 $SCP data/alphagenome/hf_$m.tar colab-$S:/content/$m.tar; rc=$?
   log "weights $m scp rc=$rc s $((SECONDS - t))"
   [ $rc = 0 ] || { log "ABORT: weights upload failed"; exit 1; }
+done
+for c in $(python3 -c "import json,sys; jw=json.load(open('outputs/M1/AG/job_windows.json')); print(' '.join(sorted({c for m in sys.argv[1:] for c in jw.get(m, {})})))" $MODELS); do
+  t=$SECONDS; gzip -1 -c data/human/$c.fa > $TMP/$c.fa.gz && timeout 900 $SCP $TMP/$c.fa.gz colab-$S:/content/$c.fa.gz; rc=$?
+  log "sequence $c scp rc=$rc s $((SECONDS - t))"   # the job checks the codes sha256 against configs/m1_ag.json
+  [ $rc = 0 ] || { log "ABORT: sequence upload failed"; exit 1; }
 done
 timeout 120 $SCP scripts/m1/ag/ag_fold_job.py colab-$S:/content/job.py || { log "ABORT: job upload failed"; exit 1; }
 
