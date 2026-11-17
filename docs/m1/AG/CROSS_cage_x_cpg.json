@@ -1,0 +1,26 @@
+{
+ "cage=True|lowcpg=True": {
+  "n": 253,
+  "ag": 0.312,
+  "puffin": 0.134,
+  "cpg_ctrl": 0.036
+ },
+ "cage=True|lowcpg=False": {
+  "n": 427,
+  "ag": 0.555,
+  "puffin": 0.546,
+  "cpg_ctrl": 0.546
+ },
+ "cage=False|lowcpg=True": {
+  "n": 1131,
+  "ag": 0.093,
+  "puffin": 0.072,
+  "cpg_ctrl": 0.021
+ },
+ "cage=False|lowcpg=False": {
+  "n": 920,
+  "ag": 0.257,
+  "puffin": 0.314,
+  "cpg_ctrl": 0.388
+ }
+}
