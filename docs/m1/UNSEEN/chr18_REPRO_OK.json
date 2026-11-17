@@ -1,0 +1,19 @@
+{
+ "config_sha256": "5b67d52ef01f596898b1fd67e68545071d8f65d5c996631b6c6d4a88db0070d3",
+ "ok": true,
+ "runs": {
+  "v20-g1b-42-ke": {
+   "post_equal": true,
+   "genes_equal": true
+  },
+  "v20-g1b-123-ke": {
+   "post_equal": true,
+   "genes_equal": true
+  },
+  "v20-g1b-456-ke": {
+   "post_equal": true,
+   "genes_equal": true
+  }
+ },
+ "time": "2026-11-17T12:24:33Z"
+}

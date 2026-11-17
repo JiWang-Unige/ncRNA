@@ -1,0 +1,23 @@
+2026-11-17T07:32:48Z START config 5b67d52ef01f
+2026-11-17T08:29:32Z chr18 v20-g1b-123-ke rc=0
+2026-11-17T09:29:39Z chr18 v20-g1b-42-ke rc=0
+2026-11-17T12:24:32Z chr18 v20-g1b-456-ke rc=0
+2026-11-17T12:24:33Z REPRO_OK
+2026-11-17T12:31:13Z tiberius rc=0
+2026-11-17T12:34:20Z FEAT_FAIL giraffe_14a
+2026-11-17T12:38:06Z RESTART 962ac22 (part a re-extracted from scratch, cores 2-31)
+2026-11-17T12:38:07Z START config 5b67d52ef01f
+2026-11-17T12:43:43Z giraffe_14a v20-g1b-123-ke rc=0
+2026-11-17T12:45:13Z giraffe_14a v20-g1b-42-ke rc=0
+2026-11-17T12:46:39Z giraffe_14a v20-g1b-456-ke rc=0
+2026-11-17T12:46:46Z giraffe_14a read, feature cache deleted
+2026-11-17T12:53:16Z giraffe_14b v20-g1b-123-ke rc=0
+2026-11-17T12:54:44Z giraffe_14b v20-g1b-42-ke rc=0
+2026-11-17T12:56:16Z giraffe_14b v20-g1b-456-ke rc=0
+2026-11-17T12:56:18Z giraffe_14b read, feature cache deleted
+2026-11-17T13:05:10Z giraffe_14c v20-g1b-123-ke rc=0
+2026-11-17T13:06:37Z giraffe_14c v20-g1b-42-ke rc=0
+2026-11-17T13:08:12Z giraffe_14c v20-g1b-456-ke rc=0
+2026-11-17T13:08:13Z giraffe_14c read, feature cache deleted
+2026-11-17T13:08:24Z score rc=0
+2026-11-17T13:08:24Z QUEUE_END
