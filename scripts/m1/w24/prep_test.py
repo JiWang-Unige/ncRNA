@@ -19,6 +19,7 @@ from ncrna_annot.grammar import g1  # noqa: E402
 
 HG = f"{ROOT}/data/human/hg38.fa.gz"
 HALVES = ("chr12", "chr13")
+CHECK = ("chr9", "chr20")
 
 
 def md5(path):
@@ -30,18 +31,21 @@ def md5(path):
 
 
 def main():
-    want = [l.split() for l in open(f"{ROOT}/data/human/MD5SUMS") if l.strip().endswith("hg38.fa.gz")]
-    assert want and want[0][0] == md5(HG), "hg38.fa.gz md5 differs from MD5SUMS"
     seqs, cur = {}, None
     with gzip.open(HG, "rt") as fh:
         for line in fh:
             if line.startswith(">"):
                 cur = line[1:].split()[0]
-                cur = cur if cur in HALVES else None
+                cur = cur if cur in HALVES + CHECK else None
                 if cur:
                     seqs[cur] = []
             elif cur:
                 seqs[cur].append(line.strip())
+    check = {}
+    for c in CHECK:
+        ref = "".join(l.strip() for l in open(f"{ROOT}/data/human/{c}.fa") if not l.startswith(">"))
+        check[c] = "".join(seqs.pop(c)) == ref
+    assert all(check.values()), f"hg38.fa.gz differs from the project's chromosome files: {check}"
     parts = {}
     for c in HALVES:
         s = "".join(seqs[c])
@@ -66,7 +70,7 @@ def main():
         p["length"], p["codes_md5"] = len(codes), md5(out)
         print(json.dumps(meta), flush=True)
     os.makedirs(f"{ROOT}/outputs/M1/W24", exist_ok=True)
-    json.dump({"hg38_md5": want[0][0], "parts": parts, "chr9": "outputs/PHASE1/V20/read/chr9 (existing v2.0 reads)"},
+    json.dump({"hg38_md5": md5(HG), "hg38_identity_check": check, "parts": parts, "chr9": "outputs/PHASE1/V20/read/chr9 (existing v2.0 reads)"},
               open(f"{ROOT}/outputs/M1/W24/PARTS.json", "w"), indent=1)
 
 
