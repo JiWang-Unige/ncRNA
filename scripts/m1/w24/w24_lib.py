@@ -10,7 +10,7 @@ from collections import defaultdict
 import numpy as np
 
 ROOT = os.path.expanduser(os.environ.get("NCRNA_ROOT", "~/ncrna-annot"))
-for d in ("src", "scripts/phase1", "scripts/phase1/b1", "scripts/m1"):
+for d in ("src", "scripts/phase1", "scripts/phase1/b1", "scripts/phase1/v20", "scripts/m1"):
     sys.path.insert(0, os.path.join(ROOT, d))
 W = f"{ROOT}/outputs/M1/W24"
 GEO = f"{ROOT}/data/wtc11/geo"
