@@ -1,0 +1,45 @@
+{
+ "hg38_md5": "1c9dcaddfa41027f17cd8f7a82c7293b",
+ "hg38_identity_check": {
+  "chr9": true,
+  "chr20": true
+ },
+ "parts": {
+  "w24_chr12a": {
+   "chrom": "chr12",
+   "offset0": 0,
+   "end0": 66637654,
+   "length": 66637654,
+   "codes_md5": "1eb0bcb69b6354077e2de4d87c7ed366"
+  },
+  "w24_chr12b": {
+   "chrom": "chr12",
+   "offset0": 66637654,
+   "end0": 133275309,
+   "length": 66637655,
+   "codes_md5": "d1e34b688671289d8b03fbc040e3bd57"
+  },
+  "w24_chr13a": {
+   "chrom": "chr13",
+   "offset0": 0,
+   "end0": 57182164,
+   "length": 57182164,
+   "codes_md5": "705b7c38285a9376c90eb2e4d38c83ea"
+  },
+  "w24_chr13b": {
+   "chrom": "chr13",
+   "offset0": 57182164,
+   "end0": 114364328,
+   "length": 57182164,
+   "codes_md5": "68ca32dc087e7e5bb1179cb1b6b0517b"
+  },
+  "w24_chr20": {
+   "chrom": "chr20",
+   "offset0": 0,
+   "end0": 64444167,
+   "length": 64444167,
+   "codes_md5": "cbb3adfe798de30b2ed96e9fb927b3c1"
+  }
+ },
+ "chr9": "outputs/PHASE1/V20/read/chr9 (existing v2.0 reads)"
+}
