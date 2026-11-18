@@ -106,6 +106,20 @@ def evidence(chrom, frac=1.0, seed=0):
             "pas": {s: np.array(sorted(v), np.int64) for s, v in pas.items()}}
 
 
+def quant_signal(chrom):
+    """{(pos, strand): max over the three replicate files of column 9 (the site's expression value)} for QuantSeq sites."""
+    sig = {}
+    for acc in QUANT:
+        with gzip.open(f"{ENC}/{acc}.bed.gz", "rt") as fh:
+            for line in fh:
+                f = line.rstrip("\n").split("\t")
+                if f[0] != chrom:
+                    continue
+                k = (int(f[3].split(":")[1]), f[5])
+                sig[k] = max(sig.get(k, 0.0), float(f[8]))
+    return sig
+
+
 # ------------------------------------------------------------------ scoring
 def score(truth, preds):
     """preds: dicts with strand, exons [(s, e)] 1-based closed.  Predictions overlapping the exclusion zone are dropped.

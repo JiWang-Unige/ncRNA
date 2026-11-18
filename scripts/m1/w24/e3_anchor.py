@@ -69,6 +69,48 @@ def select(cands, cs, theta, tib=None):
         best = max(((span_mean(cs, "l", st, s, e) - span_mean(cs, "m", st, s, e), s, e) for s, e in spans))
         units.append((best[0], st, best[1], best[2], cnt))
     units.sort(key=lambda u: -u[0])
+    return _greedy(units, theta, tib)
+
+
+def select_evidence(cands, sig, rule, tib):
+    """Evidence-only comparator on the same candidates: the end is the nearest site ('nearest'), the strongest QuantSeq
+    site among the K ('strongest') or the farthest of the K ('farthest'); units accepted greedily by ssCAGE tags."""
+    units = []
+    for st, cnt, spans in cands:
+        if rule == "nearest":
+            s, e = spans[0]
+        elif rule == "farthest":
+            s, e = spans[-1]
+        else:
+            s, e = max(spans, key=lambda se: sig.get(((se[1] if st == "+" else se[0]), st), 0.0))
+        units.append((float(cnt), st, s, e, cnt))
+    units.sort(key=lambda u: -u[0])
+    return _greedy(units, -1e9, tib)
+
+
+def select_hybrid(cands, cs, sig, rule, theta, tib):
+    """End chosen by the evidence rule (as select_evidence), units accepted greedily by ssCAGE tags, then kept only if the
+    model's span score (lnc - mrna posterior) >= theta: the sequence model as a filter only."""
+    units = []
+    for st, cnt, spans in cands:
+        if rule == "farthest":
+            s, e = spans[-1]
+        else:
+            s, e = max(spans, key=lambda se: sig.get(((se[1] if st == "+" else se[0]), st), 0.0))
+        sc = span_mean(cs, "l", st, s, e) - span_mean(cs, "m", st, s, e)
+        units.append((float(cnt), st, s, e, cnt, sc))
+    units.sort(key=lambda u: -u[0])
+    acc, out = {"+": [], "-": []}, []
+    for _, st, s, e, cnt, sc in units:
+        if any(a <= e and s <= b for a, b in acc[st]) or (tib is not None and tib_hit(tib, st, s, e)):
+            continue
+        acc[st].append((s, e))
+        if sc >= theta:
+            out.append({"strand": st, "exons": [(s, e)], "score": sc, "tss_count": cnt})
+    return out
+
+
+def _greedy(units, theta, tib):
     acc, out = {"+": [], "-": []}, []
     for sc, st, s, e, cnt in units:
         if sc < theta:
@@ -92,6 +134,7 @@ def main():
     truth = L.load_truth(C)
     tib = D.read_tiberius(C)
     ev = L.evidence(C, a.frac, a.seed)
+    sig = L.quant_signal(C)
     cfg = json.load(open(f"{L.ROOT}/configs/v20.json"))
     res = {"frac": a.frac, "seed": a.seed, "grid": {}}
     for run in cfg["targets"]["chr18"]["runs"]:
@@ -105,6 +148,17 @@ def main():
                         r = L.score_unknown(truth, select(cands, cs, th, tb), C)
                         r.pop("S50_ids")
                         res["grid"].setdefault(f"d{dm}_K{K}_th{th}_{var}", {})[run] = r
+                if K > 1:
+                    for rule in ("farthest", "strongest"):
+                        for th in (-1.0, -0.05, 0.0, 0.05, 0.1):
+                            r = L.score_unknown(truth, select_hybrid(cands, cs, sig, rule, th, tib), C)
+                            r.pop("S50_ids")
+                            res["grid"].setdefault(f"d{dm}_K{K}_hy-{rule}_th{th}+tib", {})[run] = r
+                if run == cfg["targets"]["chr18"]["runs"][0]:   # evidence-only comparators do not depend on the run
+                    for rule in ("nearest", "strongest", "farthest"):
+                        r = L.score_unknown(truth, select_evidence(cands, sig, rule, tib), C)
+                        r.pop("S50_ids")
+                        res["grid"][f"d{dm}_K{K}_ev-{rule}+tib"] = {"evidence_only": r}
         del cs
     summ = {}
     for key, rr in res["grid"].items():
