@@ -1,0 +1,150 @@
+{
+ "codes": {
+  "w24_chr12a": true,
+  "w24_chr12b": true,
+  "w24_chr13a": true,
+  "w24_chr13b": true,
+  "w24_chr20": true
+ },
+ "reads": {
+  "read/w24_chr12a/v20-g1b-123-ke": {
+   "rows": 66637650,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1667,
+   "ok": true
+  },
+  "read/w24_chr12a/v20-g1b-42-ke": {
+   "rows": 66637650,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1467,
+   "ok": true
+  },
+  "read/w24_chr12a/v20-g1b-456-ke": {
+   "rows": 66637650,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1585,
+   "ok": true
+  },
+  "read/w24_chr12b/v20-g1b-123-ke": {
+   "rows": 66637650,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1443,
+   "ok": true
+  },
+  "read/w24_chr12b/v20-g1b-42-ke": {
+   "rows": 66637650,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1255,
+   "ok": true
+  },
+  "read/w24_chr12b/v20-g1b-456-ke": {
+   "rows": 66637650,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1427,
+   "ok": true
+  },
+  "read/w24_chr13a/v20-g1b-123-ke": {
+   "rows": 57182160,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 869,
+   "ok": true
+  },
+  "read/w24_chr13a/v20-g1b-42-ke": {
+   "rows": 57182160,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 719,
+   "ok": true
+  },
+  "read/w24_chr13a/v20-g1b-456-ke": {
+   "rows": 57182160,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1670,
+   "ok": true
+  },
+  "read/w24_chr13b/v20-g1b-123-ke": {
+   "rows": 57182160,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 770,
+   "ok": true
+  },
+  "read/w24_chr13b/v20-g1b-42-ke": {
+   "rows": 57182160,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 681,
+   "ok": true
+  },
+  "read/w24_chr13b/v20-g1b-456-ke": {
+   "rows": 57182160,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 826,
+   "ok": true
+  },
+  "read/w24_chr20/v20-g1b-123-ke": {
+   "rows": 64444164,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1821,
+   "ok": true
+  },
+  "read/w24_chr20/v20-g1b-42-ke": {
+   "rows": 64444164,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1614,
+   "ok": true
+  },
+  "read/w24_chr20/v20-g1b-456-ke": {
+   "rows": 64444164,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null,
+   "n_genes": 1871,
+   "ok": true
+  }
+ },
+ "control": {
+  "outputs/PHASE1/V20/read/chr9/v20-g1b-123-ke/post.npy": {
+   "rows": 138394716,
+   "bad_rows": 0,
+   "nonfinite": 0,
+   "first_bad": null
+  }
+ },
+ "tiberius": {
+  "chr12.gtf": {
+   "lines": 37068,
+   "ok": true
+  },
+  "chr13.gtf": {
+   "lines": 11961,
+   "ok": true
+  }
+ },
+ "all_ok": true
+}
