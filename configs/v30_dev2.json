@@ -1,0 +1,110 @@
+{
+ "protocol": "PHASE1_PROTOCOL.md section 18 (v3.0)",
+ "stage": "dev",
+ "code_commit": "672acc55ceabc7122647becb276d1f022471f9f4",
+ "created": "2026-11-10T22:32:02Z",
+ "main": {
+  "family": "G1B",
+  "runs": {
+   "v30h6-g1b-789-ke": "v30h6-g1b-789-ke"
+  }
+ },
+ "runs": {
+  "v30h6-g1b-789-ke": {
+   "arm": "G1B",
+   "family": "G1B",
+   "seed": 789,
+   "labels": "v50uev",
+   "lnc_only": false,
+   "data": "v30h6",
+   "ckpts": [
+    "outputs/PHASE1/FORMAL/v30h6-g1b-789-ke/ep10.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-789-ke/ep11.pt",
+    "outputs/PHASE1/FORMAL/v30h6-g1b-789-ke/ep12.pt"
+   ],
+   "ckpt_sha256": [
+    "4d65a7048cf01fcfbf1964e20cc4517554882baed8fd53fb91c6405711cbb735",
+    "ffe3115e0306119cfa5465767451dd0d4286d71f65045aa966ba113509685c30",
+    "d43092d54cc7aba9bdd1019affeea4e2084453a0700b0c19d5689d96955aef59"
+   ]
+  }
+ },
+ "decode": {
+  "posteriors": "exact (float64 CPU forward-backward per tile, chrom.chromosome_marginals exact=True)",
+  "checkpoint": "uniform weight average of epochs 10-12",
+  "mode": "mea",
+  "level": "exon",
+  "delta": 0.0001,
+  "gamma": 3.0,
+  "tau": 0.62,
+  "min_exon": 20,
+  "min_intron": 50,
+  "lnc_min_len": 200,
+  "transitions": "allowed transitions of g1.G1Transitions() (mea_duration scores none)"
+ },
+ "out_dir": "outputs/PHASE1/V30/dev",
+ "targets": {
+  "chr18": {
+   "feats": "data/p1_feat/chr18.npy",
+   "cover": "data/p1_feat/chr18.cover.json",
+   "tiles": 3926,
+   "codes": "data/p1/chr18_codes.npy",
+   "truth": "outputs/PHASE1/DIAG_L2/chr18_v50.gtf",
+   "truth_chrom": "chr18",
+   "seqid": "chr18",
+   "runs": [
+    "v30h6-g1b-789-ke"
+   ]
+  }
+ },
+ "code_files": {
+  "scripts/phase1/p15_read.py": "552064deef209683bd735bfc81cfe87382e4795b29f921d7b7ca0c9062075b61",
+  "scripts/phase1/p15_score.py": "a12f686092a75f03bb50548a0e9f2b11110b17c270cba39bf3e2bd6c955c2c56",
+  "scripts/phase1/v20/check_v20_data.py": "89f26ec926319c8d5f7aaa064e70f1d370bde873b81f77f97b48634d72b2aaf1",
+  "scripts/phase1/v20/feat_overlay.py": "94152b6beb11ce2f451dbc11d9873d829a82be77e6a3cfbbf6e456939886388c",
+  "scripts/phase1/v20/prep_chr9_codes.py": "4e4364bcff47e0b4799a38da65674553cb07e241110ef02a341581634a3119bf",
+  "scripts/phase1/v20/prep_v20_windows.py": "b16231126124dad5fdd6172911e737d9fa5e359025f611080a793fc4415e46d8",
+  "scripts/phase1/v20/v20_calib.py": "e8970e0a6761f4f5ea756c3d2663595d8a9286917af736706c78b7f13adc630b",
+  "scripts/phase1/v20/v20_config.py": "9874eb03a227540031aafde987f9f272145e9c857cdd4a4b6abc3cff278919cd",
+  "scripts/phase1/v20/v20_replicate.py": "1b589bb00e511627690570b7b403f83c7ff519f7d92a0848127ec7b6bab7e62d",
+  "scripts/phase1/v20/v20_score.py": "e6d7b1740e3b332bf7eceb19b38190833bf8877006a6d30d554da89171dd19a9",
+  "scripts/phase1/v20/v20_tau_curve.py": "3dad2f279b325c6c1431640a7a83a034eb9a5978d4116d17bd4c6afadee3e9f3",
+  "scripts/phase1/v20/v20_tau_final.py": "59a543233bf7af901d9c3fb26a96feac02d17b3a29c874d7163ae97fe748da58",
+  "scripts/phase1/v30/check_v30_data.py": "d9edd238096e2c28a38981e930276827d928b83a56fd094ec58f10e194fa5daa",
+  "scripts/phase1/v30/concat_view.py": "8d9cb946e1b502c9747c7f10f4b05dc1bcf14c8b6581adc78aecb9a52393c6db",
+  "scripts/phase1/v30/mouse_uev.py": "4b199e4f07a41987f3b315d44760cc6e499f83f195aafab13a2fa897a5ddc10f",
+  "scripts/phase1/v30/prep_v30_windows.py": "6075807f4e0a627a15540b106800641864b685ebc553fc38e7d9cd8117bf3b9b",
+  "scripts/phase1/v30/select_c_chroms.py": "18c77526c0a45ce181cfdf9fdf2f678ff2757b529c761571bebb6653791f055b",
+  "scripts/phase1/v30/v30_config.py": "6651bf88ca9557249553a31ca650690ae65d3480ec2849bbc648ef52fa8dd1e5",
+  "scripts/phase1/v30/v30_dev.py": "50c0f468ff5dc64f0abcae231f62808f45b3ff876c351ba79b9e82f6449b09ba",
+  "scripts/phase1/v30/v30_failcheck.py": "63b269c3de531324eb7a521c51b01de8b2ec82ae91fffee92ea4adb88b83221c",
+  "scripts/phase1/v30/v30_score.py": "059d247966e4ffbb6789ed178ac4c30c65aa7c0434f43c70be766f74db684231",
+  "src/ncrna_annot/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/data/evidence.py": "f342c83f6e938b14a4da293d198fe20f14ec7afbde4686a0da4efa10eaa57a9d",
+  "src/ncrna_annot/data/labels.py": "0f2e206547f6c091c760849592b16c66a8569c0eee632415c57967cde6ac5f87",
+  "src/ncrna_annot/decode/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/decode/chrom.py": "e326772c08d16916aedc27f30d4827d20de47fee6b97020a2012e02d9a62a0b3",
+  "src/ncrna_annot/decode/g2cand.py": "546de0b37607ac79cc1e41568454a45a88cb30eda7a3519238fd068d01a33a36",
+  "src/ncrna_annot/decode/genes.py": "c24c3cc9719c681222e1ac06cad06d62bac410cd3519ea23f7868517a93b7161",
+  "src/ncrna_annot/decode/scratch.py": "707cf4797b1dd0ccffd29af9f656c6dd510c4dc59c7777bd7f25d2a8c1ab8a54",
+  "src/ncrna_annot/eval/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/eval/prcurve.py": "8b72a6a0fafa469e657d48fde8fb9b3db3f2f312bc77fbd243cb68b51779604a",
+  "src/ncrna_annot/eval/ruler.py": "4d482d4b1541109dd438f385df97c7cb57f5bfdbd2f5485f2f4f6a8e426dc427",
+  "src/ncrna_annot/features/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/features/generanno.py": "57ed6c2d08c8b2893075a5e5d3df3e2b67542f4f7edd0aa6e28fd8ed7e345b41",
+  "src/ncrna_annot/features/online.py": "a9d8d1dd3f3404b8ee1fc78ededa5ebf5c372f6c5ebcf91e5ccf3be4bd2b47d3",
+  "src/ncrna_annot/grammar/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/grammar/g1.py": "8ca4b80c6f4417112e559320be65ca04f844be1ab5763b1b75e65045f2f8099c",
+  "src/ncrna_annot/grammar/g2.py": "4263179662a4a2551cfe3af64e17ec75a7a2c976099731889e05256936cd0e25",
+  "src/ncrna_annot/grammar/g2ph.py": "5532c90f68d3e04a4753687f5179c23d0fe1cdbf85b2b620045879dee753a161",
+  "src/ncrna_annot/heads/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/heads/c0.py": "d1abdc1ef7e43903bac68209fdbbd0a1e196509016f935f85748ed7796b154b9",
+  "src/ncrna_annot/train/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/ncrna_annot/train/loop.py": "ebcdebc303587af06f7dbc801f530dd2421045ac8811c568997be73412326486",
+  "src/ncrna_annot/train/screen.py": "7a8841d2acddd1594536ddc89a0602517d7b49fda9cb0c5e08b9a1855ba92fb7",
+  "src/ncrna_annot/train/screen2.py": "0d27213751148b41db87cc9aadba03fbc1e8c2689e595b4f3b1ac593e133b31b",
+  "src/ncrna_annot/train/screen_g1b.py": "26f66756664e0c26c44df6148444ee394f183f13931072e73dd832036379679f",
+  "src/ncrna_annot/train/screen_g2ph.py": "719b74f3e867b91ecb54d82acd13cb288c651dffff4bc4775bc0e7980befaa5d"
+ }
+}
