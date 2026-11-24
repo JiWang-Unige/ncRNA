@@ -148,8 +148,8 @@
   ]
  },
  "q": {
-  "model": 0.44,
-  "model_rest": 0.58,
+  "model": 0.53,
+  "model_rest": 0.65,
   "R2": 0.69,
   "R6": 1.0
  },
@@ -161,7 +161,9 @@
  },
  "best_rule": "R2",
  "R0_train_recall": 0.37173396674584325,
- "recall_min": 0.35173396674584323,
+ "recall_min_model": 0.37173396674584325,
+ "recall_min_rules": 0.35173396674584323,
+ "q_constraint": "model / model_rest: LOCO recall >= R0 training recall; R2 / R6 and best-rule eligibility: >= R0 - 0.02 (PLAN_AUTH.md 5.3 revision, author 2026-11-24, before the freeze and before any test number was read)",
  "constants": {
   "DMAX": 50000,
   "K_WIDE": 20,
@@ -192,5 +194,5 @@
   "chrX",
   "chr18"
  ],
- "created": "2026-11-24T00:38:58Z"
+ "created": "2026-11-24T01:10:44Z"
 }

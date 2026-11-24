@@ -9,7 +9,9 @@
    Tiberius mask on chr18 reproduces the W24 development number (dev/E3_chr18_f1.0_s0.json).
 3. Leave-one-chromosome-out (LOCO): the L2 logistic model ('true vs wrong'; 'true vs rest' reported only) is fitted on
    13 chromosomes and scores the 14th; q (top fraction of the accepted units, per chromosome) is chosen on the pooled
-   out-of-fold units: highest precision (known) with recall >= R0's training recall - 0.02 (ties: larger q).  The
+   out-of-fold units: highest precision (known) with recall >= R0's training recall (ties: larger q) -- plan section
+   5.3 as revised by the author on 2026-11-24 before the freeze and before any test number was read (it was R0 - 0.02;
+   the rules R2 / R6 and the best-rule eligibility keep R0 - 0.02).  The
    rules R1-R6 are evaluated on the same chromosomes (R2 / R6 choose q the same way); the best rule is the eligible
    one (same recall bound) with the highest precision (known).
 4. Final models fitted on all 14 chromosomes; q and the best rule unchanged -> outputs/AUTH/dev/MODEL.json.
@@ -32,6 +34,9 @@ from auth_truth import TRAIN               # noqa: E402
 QS = tuple(round(0.05 + 0.01 * i, 2) for i in range(96))
 RULES = ("R1", "R2", "R3", "R4", "R5", "R6")
 FIXED = ("R0", "R1", "R3", "R4", "R5")
+MODEL_SLACK, RULE_SLACK = 0.0, 0.02     # recall bound = R0 training recall - slack (plan 5.3, revised 2026-11-24)
+Q_CONSTRAINT = ("model / model_rest: LOCO recall >= R0 training recall; R2 / R6 and best-rule eligibility: >= R0 - 0.02 "
+                "(PLAN_AUTH.md 5.3 revision, author 2026-11-24, before the freeze and before any test number was read)")
 DEV = f"{A.OUT}/dev"
 PC = {}
 
@@ -158,12 +163,13 @@ def main():
         log("LOCO scored", c)
     pooled_fixed = {m: A.metrics(list(r.values())) for m, r in res_fixed.items()}
     r0_recall = pooled_fixed["R0"]["recall"]
-    rec_min = r0_recall - 0.02
-    qsel = {m: choose_q(curves[m], TRAIN, rec_min) for m in ("R2", "R6", "model")}
-    qsel["model_rest"] = choose_q(curves["model_rest"], TRAIN, rec_min, "prec_strict")
+    slack = {"R2": RULE_SLACK, "R6": RULE_SLACK, "model": MODEL_SLACK, "model_rest": MODEL_SLACK}
+    rec_min, rec_min_model = r0_recall - RULE_SLACK, r0_recall - MODEL_SLACK
+    qsel = {m: choose_q(curves[m], TRAIN, r0_recall - slack[m]) for m in ("R2", "R6", "model")}
+    qsel["model_rest"] = choose_q(curves["model_rest"], TRAIN, rec_min_model, "prec_strict")
     q_found = {m: v is not None for m, v in qsel.items()}
     qsel = {m: v if v is not None else (1.0, None, len(QS) - 1) for m, v in qsel.items()}   # no eligible q: report q = 1
-    nested = {m: {h: (choose_q(curves[m], [c for c in TRAIN if c != h], A.metrics([res_fixed["R0"][c] for c in TRAIN if c != h])["recall"] - 0.02,
+    nested = {m: {h: (choose_q(curves[m], [c for c in TRAIN if c != h], A.metrics([res_fixed["R0"][c] for c in TRAIN if c != h])["recall"] - slack[m],
                                "prec_strict" if m == "model_rest" else "prec_known") or (None,))[0] for h in TRAIN}
               for m in curves}
     at_q = {m: {c: curves[m][c][qsel[m][2]] for c in TRAIN} for m in curves}
@@ -190,11 +196,11 @@ def main():
                "P1-R0": A.paired(Wb, Tb["P1"], Tb["R0"]), "frac_resamples_model_minus_R0_recall_below_-0.03": float(np.mean(rd < -0.03)),
                "n_blocks": len(bid)}
     alt = {}
-    for bound in (0.0, 0.01):
+    for bound in (0.02, 0.01, 0.0):
         rm = r0_recall - bound
         alt[f"recall>=R0-{bound}"] = {m: (lambda b: {"q": b[0], **A.metrics([curves[m][c][b[2]] for c in TRAIN])} if b else None)(choose_q(curves[m], TRAIN, rm))
                                       for m in ("model", "R2")}
-    preview["alternative_recall_bounds_not_used"] = alt
+    preview["recall_bounds_compared"] = alt
 
     # pair-level diagnostics on the out-of-fold scores
     lab = np.concatenate([P[c]["label"] for c in TRAIN])
@@ -214,19 +220,20 @@ def main():
     model = {"plan": "docs/auth/PLAN_AUTH.md section 5.3", "features": list(A.FEATURES), "logit_C": A.LOGIT_C,
              "true_vs_wrong": fin["tw"], "true_vs_rest": fin["tr"],
              "q": {"model": qsel["model"][0], "model_rest": qsel["model_rest"][0], "R2": qsel["R2"][0], "R6": qsel["R6"][0]},
-             "q_found_under_recall_bound": q_found, "best_rule": best_rule, "R0_train_recall": r0_recall, "recall_min": rec_min,
+             "q_found_under_recall_bound": q_found, "best_rule": best_rule, "R0_train_recall": r0_recall,
+             "recall_min_model": rec_min_model, "recall_min_rules": rec_min, "q_constraint": Q_CONSTRAINT,
              "constants": {"DMAX": A.DMAX, "K_WIDE": A.K_WIDE, "K_R0": A.K_R0, "A_MAX": A.A_MAX, "PAS_HEX": A.PAS_HEX,
                            "WIN_ANTI": A.WIN_ANTI, "BIDIR": A.BIDIR, "WIN_GC": A.WIN_GC, "q_application": "top fraction per chromosome"},
              "train": list(TRAIN), "created": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     json.dump(model, open(f"{DEV}/MODEL.json", "w"), indent=1)
     dev = {"plan": "docs/auth/PLAN_AUTH.md section 7 step 3", "train": list(TRAIN), "checks": chk,
-           "R0_train_recall": r0_recall, "recall_min": rec_min, "q_selected": {m: v[0] for m, v in qsel.items()}, "q_found_under_recall_bound": q_found,
+           "R0_train_recall": r0_recall, "recall_min_model": rec_min_model, "recall_min_rules": rec_min, "q_constraint": Q_CONSTRAINT, "q_selected": {m: v[0] for m, v in qsel.items()}, "q_found_under_recall_bound": q_found,
            "q_nested_leave_one_out": nested, "best_rule": best_rule, "rule_eligible": elig,
            "loco_pooled": table, "loco_block_bootstrap_preview": preview, "loco_per_chrom": per_chrom, "q_curves_every_0.05": curve_tab,
            "labels_of_units": labels_units, "pairs": diag, "coef_standardised": coef,
            "n_truth_train": sum(len(v) for v in truth.values()), "seconds": round(time.time() - t0, 1)}
     json.dump(dev, open(f"{DEV}/DEV.json", "w"), indent=1, default=float)
-    log("q", dev["q_selected"], "best rule", best_rule, "recall_min", round(rec_min, 4))
+    log("q", dev["q_selected"], "best rule", best_rule, "recall_min model", round(rec_min_model, 4), "rules", round(rec_min, 4))
     for m in ("R0", "R1", "R2", "R3", "R4", "R5", "R6", "P1", "model", "model_rest"):
         t = table[m]
         log(f"{m:10s} recall {t['recall']:.3f}  prec_known {t['prec_known']:.3f}  strict {t['prec_strict']:.3f}  n {t['n_pred']}")
