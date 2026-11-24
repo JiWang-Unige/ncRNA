@@ -1,0 +1,42 @@
+[     11s] sequence ready
+[     18s] observed spans {'chr1': 25721, 'chr3': 15984, 'chr4': 10574, 'chr5': 13345, 'chr7': 13382, 'chr8': 9503, 'chr11': 14711, 'chr14': 8909, 'chr15': 9419, 'chr17': 15688, 'chr19': 16729, 'chr21': 3129, 'chrX': 8852, 'chr18': 4372}
+[     37s] pairs chr7 43440 16.6s
+[     37s] pairs chr4 42747 17.2s
+[     37s] pairs chr8 35046 17.2s
+[     38s] pairs chr5 54784 17.5s
+[     38s] pairs chr3 54316 17.7s
+[     42s] pairs chr1 101469 22.3s
+[     48s] pairs chr15 36066 11.0s
+[     48s] pairs chr14 34923 11.2s
+[     50s] pairs chr19 60626 12.6s
+[     51s] pairs chr17 55542 13.1s
+[     51s] pairs chr11 52715 14.1s
+[     55s] pairs chr21 9968 13.1s
+[     59s] pairs chr18 13013 10.6s
+[     59s] pairs chrX 15504 10.9s
+[     71s] checks {"chr18_cage_equal_w24": true, "chr18_quant_equal_w24": true, "chr18_observed_equal_w24": true, "chr18_seq_equal_data_human": true, "chr18_evidence_equal_w24_lib": true, "pairs_equal_e3_candidates_k20": true, "R0_equal_select_evidence_v41": true, "chr18_R0_tiberius_vs_w24_dev": {"auth": {"S50_sn": 0.3684210526315789, "S50_pr_known": 0.2545454545454545, "n_pred": 194}, "w24": {"S50_sn": 0.3684210526315789, "S50_pr_known": 0.2545454545454545, "n_pred": 194}}, "chr18_R0_tiberius_equal_w24_dev": true}
+[     91s] LOCO fits done
+[     91s] LOCO scored chr1
+[     91s] LOCO scored chr3
+[     92s] LOCO scored chr4
+[     92s] LOCO scored chr5
+[     92s] LOCO scored chr7
+[     92s] LOCO scored chr8
+[     92s] LOCO scored chr11
+[     92s] LOCO scored chr14
+[     92s] LOCO scored chr15
+[     93s] LOCO scored chr17
+[     93s] LOCO scored chr19
+[     93s] LOCO scored chr21
+[     93s] LOCO scored chrX
+[     93s] LOCO scored chr18
+Traceback (most recent call last):
+  File "/home/ji/ncrna-annot/scripts/auth/auth_dev.py", line 211, in <module>
+    main()
+  File "/home/ji/ncrna-annot/scripts/auth/auth_dev.py", line 166, in main
+    at_q = {m: {c: curves[m][c][qsel[m][2]] for c in TRAIN} for m in curves}
+  File "/home/ji/ncrna-annot/scripts/auth/auth_dev.py", line 166, in <dictcomp>
+    at_q = {m: {c: curves[m][c][qsel[m][2]] for c in TRAIN} for m in curves}
+  File "/home/ji/ncrna-annot/scripts/auth/auth_dev.py", line 166, in <dictcomp>
+    at_q = {m: {c: curves[m][c][qsel[m][2]] for c in TRAIN} for m in curves}
+TypeError: 'NoneType' object is not subscriptable

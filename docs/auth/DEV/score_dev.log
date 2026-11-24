@@ -1,0 +1,32 @@
+chr1 {'model': (49, 231), 'R0': (51, 555)}
+chr3 {'model': (20, 154), 'R0': (21, 370)}
+chr4 {'model': (30, 131), 'R0': (25, 324)}
+chr5 {'model': (22, 145), 'R0': (29, 369)}
+chr7 {'model': (31, 137), 'R0': (28, 354)}
+chr8 {'model': (21, 106), 'R0': (25, 260)}
+chr11 {'model': (21, 111), 'R0': (26, 280)}
+chr14 {'model': (16, 78), 'R0': (17, 196)}
+chr15 {'model': (13, 66), 'R0': (13, 174)}
+chr17 {'model': (25, 99), 'R0': (30, 237)}
+chr19 {'model': (23, 98), 'R0': (22, 249)}
+chr21 {'model': (4, 33), 'R0': (7, 76)}
+chrX {'model': (8, 55), 'R0': (6, 137)}
+chr18 {'model': (12, 50), 'R0': (13, 114)}
+{
+ "G1": true,
+ "G2": true,
+ "P1": true,
+ "S": false,
+ "best_rule": "R2",
+ "conclusion": "G1+G2 pass: authenticity of cheap end evidence is learnable beyond simple rules"
+}
+model      recall 0.350  prec_known 0.615  strict 0.197  n 1494
+model_rest recall 0.355  prec_known 0.361  strict 0.135  n 2213
+P1         recall 0.406  prec_known 0.239  strict 0.101  n 3387
+R0         recall 0.372  prec_known 0.224  strict 0.085  n 3695
+R1         recall 0.300  prec_known 0.148  strict 0.056  n 4554
+R2         recall 0.353  prec_known 0.333  strict 0.116  n 2557
+R3         recall 0.311  prec_known 0.242  strict 0.089  n 2939
+R4         recall 0.227  prec_known 0.247  strict 0.080  n 2374
+R5         recall 0.251  prec_known 0.261  strict 0.103  n 2040
+R6         recall 0.181  prec_known 0.264  strict 0.081  n 1867

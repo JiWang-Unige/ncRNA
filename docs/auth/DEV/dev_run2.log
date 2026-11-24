@@ -1,0 +1,43 @@
+[      0s] sequence ready
+[      0s] observed spans {'chr1': 25721, 'chr3': 15984, 'chr4': 10574, 'chr5': 13345, 'chr7': 13382, 'chr8': 9503, 'chr11': 14711, 'chr14': 8909, 'chr15': 9419, 'chr17': 15688, 'chr19': 16729, 'chr21': 3129, 'chrX': 8852, 'chr18': 4372}
+[      2s] pairs chr8 35046 0.1s
+[      3s] pairs chr4 42747 0.1s
+[      3s] pairs chr11 52715 0.0s
+[      3s] pairs chr5 54784 0.1s
+[      3s] pairs chr3 54316 0.1s
+[      3s] pairs chr1 101469 0.1s
+[      3s] pairs chr21 9968 0.0s
+[      3s] pairs chr14 34923 0.0s
+[      3s] pairs chr15 36066 0.0s
+[      3s] pairs chrX 15504 0.0s
+[      3s] pairs chr18 13013 0.0s
+[      3s] pairs chr17 55542 0.0s
+[      3s] pairs chr19 60626 0.0s
+[      3s] pairs chr7 43440 0.1s
+[     14s] checks {"chr18_cage_equal_w24": true, "chr18_quant_equal_w24": true, "chr18_observed_equal_w24": true, "chr18_seq_equal_data_human": true, "chr18_evidence_equal_w24_lib": true, "pairs_equal_e3_candidates_k20": true, "R0_equal_select_evidence_v41": true, "chr18_R0_tiberius_vs_w24_dev": {"auth": {"S50_sn": 0.3684210526315789, "S50_pr_known": 0.2545454545454545, "n_pred": 194}, "w24": {"S50_sn": 0.3684210526315789, "S50_pr_known": 0.2545454545454545, "n_pred": 194}}, "chr18_R0_tiberius_equal_w24_dev": true}
+[     33s] LOCO fits done
+[     33s] LOCO scored chr1
+[     33s] LOCO scored chr3
+[     34s] LOCO scored chr4
+[     34s] LOCO scored chr5
+[     34s] LOCO scored chr7
+[     34s] LOCO scored chr8
+[     34s] LOCO scored chr11
+[     34s] LOCO scored chr14
+[     34s] LOCO scored chr15
+[     35s] LOCO scored chr17
+[     35s] LOCO scored chr19
+[     35s] LOCO scored chr21
+[     35s] LOCO scored chrX
+[     35s] LOCO scored chr18
+[     37s] q {'R2': 0.69, 'R6': 1.0, 'model': 0.44, 'model_rest': 0.58} best rule R2 recall_min 0.3517
+[     37s] R0         recall 0.372  prec_known 0.224  strict 0.085  n 3695
+[     37s] R1         recall 0.300  prec_known 0.148  strict 0.056  n 4554
+[     37s] R2         recall 0.353  prec_known 0.333  strict 0.116  n 2557
+[     37s] R3         recall 0.311  prec_known 0.242  strict 0.089  n 2939
+[     37s] R4         recall 0.227  prec_known 0.247  strict 0.080  n 2374
+[     37s] R5         recall 0.251  prec_known 0.261  strict 0.103  n 2040
+[     37s] R6         recall 0.181  prec_known 0.264  strict 0.081  n 1867
+[     37s] P1         recall 0.406  prec_known 0.240  strict 0.101  n 3390
+[     37s] model      recall 0.353  prec_known 0.623  strict 0.199  n 1494
+[     37s] model_rest recall 0.353  prec_known 0.358  strict 0.134  n 2217

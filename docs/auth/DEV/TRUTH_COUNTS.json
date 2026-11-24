@@ -1,0 +1,45 @@
+{
+ "rule": "wtc11_truth.py without exclusion zone",
+ "expected_plan_section4": {
+  "all_autosomes_X": 1337,
+  "train": 842,
+  "test": 312,
+  "secondary": 183
+ },
+ "got": {
+  "all_autosomes_X": 1338,
+  "train": 842,
+  "test": 312,
+  "secondary": 184
+ },
+ "match": false,
+ "lnc_per_chrom": {
+  "chr1": 126,
+  "chr2": 91,
+  "chr3": 59,
+  "chr4": 62,
+  "chr5": 70,
+  "chr6": 84,
+  "chr7": 64,
+  "chr8": 64,
+  "chr9": 52,
+  "chr10": 49,
+  "chr11": 56,
+  "chr12": 62,
+  "chr13": 41,
+  "chr14": 47,
+  "chr15": 46,
+  "chr16": 55,
+  "chr17": 70,
+  "chr18": 38,
+  "chr19": 71,
+  "chr20": 29,
+  "chr21": 26,
+  "chr22": 33,
+  "chrX": 43,
+  "chrY": 7
+ },
+ "chrY_lnc_not_in_any_set": 7,
+ "mrna_total": 12151,
+ "seconds": 19.4
+}
