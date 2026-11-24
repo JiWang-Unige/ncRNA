@@ -1,0 +1,197 @@
+{
+ "plan": "docs/auth/PLAN_AUTH.md section 2",
+ "chroms": [
+  "chr9",
+  "chr12",
+  "chr20",
+  "chr13"
+ ],
+ "runs": [
+  "v20-g1b-123-ke",
+  "v20-g1b-42-ke",
+  "v20-g1b-456-ke"
+ ],
+ "check_vs_W24": {
+  "ev_farthest_n": 1495,
+  "ev_farthest_tp": 72,
+  "ours_n_mean": 944.0,
+  "ours_not_isoquant": 31,
+  "ok": true
+ },
+ "C1": {
+  "ev_farthest_labels": {
+   "UNC": 1168,
+   "WRONG": 255,
+   "TP": 72
+  },
+  "unc_top": {
+   "U-b": 719,
+   "U-d": 34,
+   "U-a": 93,
+   "U-c": 322
+  },
+  "unc_sub": {
+   "U-b": 719,
+   "U-d": 34,
+   "U-a:3p": 31,
+   "U-c:single": 192,
+   "U-c:mono": 125,
+   "U-a:span": 6,
+   "U-a:both": 29,
+   "U-c:ism": 5,
+   "U-a:5p": 27
+  },
+  "unc_w24_estimate": 1168,
+  "U_a_ends": {
+   "n": 93,
+   "d5_le_1kb": 37,
+   "d3_downstream": 20,
+   "d3_upstream": 40,
+   "median_len_ratio": 0.173,
+   "alt_k3_would_match": 10,
+   "alt_k20_would_match": 27
+  },
+  "v41pc_same_strand": {
+   "TP": 3,
+   "U-a": 6,
+   "U-b": 688,
+   "U-c": 8,
+   "U-d": 3,
+   "WRONG": 20
+  },
+  "wrong_sub": {
+   "antisense_obs": 109,
+   "none": 146
+  },
+  "after_v41pc_mask_approx": {
+   "WRONG": 235,
+   "TP": 69,
+   "U-b": 31,
+   "U-d": 31,
+   "U-a": 87,
+   "U-c": 314
+  },
+  "removed_by_sequence_filter_mean": {
+   "U-a": 3.6666666666666665,
+   "U-a:3p": 0.6666666666666666,
+   "U-a:5p": 2.3333333333333335,
+   "U-a:both": 0.6666666666666666,
+   "U-b": 530.3333333333334,
+   "U-c": 6.0,
+   "U-c:mono": 2.0,
+   "U-c:single": 4.0,
+   "U-d": 3.6666666666666665,
+   "WRONG": 7.333333333333333
+  },
+  "removed_by_run": {
+   "v20-g1b-123-ke": {
+    "U-b": 554,
+    "WRONG": 6,
+    "U-a": 5,
+    "U-a:both": 1,
+    "U-d": 3,
+    "U-a:3p": 1,
+    "U-c": 6,
+    "U-c:single": 5,
+    "U-a:5p": 3,
+    "U-c:mono": 1
+   },
+   "v20-g1b-42-ke": {
+    "U-b": 457,
+    "WRONG": 6,
+    "U-a": 2,
+    "U-a:both": 1,
+    "U-d": 3,
+    "U-c": 4,
+    "U-c:single": 3,
+    "U-a:5p": 1,
+    "U-c:mono": 1
+   },
+   "v20-g1b-456-ke": {
+    "U-b": 580,
+    "WRONG": 10,
+    "U-c": 8,
+    "U-c:mono": 4,
+    "U-d": 5,
+    "U-a": 4,
+    "U-a:3p": 1,
+    "U-c:single": 4,
+    "U-a:5p": 3
+   }
+  },
+  "kept_by_sequence_filter_mean": {
+   "TP": 72.0,
+   "U-a": 89.33333333333333,
+   "U-b": 188.66666666666666,
+   "U-c": 316.0,
+   "U-d": 30.333333333333332,
+   "WRONG": 247.66666666666666
+  },
+  "candidate_ceiling": {
+   "n_truth": 165,
+   "k3": 100,
+   "k20": 115
+  }
+ },
+ "C2": {
+  "ours_not_isoquant": {
+   "n": 31,
+   "median_rep1_reads_same": 2.0,
+   "median_talon_rep1": 0.0,
+   "median_talon_rep23": 2.0,
+   "median_len": 6698.0,
+   "frac_cgi": 0.5806451612903226,
+   "frac_novel": 0.25806451612903225,
+   "frac_spliced": 0.8387096774193549,
+   "frac_rep1_reads_lt5": 0.7741935483870968,
+   "frac_rep1_reads_0": 0.22580645161290322,
+   "rep1_reads_same_q25_q75": [
+    1.0,
+    4.0
+   ],
+   "frac_talon_rep1_0": 0.5483870967741935
+  },
+  "iso_found": {
+   "n": 71,
+   "median_rep1_reads_same": 13.0,
+   "median_talon_rep1": 4.0,
+   "median_talon_rep23": 11.0,
+   "median_len": 9343.0,
+   "frac_cgi": 0.5352112676056338,
+   "frac_novel": 0.2535211267605634,
+   "frac_spliced": 0.7887323943661971,
+   "frac_rep1_reads_lt5": 0.18309859154929578,
+   "frac_rep1_reads_0": 0.0,
+   "rep1_reads_same_q25_q75": [
+    6.0,
+    50.5
+   ],
+   "frac_talon_rep1_0": 0.056338028169014086
+  },
+  "missed_by_both": {
+   "n": 63,
+   "median_rep1_reads_same": 6.0,
+   "median_talon_rep1": 2.0,
+   "median_talon_rep23": 5.0,
+   "median_len": 2719.0,
+   "frac_cgi": 0.3492063492063492,
+   "frac_novel": 0.1746031746031746,
+   "frac_spliced": 0.4444444444444444,
+   "frac_rep1_reads_lt5": 0.38095238095238093,
+   "frac_rep1_reads_0": 0.09523809523809523,
+   "rep1_reads_same_q25_q75": [
+    3.0,
+    19.5
+   ],
+   "frac_talon_rep1_0": 0.3333333333333333
+  },
+  "ours_not_isoquant_site": {
+   "absent": 29,
+   "mismatch": 2
+  },
+  "ours_not_isoquant_iso_tx_recip": 0,
+  "ours_not_isoquant_stringtie": 6,
+  "n_truth": 165
+ },
+ "seconds": 216.8
+}
