@@ -1,0 +1,38 @@
+[2026-11-24T01:14:16Z] queue start
+FROZEN ok: 14 files
+[2026-11-24T01:14:18Z] chr2 long reads already done
+[2026-11-24T01:14:18Z] chr6 long reads already done
+[2026-11-24T01:14:18Z] chr10 long reads already done
+[2026-11-24T01:14:18Z] chr16 long reads already done
+[2026-11-24T01:14:18Z] chr22 long reads already done
+FROZEN ok: 14 files
+chr2 {'model': (31, 229), 'R0': (31, 454)}
+chr6 {'model': (33, 167), 'R0': (24, 346)}
+chr10 {'model': (18, 117), 'R0': (14, 223)}
+chr16 {'model': (10, 90), 'R0': (12, 183)}
+chr22 {'model': (11, 55), 'R0': (12, 110)}
+chr9 {'model': (20, 115), 'R0': (20, 237)}
+chr12 {'model': (25, 145), 'R0': (21, 290)}
+chr13 {'model': (13, 87), 'R0': (20, 184)}
+chr20 {'model': (14, 76), 'R0': (17, 155)}
+{
+ "G1": true,
+ "G2": true,
+ "P1": false,
+ "S": false,
+ "best_rule": "R2",
+ "conclusion": "G1+G2 pass: authenticity of cheap end evidence is learnable beyond simple rules"
+}
+model      recall 0.330  prec_known 0.488  strict 0.157  n 658
+model_rest recall 0.359  prec_known 0.316  strict 0.123  n 908
+P1         recall 0.343  prec_known 0.203  strict 0.086  n 1237
+R0         recall 0.298  prec_known 0.182  strict 0.071  n 1316
+R1         recall 0.314  prec_known 0.151  strict 0.061  n 1612
+R2         recall 0.295  prec_known 0.300  strict 0.101  n 910
+R3         recall 0.247  prec_known 0.186  strict 0.072  n 1074
+R4         recall 0.192  prec_known 0.206  strict 0.076  n 790
+R5         recall 0.186  prec_known 0.199  strict 0.076  n 768
+R6         recall 0.147  prec_known 0.198  strict 0.072  n 639
+isoquant   recall 0.401  prec_known 0.749  strict 0.236  n 530
+stringtie  recall 0.420  prec_known 0.476  strict 0.112  n 1174
+[2026-11-24T01:15:19Z] queue done

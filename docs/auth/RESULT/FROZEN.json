@@ -1,0 +1,16 @@
+{
+ "scripts/auth/auth_lib.py": "f25c0e02757b94ff22359245edbf7ed17df92e92a2d6f61695eede8515005389",
+ "scripts/auth/auth_truth.py": "558c3be161e8c7451a0567bce733e397bf1430f5bec8461fa1992b7a6b5c4a92",
+ "scripts/auth/auth_dev.py": "8d798dce59e712e15f8fed4af9aacc7bf6edc99002f860572d8118b1191ef554",
+ "scripts/auth/auth_score.py": "a856001682b9e9d1a3400449aa5167e64bbfb72626c18a063b2e5b9ad12d896d",
+ "scripts/auth/auth_queue.sh": "d134922afde965921f942401c3b72e44b44f8448d30da6d600a131b3aa37272e",
+ "scripts/m1/w24/w24_lib.py": "43df82e9841098512cf0176f0e8dced55e4e0ee277aecf70ad38429732cbcb84",
+ "scripts/m1/w24/e3_anchor.py": "9c8f9688eaf68b020bddc309be3b4268ab11d34dfc182f374c2f5c458bff4b6d",
+ "scripts/m1/w24/dev_baselines.py": "78dfecf8e6babad511c6e79bcce59f2e35d9f828eecd5b29977e794c6821604c",
+ "scripts/m1/w24/w24_score.py": "6bdc5a24cecc6e42cc3528c724c582ac22adb5743fc8bd8314cc4756bfccc35f",
+ "scripts/m1/w24/wtc11_truth.py": "75d180fe019a023e341cfa5055223e19fb5c7f3fca4d660c327b41db0a064c22",
+ "scripts/m1/simple_det.py": "deb931dcbb094cc50ad642490c468c5bf4befb3bb1ee41e310f11f869bb46482",
+ "scripts/phase1/b1/b1_strict.py": "f5d0c50d5f2b5839bb09a4bd1778a7cc5062d0a3ac70834c42f28c182e5d0bf9",
+ "scripts/phase1/s3/s3_features.py": "1911af04806d9f3aee55c83366859fc28b93d04f82945cca4d92a2aa2ae23801",
+ "outputs/AUTH/dev/MODEL.json": "7405bcf38cdce265395cdbe6e250b986c46f148c705fcfc584314ef0f1a0f229"
+}
