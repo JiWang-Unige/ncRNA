@@ -1,0 +1,44 @@
+{
+ "wtc11": {
+  "frac>=0.0": {
+   "sites_train": 261092,
+   "truth_end_coverage": 0.7446555819477435
+  },
+  "frac>=0.5": {
+   "sites_train": 89138,
+   "truth_end_coverage": 0.663895486935867
+  },
+  "frac>=0.67": {
+   "sites_train": 89138,
+   "truth_end_coverage": 0.663895486935867
+  }
+ },
+ "h1": {
+  "frac>=0.0": {
+   "sites_train": 200565,
+   "truth_end_coverage": 0.7374429223744292
+  },
+  "frac>=0.5": {
+   "sites_train": 72526,
+   "truth_end_coverage": 0.684931506849315
+  },
+  "frac>=0.67": {
+   "sites_train": 72526,
+   "truth_end_coverage": 0.684931506849315
+  }
+ },
+ "gm12878": {
+  "frac>=0.0": {
+   "sites_train": 44464,
+   "truth_end_coverage": 0.3001345895020188
+  },
+  "frac>=0.5": {
+   "sites_train": 44464,
+   "truth_end_coverage": 0.3001345895020188
+  },
+  "frac>=0.67": {
+   "sites_train": 14982,
+   "truth_end_coverage": 0.16823687752355315
+  }
+ }
+}

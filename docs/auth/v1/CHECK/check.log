@@ -1,0 +1,86 @@
+wtc11 {"coverage_train": {"tss": 0.6104513064133017, "pas": 0.663895486935867, "both": 0.4144893111638955}, "candidate_ceiling_train": {"K3": 0.5546318289786223, "K20": 0.661520190023753}, "pairs_train": {"n": 610159, "true": 11841, "uncertain": 592319, "wrong": 5999}}
+gm12878 {"coverage_train": {"tss": 0.4831763122476447, "pas": 0.16823687752355315, "both": 0.12113055181695828}, "candidate_ceiling_train": {"K3": 0.2018842530282638, "K20": 0.2018842530282638}, "pairs_train": {"n": 69413, "true": 810, "uncertain": 64815, "wrong": 3788}}
+h1 {"coverage_train": {"tss": 0.4474885844748858, "pas": 0.684931506849315, "both": 0.317351598173516}, "candidate_ceiling_train": {"K3": 0.4292237442922374, "K20": 0.5205479452054794}, "pairs_train": {"n": 216981, "true": 2282, "uncertain": 209657, "wrong": 5042}}
+wtc11_dpi {"coverage_train": {"tss": 0.43705463182897863, "pas": 0.663895486935867, "both": 0.29334916864608074}, "candidate_ceiling_train": {"K3": 0.38954869358669836, "K20": 0.4857482185273159}, "pairs_train": {"n": 261503, "true": 4147, "uncertain": 254149, "wrong": 3207}}
+{
+ "wtc11": {
+  "truth_lnc_counts": {
+   "all_autosomes_X": 1338,
+   "train": 842,
+   "test": 312,
+   "secondary": 184
+  },
+  "R0_train": {
+   "recall": 0.37173396674584325,
+   "prec_known": 0.22421203438395415,
+   "prec_strict": 0.08470906630581868,
+   "n_pred": 3695,
+   "tp": 313,
+   "unknown": 2299,
+   "wrong": 1083,
+   "n_truth": 842
+  }
+ },
+ "gm12878": {
+  "truth_lnc_counts": {
+   "all_autosomes_X": 1199,
+   "train": 743,
+   "test": 280,
+   "secondary": 176,
+   "test_per_chrom": {
+    "chr2": 83,
+    "chr6": 71,
+    "chr10": 51,
+    "chr16": 48,
+    "chr22": 27
+   }
+  },
+  "R0_train": {
+   "recall": 0.13458950201884254,
+   "prec_known": 0.41841004184100417,
+   "prec_strict": 0.18975332068311196,
+   "n_pred": 527,
+   "tp": 100,
+   "unknown": 288,
+   "wrong": 139,
+   "n_truth": 743
+  }
+ },
+ "h1": {
+  "truth_lnc_counts": {
+   "all_autosomes_X": 693,
+   "train": 438,
+   "test": 149,
+   "secondary": 106,
+   "test_per_chrom": {
+    "chr2": 47,
+    "chr6": 36,
+    "chr10": 28,
+    "chr16": 23,
+    "chr22": 15
+   }
+  },
+  "R0_train": {
+   "recall": 0.2808219178082192,
+   "prec_known": 0.13591160220994475,
+   "prec_strict": 0.06728665207877461,
+   "n_pred": 1828,
+   "tp": 123,
+   "unknown": 923,
+   "wrong": 782,
+   "n_truth": 438
+  }
+ },
+ "wtc11_dpi": {
+  "R0_train": {
+   "recall": 0.2672209026128266,
+   "prec_known": 0.3303964757709251,
+   "prec_strict": 0.12195121951219512,
+   "n_pred": 1845,
+   "tp": 225,
+   "unknown": 1164,
+   "wrong": 456,
+   "n_truth": 842
+  }
+ }
+}
