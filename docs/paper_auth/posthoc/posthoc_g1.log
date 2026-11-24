@@ -1,0 +1,14 @@
+full_all q 0.53 test recall 0.330 prec 0.488 n 658 dPrec 0.306
+full_legal q 0.89 test recall 0.324 prec 0.240 n 1071 dPrec 0.058
+full_all_legalsel q 0.43 test recall 0.359 prec 0.596 n 601 dPrec 0.414
+full_legal_legalsel q 0.44 test recall 0.349 prec 0.596 n 611 dPrec 0.414
+geometry_all q 1.0 test recall 0.282 prec 0.161 n 1261 dPrec -0.021
+geometry_legal q 1.0 test recall 0.237 prec 0.154 n 1180 dPrec -0.028
+signal_density_all q 0.85 test recall 0.301 prec 0.233 n 1052 dPrec 0.051
+signal_density_legal q 0.97 test recall 0.314 prec 0.202 n 1182 dPrec 0.02
+signal_density_all_legalsel q 0.6 test recall 0.324 prec 0.353 n 846 dPrec 0.171
+signal_density_legal_legalsel q 0.62 test recall 0.340 prec 0.368 n 865 dPrec 0.186
+cage_only_all q 1.0 test recall 0.333 prec 0.157 n 1649 dPrec -0.025
+cage_only_legal q 1.0 test recall 0.333 prec 0.157 n 1649 dPrec -0.025
+quant_only_all q 1.0 test recall 0.311 prec 0.177 n 1307 dPrec -0.005
+quant_only_legal q 1.0 test recall 0.311 prec 0.177 n 1307 dPrec -0.005
