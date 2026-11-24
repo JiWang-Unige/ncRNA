@@ -1,0 +1,5 @@
+e19b77f22bcf692a0164d0822f70db5cd8969f02f3de770a15b8e30e2122eb0f  scripts/auth/v1_lib.py
+056958bcba8f2a5a4b27c15d6cde9a75534f249776a15d96bb60ef84f02575ee  scripts/auth/v1_dev.py
+5e4eea862e6bae0e4829faf07621cb4e1a34c3e192c75844b0b6ae4f9edf1640  scripts/auth/v1_score.py
+1f5d3bb7fd27517b47b7a25a8c4c4186978c36086b16429f3a17708bb9a08b43  outputs/AUTH_V1/dev/MODEL_V1.json
+822d34976ac70caabcae4ba0ae5fd2a25b9451f8099b7aad65f1704445a0145e  outputs/AUTH_V1/dev/DEV_V1.json

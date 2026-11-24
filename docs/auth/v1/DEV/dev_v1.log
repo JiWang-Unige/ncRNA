@@ -1,0 +1,14 @@
+[     52s] checks {"evidence_equal_check_cache": true, "cage_tags_equal_check": true, "R0_equal_check": true, "truth_is_auth_truth": true}
+[     56s] pairs loaded wtc11 261503
+[     60s] LOCO fits done wtc11
+[     65s] q {'R2': 0.71, 'R6': 1.0, 'model': 0.6, 'model_rest': 0.63} best rule R2 D0 {"rule": "pooled LOCO: model - R0-DPI precision (known) >= +0.10, a q found under the recall bound, model recall >= R0-DPI training recall", "model_prec_known": 0.6330532212885154, "R0_prec_known": 0.3303964757709251, "diff_prec_known": 0.30265674551759025, "model_recall": 0.2684085510688836, "R0_recall": 0.2672209026128266, "q_found": true, "pass": true}
+[     65s] R0         recall 0.267  prec_known 0.330  strict 0.122  n 1845
+[     65s] R1         recall 0.213  prec_known 0.223  strict 0.084  n 2132
+[     65s] R2         recall 0.249  prec_known 0.469  strict 0.160  n 1315
+[     65s] R3         recall 0.221  prec_known 0.336  strict 0.124  n 1504
+[     65s] R4         recall 0.146  prec_known 0.329  strict 0.112  n 1102
+[     65s] R5         recall 0.209  prec_known 0.387  strict 0.144  n 1224
+[     65s] R6         recall 0.107  prec_known 0.310  strict 0.103  n 872
+[     65s] P1         recall 0.293  prec_known 0.350  strict 0.141  n 1752
+[     65s] model      recall 0.268  prec_known 0.633  strict 0.214  n 1054
+[     65s] model_rest recall 0.268  prec_known 0.453  strict 0.171  n 1320
