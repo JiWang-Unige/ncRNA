@@ -1,0 +1,83 @@
+{
+ "rule": "AUTH-E1 (docs/auth/e1/PLAN_E1.md, author approved 2026-11-24): molecule-linked endpoint labels from PacBio rep1\n(ENCFF373TKM: ENCODE long-read pipeline, minimap2 -ax splice -uf --secondary=no, CCS/FLNC reads, primary only), and the\nsection 6 step 2 feasibility gate on the training chromosomes only.\n\nRead ends: transcript strand = alignment strand (-uf); 5' end = first aligned base on that strand, 3' end = last.\nCandidates: AUTH pairs cache (outputs/AUTH/pairs/<c>.npz, K20 ends, length >= 200), v41 same-strand coding pairs removed.\nPer TSS group: cov = reads whose 5' end is within W of the TSS; per candidate end: n_link = of those, reads whose 3' end is\nwithin W of the end.  Supported end: n_link >= 2.  Competing end: n_link == 0.  Group enters the main analysis if it has\n>= 1 supported end, >= 1 competing end and cov >= 10.  W = 100 (main), 50 / 200 reported.",
+ "gate_train_min": 162,
+ "train_groups": {
+  "50": 401,
+  "100": 688,
+  "200": 1075
+ },
+ "per_chrom": {
+  "chr1": {
+   "50": 61,
+   "100": 95,
+   "200": 124
+  },
+  "chr3": {
+   "50": 74,
+   "100": 126,
+   "200": 173
+  },
+  "chr4": {
+   "50": 46,
+   "100": 64,
+   "200": 100
+  },
+  "chr5": {
+   "50": 23,
+   "100": 33,
+   "200": 65
+  },
+  "chr7": {
+   "50": 30,
+   "100": 58,
+   "200": 94
+  },
+  "chr8": {
+   "50": 20,
+   "100": 25,
+   "200": 40
+  },
+  "chr11": {
+   "50": 23,
+   "100": 46,
+   "200": 74
+  },
+  "chr14": {
+   "50": 10,
+   "100": 17,
+   "200": 30
+  },
+  "chr15": {
+   "50": 12,
+   "100": 36,
+   "200": 91
+  },
+  "chr17": {
+   "50": 28,
+   "100": 39,
+   "200": 60
+  },
+  "chr19": {
+   "50": 36,
+   "100": 68,
+   "200": 115
+  },
+  "chr21": {
+   "50": 6,
+   "100": 9,
+   "200": 12
+  },
+  "chrX": {
+   "50": 21,
+   "100": 57,
+   "200": 78
+  },
+  "chr18": {
+   "50": 11,
+   "100": 15,
+   "200": 19
+  }
+ },
+ "expected_test_groups_main": 254.9,
+ "gate_pass": true
+}
