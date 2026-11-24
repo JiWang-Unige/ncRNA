@@ -1,0 +1,35 @@
+{
+ "chr16_rep1": {
+  "seen": 107356,
+  "clip": 75512,
+  "kept": 31804,
+  "noncanonical": 39,
+  "short_intron": 1,
+  "annotated_junction_frac": 0.9742111270409086
+ },
+ "chr16_V": {
+  "seen": 123117,
+  "clip": 42125,
+  "kept": 80922,
+  "noncanonical": 65,
+  "short_intron": 5,
+  "annotated_junction_frac": 0.9781285208259115
+ },
+ "chr22_rep1": {
+  "seen": 65243,
+  "clip": 46988,
+  "kept": 18069,
+  "noncanonical": 185,
+  "short_intron": 1,
+  "annotated_junction_frac": 0.9780091643130867
+ },
+ "chr22_V": {
+  "seen": 76622,
+  "kept": 50592,
+  "clip": 25793,
+  "noncanonical": 232,
+  "short_intron": 5,
+  "annotated_junction_frac": 0.980689800144463
+ },
+ "movie_zmw_overlap_rep1_V": 0
+}

@@ -31,7 +31,7 @@ import ident_core as C        # noqa: E402
 import oracle_indep as O      # noqa: E402
 
 ROOT = os.path.expanduser(os.environ.get("NCRNA_ROOT", "~/ncrna-annot"))
-OUT = f"{ROOT}/outputs/IDENT/P0b_fix"
+OUT = f"{ROOT}/outputs/IDENT/{os.environ.get('P0B_TAG', 'P0b_fix')}"
 DELTAS = (0, 1, 2, None)
 TYPE_TAUS = ("ends", "short2", "pe", "link")
 TYPE_DELTAS = (0, 1)
@@ -203,6 +203,8 @@ def check(args):
     res = {"seed": seed, "n_paths": n, "fails": [], "scen": {}, "counts": {}}
     for k in C.SOLVER_LOG:
         C.SOLVER_LOG[k] = 0
+    O.ORACLE_LOG["lp_unresolved"] = 0
+    O.ORACLE_LOG["lp_retried"] = 0
     fails, counts, scen = res["fails"], res["counts"], res["scen"]
     if P != O.enum_paths(sp):                                                           # F1
         fails.append("F1 path enumeration differs")
@@ -274,8 +276,8 @@ def check(args):
                 continue
             Fm = [Z for Z in fam if (K is None or len(Z) <= K) and i not in Z]
             cex = [[P[j] for j in Z] for Z in Fm]
-            pool, cost = C.diagnosis_pool(P[i], C.PROTOCOLS)
-            pool_or = set().union(*(O.tau_obs(P[i], tau) for tau in C.PROTOCOLS))
+            pool, cost = C.diagnosis_pool(P[i], C.PROTOCOLS, ev.locus)
+            pool_or = set().union(*(O.tau_obs(P[i], tau, sp) for tau in C.PROTOCOLS))
             if set(pool) != pool_or:
                 fails.append(f"B3 pool differs path {i}")
             if any(abs(cost[o] - O.cost_of(o, C.PROTOCOLS)) > 1e-12 for o in pool):
@@ -354,7 +356,10 @@ def check(args):
     for k in ("full", "paired"):
         if k in kinds:
             bump(scen, f"instances_with_{k}_evidence")
-    res["solver"] = dict(C.SOLVER_LOG)
+    res["solver"] = dict(C.SOLVER_LOG, oracle_lp_retried=O.ORACLE_LOG["lp_retried"])
+    if O.ORACLE_LOG["lp_unresolved"]:
+        res["oracle_lp_unresolved"] = O.ORACLE_LOG["lp_unresolved"]
+        fails.append(f"ORACLE lp unresolved x{O.ORACLE_LOG['lp_unresolved']} (comparison not trustworthy)")
     res["seconds"] = round(time.time() - t0, 2)
     return res
 
@@ -447,6 +452,20 @@ def edge_cases():
     out["tolerance_allows"] = C.three_state(to_ev(low_abundance_case(0.5)), None)["paths"][j]["state"] == "POSSIBLE"
     t = C.three_state(to_ev(shared_chain_case()), 0)
     out["shared_chain_both_necessary"] = all(v["state"] == "NECESSARY" for v in t["paths"].values())
+    # permanent regression: instances where HiGHS presolve wrongly reported infeasible (P0b-fix, 2026-11-24)
+    for s in (329, 391, 414):
+        out[f"regression_presolve_seed{s}"] = not check((s, None))["fails"]
+    # class state: two paths sharing the chain 1-2 through different TSS; the class is necessary, neither path is
+    ev = to_ev(spec(3, {(0, 1), (1, 2)}, {"s1": (0, False), "s2": (1, False)}, {"t": (2, True)}, hard={("sub", (1, 2))}))
+    P = ev.locus.paths
+    cls = [k for k, p in enumerate(P) if p[1][-2:] == (1, 2)]
+    t = C.three_state(ev, None)
+    out["class_necessary_members_possible"] = (C.class_state(ev, cls, None) == "NECESSARY"
+                                               and all(t["paths"][k]["state"] == "POSSIBLE" for k in cls))
+    # full-length observation not offered for an open-ended path
+    loc = C.Locus(3, {(0, 1), (1, 2)}, {"s": (0, False)}, {"t": (2, True)})
+    out["no_full_for_open_end"] = not any(o[0] == "full" for o in C.protocol_obs(loc.paths[0], "long", loc))
+    out["prune_unreachable"] = C.Locus(4, {(0, 1), (1, 2), (0, 3)}, {"s": (0, True)}, {"t": (2, True)}).paths == [("s", (0, 1, 2), "t")]
     return out
 
 
@@ -484,7 +503,10 @@ def main():
                "state_counts": counts, "scenarios": scen, "paths_total": sum(r["n_paths"] for r in done),
                "max_seconds": max(r.get("seconds", 0) for r in done), "seconds": round(time.time() - t0, 1)}
     json.dump(summary, open(f"{OUT}/P0B_FIX.json", "w"), indent=1, default=str)
-    print(json.dumps({k: summary[k] for k in ("solver_rechecks", "instances", "skipped", "edge_cases_all_pass", "n_fail", "constructed_fails",
+    import scipy
+    summary["versions"] = {"scipy": scipy.__version__, "numpy": np.__version__}
+    json.dump(summary, open(f"{OUT}/P0B_FIX.json", "w"), indent=1, default=str)
+    print(json.dumps({k: summary[k] for k in ("versions", "solver_rechecks", "instances", "skipped", "edge_cases_all_pass", "n_fail", "constructed_fails",
                                               "state_counts", "scenarios", "paths_total", "max_seconds", "seconds")}, indent=1, default=str))
     if fails:
         print("FIRST FAILS", fails[:30])

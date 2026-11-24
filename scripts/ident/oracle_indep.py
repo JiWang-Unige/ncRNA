@@ -16,6 +16,7 @@ GAP = (0, 2)          # read-pair gap (nodes) and mate length <= 2, as in the de
 MATE = 2
 COST = {"ends": 0.5, "short2": 1.0, "short3": 1.5, "pe": 1.5, "long": 3.0, "link": 5.0}
 TOL = 1e-6
+ORACLE_LOG = {"lp_unresolved": 0, "lp_retried": 0}
 
 
 # ------------------------------------------------------------------ paths and observation semantics
@@ -69,7 +70,7 @@ def yields(path, o):
     raise ValueError(o)
 
 
-def tau_obs(path, tau):
+def tau_obs(path, tau, spec=None):
     s, nodes, t = path
     L = len(nodes)
     windows = {tuple(nodes[i:i + w]) for w in range(1, L + 1) for i in range(0, L - w + 1)}
@@ -82,7 +83,8 @@ def tau_obs(path, tau):
     if tau == "short3":
         return {("sub", w) for w in windows if len(w) <= 3}
     if tau == "long":
-        return {("sub", w) for w in windows} | {("full", s, tuple(nodes), t)}
+        full_ok = spec is None or (spec["sources"][s][1] and spec["sinks"][t][1])
+        return {("sub", w) for w in windows} | ({("full", s, tuple(nodes), t)} if full_ok else set())
     if tau == "pe":
         out = set()
         for i in range(L):
@@ -146,6 +148,13 @@ def _lp(A, lo, hi, nvar, A_eq=None):
     res = linprog(np.zeros(nvar), A_ub=np.array(A_ub) if A_ub else None, b_ub=np.array(b_ub) if b_ub else None,
                   A_eq=np.array(A_eq) if A_eq else None, b_eq=np.zeros(len(A_eq)) if A_eq else None,
                   bounds=[(ETA, BIGM)] * nvar, method="highs-ipm")
+    if res.status not in (0, 2):                       # interior point did not conclude: retry with dual simplex
+        res = linprog(np.zeros(nvar), A_ub=np.array(A_ub) if A_ub else None, b_ub=np.array(b_ub) if b_ub else None,
+                      A_eq=np.array(A_eq) if A_eq else None, b_eq=np.zeros(len(A_eq)) if A_eq else None,
+                      bounds=[(ETA, BIGM)] * nvar, method="highs-ds")
+        ORACLE_LOG["lp_retried"] += 1
+        if res.status not in (0, 2):
+            ORACLE_LOG["lp_unresolved"] += 1
     return res.status == 0, (res.x if res.status == 0 else None)
 
 

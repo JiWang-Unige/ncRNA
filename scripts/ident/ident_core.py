@@ -14,6 +14,7 @@ Hard observations must be produced by a selected path.  Optional quantitative ev
 Method = MILP (scipy HiGHS branch-and-bound).  The P0b oracle lives in oracle_indep.py and does not import this file.
 """
 import math
+import time
 
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, linprog, milp
@@ -41,8 +42,17 @@ class Locus:
         sink_at = {}
         for t, (v, _) in self.sinks.items():
             sink_at.setdefault(v, []).append(t)
+        reach = set(sink_at)                                   # nodes that can reach some sink
+        changed = True
+        while changed:
+            changed = False
+            for u, v in self.edges:
+                if v in reach and u not in reach:
+                    reach.add(u); changed = True
         out = set()
         for s, (v0, _) in sorted(self.sources.items()):
+            if v0 not in reach:
+                continue
             stack = [(v0, (v0,))]
             while stack:
                 v, nodes = stack.pop()
@@ -52,7 +62,8 @@ class Locus:
                         self.too_many = True
                         return []
                 for w in self.succ[v]:
-                    stack.append((w, nodes + (w,)))
+                    if w in reach:
+                        stack.append((w, nodes + (w,)))
         return sorted(out)
 
 
@@ -97,8 +108,9 @@ def _pe_obs(nodes):
     return out
 
 
-def protocol_obs(path, tau):
-    """Observations of protocol tau that a path produces (the candidate pool for diagnosis)."""
+def protocol_obs(path, tau, locus=None):
+    """Observations of protocol tau that a path produces (the candidate pool for diagnosis).  A full-length observation
+    is offered only for paths whose source and sink are both observed boundaries (when the locus is given)."""
     s, nodes, t = path
     if tau == "ends":
         return [("src", s), ("snk", t)]
@@ -112,12 +124,13 @@ def protocol_obs(path, tau):
     if tau == "short3":
         return [o for o in subs if len(o[1]) <= 3]
     if tau == "long":
-        return subs + [("full", s, nodes, t)]
+        full_ok = locus is None or (locus.sources[s][1] and locus.sinks[t][1])
+        return subs + ([("full", s, nodes, t)] if full_ok else [])
     raise ValueError(tau)
 
 
 def protocol_space(locus, tau):
-    return sorted({o for p in locus.paths for o in protocol_obs(p, tau)})
+    return sorted({o for p in locus.paths for o in protocol_obs(p, tau, locus)})
 
 
 class Evidence:
@@ -135,7 +148,8 @@ class Evidence:
 
 
 # ------------------------------------------------------------------ MILP method
-SOLVER_LOG = {"infeasible_rechecked": 0, "presolve_false_infeasible": 0}
+SOLVER_LOG = {"infeasible_rechecked": 0, "presolve_false_infeasible": 0, "presolve_recheck_unresolved": 0,
+              "presolve_confirmed_infeasible": 0, "witness_check_failed": 0, "both_infeasible": 0}
 
 
 def _milp(c, cons, bnd, integ, time_limit):
@@ -145,9 +159,13 @@ def _milp(c, cons, bnd, integ, time_limit):
     if r.status == 2:
         SOLVER_LOG["infeasible_rechecked"] += 1
         r2 = milp(c, constraints=cons, bounds=bnd, integrality=integ, options={"time_limit": time_limit, "presolve": False})
-        if r2.status != 2:
-            SOLVER_LOG["presolve_false_infeasible"] += 1
+        if r2.status == 0 and r2.x is not None:
+            SOLVER_LOG["presolve_false_infeasible"] += 1     # counted as false only once a witness exists (verified later)
             return r2
+        if r2.status != 2:
+            SOLVER_LOG["presolve_recheck_unresolved"] += 1
+            return r2
+        SOLVER_LOG["presolve_confirmed_infeasible"] += 1
     return r
 
 
@@ -221,12 +239,36 @@ class Model:
         if r.status == 0 and r.x is not None:
             z = np.round(r.x[:self.n]).astype(int)
             x = self._polish(z)
-            if x is None:                                     # MILP tolerance accepted a support the exact LP rejects
+            if x is None or not self.verify(z, x, **{k: kw.get(k) for k in ("K", "fix", "extra_cov")}):
+                SOLVER_LOG["witness_check_failed"] += 1
                 return "unresolved", None, None
             return "feasible", z, x
         if r.status == 2:
             return "infeasible", None, None
         return "unresolved", None, None
+
+    def verify(self, z, x, K=None, fix=None, extra_cov=None):
+        """Direct check of a returned witness against every constraint of the model it came from."""
+        Z = [j for j in range(self.n) if z[j] == 1]
+        if any(v not in (0, 1) for v in z):
+            return False
+        for i, v in (fix or {}).items():
+            if z[i] != v:
+                return False
+        if K is not None and len(Z) > K:
+            return False
+        for j in range(self.n):
+            if (j in Z and not (ETA - 1e-7 <= x[j] <= BIGM + 1e-7)) or (j not in Z and abs(x[j]) > 1e-9):
+                return False
+        for o in list(self.cov) + list(extra_cov or ()):
+            if not any(produces(self.P[j], o) for j in Z):
+                return False
+        if self.use_quant:
+            for tau, y, er, ea in self.ev.quant:
+                for o, yo in y.items():
+                    if abs(sum(produces(self.P[j], o) * x[j] for j in Z) - yo) > er * yo + ea + 1e-7:
+                        return False
+        return True
 
     def _polish(self, z):
         """Exact abundances on the chosen support: x_j = 0 off support, eta <= x_j <= M on it, quantitative rows by LP.
@@ -256,10 +298,14 @@ class Model:
         return (int(z.sum()), z, x) if st == "feasible" else (st, None, None)
 
 
-def three_state(ev, delta=0, use_quant=True, time_limit=30.0):
-    """Per candidate path: NECESSARY / POSSIBLE / INCOMPATIBLE (+ witnesses), or model-level INFEASIBLE_MODEL / UNRESOLVED."""
+def three_state(ev, delta=0, use_quant=True, time_limit=30.0, deadline=None):
+    """Per candidate path: NECESSARY / POSSIBLE / INCOMPATIBLE (+ witnesses), or model-level INFEASIBLE_MODEL / UNRESOLVED.
+    deadline: absolute time.time() budget for the whole locus."""
     if ev.locus.too_many:
         return {"model": "UNRESOLVED"}
+    if not ev.locus.paths:
+        return {"model": "INFEASIBLE_MODEL" if ev.coverage_obs() or any(y for _, y, _, _ in ev.quant) else "OK",
+                "kstar": 0, "K": None if delta is None else delta, "paths": {}}
     m = Model(ev, use_quant, time_limit)
     ks = m.kstar()
     if ks[0] == "infeasible":
@@ -270,9 +316,14 @@ def three_state(ev, delta=0, use_quant=True, time_limit=30.0):
     K = None if delta is None else k + delta
     out = {"model": "OK", "kstar": k, "K": K, "paths": {}}
     for i in range(m.n):
+        if deadline is not None and time.time() > deadline:
+            return {"model": "UNRESOLVED"}
         w1 = m.solve(K=K, fix={i: 1})
         w0 = m.solve(K=K, fix={i: 0})
         if "unresolved" in (w1[0], w0[0]):
+            st = "UNRESOLVED"
+        elif w0[0] == "infeasible" and w1[0] == "infeasible":   # contradicts k*: solver inconsistency
+            SOLVER_LOG["both_infeasible"] += 1
             st = "UNRESOLVED"
         elif w0[0] == "infeasible":
             st = "NECESSARY"
@@ -329,32 +380,37 @@ def min_cost_cover(pool, cost, counterexamples, time_limit=30.0):
     return ("impossible", None) if r.status == 2 else ("unresolved", None)
 
 
-def obs_cost(o, protocols):
-    """Cheapest protocol (among those allowed) that can produce o."""
+def obs_cost(o, protocols, cost_table=None):
+    """Cheapest protocol (among those allowed) that can produce o, under cost_table (default DEFAULT_COST)."""
+    cost_table = cost_table or DEFAULT_COST
     best = math.inf
     for tau in protocols:
         if (o[0] == "link" and tau == "link") or (o[0] in ("src", "snk") and tau == "ends") \
                 or (o[0] == "paired" and tau == "pe") or (o[0] == "full" and tau == "long"):
-            best = min(best, DEFAULT_COST[tau])
+            best = min(best, cost_table[tau])
         elif o[0] == "sub" and tau in ("short2", "short3", "long"):
             L = len(o[1])
             if tau == "long" or (tau == "short2" and L <= 2) or (tau == "short3" and L <= 3):
-                best = min(best, DEFAULT_COST[tau])
+                best = min(best, cost_table[tau])
     return best
 
 
-def diagnosis_pool(path, protocols):
-    pool = sorted({o for tau in protocols for o in protocol_obs(path, tau)})
-    return pool, {o: obs_cost(o, protocols) for o in pool}
+def diagnosis_pool(path, protocols, locus=None, cost_table=None):
+    pool = sorted({o for tau in protocols for o in protocol_obs(path, tau, locus)})
+    return pool, {o: obs_cost(o, protocols, cost_table) for o in pool}
 
 
-def diagnose(ev, i, K, protocols=PROTOCOLS, time_limit=30.0, max_iter=500):
-    """Minimum-cost conditionally sufficient observation set for path i (K fixed).  -> dict."""
-    m = Model(ev, True, time_limit)
-    pool, cost = diagnosis_pool(m.P[i], protocols)
+def diagnose(ev, i, K, protocols=PROTOCOLS, time_limit=30.0, max_iter=500, cost_table=None, use_quant=True, members=None):
+    """Minimum-cost conditionally sufficient observation set for path i (or for the class `members`, all absent in a
+    counterexample; pool = observations produced by every member), K fixed.  -> dict."""
+    m = Model(ev, use_quant, time_limit)
+    members = list(members) if members is not None else [i]
+    pools = [set(diagnosis_pool(m.P[j], protocols, ev.locus, cost_table)[0]) for j in members]
+    pool = sorted(set.intersection(*pools))
+    cost = {o: obs_cost(o, protocols, cost_table) for o in pool}
     cex, O = [], []
     for it in range(max_iter):
-        st, z, x = m.solve(K=K, fix={i: 0}, extra_cov=O)
+        st, z, x = m.solve(K=K, fix={j: 0 for j in members}, extra_cov=O)
         if st == "unresolved":
             return {"status": "UNRESOLVED"}
         if st == "infeasible":
@@ -444,3 +500,27 @@ def ambiguity_type(ev, i, K, tau, time_limit=30.0):
     if w == "UNRESOLVED":
         return "UNRESOLVED", None
     return ("INFORMATION_LIMITED", w) if w is not None else ("QUANT_DISTINGUISHABLE", d)
+
+
+def class_state(ev, members, K, use_quant=True, time_limit=30.0):
+    """Three state of an equivalence class (e.g. all paths sharing an intron chain): NECESSARY iff no feasible solution
+    has every member absent; INCOMPATIBLE iff no feasible solution has some member present."""
+    m = Model(ev, use_quant, time_limit)
+    absent = m.solve(K=K, fix={j: 0 for j in members})[0]
+    if absent == "unresolved":
+        return "UNRESOLVED"
+    if absent == "infeasible":
+        return "NECESSARY"
+    b = m._base(K=K, extra_cov=())
+    if b is None:
+        return "UNRESOLVED"
+    c, cons, bnd = b
+    n = m.n
+    r = np.zeros(2 * n)
+    r[list(members)] = 1.0
+    A = np.vstack([cons.A, r])
+    lo, hi = np.r_[cons.lb, 1.0], np.r_[cons.ub, np.inf]
+    res = _milp(c, LinearConstraint(A, lo, hi), bnd, np.r_[np.ones(n), np.zeros(n)], time_limit)
+    if res.status == 0:
+        return "POSSIBLE"
+    return "INCOMPATIBLE" if res.status == 2 else "UNRESOLVED"

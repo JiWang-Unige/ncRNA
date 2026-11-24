@@ -1,0 +1,210 @@
+{
+ "extract": {
+  "chr16_rep1": {
+   "seen": 107356,
+   "clip": 75512,
+   "kept": 31804,
+   "noncanonical": 39,
+   "short_intron": 1,
+   "annotated_junction_frac": 0.9742111270409086
+  },
+  "chr16_V": {
+   "seen": 123117,
+   "clip": 42125,
+   "kept": 80922,
+   "noncanonical": 65,
+   "short_intron": 5,
+   "annotated_junction_frac": 0.9781285208259115
+  },
+  "chr22_rep1": {
+   "seen": 65243,
+   "clip": 46988,
+   "kept": 18069,
+   "noncanonical": 185,
+   "short_intron": 1,
+   "annotated_junction_frac": 0.9780091643130867
+  },
+  "chr22_V": {
+   "seen": 76622,
+   "kept": 50592,
+   "clip": 25793,
+   "noncanonical": 232,
+   "short_intron": 5,
+   "annotated_junction_frac": 0.980689800144463
+  },
+  "movie_zmw_overlap_rep1_V": 0
+ },
+ "build": {
+  "chr16": {
+   "D": 6269,
+   "D_qc": 4732,
+   "D_dropped_unadmitted": 708,
+   "A": 25535,
+   "admitted_introns": 4157,
+   "loci": 676,
+   "loci_ge20D": 73
+  },
+  "chr22": {
+   "D": 3628,
+   "D_qc": 2930,
+   "D_dropped_unadmitted": 381,
+   "A": 14441,
+   "admitted_introns": 2343,
+   "loci": 283,
+   "loci_ge20D": 42
+  }
+ },
+ "check2": {
+  "strict": {
+   "eligible_loci": 107,
+   "computed": 107,
+   "computed_frac": 1.0,
+   "too_many_paths": 0,
+   "d1_model_counts": {
+    "OK": 107
+   },
+   "paths": 1730,
+   "nested_frac": 0.5855491329479768,
+   "possible_inf": 1462,
+   "possible_d1": 1462,
+   "loci_with_nonnested_possible_d1": 34
+  },
+  "expanded": {
+   "eligible_loci": 107,
+   "computed": 106,
+   "computed_frac": 0.9906542056074766,
+   "too_many_paths": 0,
+   "d1_model_counts": {
+    "OK": 106,
+    "UNRESOLVED": 1
+   },
+   "paths": 2870,
+   "nested_frac": 0.6198606271777003,
+   "possible_inf": 2613,
+   "possible_d1": 2613,
+   "loci_with_nonnested_possible_d1": 38
+  },
+  "strict_d1_necessary": 257,
+  "strict_d1_necessary_possible_in_expanded": 0,
+  "PASS": true
+ },
+ "check3": {
+  "evidence_forced": {
+   "n": 268,
+   "V_support_rate": 0.9029850746268657
+  },
+  "parsimony_forced": {
+   "n": 0,
+   "V_support_rate": null
+  },
+  "quant_forced": {
+   "n": 6,
+   "V_support_rate": 1.0
+  },
+  "quant_infeasible_loci": 0,
+  "quant_infeasible_frac": 0.0,
+  "PASS": false
+ },
+ "check1": {
+  "diagnosis_status": {
+   "SUFFICIENT": 449
+  },
+  "pairs": 2245,
+  "base_rate": 0.0022271714922048997,
+  "Q0": {
+   "brier": 0.01752380887131866,
+   "skill_vs_Q0": 0.0,
+   "skill_ci": [
+    0.0,
+    0.0
+   ],
+   "auc": 0.4513392857142857,
+   "mean_pred": 0.05420461348974293
+  },
+  "Q1": {
+   "brier": 0.0022847658660807386,
+   "skill_vs_Q0": 0.8696193343092077,
+   "skill_ci": [
+    0.46351449136570655,
+    0.9794060060442084
+   ],
+   "auc": 0.7432142857142857,
+   "mean_pred": 0.002638713689285917,
+   "calibration": [
+    [
+     0.0,
+     0.2,
+     2245,
+     0.0022271714922048997
+    ],
+    [
+     0.2,
+     0.4,
+     0,
+     null
+    ],
+    [
+     0.4,
+     0.6000000000000001,
+     0,
+     null
+    ],
+    [
+     0.6000000000000001,
+     0.8,
+     0,
+     null
+    ],
+    [
+     0.8,
+     1.0,
+     0,
+     null
+    ]
+   ]
+  },
+  "Q2": {
+   "brier": 0.002227072077624287,
+   "skill_vs_Q0": 0.8729116430121906,
+   "skill_ci": [
+    0.48337206430264273,
+    0.982836617034289
+   ],
+   "auc": 0.39883928571428573,
+   "mean_pred": 3.4834274723778535e-05,
+   "calibration": [
+    [
+     0.0,
+     0.2,
+     2245,
+     0.0022271714922048997
+    ],
+    [
+     0.2,
+     0.4,
+     0,
+     null
+    ],
+    [
+     0.4,
+     0.6000000000000001,
+     0,
+     null
+    ],
+    [
+     0.6000000000000001,
+     0.8,
+     0,
+     null
+    ],
+    [
+     0.8,
+     1.0,
+     0,
+     null
+    ]
+   ]
+  },
+  "PASS": true
+ }
+}

@@ -1,0 +1,20 @@
+{
+ "chr16": {
+  "D": 6269,
+  "D_qc": 4732,
+  "D_dropped_unadmitted": 708,
+  "A": 25535,
+  "admitted_introns": 4157,
+  "loci": 676,
+  "loci_ge20D": 73
+ },
+ "chr22": {
+  "D": 3628,
+  "D_qc": 2930,
+  "D_dropped_unadmitted": 381,
+  "A": 14441,
+  "admitted_introns": 2343,
+  "loci": 283,
+  "loci_ge20D": 42
+ }
+}
