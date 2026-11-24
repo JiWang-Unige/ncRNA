@@ -1,52 +1,68 @@
 #!/usr/bin/env python3
-"""IDENT core (docs/ident/P0a/DEFS_P0a.md v1): evidence-constrained transcript identification on one locus.
+"""IDENT core (docs/ident/P0a/DEFS_P0a.md v1.1): evidence-constrained transcript identification on one locus.
 
 Objects: a DAG of exon segments; virtual sources (TSS clusters) and sinks (TES clusters), each 'observed' or 'open';
-candidate transcripts = all source->sink paths.  Observations: ('sub', nodes) contiguous subpath, ('link', s, t)
-end-to-end link, ('src', s) / ('snk', t) end presence.  Hard observations must be produced by a selected path.
-Optional quantitative evidence per protocol: |B_tau x - y| <= eps_rel*y + eps_abs.
-Supports: z_p in {0,1}, eta*z_p <= x_p <= M*z_p; parsimony sum z <= K = k* + delta.
+candidate transcripts = all source->sink paths.  Observations:
+  ('sub', nodes)                    contiguous subpath (short read, truncated long read)
+  ('paired', m1, m2, gmin, gmax)    read pair: both mates in the same transcript, m2 after m1, gmin..gmax nodes between
+  ('full', s, nodes, t)             full-length molecule: exactly one transcript
+  ('link', s, t)                    end-to-end link (TIF-seq-like)
+  ('src', s) / ('snk', t)           end presence (CAGE / 3'-end seq)
+Hard observations must be produced by a selected path.  Optional quantitative evidence per protocol:
+|B_tau x - y| <= eps_rel*y + eps_abs.  Supports: z_p in {0,1}, eta*z_p <= x_p <= M*z_p; parsimony sum z <= K = k* + delta.
 
-Method = MILP (scipy HiGHS).  Oracle (P0b only) = enumerate every support subset, LP feasibility per subset.
+Method = MILP (scipy HiGHS branch-and-bound).  The P0b oracle lives in oracle_indep.py and does not import this file.
 """
-import itertools
 import math
 
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, linprog, milp
 
-PROTOCOLS = ("ends", "short2", "short3", "long", "link")
-DEFAULT_COST = {"ends": 0.5, "short2": 1.0, "short3": 1.5, "long": 3.0, "link": 5.0}
+PROTOCOLS = ("ends", "short2", "short3", "pe", "long", "link")
+DEFAULT_COST = {"ends": 0.5, "short2": 1.0, "short3": 1.5, "pe": 1.5, "long": 3.0, "link": 5.0}
 ETA, BIGM = 1.0, 1e4
+PE_MATE_MAX, PE_GAP = 2, (0, 2)
+MAX_PATHS = 5000
 
 
 # ------------------------------------------------------------------ locus, paths, observations
 class Locus:
-    def __init__(self, n_nodes, edges, sources, sinks):
+    def __init__(self, n_nodes, edges, sources, sinks, max_paths=MAX_PATHS):
         """sources / sinks: {name: (node, observed_bool)}; edges: iterable of (u, v) with u < v."""
         self.n = n_nodes
-        self.succ = {v: sorted(w for u, w in edges if u == v) for v in range(n_nodes)}
+        self.edges = sorted(set(edges))
+        self.succ = {v: sorted(w for u, w in self.edges if u == v) for v in range(n_nodes)}
         self.sources, self.sinks = dict(sources), dict(sinks)
+        self.max_paths = max_paths
+        self.too_many = False
         self.paths = self._enumerate()
 
     def _enumerate(self):
         sink_at = {}
         for t, (v, _) in self.sinks.items():
             sink_at.setdefault(v, []).append(t)
-        out = []
+        out = set()
         for s, (v0, _) in sorted(self.sources.items()):
             stack = [(v0, (v0,))]
             while stack:
                 v, nodes = stack.pop()
                 for t in sink_at.get(v, []):
-                    out.append((s, nodes, t))
+                    out.add((s, nodes, t))
+                    if len(out) > self.max_paths:
+                        self.too_many = True
+                        return []
                 for w in self.succ[v]:
                     stack.append((w, nodes + (w,)))
-        return sorted(set(out))
+        return sorted(out)
+
+
+def _occurrences(nodes, sub):
+    L = len(sub)
+    return [i for i in range(len(nodes) - L + 1) if nodes[i:i + L] == sub]
 
 
 def produces(path, o):
-    """Number of ways path produces observation o (0/1 in a DAG)."""
+    """Number of ways path produces observation o."""
     s, nodes, t = path
     k = o[0]
     if k == "src":
@@ -55,9 +71,30 @@ def produces(path, o):
         return int(t == o[1])
     if k == "link":
         return int(s == o[1] and t == o[2])
-    sub = o[1]
-    L = len(sub)
-    return sum(1 for i in range(len(nodes) - L + 1) if nodes[i:i + L] == sub)
+    if k == "full":
+        return int(path == (o[1], o[2], o[3]))
+    if k == "sub":
+        return len(_occurrences(nodes, o[1]))
+    if k == "paired":
+        m1, m2, gmin, gmax = o[1], o[2], o[3], o[4]
+        return sum(1 for i in _occurrences(nodes, m1) for j in _occurrences(nodes, m2)
+                   if gmin <= j - (i + len(m1)) <= gmax)
+    raise ValueError(o)
+
+
+def _pe_obs(nodes):
+    out = set()
+    n = len(nodes)
+    for i in range(n):
+        for a in range(1, PE_MATE_MAX + 1):
+            if i + a > n:
+                break
+            for g in range(PE_GAP[0], PE_GAP[1] + 1):
+                j = i + a + g
+                for b in range(1, PE_MATE_MAX + 1):
+                    if j + b <= n:
+                        out.add(("paired", nodes[i:i + a], nodes[j:j + b], PE_GAP[0], PE_GAP[1]))
+    return out
 
 
 def protocol_obs(path, tau):
@@ -67,13 +104,15 @@ def protocol_obs(path, tau):
         return [("src", s), ("snk", t)]
     if tau == "link":
         return [("link", s, t)]
+    if tau == "pe":
+        return sorted(_pe_obs(nodes))
     subs = [("sub", nodes[i:j]) for i in range(len(nodes)) for j in range(i + 1, len(nodes) + 1)]
     if tau == "short2":
         return [o for o in subs if len(o[1]) <= 2]
     if tau == "short3":
         return [o for o in subs if len(o[1]) <= 3]
     if tau == "long":
-        return subs
+        return subs + [("full", s, nodes, t)]
     raise ValueError(tau)
 
 
@@ -96,6 +135,22 @@ class Evidence:
 
 
 # ------------------------------------------------------------------ MILP method
+SOLVER_LOG = {"infeasible_rechecked": 0, "presolve_false_infeasible": 0}
+
+
+def _milp(c, cons, bnd, integ, time_limit):
+    """HiGHS MILP; every 'infeasible' is re-checked with presolve off (P0b-fix found presolve declaring feasible
+    models infeasible).  If the re-check finds a solution, that solution is used (it is then polished and verified)."""
+    r = milp(c, constraints=cons, bounds=bnd, integrality=integ, options={"time_limit": time_limit})
+    if r.status == 2:
+        SOLVER_LOG["infeasible_rechecked"] += 1
+        r2 = milp(c, constraints=cons, bounds=bnd, integrality=integ, options={"time_limit": time_limit, "presolve": False})
+        if r2.status != 2:
+            SOLVER_LOG["presolve_false_infeasible"] += 1
+            return r2
+    return r
+
+
 class Model:
     def __init__(self, ev, use_quant=True, time_limit=30.0):
         self.ev, self.P = ev, ev.locus.paths
@@ -104,56 +159,71 @@ class Model:
         self.time_limit = time_limit
         self.cov = ev.coverage_obs()
 
-    def _base(self, K=None, fix=None, extra_cov=(), objective="none"):
+    def quant_rows(self, offset, width):
+        """Rows |B x - y| <= tol on x placed at columns offset .. offset+n of a width-wide vector."""
+        A, lo, hi = [], [], []
+        if not self.use_quant:
+            return A, lo, hi
+        for tau, y, er, ea in self.ev.quant:
+            for o, yo in y.items():
+                r = np.zeros(width)
+                for i, p in enumerate(self.P):
+                    r[offset + i] = produces(p, o)
+                tol = er * yo + ea
+                A.append(r); lo.append(yo - tol); hi.append(yo + tol)
+        return A, lo, hi
+
+    def struct_rows(self, zoff, xoff, width, K=None, extra_cov=()):
+        """eta z <= x <= M z, coverage, parsimony; None if some observation no candidate can produce."""
         n = self.n
         A, lo, hi = [], [], []
-
-        def row(zc=None, xc=None):
-            r = np.zeros(2 * n)
-            if zc:
-                for i, v in zc.items():
-                    r[i] += v
-            if xc:
-                for i, v in xc.items():
-                    r[n + i] += v
-            return r
-        for i in range(n):                                    # eta z <= x <= M z
-            A.append(row({i: -ETA}, {i: 1.0})); lo.append(0.0); hi.append(np.inf)
-            A.append(row({i: -BIGM}, {i: 1.0})); lo.append(-np.inf); hi.append(0.0)
-        for o in list(self.cov) + list(extra_cov):          # coverage
-            prod = {i: 1.0 for i, p in enumerate(self.P) if produces(p, o)}
-            if not prod:
-                return None                                   # observation no candidate can produce
-            A.append(row(prod)); lo.append(1.0); hi.append(np.inf)
-        if self.use_quant:
-            for tau, y, er, ea in self.ev.quant:
-                for o, yo in y.items():
-                    xc = {i: float(produces(p, o)) for i, p in enumerate(self.P) if produces(p, o)}
-                    tol = er * yo + ea
-                    A.append(row(None, xc)); lo.append(yo - tol); hi.append(yo + tol)
+        for i in range(n):
+            r = np.zeros(width); r[zoff + i] = -ETA; r[xoff + i] = 1.0; A.append(r); lo.append(0.0); hi.append(np.inf)
+            r = np.zeros(width); r[zoff + i] = -BIGM; r[xoff + i] = 1.0; A.append(r); lo.append(-np.inf); hi.append(0.0)
+        for o in list(self.cov) + list(extra_cov):
+            r = np.zeros(width)
+            for i, p in enumerate(self.P):
+                if produces(p, o):
+                    r[zoff + i] = 1.0
+            if not r.any():
+                return None
+            A.append(r); lo.append(1.0); hi.append(np.inf)
         if K is not None:
-            A.append(row({i: 1.0 for i in range(n)})); lo.append(-np.inf); hi.append(K)
+            r = np.zeros(width); r[zoff:zoff + n] = 1.0; A.append(r); lo.append(-np.inf); hi.append(K)
+        return A, lo, hi
+
+    def _base(self, K=None, fix=None, extra_cov=(), objective="none"):
+        n = self.n
+        sr = self.struct_rows(0, n, 2 * n, K, extra_cov)
+        if sr is None:
+            return None
+        A, lo, hi = sr
+        qa, ql, qh = self.quant_rows(n, 2 * n)
+        A, lo, hi = A + qa, lo + ql, hi + qh
         lb, ub = np.zeros(2 * n), np.r_[np.ones(n), np.full(n, BIGM)]
         for i, v in (fix or {}).items():
             lb[i] = ub[i] = v
         c = np.r_[np.ones(n), np.zeros(n)] if objective == "minz" else np.zeros(2 * n)
+        if not A:
+            A, lo, hi = [np.zeros(2 * n)], [0.0], [0.0]
         return c, LinearConstraint(np.array(A), lo, hi), Bounds(lb, ub)
 
     def solve(self, **kw):
         """-> ('feasible', z, x) | ('infeasible', None, None) | ('unresolved', None, None)."""
+        if self.ev.locus.too_many:
+            return "unresolved", None, None
         b = self._base(**kw)
         if b is None:
             return "infeasible", None, None
         c, cons, bnd = b
         integ = np.r_[np.ones(self.n), np.zeros(self.n)]
-        r = milp(c, constraints=cons, bounds=bnd, integrality=integ, options={"time_limit": self.time_limit})
+        r = _milp(c, cons, bnd, integ, self.time_limit)
         if r.status == 0 and r.x is not None:
             z = np.round(r.x[:self.n]).astype(int)
             x = self._polish(z)
             if x is None:                                     # MILP tolerance accepted a support the exact LP rejects
                 return "unresolved", None, None
             return "feasible", z, x
-
         if r.status == 2:
             return "infeasible", None, None
         return "unresolved", None, None
@@ -163,18 +233,18 @@ class Model:
         Removes MILP integrality / big-M residues (x ~ 1e-6 on unselected paths)."""
         Z = list(np.nonzero(z)[0])
         x = np.zeros(self.n)
+        rows = []
+        if self.use_quant:
+            for tau, y, er, ea in self.ev.quant:
+                for o, yo in y.items():
+                    rows.append(([float(produces(self.P[j], o)) for j in Z], yo, er * yo + ea))
         if not Z:
-            return x
-        if not self.use_quant:
+            return x if all(abs(yo) <= tol for _, yo, tol in rows) else None
+        if not rows:
             x[Z] = ETA
             return x
-        A_ub, b_ub = [], []
-        for tau, y, er, ea in self.ev.quant:
-            for o, yo in y.items():
-                a = [float(produces(self.P[j], o)) for j in Z]
-                tol = er * yo + ea
-                A_ub.append(a); b_ub.append(yo + tol)
-                A_ub.append([-v for v in a]); b_ub.append(-(yo - tol))
+        A_ub = [a for a, _, _ in rows] + [[-v for v in a] for a, _, _ in rows]
+        b_ub = [yo + tol for _, yo, tol in rows] + [-(yo - tol) for _, yo, tol in rows]
         r = linprog(np.zeros(len(Z)), A_ub=np.array(A_ub), b_ub=np.array(b_ub), bounds=[(ETA, BIGM)] * len(Z), method="highs")
         if r.status != 0:
             return None
@@ -188,6 +258,8 @@ class Model:
 
 def three_state(ev, delta=0, use_quant=True, time_limit=30.0):
     """Per candidate path: NECESSARY / POSSIBLE / INCOMPATIBLE (+ witnesses), or model-level INFEASIBLE_MODEL / UNRESOLVED."""
+    if ev.locus.too_many:
+        return {"model": "UNRESOLVED"}
     m = Model(ev, use_quant, time_limit)
     ks = m.kstar()
     if ks[0] == "infeasible":
@@ -213,22 +285,28 @@ def three_state(ev, delta=0, use_quant=True, time_limit=30.0):
 
 
 def certificate_source(ev, i, delta=0, time_limit=30.0):
-    """For a path NECESSARY at delta: evidence-forced / quantification-forced / parsimony-dependent; and delta_break."""
+    """For a path NECESSARY at delta: 'evidence' / 'quantification' / 'parsimony' / 'UNRESOLVED'; and delta_break
+    (int, math.inf if no solution avoids the path, or 'UNRESOLVED')."""
     def nec(use_quant, K):
-        m = Model(ev, use_quant, time_limit)
-        return m.solve(K=K, fix={i: 0})[0] == "infeasible"
-    if nec(False, None):
-        src = "evidence"
-    elif ev.quant and nec(True, None):
-        src = "quantification"
-    elif nec(True, Model(ev, True, time_limit).kstar()[0] + delta):
-        src = "parsimony"
-    else:
-        src = None
-    m = Model(ev, True, time_limit)
-    k = m.kstar()[0]
-    k0 = m.kstar(fix={i: 0})[0]
-    brk = (k0 - k) if isinstance(k0, int) else math.inf
+        st = Model(ev, use_quant, time_limit).solve(K=K, fix={i: 0})[0]
+        return None if st == "unresolved" else st == "infeasible"
+    ks = Model(ev, True, time_limit).kstar()
+    if not isinstance(ks[0], int):
+        return "UNRESOLVED", "UNRESOLVED"
+    k = ks[0]
+    src = None
+    for use_quant, K, name in ((False, None, "evidence"), (True, None, "quantification"), (True, k + delta, "parsimony")):
+        if name == "quantification" and not ev.quant:
+            continue
+        r = nec(use_quant, K)
+        if r is None:
+            src = "UNRESOLVED"
+            break
+        if r:
+            src = name
+            break
+    k0 = Model(ev, True, time_limit).kstar(fix={i: 0})[0]
+    brk = (k0 - k) if isinstance(k0, int) else (math.inf if k0 == "infeasible" else "UNRESOLVED")
     return src, brk
 
 
@@ -237,27 +315,26 @@ def hits(paths_in_Z, o):
     return not any(produces(p, o) for p in paths_in_Z)
 
 
-def min_cost_cover(pool, cost, counterexamples):
-    """Minimum-cost subset of pool hitting every counterexample (list of path lists); None if impossible."""
+def min_cost_cover(pool, cost, counterexamples, time_limit=30.0):
+    """Minimum-cost subset of pool hitting every counterexample.  -> ('ok', obs) | ('impossible', None) | ('unresolved', None)."""
     if not counterexamples:
-        return []
+        return "ok", []
     H = np.array([[1.0 if hits(Z, o) else 0.0 for o in pool] for Z in counterexamples])
     if (H.sum(1) == 0).any():
-        return None
+        return "impossible", None
     c = np.array([cost[o] for o in pool])
-    r = milp(c, constraints=LinearConstraint(H, 1.0, np.inf), bounds=Bounds(0, 1), integrality=np.ones(len(pool)))
-    if r.status != 0:
-        return None
-    return [o for o, u in zip(pool, r.x) if u > 0.5]
+    r = _milp(c, LinearConstraint(H, 1.0, np.inf), Bounds(0, 1), np.ones(len(pool)), time_limit)
+    if r.status == 0 and r.x is not None:
+        return "ok", [o for o, u in zip(pool, r.x) if u > 0.5]
+    return ("impossible", None) if r.status == 2 else ("unresolved", None)
 
 
 def obs_cost(o, protocols):
     """Cheapest protocol (among those allowed) that can produce o."""
     best = math.inf
     for tau in protocols:
-        if o[0] == "link" and tau == "link":
-            best = min(best, DEFAULT_COST[tau])
-        elif o[0] in ("src", "snk") and tau == "ends":
+        if (o[0] == "link" and tau == "link") or (o[0] in ("src", "snk") and tau == "ends") \
+                or (o[0] == "paired" and tau == "pe") or (o[0] == "full" and tau == "long"):
             best = min(best, DEFAULT_COST[tau])
         elif o[0] == "sub" and tau in ("short2", "short3", "long"):
             L = len(o[1])
@@ -266,12 +343,15 @@ def obs_cost(o, protocols):
     return best
 
 
+def diagnosis_pool(path, protocols):
+    pool = sorted({o for tau in protocols for o in protocol_obs(path, tau)})
+    return pool, {o: obs_cost(o, protocols) for o in pool}
+
+
 def diagnose(ev, i, K, protocols=PROTOCOLS, time_limit=30.0, max_iter=500):
     """Minimum-cost conditionally sufficient observation set for path i (K fixed).  -> dict."""
     m = Model(ev, True, time_limit)
-    p = m.P[i]
-    pool = sorted({o for tau in protocols for o in protocol_obs(p, tau)})
-    cost = {o: obs_cost(o, protocols) for o in pool}
+    pool, cost = diagnosis_pool(m.P[i], protocols)
     cex, O = [], []
     for it in range(max_iter):
         st, z, x = m.solve(K=K, fix={i: 0}, extra_cov=O)
@@ -281,58 +361,80 @@ def diagnose(ev, i, K, protocols=PROTOCOLS, time_limit=30.0, max_iter=500):
             return {"status": "SUFFICIENT", "obs": O, "cost": float(sum(cost[o] for o in O)), "n_counterexamples": len(cex), "iterations": it}
         Z = [m.P[j] for j in np.nonzero(z)[0]]
         cex.append(Z)
-        O = min_cost_cover(pool, cost, cex)
-        if O is None:
+        cs, O = min_cost_cover(pool, cost, cex, time_limit)
+        if cs == "unresolved":
+            return {"status": "UNRESOLVED"}
+        if cs == "impossible":
             return {"status": "INSUFFICIENT_POOL", "counterexample": Z, "n_counterexamples": len(cex)}
     return {"status": "UNRESOLVED"}
 
 
 def info_limited(ev, i, K, tau, time_limit=30.0):
-    """Two feasible supports (with / without path i), each normalised to total tau-mass 1, with identical tau
-    observation vectors?  Current quantitative evidence is not used (scale-free comparison).  -> witness or None."""
-    loc = ev.locus
-    P, n = loc.paths, len(loc.paths)
-    space = protocol_space(loc, tau)
-    B = np.array([[float(produces(p, o)) for p in P] for o in space])
-    cov = ev.coverage_obs()
-    eta = 1e-3
-    A, lo, hi = [], [], []
+    """In the ORIGINAL feasible region (hard, boundaries, current quantitative evidence, eta, K): two solutions, one with
+    path i and one without, with identical expected tau observations B_tau x1 = B_tau x2 (same abundance scale).
+    -> witness dict | None (no such pair) | 'UNRESOLVED'."""
+    m = Model(ev, True, time_limit)
+    n = m.n
+    space = protocol_space(ev.locus, tau)
+    B = np.array([[float(produces(p, o)) for p in m.P] for o in space])
     N = 4 * n                                                   # z1, x1, z2, x2
-
-    def blank():
-        return np.zeros(N)
-    for blk in (0, 2):
-        zo, xo = blk * n, (blk + 1) * n
-        for j in range(n):
-            r = blank(); r[xo + j] = 1; r[zo + j] = -eta; A.append(r); lo.append(0); hi.append(np.inf)
-            r = blank(); r[xo + j] = 1; r[zo + j] = -1.0; A.append(r); lo.append(-np.inf); hi.append(0)
-        for o in cov:
-            r = blank()
-            for j, p in enumerate(P):
-                if produces(p, o):
-                    r[zo + j] = 1
-            if not r.any():
-                return None
-            A.append(r); lo.append(1); hi.append(np.inf)
-        if K is not None:
-            r = blank(); r[zo:zo + n] = 1; A.append(r); lo.append(-np.inf); hi.append(K)
-        r = blank(); r[xo:xo + n] = B.sum(0); A.append(r); lo.append(1); hi.append(1)     # total tau mass = 1
-    for k in range(len(space)):                                                         # identical tau vectors
-        r = blank(); r[n:2 * n] = B[k]; r[3 * n:4 * n] = -B[k]; A.append(r); lo.append(0); hi.append(0)
-    lb, ub = np.zeros(N), np.r_[np.ones(n), np.ones(n), np.ones(n), np.ones(n)]
-    lb[i] = ub[i] = 1                 # path i in solution 1
-    lb[2 * n + i] = ub[2 * n + i] = 0  # path i not in solution 2
+    A, lo, hi = [], [], []
+    for zoff, xoff in ((0, n), (2 * n, 3 * n)):
+        sr = m.struct_rows(zoff, xoff, N, K)
+        if sr is None:
+            return None
+        qa, ql, qh = m.quant_rows(xoff, N)
+        A += sr[0] + qa; lo += sr[1] + ql; hi += sr[2] + qh
+    for k in range(len(space)):
+        r = np.zeros(N); r[n:2 * n] = B[k]; r[3 * n:] = -B[k]; A.append(r); lo.append(0.0); hi.append(0.0)
+    lb = np.zeros(N)
+    ub = np.r_[np.ones(n), np.full(n, BIGM), np.ones(n), np.full(n, BIGM)]
+    lb[i] = ub[i] = 1
+    lb[2 * n + i] = ub[2 * n + i] = 0
     integ = np.r_[np.ones(n), np.zeros(n), np.ones(n), np.zeros(n)]
-    r = milp(np.zeros(N), constraints=LinearConstraint(np.array(A), lo, hi), bounds=Bounds(lb, ub), integrality=integ,
-             options={"time_limit": time_limit})
+    r = _milp(np.zeros(N), LinearConstraint(np.array(A), lo, hi), Bounds(lb, ub), integ, time_limit)
     if r.status != 0 or r.x is None:
         return None if r.status == 2 else "UNRESOLVED"
-    z1, x1 = np.round(r.x[:n]).astype(int), r.x[n:2 * n]
-    z2, x2 = np.round(r.x[2 * n:3 * n]).astype(int), r.x[3 * n:]
+    z1, z2 = np.round(r.x[:n]).astype(int), np.round(r.x[2 * n:3 * n]).astype(int)
+    pol = _polish_pair(m, z1, z2, B)
+    if pol is None:
+        return "UNRESOLVED"
+    x1, x2 = pol
     return {"z1": z1, "x1": x1, "z2": z2, "x2": x2, "space": space, "B": B}
 
 
+def _polish_pair(m, z1, z2, B):
+    """Exact x1, x2 on fixed supports with the quantitative rows and B x1 = B x2 (removes MILP residues)."""
+    n = m.n
+    Z1, Z2 = list(np.nonzero(z1)[0]), list(np.nonzero(z2)[0])
+    nv = len(Z1) + len(Z2)
+    if nv == 0:
+        return np.zeros(n), np.zeros(n)
+    A_eq, b_eq, A_ub, b_ub = [], [], [], []
+    for k in range(B.shape[0]):
+        A_eq.append([B[k, j] for j in Z1] + [-B[k, j] for j in Z2]); b_eq.append(0.0)
+    if m.use_quant:
+        for blk, Zb in ((0, Z1), (1, Z2)):
+            for tau, y, er, ea in m.ev.quant:
+                for o, yo in y.items():
+                    a = [0.0] * nv
+                    for k, j in enumerate(Zb):
+                        a[blk * len(Z1) + k] = float(produces(m.P[j], o))
+                    tol = er * yo + ea
+                    A_ub.append(a); b_ub.append(yo + tol)
+                    A_ub.append([-v for v in a]); b_ub.append(-(yo - tol))
+    r = linprog(np.zeros(nv), A_ub=np.array(A_ub) if A_ub else None, b_ub=np.array(b_ub) if b_ub else None,
+                A_eq=np.array(A_eq), b_eq=np.array(b_eq), bounds=[(ETA, BIGM)] * nv, method="highs")
+    if r.status != 0:
+        return None
+    x1, x2 = np.zeros(n), np.zeros(n)
+    x1[Z1] = r.x[:len(Z1)]
+    x2[Z2] = r.x[len(Z1):]
+    return x1, x2
+
+
 def ambiguity_type(ev, i, K, tau, time_limit=30.0):
+    """STRUCTURAL / INFORMATION_LIMITED / QUANT_DISTINGUISHABLE / UNRESOLVED for a POSSIBLE path under protocol tau."""
     d = diagnose(ev, i, K, protocols=(tau,), time_limit=time_limit)
     if d["status"] == "SUFFICIENT":
         return "STRUCTURAL", d
@@ -341,46 +443,4 @@ def ambiguity_type(ev, i, K, tau, time_limit=30.0):
     w = info_limited(ev, i, K, tau, time_limit)
     if w == "UNRESOLVED":
         return "UNRESOLVED", None
-    return ("INFORMATION_LIMITED", w) if w is not None else ("SAMPLING_LIMITED", d)
-
-
-# ------------------------------------------------------------------ oracle (P0b)
-def support_feasible(ev, Z_idx, use_quant=True):
-    """Independent check: coverage + boundaries + (LP) quantitative feasibility for a support set."""
-    P = ev.locus.paths
-    Zp = [P[j] for j in Z_idx]
-    for o in ev.coverage_obs():
-        if not any(produces(p, o) for p in Zp):
-            return False, None
-    if not (use_quant and ev.quant):
-        return True, None
-    if not Z_idx:
-        return False, None
-    A_ub, b_ub = [], []
-    for tau, y, er, ea in ev.quant:
-        for o, yo in y.items():
-            a = [float(produces(P[j], o)) for j in Z_idx]
-            tol = er * yo + ea
-            A_ub.append(a); b_ub.append(yo + tol)
-            A_ub.append([-v for v in a]); b_ub.append(-(yo - tol))
-    r = linprog(np.zeros(len(Z_idx)), A_ub=np.array(A_ub), b_ub=np.array(b_ub), bounds=[(ETA, BIGM)] * len(Z_idx), method="highs")
-    return (r.status == 0), (r.x if r.status == 0 else None)
-
-
-def oracle_family(ev, use_quant=True):
-    n = len(ev.locus.paths)
-    fam = []
-    for r in range(1, n + 1):
-        for Z in itertools.combinations(range(n), r):
-            ok, _ = support_feasible(ev, Z, use_quant)
-            if ok:
-                fam.append(frozenset(Z))
-    return fam
-
-
-def oracle_states(fam, n, K):
-    F = [Z for Z in fam if K is None or len(Z) <= K]
-    if not F:
-        return None
-    return {i: ("NECESSARY" if all(i in Z for Z in F) else "INCOMPATIBLE" if all(i not in Z for Z in F) else "POSSIBLE")
-            for i in range(n)}
+    return ("INFORMATION_LIMITED", w) if w is not None else ("QUANT_DISTINGUISHABLE", d)
