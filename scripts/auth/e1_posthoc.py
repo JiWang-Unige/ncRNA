@@ -54,7 +54,13 @@ def hq_reads(c):
             out["+"][0].append(pos)
             out["+"][1].append(end)
     assert p.wait() == 0
-    return {st: tuple(np.array(v, np.int64) for v in vv) for st, vv in out.items()}
+    res = {}
+    for st, (a, b) in out.items():          # sort by 5' end (fix 2026-11-24: minus-strand 5' ends are not sorted)
+        a, b = np.asarray(a, np.int64), np.asarray(b, np.int64)
+        o = np.argsort(a, kind="stable")
+        res[st] = (a[o], b[o])
+        assert np.all(res[st][0][:-1] <= res[st][0][1:])
+    return res
 
 
 def scores(g):
