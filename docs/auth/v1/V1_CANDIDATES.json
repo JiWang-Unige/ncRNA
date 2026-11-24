@@ -1,0 +1,1334 @@
+{
+ "queried": "2026-11-24; ENCODE portal REST (Experiment, File, QualityMetric), GEO E-utilities, FANTOM5 hg38/mm10 reprocessed directory listings, LRGASP docs and paper (PMC11543605). Metadata only; no data files downloaded.",
+ "long_read_qc_by_rep": {
+  "ENCSR507JOF": {
+   "[1]": {
+    "genes_detected": 18014,
+    "full_length_non_chimeric_read_count": 2620316,
+    "mapping_rate": 0.9787163074987902
+   },
+   "[2]": {
+    "genes_detected": 16990,
+    "full_length_non_chimeric_read_count": 1714957,
+    "mapping_rate": 0.95268686037026
+   },
+   "[3]": {
+    "full_length_non_chimeric_read_count": 3089650,
+    "mapping_rate": 0.9739313514475749,
+    "genes_detected": 18742
+   }
+  },
+  "ENCSR271KEJ": {
+   "[1]": {
+    "full_length_non_chimeric_read_count": 665485,
+    "mapping_rate": 0.9884820844947669,
+    "genes_detected": 14722
+   },
+   "[2]": {
+    "genes_detected": 12216,
+    "full_length_non_chimeric_read_count": 248593,
+    "mapping_rate": 0.9832819105928163
+   },
+   "[3]": {
+    "full_length_non_chimeric_read_count": 1341667,
+    "mapping_rate": 0.975019881982638,
+    "genes_detected": 16509
+   }
+  },
+  "ENCSR127HKN": {
+   "[1]": {
+    "full_length_non_chimeric_read_count": 1587841,
+    "mapping_rate": 0.9748961010579774,
+    "genes_detected": 16922
+   },
+   "[2]": {
+    "genes_detected": 16345,
+    "full_length_non_chimeric_read_count": 1216390,
+    "mapping_rate": 0.9868701649964239
+   },
+   "[3]": {
+    "full_length_non_chimeric_read_count": 1553082,
+    "mapping_rate": 0.9773959134160334,
+    "genes_detected": 17040
+   }
+  },
+  "ENCSR838WFC": {
+   "[1]": {
+    "full_length_non_chimeric_read_count": 2137168,
+    "mapping_rate": 0.9989860413406901,
+    "genes_detected": 13754
+   },
+   "[2]": {
+    "genes_detected": 14027,
+    "full_length_non_chimeric_read_count": 2538701,
+    "mapping_rate": 0.9988809237480113
+   }
+  },
+  "ENCSR706ANY": {
+   "[1]": {
+    "full_length_non_chimeric_read_count": 689486,
+    "mapping_rate": 0.9967686073393803,
+    "genes_detected": 10973
+   },
+   "[2]": {
+    "full_length_non_chimeric_read_count": 793577,
+    "mapping_rate": 0.9976259392598323,
+    "genes_detected": 11855
+   },
+   "[3]": {
+    "genes_detected": 9877,
+    "full_length_non_chimeric_read_count": 684576,
+    "mapping_rate": 0.9959887580049549
+   },
+   "[4]": {
+    "genes_detected": 10607,
+    "full_length_non_chimeric_read_count": 747100,
+    "mapping_rate": 0.996900013385089
+   }
+  },
+  "ENCSR172GXL": {
+   "[1]": {
+    "genes_detected": 16493,
+    "full_length_non_chimeric_read_count": 4062836,
+    "mapping_rate": 0.910124602617482
+   },
+   "[2]": {
+    "genes_detected": 15639,
+    "full_length_non_chimeric_read_count": 2526806,
+    "mapping_rate": 0.9263018213507487
+   },
+   "[3]": {
+    "genes_detected": 14961,
+    "full_length_non_chimeric_read_count": 2144172,
+    "mapping_rate": 0.9378986387286095
+   }
+  },
+  "ENCSR983KDL": {
+   "[1]": {
+    "genes_detected": 15548,
+    "full_length_non_chimeric_read_count": 2857485,
+    "mapping_rate": 0.9544400058093043
+   },
+   "[2]": {
+    "full_length_non_chimeric_read_count": 2982410,
+    "mapping_rate": 0.9496980629759154,
+    "genes_detected": 15463
+   }
+  },
+  "ENCSR589FUJ": {
+   "[1]": {
+    "genes_detected": 11905,
+    "full_length_non_chimeric_read_count": 1371010,
+    "mapping_rate": 0.9959745005506889
+   },
+   "[2]": {
+    "full_length_non_chimeric_read_count": 639745,
+    "mapping_rate": 0.9978085018249458,
+    "genes_detected": 11341
+   }
+  }
+ },
+ "fantom5_hg38_ctss_gz_size": {
+  "H1 ESC (CD34+ HSC time course day00) rep1-3": [
+   "6.1M",
+   "8.1M",
+   "19M"
+  ],
+  "GM12878 ENCODE rep1-3": [
+   "25M",
+   "22M",
+   "23M"
+  ],
+  "K562 ENCODE rep1-3": [
+   "9.0M",
+   "10M",
+   "11M"
+  ],
+  "HepG2 ENCODE rep1-3": [
+   "22M",
+   "21M",
+   "24M"
+  ],
+  "H9 ESC rep1-3": [
+   "14M",
+   "18M",
+   "14M"
+  ],
+  "hIPS rep1-3": [
+   "2.9M",
+   "5.4M",
+   "6.5M"
+  ],
+  "peak set hg38_fair+new_CAGE_peaks_phase1and2.bed.gz": "5.2M"
+ },
+ "fantom5_mm10_mouse_ES": "ES-OS25 untreated control 3 reps (8.2M/8.6M/18M); ES-46C day00 2 reps (16M/16M); not F121-9",
+ "wtc11_reference": {
+  "ssCAGE": "GSE185917, 6 samples, ctss 41-58 MB gz each, count.bed peaks ~2 MB each",
+  "QuantSeq": "ENCSR322MWL polyA sites bed 8.7 MB x3"
+ },
+ "lrgasp_cage": "Only WTC11 ssCAGE is public (GSE185917). The LRGASP paper also used same-sample CAGE for mouse ES, but no public GEO/ENCODE record was found (possibly Synapse, login needed). No LRGASP CAGE for H1 or H1-DE.",
+ "candidate_files": {
+  "ENCSR271KEJ": {
+   "label": "H1 PacBio",
+   "files": [
+    {
+     "accession": "ENCFF213XDA",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 218443674,
+     "md5": "b6cfed914b16db47d8e493454cc1fca1",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF281VKZ",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 70990358,
+     "md5": "793881c36cc3f73a7773b044f591a4c8",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF250BDM",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 370169092,
+     "md5": "f191df4af689bc704bce46561ce6a262",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF580WQM",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      1
+     ],
+     "size": 12062023,
+     "md5": "db8923f23707ffc442f6702dac2c66dd",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF563JZI",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      2
+     ],
+     "size": 5361791,
+     "md5": "c1c7dc762fcf2a35829567d760ad49a0",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF014CCY",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      3
+     ],
+     "size": 18910561,
+     "md5": "901c5c335d6914c37a42aebfec074fdc",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF721HVH",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      1
+     ],
+     "size": 54404006,
+     "md5": "fd870491c4c564ecaa707f11e7902df2",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF814SOM",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      2
+     ],
+     "size": 42623992,
+     "md5": "9d80aeac07aa65cd1e94926e36e86a94",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF236CGS",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      3
+     ],
+     "size": 64224018,
+     "md5": "19ca5c67730ed24889bd1967bad446b3",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR813AOB": {
+   "label": "H1 QuantSeq",
+   "files": [
+    {
+     "accession": "ENCFF520EMF",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 1972705087,
+     "md5": "29b137ff9f1ca44382d55d8666b08cc8",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF377TQE",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 2213917694,
+     "md5": "1c2f2b313adfb5cb32336ac3b70d3e7d",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF827XLY",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 1582327025,
+     "md5": "3ba2950c363b5c01c75520d763088f39",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF970YYF",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      1
+     ],
+     "size": 6928415,
+     "md5": "1f2bb3eacc9e7fbfc3f3b8f9d1e580b9",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF138ZWV",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      2
+     ],
+     "size": 6926007,
+     "md5": "e9045c35100a635e7d550bbfe8df3359",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF215NMJ",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      3
+     ],
+     "size": 6904337,
+     "md5": "0a9de47743884a6bb8f4e9c4851f5849",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR127HKN": {
+   "label": "H1-DE PacBio",
+   "files": [
+    {
+     "accession": "ENCFF362CPC",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 435575270,
+     "md5": "62502be9732f08cc28abd23f9d476598",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF168AZV",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 355059671,
+     "md5": "61c93aaa848a73f3bd4bec8df0ebe0df",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF940WVU",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 450607355,
+     "md5": "154b74ba75d36c90bebbdb80bc3c30c2",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF640HEE",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      1
+     ],
+     "size": 22457312,
+     "md5": "92056b020e007c5ced753f4b19469a9f",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF613VBC",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      2
+     ],
+     "size": 19157748,
+     "md5": "9c30a029fb9e4094ee1067b28e7ae9c2",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF396JNE",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      3
+     ],
+     "size": 23372314,
+     "md5": "6d8e607b5e06184720129cfad51795ba",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF643RMM",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      1
+     ],
+     "size": 70076829,
+     "md5": "b5232527f4894d079e64da9d530becbf",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF058VZB",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      2
+     ],
+     "size": 65737698,
+     "md5": "7db14917538096b802fc523b175ad3be",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF060RBH",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      3
+     ],
+     "size": 71602731,
+     "md5": "e8b5cd34893a61ba0d424ed5f7149b17",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR198UNH": {
+   "label": "H1-DE QuantSeq",
+   "files": [
+    {
+     "accession": "ENCFF988LKF",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 1555956342,
+     "md5": "766462f2d37b04a8d6607ae70705e059",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF262UDX",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 1967750885,
+     "md5": "c83ec828030f6cc199a39ea84cc2a93b",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF109IQE",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 1840590118,
+     "md5": "0514db858a7da4f289fe4ca5733951d1",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF725ZME",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      1
+     ],
+     "size": 8120287,
+     "md5": "39ac24cf18729ebeb4ae7852a572177a",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF112AMT",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      2
+     ],
+     "size": 8148366,
+     "md5": "9b2b3bc7d36ffaef2398c11dca8010be",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF084BCO",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      3
+     ],
+     "size": 8133423,
+     "md5": "e375c4ac79c981c599c391b4aef45d7f",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR443GRP": {
+   "label": "H1-DE PRO-cap",
+   "files": [
+    {
+     "accession": "ENCFF275IRK",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 1259765636,
+     "md5": "3d7a95ac9ad72f05b497ab2d6821f768",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF545LQL",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 1328046864,
+     "md5": "4720d869d1d23a4ce192a96d0c57adad",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF281LQC",
+     "output_type": "bidirectional peaks",
+     "format": "bed",
+     "reps": [
+      1,
+      2
+     ],
+     "size": 631196,
+     "md5": "d155ea877c660194e64871090f97944a",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF673TLQ",
+     "output_type": "unidirectional peaks",
+     "format": "bed",
+     "reps": [
+      1,
+      2
+     ],
+     "size": 600940,
+     "md5": "2458c8724b99653d603eb89bebd790ed",
+     "assembly": "GRCh38",
+     "annotation": ""
+    }
+   ]
+  },
+  "ENCSR838WFC": {
+   "label": "GM12878 PacBio SeqII",
+   "files": [
+    {
+     "accession": "ENCFF648NAR",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 337379020,
+     "md5": "bf8fe9b8f6cf6f66321ad3eef4018368",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF225CCJ",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 378700722,
+     "md5": "638758d126f495a75c96b65299aad1c9",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF079JHG",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      1
+     ],
+     "size": 22944537,
+     "md5": "bb1f5ba6bc220e816524919428dca814",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF386OOG",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      2
+     ],
+     "size": 26414581,
+     "md5": "ccd15fd0b6b01eeb508e08daf0e4dc42",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF871ODI",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      1
+     ],
+     "size": 62109502,
+     "md5": "b8853e2217d92824b944c614e7be6622",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF993PKH",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      2
+     ],
+     "size": 64083668,
+     "md5": "50819f3646970a62b39777e9af319077",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR706ANY": {
+   "label": "GM12878 PacBio SeqI",
+   "files": [
+    {
+     "accession": "ENCFF192PJS",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 112128976,
+     "md5": "a2d12c4ffde4dc270f91c7404bd11439",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF596ODX",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 134030159,
+     "md5": "c3520b0c4713c05c25962c597a43a161",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF694CBG",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 113234636,
+     "md5": "3d58c7878c42dd9f7cc5e0d12f0eb8d5",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF538BNH",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      4
+     ],
+     "size": 113744529,
+     "md5": "7e7b60a0cd8cf21db6b6602000d209a0",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF299LDF",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      1
+     ],
+     "size": 6279263,
+     "md5": "2b7694f60b0684268c85fd79e8130c04",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF296IKY",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      2
+     ],
+     "size": 8281166,
+     "md5": "d09b71bfe6a36bffe097b1cbdbd8d846",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF996LST",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      3
+     ],
+     "size": 5366569,
+     "md5": "dfd4e1b290c312b900d74ecbbecc463c",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF538TCX",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      4
+     ],
+     "size": 6059874,
+     "md5": "639dffc182b399d17bb8c8926f8fd96d",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF265EFZ",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      1
+     ],
+     "size": 43546705,
+     "md5": "d3f9f18d7e27f314f84df5dcc5969f27",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF649PCO",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      2
+     ],
+     "size": 46235594,
+     "md5": "bc29dd7e4a58ac3e28badf4775e4214b",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF784TJH",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      3
+     ],
+     "size": 41629347,
+     "md5": "9639f0dbda994930f714ab9c4ebf8819",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF849WZC",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      4
+     ],
+     "size": 43073049,
+     "md5": "7a9f70995f73d32d8a2dcf6b5e670829",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR275KDL": {
+   "label": "GM12878 QuantSeq",
+   "files": [
+    {
+     "accession": "ENCFF607ZLG",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 1589998998,
+     "md5": "b201f1b292f5d38aca6a6c4c1e65d40c",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF037NVQ",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 2038493157,
+     "md5": "004cbb9528bb32ee51c196f5163df9a6",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF259EZO",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      1
+     ],
+     "size": 1698937,
+     "md5": "37220abb8b39b91d90c317d41073bff2",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF448CNL",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      1
+     ],
+     "size": 1718039,
+     "md5": "329ebb22cd1127c16088d740afdefa77",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR000AEI": {
+   "label": "GM12878 RAMPAGE",
+   "files": [
+    {
+     "accession": "ENCFF520YOP",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 7543381771,
+     "md5": "c30ffef0be98b3028270145ebff36f1b",
+     "assembly": "GRCh38",
+     "annotation": "V24"
+    },
+    {
+     "accession": "ENCFF006EEW",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 9870696761,
+     "md5": "39d2c8d88da48faaf8dee76ca0d8669c",
+     "assembly": "GRCh38",
+     "annotation": "V24"
+    },
+    {
+     "accession": "ENCFF871RLN",
+     "output_type": "transcription start sites",
+     "format": "bed",
+     "reps": [
+      1,
+      2
+     ],
+     "size": 250174,
+     "md5": "1edb700cfd3d14a4dce71244020862ba",
+     "assembly": "GRCh38",
+     "annotation": "V24"
+    },
+    {
+     "accession": "ENCFF591KXZ",
+     "output_type": "transcription start sites",
+     "format": "bed",
+     "reps": [
+      1
+     ],
+     "size": 768021,
+     "md5": "a11182fa0ffd739c5f35f675d9fcc355",
+     "assembly": "GRCh38",
+     "annotation": "V24"
+    },
+    {
+     "accession": "ENCFF579JKU",
+     "output_type": "transcription start sites",
+     "format": "bed",
+     "reps": [
+      2
+     ],
+     "size": 797450,
+     "md5": "004855da1ad6259834b82786beaad368",
+     "assembly": "GRCh38",
+     "annotation": "V24"
+    }
+   ]
+  },
+  "ENCSR172GXL": {
+   "label": "mES PacBio",
+   "files": [
+    {
+     "accession": "ENCFF240QMR",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 894407449,
+     "md5": "023fae99e9c4758b092b7f707afa8612",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF945QSC",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 622364751,
+     "md5": "2e2598ba6d82abe59634af512a770600",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF697PDG",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 555906595,
+     "md5": "a7b72cdf58843e2ffe7f76e4907dd95a",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF353BXC",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      1
+     ],
+     "size": 33378618,
+     "md5": "19116210a3ab83ed2ba96b7873809e47",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF253EYM",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      2
+     ],
+     "size": 25624284,
+     "md5": "735c9725067bc9f03572900d2e4965bf",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF708XYC",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      3
+     ],
+     "size": 20539885,
+     "md5": "9b148e21498b1ecebb4b107e7eb780ea",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF013QXE",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      1
+     ],
+     "size": 79564436,
+     "md5": "52706fa66754c81c6d38815369dc0f65",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF720CHP",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      2
+     ],
+     "size": 66682614,
+     "md5": "5e10d8780cbc63cf2b7dc775956b2b33",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF365YBV",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      3
+     ],
+     "size": 60738196,
+     "md5": "7f84fc023f2cafed3fae426d2595f0c5",
+     "assembly": "mm10",
+     "annotation": "M21"
+    }
+   ]
+  },
+  "ENCSR944IAR": {
+   "label": "mES QuantSeq",
+   "files": [
+    {
+     "accession": "ENCFF029NZQ",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 1370325766,
+     "md5": "c054857182228fe035ff1a20921d3f6a",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF194AAR",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 1964087638,
+     "md5": "86669c902871ccf68874e88970f287e6",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF288QGU",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 1893255846,
+     "md5": "9969e45ab4b6665aeacdba160d483a5d",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF348MIL",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      1
+     ],
+     "size": 3935559,
+     "md5": "2f9dd6ce11e96609415e614a432645ce",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF531GAI",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      2
+     ],
+     "size": 3943877,
+     "md5": "2e55b3bae0b903d199e617af41e7c9bf",
+     "assembly": "mm10",
+     "annotation": "M21"
+    },
+    {
+     "accession": "ENCFF641ZRN",
+     "output_type": "polyA sites",
+     "format": "bed",
+     "reps": [
+      3
+     ],
+     "size": 3949125,
+     "md5": "c4ce886fa306fdf7e206a29349dd7fd1",
+     "assembly": "mm10",
+     "annotation": "M21"
+    }
+   ]
+  },
+  "ENCSR507JOF": {
+   "label": "WTC11 PacBio",
+   "files": [
+    {
+     "accession": "ENCFF373TKM",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 878433020,
+     "md5": "4dc9013c1315114604ff0e25697972eb",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF985LGZ",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 393981849,
+     "md5": "34404865ca04fd00e407684a1f43dec6",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF388HXU",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      3
+     ],
+     "size": 873221328,
+     "md5": "d59c8c2251093f53c34ceadbe0ab455e",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF803XYM",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      1
+     ],
+     "size": 33895273,
+     "md5": "c122cfd4c1e6cbdd0bc7a3a21292e562",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF527KWD",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      2
+     ],
+     "size": 21042167,
+     "md5": "2f38cf227b11f8c45d8439d95ccc6cc4",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF486EKE",
+     "output_type": "transcript quantifications",
+     "format": "tsv",
+     "reps": [
+      3
+     ],
+     "size": 36898333,
+     "md5": "0f66575306c109c11cf1488c337fce55",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF370SDY",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      1
+     ],
+     "size": 96004557,
+     "md5": "45e7f7a314038b09829065defeb86263",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF798DWV",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      2
+     ],
+     "size": 66168772,
+     "md5": "6f981bcacedcf9d2843ae3f1dceeebca",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    },
+    {
+     "accession": "ENCFF422CGK",
+     "output_type": "transcriptome annotations",
+     "format": "gtf",
+     "reps": [
+      3
+     ],
+     "size": 96589860,
+     "md5": "2e50f7e5b95a6c505d8ddbcb00d17a9c",
+     "assembly": "GRCh38",
+     "annotation": "V29"
+    }
+   ]
+  },
+  "ENCSR178XKL": {
+   "label": "WTC11 PRO-cap",
+   "files": [
+    {
+     "accession": "ENCFF147RSN",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 259692043,
+     "md5": "278a9ed744c3231051063ef811fec40d",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF393EAO",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      1
+     ],
+     "size": 664286955,
+     "md5": "4b0b471e2a2e8b53cc4584072b08102b",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF007OAY",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 452737862,
+     "md5": "9768273eab7d75e6ea217a94767590a4",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF743WBL",
+     "output_type": "alignments",
+     "format": "bam",
+     "reps": [
+      2
+     ],
+     "size": 765790498,
+     "md5": "c21b1a631a5378455ed04b8ecfd8e759",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF187HGX",
+     "output_type": "bidirectional peaks",
+     "format": "bed",
+     "reps": [
+      1,
+      2
+     ],
+     "size": 575122,
+     "md5": "d21794b8983cb7cf76856867b876a73c",
+     "assembly": "GRCh38",
+     "annotation": ""
+    },
+    {
+     "accession": "ENCFF927UKV",
+     "output_type": "unidirectional peaks",
+     "format": "bed",
+     "reps": [
+      1,
+      2
+     ],
+     "size": 440052,
+     "md5": "4811302bf4028cccf0f5a1d9efd46ec9",
+     "assembly": "GRCh38",
+     "annotation": ""
+    }
+   ]
+  }
+ }
+}
