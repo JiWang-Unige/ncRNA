@@ -1,0 +1,50 @@
+{
+ "instances": 603,
+ "skipped": 0,
+ "edge_cases": {
+  "conflict_unproducible_obs": true,
+  "conflict_quant": true,
+  "open_boundary_not_forced": true,
+  "truncated_read_as_subpath": true,
+  "timeout_unresolved": true,
+  "e1_delta0_s2t2_necessary": true,
+  "e1_delta1_s2t2_possible": true,
+  "e1_source_parsimony": true,
+  "e1_ends_information_limited": true,
+  "e1_link_structural": true,
+  "e1_short3_structural": true,
+  "joint_local_possible": true,
+  "joint_local_two_junctions": true,
+  "joint_local_short2_alone_structural": true,
+  "read_pair_middle_ambiguous": true,
+  "read_pair_middle_resolved_by_junction": true
+ },
+ "edge_cases_all_pass": true,
+ "n_fail": 0,
+ "fails": [],
+ "state_counts": {
+  "NECESSARY": 3101,
+  "INCOMPATIBLE": 2978,
+  "source_evidence": 555,
+  "POSSIBLE": 6449,
+  "ends_INFORMATION_LIMITED": 758,
+  "short2_INFORMATION_LIMITED": 657,
+  "source_parsimony": 121,
+  "short2_STRUCTURAL": 102,
+  "source_quantification": 190,
+  "ends_STRUCTURAL": 25,
+  "short2_SAMPLING_LIMITED": 31,
+  "ends_SAMPLING_LIMITED": 7
+ },
+ "scenarios": {
+  "link_insufficient_chain_needed": 354,
+  "info_limited_ends": 758,
+  "info_limited_short2": 657,
+  "parsimony_necessity": 121,
+  "multi_counterexample_cover": 40,
+  "joint_local_sufficient": 4
+ },
+ "paths_total": 3132,
+ "max_seconds": 7.24,
+ "seconds": 42.3
+}
