@@ -1,0 +1,42 @@
+FROZEN ok: 17 files
+h1 chr2 {'model': (16, 122), 'R0': (15, 199)}
+h1 chr6 {'model': (12, 113), 'R0': (10, 200)}
+h1 chr10 {'model': (10, 63), 'R0': (11, 105)}
+h1 chr16 {'model': (6, 56), 'R0': (7, 100)}
+h1 chr22 {'model': (9, 37), 'R0': (6, 65)}
+h1 chr9 {'model': (7, 60), 'R0': (7, 99)}
+h1 chr12 {'model': (9, 92), 'R0': (8, 161)}
+h1 chr13 {'model': (7, 48), 'R0': (6, 84)}
+h1 chr20 {'model': (8, 36), 'R0': (5, 63)}
+pairs loaded h1 216981
+LOCO fits done h1
+h1 chr2 {'model': (12, 106), 'R0': (15, 199)}
+h1 chr6 {'model': (10, 100), 'R0': (10, 200)}
+h1 chr10 {'model': (8, 55), 'R0': (11, 105)}
+h1 chr16 {'model': (6, 49), 'R0': (7, 100)}
+h1 chr22 {'model': (8, 32), 'R0': (6, 65)}
+h1 chr9 {'model': (8, 53), 'R0': (7, 99)}
+h1 chr12 {'model': (8, 82), 'R0': (8, 161)}
+h1 chr13 {'model': (6, 42), 'R0': (6, 84)}
+h1 chr20 {'model': (7, 31), 'R0': (5, 63)}
+wtc11 chr2 {'model': (22, 133), 'R0': (20, 222)}
+wtc11 chr6 {'model': (23, 105), 'R0': (18, 185)}
+wtc11 chr10 {'model': (12, 68), 'R0': (11, 115)}
+wtc11 chr16 {'model': (6, 59), 'R0': (10, 108)}
+wtc11 chr22 {'model': (10, 43), 'R0': (10, 77)}
+{
+ "T1": true,
+ "T2": true,
+ "best_rule": "R2",
+ "conclusion": "T1+T2 pass: the WTC11-DPI model transfers to H1 and beats the simple rules there"
+}
+model      recall 0.329  prec_known 0.327  strict 0.134  n 627
+model_rest recall 0.322  prec_known 0.225  strict 0.106  n 777
+P1         recall 0.337  prec_known 0.168  strict 0.083  n 1041
+R0         recall 0.294  prec_known 0.149  strict 0.070  n 1076
+R1         recall 0.231  prec_known 0.094  strict 0.047  n 1258
+R2         recall 0.263  prec_known 0.201  strict 0.087  n 768
+R3         recall 0.220  prec_known 0.147  strict 0.064  n 871
+R4         recall 0.169  prec_known 0.140  strict 0.062  n 698
+R5         recall 0.231  prec_known 0.191  strict 0.089  n 660
+R6         recall 0.110  prec_known 0.130  strict 0.051  n 546
