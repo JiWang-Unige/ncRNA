@@ -20,37 +20,23 @@ keep = var.gene_type.isin(["protein_coding", "lncRNA"]).values
 a = a[:, keep].copy()
 var = var.loc[keep].copy()
 
-def dense(m):
-    return np.asarray(m.toarray() if hasattr(m, "toarray") else m, dtype=np.float64)
-
-
-X = dense(a.X)
-P = dense(a.layers["preds"])
-
-
-def colpearson(X, P):
-    out = np.full(X.shape[1], np.nan)
-    for j in range(X.shape[1]):
-        x, p = X[:, j], P[:, j]
-        m = np.isfinite(x) & np.isfinite(p)
-        if m.sum() > 10 and x[m].std() > 0 and p[m].std() > 0:
-            out[j] = np.corrcoef(x[m], p[m])[0, 1]
-    return out
-
-
-var["r"] = colpearson(X, P)
-var["sd_obs"] = np.nanstd(X, axis=0)
+# deviation 2: no measured X in public files -> use authors' per-gene pearson
+P = np.asarray(a.layers["preds"], dtype=np.float64)
+var["r"] = var["pearson"].astype(float)
+var["sd_pred"] = np.nanstd(P, axis=0)
+del P
 var["log_mean"] = np.log10(var["mean_counts"].astype(float) + 1e-3)
 var["log_len"] = np.log10(var["gene_length"].astype(float))
 var["is_lnc"] = (var.gene_type == "lncRNA").astype(int)
-res = {"check_recomputed_vs_var_pearson_median_absdiff":
-       float(np.nanmedian(np.abs(var["r"] - var["pearson"])))}
+var["n_tracks"] = var["n_tracks"].astype(float)
+res = {}
 
-FORM = "r ~ is_lnc + cr(log_mean, df=4) + cr(sd_obs, df=4) + log_len + frac_nan"
+FORM = "r ~ is_lnc + cr(log_mean, df=4) + cr(n_tracks, df=4) + log_len + frac_nan"
+FORM_SENS = FORM + " + cr(sd_pred, df=4)"
 
 
-def ols_coef(d):
-    y, Xd = patsy.dmatrices(FORM, d, return_type="dataframe")
+def ols_coef(d, form=FORM):
+    y, Xd = patsy.dmatrices(form, d, return_type="dataframe")
     b, *_ = np.linalg.lstsq(Xd.values, y.values[:, 0], rcond=None)
     return b[list(Xd.columns).index("is_lnc")]
 
@@ -75,6 +61,7 @@ def analyse(split):
         cb.append(ols_coef(d.iloc[rng.choice(idx, len(idx))].reset_index(drop=True)))
     o["H2_coef_is_lnc"] = float(c)
     o["H2_ci"] = [float(np.percentile(cb, 2.5)), float(np.percentile(cb, 97.5))]
+    o["sens_coef_with_sd_pred"] = float(ols_coef(d, FORM_SENS))
     # decile-matched
     d["dec"] = pd.qcut(d.log_mean, 10, labels=False, duplicates="drop")
     rows = []
@@ -131,6 +118,6 @@ for s in ["test", "val", "train"]:
 res["explore_lnc_class"] = ex
 
 json.dump(res, open(f"{OUT}/DEC1.json", "w"), indent=1)
-var[["gene_id", "gene_type", "dataset", "mean_counts", "sd_obs", "gene_length",
-     "frac_nan", "pearson", "r", "lnc_class"]].to_csv(f"{OUT}/dec1_genes.tsv.gz", sep="\t")
+var[["gene_id", "gene_type", "dataset", "mean_counts", "n_tracks", "sd_pred",
+     "gene_length", "frac_nan", "pearson", "lnc_class"]].to_csv(f"{OUT}/dec1_genes.tsv.gz", sep="\t")
 print("done", verdict)

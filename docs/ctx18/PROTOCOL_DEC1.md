@@ -32,3 +32,11 @@
 ## 偏离 1（2026-11-25，读结果之前）
 - 首次运行在第一步崩溃：`a.X` 以稀疏矩阵存储，`np.asarray` 未转成稠密数组（IndexError，未产生任何统计量）。
 - 修复：稀疏矩阵先 `.toarray()`。门槛、指标、协变量都不变；重新冻结。
+
+## 偏离 2（2026-11-25，读结果之前）
+- 第二次运行仍崩溃：补充文件 1 **没有实测矩阵 X**，只有 `layers/preds`。另下载了 HF `Genentech/decima-data` 的 `metadata.h5ad`（3.27 GB，sha256 b6d1d743…，与 HF etag 一致），它同样只有预测层（preds、v1_rep0–3），没有实测值。公开文件里拿不到实测表达。
+- 因此：
+  - 主指标改为 var 中作者给出的每基因 `pearson`（Decima 自己算的预测 vs 实测、跨伪 bulk 的相关），不再重算。
+  - 协变量「实测 SD」无法计算，主模型改为：r ~ is_lnc + cr(log mean_counts, 4) + cr(n_tracks, 4) + log 长度 + frac_nan（n_tracks 取自 var，是该基因有数据的轨道数）。
+  - 敏感性（不进门槛）：再加 cr(预测 SD, 4)。预测 SD 来自模型本身，若 Decima 对 lncRNA 低估变化，会把真实盲区吸收掉，所以只偏向「不过」，不会制造假阳性。
+- 门槛数值和决策规则不变；重新冻结。
