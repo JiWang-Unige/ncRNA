@@ -256,9 +256,20 @@ def analyse():
     # S0 + H3
     q = np.load(f"{OUT}/rep0_preds.npz")
     idx, R = q["idx"], q["preds"]
-    s0 = [pear(R[i], P[:, dec_ids[gid[j]]]) for i, j in enumerate(idx) if in_set[j]]
-    res["S0"] = {"n": len(s0), "median_pearson_rep0_vs_published": float(np.nanmedian(s0))}
-    res["S0"]["pass"] = res["S0"]["median_pearson_rep0_vs_published"] >= 0.95
+    # deviation 1: compare own rep0 with the published single-model layer v1_rep0
+    import h5py
+    meta = f"{ROOT}/data/ctx18/decima/metadata.h5ad"
+    mv = ad.read_h5ad(meta, backed="r").var
+    mids = {strip(g): j for j, g in enumerate(mv.gene_id)}
+    sel = [(i, mids[gid[j]]) for i, j in enumerate(idx) if in_set[j]]
+    cols = sorted(set(c for _, c in sel))
+    pos = {c: k for k, c in enumerate(cols)}
+    r0 = h5py.File(meta)["layers/v1_rep0"][:, cols]
+    s0 = [pear(R[i], r0[:, pos[c]]) for i, c in sel]
+    s0e = [pear(R[i], P[:, dec_ids[gid[j]]]) for i, j in enumerate(idx) if in_set[j]]
+    res["S0"] = {"n": len(s0), "median_pearson_rep0_vs_published_rep0": float(np.nanmedian(s0)),
+                 "median_pearson_rep0_vs_published_ensemble": float(np.nanmedian(s0e))}
+    res["S0"]["pass"] = res["S0"]["median_pearson_rep0_vs_published_rep0"] >= 0.95
     if res["S0"]["pass"]:
         rows = []
         for i, j in enumerate(idx):
