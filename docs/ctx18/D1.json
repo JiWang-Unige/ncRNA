@@ -1,0 +1,196 @@
+{
+ "G0": {
+  "n_common": 910,
+  "spearman": 0.4563349447282401,
+  "pass": true
+ },
+ "G1_lncRNA": {
+  "n_genes": 7514,
+  "n_obs": 356584,
+  "var_mu": 1.419833779335022,
+  "var_alpha": 0.2807105481624603,
+  "var_y_minus_mu": 2.1465864181518555,
+  "var_delta_hat": 1.9129180908203125,
+  "noise_var": 0.6774385571479797,
+  "true_interaction_var": 1.2354795932769775,
+  "ci": [
+   1.2160943746566772,
+   1.2563111782073975
+  ],
+  "fraction_beyond_mu": 0.5755554879270536,
+  "pass": true
+ },
+ "G1_protein_coding_control": {
+  "n_genes": 16967,
+  "n_obs": 1075623,
+  "var_mu": 1.5486366748809814,
+  "var_alpha": 0.09046527743339539,
+  "var_y_minus_mu": 1.7564046382904053,
+  "var_delta_hat": 1.6792970895767212,
+  "noise_var": 0.46834251284599304,
+  "true_interaction_var": 1.2109545469284058,
+  "ci": [
+   1.1950651407241821,
+   1.227351427078247
+  ],
+  "fraction_beyond_mu": 0.6894507794667902,
+  "pass": true
+ },
+ "G2_n_genes_with_features": 7494,
+ "G2": {
+  "M0": {
+   "pearson_median_tissue": 0.0,
+   "pearson_by_tissue": {
+    "Bladder": 0.0,
+    "Large_intestine": 0.0,
+    "Lung": 0.0,
+    "Mucosa": 0.0,
+    "Muscle": 0.0,
+    "Prostate": 0.0,
+    "Salivary_gland": 0.0,
+    "Small_intestine": 0.0,
+    "Testis": 0.0,
+    "Tongue": 0.0,
+    "Vasculature": 0.0
+   },
+   "R2": -7.355173048395613e-08
+  },
+  "M1": {
+   "pearson_median_tissue": 0.16358767101359284,
+   "pearson_by_tissue": {
+    "Bladder": 0.22,
+    "Large_intestine": 0.318,
+    "Lung": 0.13,
+    "Mucosa": 0.268,
+    "Muscle": 0.145,
+    "Prostate": 0.168,
+    "Salivary_gland": 0.164,
+    "Small_intestine": 0.367,
+    "Testis": 0.038,
+    "Tongue": 0.098,
+    "Vasculature": 0.058
+   },
+   "R2": -0.021717797849307496
+  },
+  "M2": {
+   "pearson_median_tissue": 0.07236986186236534,
+   "pearson_by_tissue": {
+    "Bladder": 0.054,
+    "Large_intestine": 0.116,
+    "Lung": 0.105,
+    "Mucosa": 0.014,
+    "Muscle": 0.072,
+    "Prostate": 0.016,
+    "Salivary_gland": 0.018,
+    "Small_intestine": 0.138,
+    "Testis": 0.123,
+    "Tongue": -0.038,
+    "Vasculature": 0.194
+   },
+   "R2": 0.005518027659466962
+  },
+  "M3": {
+   "pearson_median_tissue": 0.08047766553659738,
+   "pearson_by_tissue": {
+    "Bladder": 0.077,
+    "Large_intestine": 0.131,
+    "Lung": 0.094,
+    "Mucosa": 0.109,
+    "Muscle": 0.031,
+    "Prostate": 0.08,
+    "Salivary_gland": 0.06,
+    "Small_intestine": 0.179,
+    "Testis": 0.188,
+    "Tongue": 0.013,
+    "Vasculature": 0.075
+   },
+   "R2": -0.04764711856842041
+  },
+  "M4": {
+   "pearson_median_tissue": 0.14995816206157142,
+   "pearson_by_tissue": {
+    "Bladder": 0.162,
+    "Large_intestine": 0.204,
+    "Lung": 0.15,
+    "Mucosa": 0.188,
+    "Muscle": 0.151,
+    "Prostate": 0.121,
+    "Salivary_gland": 0.134,
+    "Small_intestine": 0.281,
+    "Testis": 0.003,
+    "Tongue": 0.107,
+    "Vasculature": 0.104
+   },
+   "R2": -0.28673763394378793
+  },
+  "best": "M4",
+  "R2_gain_vs_M1": -0.28673763394378793,
+  "R2_gain_ci": [
+   -0.3140518596203267,
+   -0.26374063982880397
+  ],
+  "pass": false,
+  "kill": false,
+  "diag_shuffled_ctx_R2": -0.6226228810143024
+ },
+ "G3": {
+  "M0": {
+   "pearson_median_tissue": 0.0,
+   "pearson_by_tissue": {
+    "Bladder": 0.0,
+    "Large_intestine": 0.0,
+    "Lung": 0.0,
+    "Mucosa": 0.0,
+    "Muscle": 0.0,
+    "Prostate": 0.0,
+    "Salivary_gland": 0.0,
+    "Small_intestine": 0.0,
+    "Testis": 0.0,
+    "Tongue": 0.0,
+    "Vasculature": 0.0
+   },
+   "R2": -1.897927881522321e-08
+  },
+  "M2": {
+   "pearson_median_tissue": 0.0676421788956287,
+   "pearson_by_tissue": {
+    "Bladder": 0.05,
+    "Large_intestine": 0.108,
+    "Lung": 0.101,
+    "Mucosa": 0.011,
+    "Muscle": 0.068,
+    "Prostate": 0.013,
+    "Salivary_gland": 0.011,
+    "Small_intestine": 0.131,
+    "Testis": 0.12,
+    "Tongue": -0.041,
+    "Vasculature": 0.188
+   },
+   "R2": 0.004527791527477398
+  },
+  "M3": {
+   "pearson_median_tissue": 0.05911179018033713,
+   "pearson_by_tissue": {
+    "Bladder": 0.057,
+    "Large_intestine": 0.086,
+    "Lung": 0.036,
+    "Mucosa": 0.07,
+    "Muscle": 0.009,
+    "Prostate": 0.059,
+    "Salivary_gland": 0.025,
+    "Small_intestine": 0.081,
+    "Testis": 0.201,
+    "Tongue": -0.01,
+    "Vasculature": 0.115
+   },
+   "R2": -0.10654032230377197
+  },
+  "best": "M2",
+  "R2": 0.004527791527477398,
+  "R2_ci": [
+   0.003469773003011517,
+   0.005592906597313996
+  ],
+  "pass": true
+ }
+}
