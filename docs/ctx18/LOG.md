@@ -26,3 +26,9 @@
 ## B 审计与 D1（2026-11-25）
 - B：GSE236224 只有 262 个基因、4 个 lncRNA → B 作为 lncRNA 方法停止（`B_AUDIT_GSE236224.md`）。
 - D1（TS total-RNA，冻结 d99d867）：G0 过（0.456）、G1 过（57.6%，但蛋白编码对照 68.9%）、**G2 不过**（最佳中位 r 0.150，灰区；R² 为负）→ 按协议停 D（`RESULT_D1.md`）。
+
+## Decima 诊断 DEC1–DEC3（2026-11-25）
+- DEC1（Decima 自身数据，94e6666）：lncRNA 差距完全由表达低解释（校正后 +0.070）；Decima 只覆盖 11.6% 的 lncRNA（`RESULT_DEC1.md`）。
+- DEC2（TS total-RNA）：H1 过（校正后 −0.108）；H2 不过（核富集越强越好）；S0 偏离 1 后过（0.992）；H3 不过（−0.011，事后放行）→ 形式 blind_spot，仅 H1 支撑（`RESULT_DEC2.md`）。
+- DEC3（ENTEx total vs GTEx poly(A)，冻结 4391be8）：R1、R2 都不过 → not_replicated；但蛋白编码中位 r ≈ 0，检验本身无分辨力，留出 lncRNA 只有 25 个（`RESULT_DEC3.md`）。
+- 综合：Decima 盲区只在单一供体 TS 上见到，机制假设不成立，第二套数据无法复核 → 按协议不立项，交作者确认关闭。

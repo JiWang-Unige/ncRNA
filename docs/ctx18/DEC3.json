@@ -1,0 +1,90 @@
+{
+ "organs": [
+  "adipose",
+  "adrenal",
+  "breast",
+  "gut",
+  "heart",
+  "liver",
+  "lung",
+  "muscle",
+  "ovary",
+  "pancreas",
+  "prostate",
+  "skin",
+  "spleen",
+  "uterus",
+  "vasculature"
+ ],
+ "n_organs": 15,
+ "tracks_per_organ": {
+  "adipose": 84,
+  "adrenal": 28,
+  "breast": 48,
+  "gut": 669,
+  "heart": 380,
+  "liver": 210,
+  "lung": 1141,
+  "muscle": 52,
+  "ovary": 59,
+  "pancreas": 63,
+  "prostate": 125,
+  "skin": 705,
+  "spleen": 78,
+  "uterus": 46,
+  "vasculature": 121
+ },
+ "groups_heldout": {
+  "0": {
+   "n": 2365,
+   "median_r_tot": -0.02913278827423106,
+   "median_r_pA": -0.044596538473938414
+  },
+  "1": {
+   "n": 25,
+   "median_r_tot": -0.09266344592388367,
+   "median_r_pA": -0.14523256225811504
+  }
+ },
+ "groups_train": {
+  "0": {
+   "n": 8572,
+   "median_r_tot": -0.022708229378856616,
+   "median_r_pA": 0.04362830933675183
+  },
+  "1": {
+   "n": 105,
+   "median_r_tot": -0.008987337450732977,
+   "median_r_pA": 0.056381729096633776
+  }
+ },
+ "R1": {
+  "coef": -0.011339160463681747,
+  "ci": [
+   -0.12077087547875896,
+   0.110207696833762
+  ],
+  "pass": false
+ },
+ "R1_polyA_report": {
+  "coef": -0.04158284721471367,
+  "ci": [
+   -0.16722385818357938,
+   0.08492591386511839
+  ]
+ },
+ "R2": {
+  "coef": 0.05861954877871428,
+  "ci": [
+   -0.05315855624837093,
+   0.16984220871426492
+  ],
+  "pass": false
+ },
+ "train_report": {
+  "R1": 0.03396562957240945,
+  "R1_polyA": -0.023718972346211592,
+  "R2": 0.022580925051828682
+ },
+ "decision": "not_replicated"
+}
