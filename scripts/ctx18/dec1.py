@@ -20,8 +20,12 @@ keep = var.gene_type.isin(["protein_coding", "lncRNA"]).values
 a = a[:, keep].copy()
 var = var.loc[keep].copy()
 
-X = np.asarray(a.X, dtype=np.float64)
-P = np.asarray(a.layers["preds"], dtype=np.float64)
+def dense(m):
+    return np.asarray(m.toarray() if hasattr(m, "toarray") else m, dtype=np.float64)
+
+
+X = dense(a.X)
+P = dense(a.layers["preds"])
 
 
 def colpearson(X, P):
