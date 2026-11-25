@@ -1,0 +1,11 @@
+Round 2 — cross-review. Another independent deep-research agent answered the same brief. Its core points are summarised below. Please do NOT start a new deep research; answer directly in this chat, in Simplified Chinese (technical terms in English).
+
+{OTHER}
+
+Please:
+1. Go through the other agent's top directions one by one: agree / disagree, with reasons. Point out any factual errors in its claims (with a verifiable source: DOI or PMID).
+2. Say what you missed in your own report that the other agent found, and whether it changes your view.
+3. Give your updated top 3 directions (you may merge directions from both lists). For each: core hypothesis, the closest existing work (with DOI/PMID), the minimal falsifiable first experiment and the strongest simple baseline.
+4. List the 3 open questions that would most change which direction is worth pursuing, and the cheapest experiment (days, public data, 1–2 24 GB GPUs) that would answer each.
+5. {EXTRA}
+Be direct and critical.

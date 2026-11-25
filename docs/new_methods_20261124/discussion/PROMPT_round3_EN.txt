@@ -1,0 +1,14 @@
+Round 3 — code repositories and cross-domain transfer. Answer directly in this chat (no new deep research), in Simplified Chinese with technical terms in English.
+
+After two rounds, four candidate directions remain:
+A. Uncertainty-aware inference of RNA conformational ensembles from single-molecule chemical-probing reads (DMS/SHAPE-MaP mutational profiling, possibly nanopore direct RNA), amortised / simulation-based or Bayesian mixture, with calibrated uncertainty and identifiability limits. Competitors named so far: DREEM, DRACO, DANCE-MaP, SEISMIC-RNA, sm-PORE-cupine (Nat Methods 2026), DeCoRE (Sci Adv 2026).
+B. Compartment / cell-context-conditioned in-cell structure reactivity: predict differential reactivity of the same RNA across compartments or cell states within one probing platform (e.g. HEK293 icSHAPE whole-cell in vivo / in vitro / chromatin / nucleoplasm / cytoplasm from RASP v2.0), beyond sequence-only models.
+C. Deep homology retrieval for fast-evolving lncRNAs with neighbouring protein-coding-gene identity masked: multimodal (motif order, predicted RBP-binding profiles, splicing architecture, structure) retrieval or phylogenetically calibrated functional-motif-turnover detection; seeds lncHOME (Nat Genet 2024) and the 13-species orthology set (NAR 2026).
+D. Predicting lncRNA localisation SHIFTS across unseen cellular contexts: model the gene x cell interaction term in nuclear/cytoplasmic ratio (lncATLAS continuous CNRCI, 15 cell lines; ENCODE fractionation), conditioning on cell-line trans context (RBP expression, splicing efficiency), with leave-one-cell-line-out evaluation.
+
+For EACH of A–D:
+1. Repositories (GitHub / GitLab / Hugging Face / Zenodo): the 2–4 most relevant implementations or datasets, with URL, what they implement, last commit/release you can see, licence, whether usable as a baseline as-is, and concrete unresolved problems in their issues. Do not invent star counts or dates; say "not visible" if you cannot see them.
+2. Cross-domain transfer: 2–3 problems in other fields with the same structure and a method already validated there (e.g. population genetics, recommender systems, single-cell matrix factorisation, phylogenetics, remote homology search in proteins, signal processing, causal inference, mixture deconvolution in other sciences). For each: what maps to what, what must change, and why it could fail.
+3. Your current verdict on the direction: keep / merge / drop, and the single cheapest experiment that would most reduce uncertainty (public data, days, 1–2 24 GB GPUs).
+
+Finish with your ranking of A–D. Be direct and critical; give DOI/PMID for key claims.

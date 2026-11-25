@@ -1,0 +1,19 @@
+Round 2 — cross-review. Another independent deep-research agent answered the same brief. Its core points are summarised below. Please do NOT start a new deep research; answer directly in this chat, in Simplified Chinese (technical terms in English).
+
+Other agent's core points (Gemini Deep Research):
+- Overall: RNA LMs and AF3-class models keep improving on self-built benchmarks, but independent tests show a "capability bubble": CASP16 nucleic-acid assessment (Kretsch et al., Proteins; PMID 41165252) finds no real gain from deep learning once template availability is controlled (19 of 21 acceptable monomer folds had PDB templates); lncRNA localisation models collapse when the "middle exclusion" filtering of lncATLAS CNRCI is removed (NAR Genom Bioinform 2024, PMID 39296930: H1.hESC accuracy 75% -> 59%); BEACON/RNAGym/GraphFLA show RNA LMs failing on epistatic fitness landscapes and affinity regression.
+- Top 1: cell-line-conditioned CONTINUOUS lncRNA subcellular localisation — condition a model on each cell line's RBP expression profile (cross-attention with transcript cis features or frozen LncRFM/RNA-FM embeddings), predict continuous CNRCI without middle exclusion, leave-one-cell-line-out and <=30% sequence-identity splits. Go/no-go: Pearson r beats both a sequence k-mer ridge baseline and a "gene mean + cell-line offset" additive baseline by >=0.08.
+- Top 2: lncRNA sequence -> decay kinetics (half-life) from public PRO-seq/RNA-seq and 4sU data; Saluki (Genome Biol 2022) covers only mRNA. Go/no-go: deep model beats a LightGBM on length/exons/splicing/GC/TE/k-mers by >=0.05 Spearman.
+- Top 3: amortised simulation-based inference (Set-Transformer trained on Boltzmann-sampled synthetic DMS-MaP reads) to deconvolute multi-conformation ensembles from chemical probing, vs DREEM/DRACO/DANCE-MaP; go/no-go: per-state reactivity Pearson +0.08 and state-fraction MAE -15% at 1,000–5,000 reads on DREEM's published mixtures and riboswitches.
+- Top 4: synteny-anchored lncRNA conserved-module discovery by soft (soft-DTW) alignment of predicted RBP-binding profiles (RBPNet) instead of LncLOOM's exact k-mers, calibrated with R-scape-style phylogenetic null simulation; go/no-go: AUPRC >=0.15 above LncLOOM and SEEKR, and recovery of known CHASERR/CASC15 elements.
+- Also cited: LncRFM (bioRxiv 2026-11, lncRNA foundation model; cross-kingdom coding F1 0.374), R-scape v2 rejecting conserved structure in HOTAIR/XIST, GPN-Star, Dorado RNA004 modification calls disagreeing with GLORI (Genome Biol 2026), a 2026 arXiv miRNA target benchmark (5 of 7 tools FDP > 0.85).
+- Not worth doing: new general RNA BERT/Mamba; 2D SS F1 on random splits; single-sequence 3D vs AF3/Boltz; sequence-only binary localisation or binary miRNA target classifiers; yet another classifier on top of Dorado modification calls.
+
+
+Please:
+1. Go through the other agent's top directions one by one: agree / disagree, with reasons. Point out any factual errors in its claims (with a verifiable source: DOI or PMID).
+2. Say what you missed in your own report that the other agent found, and whether it changes your view.
+3. Give your updated top 3 directions (you may merge directions from both lists). For each: core hypothesis, the closest existing work (with DOI/PMID), the minimal falsifiable first experiment and the strongest simple baseline.
+4. List the 3 open questions that would most change which direction is worth pursuing, and the cheapest experiment (days, public data, 1–2 24 GB GPUs) that would answer each.
+5. Your exported report lost its links: the citations appear only as placeholders. For the 10 most important numbers or claims in your report, give the DOI or PMID.
+Be direct and critical.

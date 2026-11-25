@@ -1,0 +1,20 @@
+Round 2 — cross-review. Another independent deep-research agent answered the same brief. Its core points are summarised below. Please do NOT start a new deep research; answer directly in this chat, in Simplified Chinese (technical terms in English).
+
+Other agent's core points (ChatGPT deep research):
+- Overall: the field lacks stricter OOD benchmarks, condition-dependent structure/interaction models, cross-species deep homology, and methods that model imperfect assay readouts as noisy observations — not another larger sequence LM. RNA LMs do not reliably beat one-hot or classical folding on the lowest-homology secondary-structure tests (Brief Bioinform 2025, PMID 40205851); AF3/Boltz-1 are reliable mainly on recurring folds.
+- Top 1: structure-aware ncRNA variant-effect model for structured small RNAs (miRNA, snoRNA, tRNA, Rfam families) combining population constraint (Gnocchi, Nature 2024, PMID 38057664), covariation/structure (Infernal, RNA-MSM) and RNA-LM likelihoods, with Rfam-family + locus held-out splits. Go/no-go: +0.05 absolute auPRC or rank correlation over the best single baseline (Gnocchi, phyloP, RNAfold ddG/ensemble defect, Infernal bit-score change, RNA-FM/RiNALMo/Evo2 likelihood delta, k-mer logistic regression).
+- Top 2: sequence + cellular-context conditioned in-cell RNA structure/probing model trained on RASP v2.0 (NAR 2025, PMID 39546630; ~438 probing datasets); transcript-held-out and condition-held-out; go/no-go: +0.05 Pearson/Spearman over sequence-only and +0.05 auPRC on differential-reactivity positions. Simple baseline: mean reactivity by local sequence context.
+- Top 3: multimodal deep-homology RETRIEVAL for fast-evolving ncRNA (synteny, motif architecture, structure/covariation, RBP binding, genomic context) — not classification; builds on lncHOME (Nat Genet 2024, PMID 38195860) and a 2026 13-species lncRNA orthology workflow (NAR 2026, PMID 42483833) that finds only ~200 strict orthologs per species. Go/no-go: recall@10 +10 points over sequence-alignment + synteny baselines, robust to removing neighbouring protein-coding-gene identity.
+- Top 4: latent observation model for RNA–RNA proximity-ligation data (PARIS/SPLASH/RIC-seq): chimeric counts = latent interaction x abundance x crosslink/ligation/mapping bias; validated by cross-replicate and cross-protocol reproducibility of top-k edges (+10% relative over raw-count scoring).
+- Top 5: contamination-aware, family/structure/locus-split benchmark for RNA foundation models, expecting model rankings to change.
+- Also: lncRNA-vs-mRNA classification is saturated (LncADeep 2.0 AUROC 0.980, Bioinformatics 2026, PMID 41923359); CLIP model rankings depend strongly on negative sampling; Gnocchi finds only 3.7% of lncRNA sequence strongly constrained vs 22.2% of miRNA.
+- Not worth doing: lncRNA-vs-mRNA classifiers, Rfam random-split family classifiers, training a 100M–1B RNA FM from scratch, "contact map as image + vanilla U-Net", sequence-only lncRNA–disease association with random negatives.
+
+
+Please:
+1. Go through the other agent's top directions one by one: agree / disagree, with reasons. Point out any factual errors in its claims (with a verifiable source: DOI or PMID).
+2. Say what you missed in your own report that the other agent found, and whether it changes your view.
+3. Give your updated top 3 directions (you may merge directions from both lists). For each: core hypothesis, the closest existing work (with DOI/PMID), the minimal falsifiable first experiment and the strongest simple baseline.
+4. List the 3 open questions that would most change which direction is worth pursuing, and the cheapest experiment (days, public data, 1–2 24 GB GPUs) that would answer each.
+5. Several of your sources were preprints, ResearchGate or MDPI reviews, or an arXiv ID we could not verify (2610.33960). For your 10 most important numbers or claims, give a peer-reviewed DOI or PMID where one exists, and mark the rest as preprint or unverified. Note: GPN-Star is now published (Nature 2026, PMID 42717086).
+Be direct and critical.

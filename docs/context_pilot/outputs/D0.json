@@ -1,0 +1,148 @@
+{
+ "lncRNA": {
+  "set": "lncRNA",
+  "n_genes": 1243,
+  "n_obs": 12214,
+  "cells_per_gene_median": 10.0,
+  "G1": {
+   "var_y_minus_mu": 1.3763014328589238,
+   "var_delta_hat": 1.0638646211673242,
+   "noise_var_mean": 0.46105634581254856,
+   "true_interaction_var": 0.6028082753547757,
+   "ci": [
+    0.5395564181414584,
+    0.67248180469159
+   ],
+   "fraction_beyond_mu": 0.4379914610003649,
+   "var_mu": 2.807644114344257,
+   "var_alpha": 0.3150020950829207,
+   "noise_cells": [
+    "A549",
+    "GM12878",
+    "HT1080",
+    "HeLa-S3",
+    "HepG2",
+    "IMR-90",
+    "K562",
+    "MCF-7",
+    "SK-MEL-5",
+    "SK-N-DZ",
+    "SK-N-SH"
+   ],
+   "pass": true
+  },
+  "G2": {
+   "M0": {
+    "pearson_median": 0.0,
+    "pearson_by_cell": {
+     "A549": 0.0,
+     "GM12878": 0.0,
+     "H1": 0.0,
+     "HT1080": 0.0,
+     "HeLa-S3": 0.0,
+     "HepG2": 0.0,
+     "IMR-90": 0.0,
+     "K562": 0.0,
+     "MCF-7": 0.0,
+     "NCI-H460": 0.0,
+     "SK-MEL-5": 0.0,
+     "SK-N-DZ": 0.0,
+     "SK-N-SH": 0.0
+    },
+    "R2_interaction": 0.0
+   },
+   "M1": {
+    "pearson_median": 0.15927707489847398,
+    "pearson_by_cell": {
+     "A549": 0.17,
+     "GM12878": 0.159,
+     "H1": 0.391,
+     "HT1080": 0.048,
+     "HeLa-S3": 0.235,
+     "HepG2": 0.187,
+     "IMR-90": 0.178,
+     "K562": 0.178,
+     "MCF-7": 0.026,
+     "NCI-H460": 0.062,
+     "SK-MEL-5": 0.061,
+     "SK-N-DZ": -0.138,
+     "SK-N-SH": -0.215
+    },
+    "R2_interaction": -0.10535880901782346
+   },
+   "M2": {
+    "pearson_median": 0.027852105997570365,
+    "pearson_by_cell": {
+     "A549": 0.058,
+     "GM12878": -0.018,
+     "H1": 0.347,
+     "HT1080": -0.018,
+     "HeLa-S3": 0.06,
+     "HepG2": -0.061,
+     "IMR-90": 0.042,
+     "K562": -0.056,
+     "MCF-7": -0.21,
+     "NCI-H460": 0.028,
+     "SK-MEL-5": 0.182,
+     "SK-N-DZ": 0.034,
+     "SK-N-SH": -0.051
+    },
+    "R2_interaction": -0.018307678767908175
+   },
+   "M3": {
+    "pearson_median": 0.1060295864863887,
+    "pearson_by_cell": {
+     "A549": 0.109,
+     "GM12878": 0.022,
+     "H1": 0.415,
+     "HT1080": 0.024,
+     "HeLa-S3": 0.106,
+     "HepG2": 0.142,
+     "IMR-90": 0.024,
+     "K562": 0.123,
+     "MCF-7": -0.15,
+     "NCI-H460": 0.11,
+     "SK-MEL-5": 0.152,
+     "SK-N-DZ": -0.08,
+     "SK-N-SH": -0.017
+    },
+    "R2_interaction": -0.028494923956552176
+   },
+   "best": "M3",
+   "pass": false
+  }
+ },
+ "protein_coding_control": {
+  "set": "protein_coding_control",
+  "n_genes": 12102,
+  "n_obs": 144088,
+  "cells_per_gene_median": 13.0,
+  "G1": {
+   "var_y_minus_mu": 0.6581277415289605,
+   "var_delta_hat": 0.5780335252963569,
+   "noise_var_mean": 0.20106053907002022,
+   "true_interaction_var": 0.3769729862263367,
+   "ci": [
+    0.36609997198035155,
+    0.38869801285035993
+   ],
+   "fraction_beyond_mu": 0.5727960735260211,
+   "var_mu": 1.5790877664708656,
+   "var_alpha": 0.08234392215755178,
+   "noise_cells": [
+    "A549",
+    "GM12878",
+    "HT1080",
+    "HeLa-S3",
+    "HepG2",
+    "IMR-90",
+    "K562",
+    "MCF-7",
+    "SK-MEL-5",
+    "SK-N-DZ",
+    "SK-N-SH"
+   ],
+   "pass": true
+  }
+ }
+}

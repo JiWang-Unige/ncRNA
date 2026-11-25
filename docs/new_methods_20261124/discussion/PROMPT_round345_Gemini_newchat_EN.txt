@@ -1,0 +1,24 @@
+Context: this continues a multi-round discussion on "new computational models and methods for studying non-coding RNA" that you took part in (your earlier conversation became too long to continue). Please answer in Simplified Chinese with technical terms in English. Give only the final answer, not your drafting.
+
+Where the discussion stands. Four candidate directions remain:
+A. Uncertainty-aware inference of RNA conformational ensembles from single-molecule chemical-probing reads (DMS/SHAPE-MaP, possibly nanopore direct RNA), with calibrated uncertainty and identifiability limits. Competitors: DREEM, DRACO, DANCE-MaP, SEISMIC-RNA (v0.26.0, Aug 2026, already has chemistry-specific simulation, collision-bias correction, automatic heterogeneity detection, multiple EM restarts), sm-PORE-cupine (Nat Methods 2026), DeCoRE (Sci Adv 2026).
+B. Compartment / cell-context-conditioned in-cell reactivity: predict the CHANGE in reactivity of the same nucleotide across compartments within one probing platform (HEK293 icSHAPE chromatin / nucleoplasm / cytoplasm, GSE117840; Sun et al. NSMB 2019), using observed (non-imputed) values only, because RASP v2.0's StructureImpute was trained on these data.
+C. Deep homology for fast-evolving lncRNAs with neighbouring protein-coding-gene identity masked, merged with phylogenetically calibrated functional-motif-turnover detection (analogy: TF-binding-site turnover models); seeds lncHOME (Nat Genet 2024) and the 13-species orthology workflow (NAR 2026, computationally inferred orthologs only).
+D. Predicting lncRNA localisation SHIFTS across unseen cell lines: the gene x cell interaction term in continuous nuclear/cytoplasmic ratio (lncATLAS 15 cell lines; ENCODE fractionation), conditioned on cell-line covariates (RBP expression, splicing efficiency); analogy: genotype x environment reaction-norm kernel models from plant breeding.
+Your round-2 position was B > C > D(+half-life). The other agent (ChatGPT) now ranks A > B > C > D: A has the clearest maths but SEISMIC-RNA narrows its novelty to identifiability / calibration / multi-condition joint inference; B is the best new data-analysis pilot; C risks redoing lncHOME; D is cheap but has too few independent cellular contexts. Sequence-only lncRNA half-life was dropped after PMID 42760417 (Mol Genet Genomics 2026: lncRNA half-life essentially unpredictable from sequence, R^2 ~ 0).
+
+Reveal: we are the group behind the brief (repo https://github.com/JiWang-Unige/ncRNA). What we already tried:
+- Jan–Nov 2026: DNA-only lncRNA gene finding with genomic LMs and HMM/CRF grammars; a CpG-island rule reached 70–82% of our score; with sparse CAGE + QuantSeq ends our sequence prior added nothing over an evidence-only rule.
+- AUTH: learned authenticity of cheap endpoint evidence (precision 0.18 -> 0.49 at recall 0.33, transferred to H1); IsoQuant on full long reads still better.
+- E1: pairing separately measured transcript ends — STOP, no model beat "take the strongest end".
+- IDENT: evidence-constrained transcript identifiability with counterexample-guided diagnosis — correct on synthetic data, STOPPED on real long reads (59% nested candidates under open ends; parsimony added nothing; every diagnosis needed one observation).
+- Localisation (K562, HepG2): after confounders including splicing efficiency, sequence still adds Delta R^2 0.13 / 0.11 to nuclear/cytoplasmic ratio (same class as Tani 2026, RBP occupancy Delta R^2 0.12).
+- Cheap checks: functional-screen hits to evaluate annotation (narrow); layered benchmark on LRGASP submissions (ranking reversal real but not lncRNA-specific); small structured-ncRNA tools (closed).
+Resources: one shared 24 GB GPU, 32-core server, small cloud budget, public data only, no wet lab. Goal: a genuinely new model/method that helps study ncRNA, publishable in a JCR Q1 journal.
+
+Please:
+1. For each of A–D: the 2–3 most useful public repositories or datasets (URL, licence, usable as baseline?) and one method from another field that transfers, with what must change. Keep this short.
+2. Given our results, which directions are strengthened or weakened, and why?
+3. Score A, B, C, D (and any better idea you have) on novelty, falsifiability, public-data availability, cost for our resources, collision risk (name teams), fit with our existing data/code. Use a table.
+4. Final top 3, each with the first experiment (data, metric, pre-registered go/no-go, strongest simple baseline, days), and a kill list.
+5. Correct any number or citation above that you can check (DOI/PMID), and say honestly whether any of these can reach a JCR Q1 journal and what would have to be true.

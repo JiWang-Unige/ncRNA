@@ -1,0 +1,20 @@
+Rounds 4+5 combined — reveal and convergence. Answer directly in this chat (no new deep research), Simplified Chinese with technical terms in English.
+
+Reveal: we are the group behind this brief. Our repository (code, frozen protocols and results, mostly in Chinese) is https://github.com/JiWang-Unige/ncRNA — you may read it with the GitHub connector (start with docs/ and the summaries; the deep-research folder holds ATTEMPTS_SUMMARY_EN.md). What we have tried, briefly:
+- Jan–Nov 2026: DNA-only lncRNA gene finding with genomic LMs, HMM/CRF grammars, boundary heads; a training-free CpG-island rule reached 70–82% of our strict span score; AlphaGenome ~ CpG rule for lncRNA TSS; with sparse CAGE + QuantSeq ends our sequence prior added zero loci over an evidence-only rule.
+- AUTH (authenticity of cheap endpoint evidence): precision 0.182/0.300 -> 0.488 at recall 0.330, transferred to H1; IsoQuant on full long reads still better.
+- E1 (pairing separately measured ends): STOP; no model beat "take the strongest end" (0.705); rankings reversed between span matching and molecule-level evaluation.
+- IDENT (evidence-constrained transcript identifiability, counterexample-guided sufficient-observation diagnosis): correct on 617 synthetic instances, but STOPPED on real WTC11 PacBio dev data: 59% of candidate intron chains nested under open ends, parsimony bound added nothing, all 449 diagnoses single-observation, diagnostic observations in 0.22% of added reads; ENCODE filtered WTC11 BAMs are TranscriptClean-corrected to GENCODE v29.
+- RNA fate / localisation (K562, HepG2 ENCODE fractionation, ~715/629 lncRNAs): after confounders incl. splicing efficiency, sequence (mostly low-order k-mers) adds Delta R^2 0.128 / 0.108 (transfer 0.098); splicing efficiency missing for 56–62% of multi-exon lncRNAs; judged same class as Tani 2026.
+- Cheap checks: functional-screen hits to evaluate annotation (narrow; CASPR 2020; Cas13 screen retracted); layered benchmark on 57 LRGASP submissions (rankings reverse between reference-match and CAGE/polyA layers, ~370–520 lncRNA loci lose end support on PacBio, but not lncRNA-specific); small structured ncRNA tools (tRNA solved, Rfam labels too few) closed.
+Resources: one shared RTX 4090, 32-core server, small cloud budgets, public data only, no wet lab. Goal: a genuinely new model/method for studying ncRNA, JCR Q1 (Genome Biology, NAR, Bioinformatics, Genome Research).
+
+The other agent's latest position (Gemini, round 2): top 1 = B (compartment-conditioned in-cell reactivity, single icSHAPE platform, HEK293 compartments, non-imputed sites only); top 2 = C (anchor-masked multimodal deep-homology retrieval, independent check by tissue-expression conservation); top 3 = D merged with lncRNA half-life (it still wants joint localisation + decay modelling). It strongly rejects the structured-small-RNA variant-effect idea (Gnocchi scores 1 kb windows; little pathogenic truth) and the RNA–RNA latent model as main line.
+
+Please:
+1. Given our results, which of A–D (from round 3) are weakened or strengthened, and why? In particular: does our localisation result (point 4) make D more or less attractive as a gene x cell interaction problem? Does the IDENT failure say anything about A or C?
+2. Score A, B, C, D (and any new idea you now think is better) on: novelty, falsifiability, data availability (public, already downloadable), cost for our resources, collision risk (name teams), and fit with our existing data/code. Use a table.
+3. Give the final top 3 with the first experiment for each (data, metric, pre-registered go/no-go, strongest simple baseline, days), and a kill list.
+4. Correct any wrong numbers or citations from either agent that you can check (DOI/PMID).
+5. Say honestly whether any of these can plausibly reach a JCR Q1 journal and what would have to be true.
+Be direct and critical.
